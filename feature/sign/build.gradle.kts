@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.moneymong.moneymong.data"
+    namespace = "com.moneymong.moneymong.feature.sign"
     compileSdk = 34
 
     defaultConfig {
