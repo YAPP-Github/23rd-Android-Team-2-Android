@@ -1,4 +1,5 @@
 pluginManagement {
+    includeBuild("build-logic")
     repositories {
         google()
         mavenCentral()
@@ -10,6 +11,7 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        maven(url = "https://jitpack.io")
     }
 }
 
@@ -17,7 +19,6 @@ rootProject.name = "moneymong-android"
 include(":app")
 include(":data")
 include(":domain")
-include(":di")
-include(":design-system")
+include(":core:design-system")
 include(":feature:sign")
 include(":core:ui")
