@@ -69,4 +69,11 @@ android {
 }
 
 dependencies {
+    implementation(projects.core.ui)
+    implementation(projects.core.designSystem)
+
+    implementation(projects.data)
+    implementation(projects.domain)
+    
+    implementation(projects.feature.sign)
 }
