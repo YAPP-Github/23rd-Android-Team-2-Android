@@ -16,7 +16,10 @@ androidxDatastore = "1.0.0"
 androidxEspresso = "3.5.1"
 androidHiltNavigationCompose = "1.0.0"
 desugaring = "1.2.2"
+firebaseBom = "32.6.0"
+firebaseCrashlyticsPlugin = "2.9.9"
 glide = "1.0.0-alpha.1"
+gmsPlugin = "4.4.0"
 hilt = "2.48.1"
 hiltNavigation = "1.0.0"
 junit4 = "4.13.2"
@@ -42,6 +45,9 @@ androidx-lifecycle-livedata-ktx = { group = "androidx.lifecycle", name = "lifecy
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "androidxComposeNavigation" }
 androidx-test-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "androidxEspresso" }
 desugaring = { group = "com.android.tools", name = "desugar_jdk_libs", version.ref = "desugaring" }
+firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics-ktx" }
+firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebaseBom"}
+firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics-ktx" }
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
 hilt-compiler = { group = "com.google-dagger", name = "hilt-android-compiler", version.ref = "hilt" }
 hilt-navigation = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hiltNavigation" }
@@ -64,6 +70,8 @@ androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "a
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
 android-library = { id = "com.android.library", version.ref = "androidGradlePlugin" }
 android-test = { id = "com.android.test", version.ref = "androidGradlePlugin" }
+firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "firebaseCrashlyticsPlugin" }
+gms = { id = "com.google.gms.google-services", version.ref = "gmsPlugin" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
@@ -71,6 +79,7 @@ ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 
 moneymong-android-application = { id = "moneymong.android.application", version = "unspecified" }
 moneymong-android-application-compose = { id = "moneymong.android.application.compose", version = "unspecified" }
+moneymong-android-application-firebase = { id = "moneymong.android.application.firebase", version = "unspecified" }
 moneymong-android-application-flavors = { id = "moneymong.android.application.flavors", version = "unspecified" }
 moneymong-android-feature = { id = "moneymong.android.feature", version = "unspecified" }
 moneymong-android-hilt = { id = "moneymong.android.hilt", version = "unspecified" }
