@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.moneymong.android.application)
     alias(libs.plugins.moneymong.android.application.compose)
     alias(libs.plugins.moneymong.android.application.flavors)
+    alias(libs.plugins.moneymong.android.application.firebase)
 //    alias(libs.plugins.moneymong.android.hilt) hilt compiler was found error
 }
 
@@ -48,24 +49,6 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
-
-//    flavorDimensions += "deploy"
-//    productFlavors {
-//        create("tb") {
-//            dimension = "deploy"
-//            applicationIdSuffix = ".tb"
-//
-//            manifestPlaceholders["appLabel"] = "머니몽 TB"
-//            buildConfigField("Boolean", "IS_TB", "true")
-//        }
-//        create("live") {
-//            dimension = "deploy"
-//            applicationIdSuffix = ".live"
-//
-//            manifestPlaceholders["appLable"] = "머니몽"
-//            buildConfigField("Boolean", "IS_TB", "false")
-//        }
-//    }
 }
 
 dependencies {
@@ -74,6 +57,6 @@ dependencies {
 
     implementation(projects.data)
     implementation(projects.domain)
-    
+
     implementation(projects.feature.sign)
 }
