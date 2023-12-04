@@ -7,3 +7,7 @@ plugins {
 android {
     namespace = "com.moneymong.moneymong.design_system"
 }
+
+dependencies {
+    implementation(libs.androidx.core.ktx)
+}
