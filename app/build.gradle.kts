@@ -33,17 +33,6 @@ android {
             )
         }
     }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
-    }
-    buildFeatures {
-        compose = true
-        buildConfig = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.3"
-    }
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
@@ -59,4 +48,7 @@ dependencies {
     implementation(projects.domain)
 
     implementation(projects.feature.sign)
+
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.compose.material3)
 }
