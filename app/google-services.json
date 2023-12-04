@@ -7,9 +7,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1091533625653:android:cbcd471ed618616dad547c",
+        "mobilesdk_app_id": "1:1091533625653:android:435637da7f3d4352ad547c",
         "android_client_info": {
-          "package_name": "com.moneymong.moneymong"
+          "package_name": "com.moneymong.moneymong.tb"
         }
       },
       "oauth_client": [],
