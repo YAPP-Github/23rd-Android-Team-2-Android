@@ -9,7 +9,7 @@ import com.moneymong.moneymong.design_system.theme.Gray04
 import com.moneymong.moneymong.design_system.theme.Gray05
 import com.moneymong.moneymong.design_system.theme.White
 
-enum class ButtonType(val backgroundColor: Color, val contentColor: Color) {
+enum class MDSButtonType(val backgroundColor: Color, val contentColor: Color) {
 
     PRIMARY(backgroundColor = Blue04, contentColor = White),
     SECONDARY(backgroundColor = Blue01, contentColor = Blue04),

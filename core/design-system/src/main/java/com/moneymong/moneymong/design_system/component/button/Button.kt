@@ -24,8 +24,8 @@ fun MDSButton(
     modifier: Modifier = Modifier,
     onClick: () -> Unit,
     text: String,
-    type: ButtonType = ButtonType.PRIMARY,
-    size: ButtonSize = ButtonSize.LARGE,
+    type: MDSButtonType = MDSButtonType.PRIMARY,
+    size: MDSButtonSize = MDSButtonSize.LARGE,
     @DrawableRes iconResource: Int? = null,
     enabled: Boolean = true,
 ) {
