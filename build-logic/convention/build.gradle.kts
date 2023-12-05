@@ -50,6 +50,10 @@ gradlePlugin {
             id = "moneymong.android.hilt"
             implementationClass = "AndroidHiltConventionPlugin"
         }
+        register("androidFirebase") {
+            id = "moneymong.android.application.firebase"
+            implementationClass = "AndroidApplicationFirebaseConventionPlugin"
+        }
         register("androidFlavors") {
             id = "moneymong.android.application.flavors"
             implementationClass = "AndroidApplicationFlavorsConventionPlugin"
