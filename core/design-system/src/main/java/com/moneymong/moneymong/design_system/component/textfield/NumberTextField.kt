@@ -18,10 +18,11 @@ fun MDSNumberTextField(
     type: MDSNumberTextFieldType,
     title: String,
     placeholder: String,
-    isFilled: Boolean = false,
+    isFilled: Boolean,
+    onFocused: (() -> Unit),
+    onDone: () -> Unit,
+    onIconClick: (() -> Unit),
     singleLine: Boolean = true,
-    onDone: () -> Unit = {},
-    onIconClick: (() -> Unit) = {},
 ) {
 
     MDSBaseTextField(
@@ -31,6 +32,7 @@ fun MDSNumberTextField(
         title = title,
         placeholder = placeholder,
         isFilled = isFilled,
+        onFocused = onFocused,
         singleLine = singleLine,
         onDone = onDone,
         icon = MDSTextFieldIcons.Clear,

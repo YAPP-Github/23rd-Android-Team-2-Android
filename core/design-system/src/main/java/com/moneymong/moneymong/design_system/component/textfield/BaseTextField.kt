@@ -8,6 +8,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
@@ -24,8 +25,9 @@ internal fun MDSBaseTextField(
     onValueChange: (TextFieldValue) -> Unit,
     title: String,
     placeholder: String,
+    isFilled: Boolean,
+    onFocused: (() -> Unit),
     isError: Boolean = false,
-    isFilled: Boolean = false,
     helperText: String? = null,
     maxCount: Int? = null,
     singleLine: Boolean = true,
@@ -45,7 +47,12 @@ internal fun MDSBaseTextField(
         onValueChange = { onValueChange(it) },
         modifier = modifier
             .sizeIn(minWidth = 320.dp)
-            .width(intrinsicSize = IntrinsicSize.Min),
+            .width(intrinsicSize = IntrinsicSize.Min)
+            .onFocusChanged {
+                if (it.isFocused) {
+                    onFocused()
+                }
+            },
         textStyle = Body3.copy(
             color = state.textColor
         ),
