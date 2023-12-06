@@ -32,7 +32,11 @@ fun MDSChip(
             val mdsChipColor = MDSChipColor(chipType)
             Box(
                 modifier = Modifier
-                    .border(1.dp, mdsChipColor.borderColor().value, RoundedCornerShape(100))
+                    .border(
+                        width = 1.dp,
+                        color = mdsChipColor.borderColor().value,
+                        shape = RoundedCornerShape(100)
+                    )
                     .clip(RoundedCornerShape(100))
                     .background(mdsChipColor.backgroundColor().value)
                     .clickable {
@@ -53,5 +57,8 @@ fun MDSChip(
 @Preview(showBackground = true)
 @Composable
 fun MDSChipPreview() {
-    MDSChip(tabs = listOf("tab", "tab", "tab"), selectedTabIndex = 0, onChangeSelectedTabIndex = {0})
+    MDSChip(
+        tabs = listOf("tab", "tab", "tab"),
+        selectedTabIndex = 0,
+        onChangeSelectedTabIndex = { 0 })
 }
