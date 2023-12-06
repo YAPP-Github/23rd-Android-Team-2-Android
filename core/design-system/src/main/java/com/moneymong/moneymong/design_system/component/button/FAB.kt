@@ -9,7 +9,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import com.moneymong.moneymong.design_system.theme.White
 
 @Composable
 fun MDSFloatingActionButton(
@@ -17,7 +16,7 @@ fun MDSFloatingActionButton(
     onClick: () -> Unit,
     iconResource: Int,
     containerColor: Color,
-    contentColor: Color = White
+    contentColor: Color = Color.Unspecified
 ) {
     FloatingActionButton(
         modifier = modifier.size(48.dp),
@@ -29,7 +28,7 @@ fun MDSFloatingActionButton(
         Icon(
             modifier = Modifier.size(24.dp),
             painter = painterResource(id = iconResource),
-            contentDescription = "Floating Action Button"
+            contentDescription = "Floating Action Button",
         )
     }
 }
