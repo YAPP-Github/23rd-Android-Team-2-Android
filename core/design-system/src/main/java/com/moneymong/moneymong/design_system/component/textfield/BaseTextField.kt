@@ -8,7 +8,6 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
@@ -26,16 +25,15 @@ internal fun MDSBaseTextField(
     title: String,
     placeholder: String,
     isFilled: Boolean,
-    onFocused: (() -> Unit),
     isError: Boolean = false,
     helperText: String? = null,
     maxCount: Int? = null,
     singleLine: Boolean = true,
-    onDone: () -> Unit = {},
     icon: MDSTextFieldIcons? = null,
     onIconClick: (() -> Unit) = {},
     visualTransformation: VisualTransformation = VisualTransformation.None,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    keyboardActions: KeyboardActions = KeyboardActions.Default,
 ) {
 
     val focusManager = LocalFocusManager.current
@@ -47,22 +45,12 @@ internal fun MDSBaseTextField(
         onValueChange = { onValueChange(it) },
         modifier = modifier
             .sizeIn(minWidth = 320.dp)
-            .width(intrinsicSize = IntrinsicSize.Min)
-            .onFocusChanged {
-                if (it.isFocused) {
-                    onFocused()
-                }
-            },
+            .width(intrinsicSize = IntrinsicSize.Min),
         textStyle = Body3.copy(
             color = state.textColor
         ),
         keyboardOptions = keyboardOptions,
-        keyboardActions = KeyboardActions(
-            onDone = {
-                onDone()
-                focusManager.clearFocus()
-            },
-        ),
+        keyboardActions = keyboardActions,
         singleLine = singleLine,
         visualTransformation = visualTransformation,
         decorationBox = { innerTextField ->

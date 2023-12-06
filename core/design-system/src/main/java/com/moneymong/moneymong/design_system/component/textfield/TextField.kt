@@ -1,5 +1,7 @@
 package com.moneymong.moneymong.design_system.component.textfield
 
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.TextFieldValue
@@ -14,14 +16,14 @@ fun MDSTextField(
     title: String,
     placeholder: String,
     isFilled: Boolean,
-    onFocused: (() -> Unit),
-    onDone: () -> Unit,
     isError: Boolean = false,
     helperText: String? = null,
     maxCount: Int? = null,
     singleLine: Boolean = true,
     icon: MDSTextFieldIcons? = null,
     onIconClick: (() -> Unit) = {},
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    keyboardActions: KeyboardActions = KeyboardActions.Default
 ) {
 
     MDSBaseTextField(
@@ -31,13 +33,13 @@ fun MDSTextField(
         title = title,
         placeholder = placeholder,
         isFilled = isFilled,
-        onFocused = onFocused,
         isError = isError,
         helperText = helperText,
         maxCount = maxCount,
         singleLine = singleLine,
-        onDone = onDone,
         icon = icon,
         onIconClick = onIconClick,
+        keyboardOptions = keyboardOptions,
+        keyboardActions = keyboardActions
     )
 }

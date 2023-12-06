@@ -1,13 +1,14 @@
 package com.moneymong.moneymong.design_system.component.textfield
 
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import com.moneymong.moneymong.design_system.component.textfield.util.MDSNumberTextFieldType
-import com.moneymong.moneymong.design_system.component.textfield.util.PriceVisualTransformation
 import com.moneymong.moneymong.design_system.component.textfield.util.MDSTextFieldIcons
+import com.moneymong.moneymong.design_system.component.textfield.util.PriceVisualTransformation
 
 
 @Composable
@@ -19,10 +20,9 @@ fun MDSNumberTextField(
     title: String,
     placeholder: String,
     isFilled: Boolean,
-    onFocused: (() -> Unit),
-    onDone: () -> Unit,
     onIconClick: (() -> Unit),
     singleLine: Boolean = true,
+    keyboardActions: KeyboardActions = KeyboardActions.Default,
 ) {
 
     MDSBaseTextField(
@@ -32,12 +32,11 @@ fun MDSNumberTextField(
         title = title,
         placeholder = placeholder,
         isFilled = isFilled,
-        onFocused = onFocused,
         singleLine = singleLine,
-        onDone = onDone,
         icon = MDSTextFieldIcons.Clear,
         onIconClick = onIconClick,
         visualTransformation = PriceVisualTransformation(type),
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+        keyboardActions = keyboardActions,
     )
 }
