@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -41,7 +42,9 @@ fun LedgerTopbarView(
         Spacer(modifier = Modifier.width(4.dp))
         if (visibleArrow) {
             Icon(
-                modifier = Modifier.noRippleClickable {
+                modifier = Modifier
+                    .size(20.dp)
+                    .noRippleClickable {
                     onClickDownArrow()
                 },
                 painter = painterResource(id = icon),
