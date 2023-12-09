@@ -14,12 +14,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.moneymong.moneymong.design_system.theme.Body4
-import com.moneymong.moneymong.design_system.theme.Gray08
+import com.moneymong.moneymong.design_system.R.*
+import com.moneymong.moneymong.design_system.theme.Body3
+import com.moneymong.moneymong.design_system.theme.Gray07
 
 @Composable
-fun LedgerMemberEmptyView(
+fun LedgerTransactionEmptyView(
     modifier: Modifier = Modifier,
+    text: String,
+    image: Int
 ) {
     Column(
         modifier = modifier.fillMaxSize(),
@@ -27,21 +30,21 @@ fun LedgerMemberEmptyView(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Image(
-            modifier = Modifier.size(92.dp),
-            painter = painterResource(id = com.moneymong.moneymong.design_system.R.drawable.img_empty_ledger),
+            modifier = Modifier.size(88.dp),
+            painter = painterResource(id = image),
             contentDescription = null
         )
-        Spacer(modifier = Modifier.height(12.dp))
+        Spacer(modifier = Modifier.height(4.dp))
         Text(
-            text = "아직 기록된 장부가 없습니다",
-            style = Body4,
-            color = Gray08
+            text = text,
+            style = Body3,
+            color = Gray07
         )
     }
 }
 
 @Preview(showBackground = true)
 @Composable
-fun LedgerMemberEmptyPreview() {
-    LedgerMemberEmptyView()
+fun LedgerTransactionEmptyPreview() {
+    LedgerTransactionEmptyView(text = "10월에 기록된 장부가 없습니다", image = drawable.img_transaction_empty)
 }
