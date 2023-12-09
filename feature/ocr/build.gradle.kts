@@ -13,6 +13,14 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.appcompat)
     implementation(libs.material)
+
+    implementation(libs.androidx.cameraX.core)
+    implementation(libs.androidx.cameraX.camera2)
+    implementation(libs.androidx.cameraX.lifecycle)
+    implementation(libs.androidx.cameraX.video)
+    implementation(libs.androidx.cameraX.view)
+    implementation(libs.androidx.cameraX.extensions)
+
     testImplementation(libs.junit4)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.test.espresso.core)
