@@ -36,14 +36,13 @@ import com.moneymong.moneymong.design_system.component.tooltip.MDSToolTip
 import com.moneymong.moneymong.design_system.component.tooltip.MDSToolTipPosition
 import com.moneymong.moneymong.design_system.theme.Mint02
 import com.moneymong.moneymong.design_system.theme.Mint03
-import com.moneymong.moneymong.ledger.view.LedgerAdminEmptyView
+import com.moneymong.moneymong.ledger.view.LedgerStaffEmptyView
 import com.moneymong.moneymong.ledger.view.LedgerAgencyEmptyView
 import com.moneymong.moneymong.ledger.view.LedgerDefaultView
-import com.moneymong.moneymong.ledger.view.LedgerGroupSelectBottomSheet
+import com.moneymong.moneymong.ledger.view.LedgerAgencySelectBottomSheet
 import com.moneymong.moneymong.ledger.view.LedgerMemberEmptyView
 import com.moneymong.moneymong.ledger.view.LedgerTabRowView
 import com.moneymong.moneymong.ledger.view.LedgerTopbarView
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -82,7 +81,7 @@ fun LedgerScreen(
     ) {
         ModalBottomSheetLayout(
             sheetContent = {
-                LedgerGroupSelectBottomSheet(onClickItem = {
+                LedgerAgencySelectBottomSheet(onClickItem = {
                     closeSheet() // TODO
                 })
             },
@@ -108,7 +107,7 @@ fun LedgerScreen(
                             if (true) { // TODO 멤버일 경우
                                 LedgerMemberEmptyView()
                             } else {
-                                LedgerAdminEmptyView()
+                                LedgerStaffEmptyView()
                             }
                         } else {
                             LedgerDefaultView()
