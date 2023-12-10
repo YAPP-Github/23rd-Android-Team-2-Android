@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -12,11 +13,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import com.moneymong.moneymong.design_system.R
 import com.moneymong.moneymong.design_system.component.modal.MDSModal
+import com.moneymong.moneymong.design_system.theme.Heading1
 import com.moneymong.moneymong.design_system.theme.White
 import com.moneymong.moneymong.ocr.view.OCRCameraPermissionDeniedView
+import com.moneymong.moneymong.ocr.view.OCRCaptureView
 import com.moneymong.moneymong.ocr.view.OCRHelperView
 import com.moneymong.moneymong.ocr.view.OCRInteractionView
 import com.moneymong.moneymong.ocr.view.OCRTopbarView
@@ -57,7 +62,20 @@ fun OCRScreen(
                 .padding(it),
             contentAlignment = Alignment.Center
         ) {
-            OCRCameraPermissionDeniedView(onClickRequestPermission = { /* TODO */ })
+            if (false) { // TODO 카메라 접근 권한이 없다면
+                OCRCameraPermissionDeniedView(onClickRequestPermission = { /* TODO */ })
+            } else {
+                OCRCaptureView()
+                if (true) { // TODO 영수증이 보일 때 숨기기
+                    Text(
+                        modifier = Modifier.align(Alignment.Center),
+                        text = "영수증의 처음과 끝이\n모두 포함되게 촬영해주세요",
+                        style = Heading1,
+                        color = Color.White,
+                        textAlign = TextAlign.Center
+                    )
+                }
+            }
             OCRTopbarView(
                 modifier = Modifier.align(Alignment.TopCenter),
                 onClickHelp = { /*TODO*/ },
