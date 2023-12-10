@@ -19,7 +19,7 @@ import com.moneymong.moneymong.design_system.theme.Gray07
 import com.moneymong.moneymong.ledger.R
 
 @Composable
-fun LedgerAdminEmptyView(
+fun LedgerStaffEmptyView(
     modifier: Modifier = Modifier,
 ) {
     Box(modifier = modifier.fillMaxSize()) {
@@ -46,6 +46,6 @@ fun LedgerAdminEmptyView(
 
 @Preview(showBackground = true)
 @Composable
-fun LedgerAdminEmptyPreview() {
-    LedgerAdminEmptyView()
+fun LedgerStaffEmptyPreview() {
+    LedgerStaffEmptyView()
 }
