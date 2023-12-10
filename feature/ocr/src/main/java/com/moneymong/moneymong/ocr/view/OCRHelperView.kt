@@ -42,24 +42,24 @@ fun OCRHelperView(
             contentDescription = null,
             contentScale = ContentScale.FillWidth
         )
+        Row(
+            modifier = Modifier.fillMaxWidth().align(Alignment.TopCenter),
+            horizontalArrangement = Arrangement.End
+        ) {
+            Icon(
+                modifier = Modifier
+                    .padding(vertical = 10.dp, horizontal = 20.dp)
+                    .noRippleClickable { onClickClose() },
+                painter = painterResource(id = R.drawable.ic_close_default),
+                contentDescription = null,
+                tint = Color.White
+            )
+        }
         Column(
             modifier = Modifier.fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
         ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.End
-            ) {
-                Icon(
-                    modifier = Modifier
-                        .padding(vertical = 10.dp, horizontal = 20.dp)
-                        .noRippleClickable { onClickClose() },
-                    painter = painterResource(id = R.drawable.ic_close_default),
-                    contentDescription = null,
-                    tint = Color.White
-                )
-            }
-            Spacer(modifier = Modifier.height(30.dp))
             Text(
                 text = "실물 영수증 혹은 전자 영수증을\n활영해 주세요.",
                 style = Heading2,
