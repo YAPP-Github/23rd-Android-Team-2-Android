@@ -38,6 +38,17 @@ fun OCRScreen(
         )
     }
 
+    if (false) { // TODO 갤러리 권한 요청 모달
+        MDSModal(
+            icon = R.drawable.ic_photo_modal,
+            title = "갤러리 접근 권한이 필요합니다",
+            description = "설정에서 변경해주세요",
+            negativeBtnText = "확인",
+            positiveBtnText = "이동",
+            onClickNegative = { /*TODO*/ },
+            onClickPositive = { /*TODO*/ })
+    }
+
     Scaffold {
         Box(
             modifier = modifier
