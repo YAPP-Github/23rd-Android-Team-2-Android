@@ -4,6 +4,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -16,9 +18,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.moneymong.moneymong.design_system.R
 import com.moneymong.moneymong.design_system.component.modal.MDSModal
 import com.moneymong.moneymong.design_system.theme.Heading1
+import com.moneymong.moneymong.design_system.theme.Mint03
 import com.moneymong.moneymong.design_system.theme.White
 import com.moneymong.moneymong.ocr.view.OCRCameraPermissionDeniedView
 import com.moneymong.moneymong.ocr.view.OCRCaptureView
@@ -86,6 +90,14 @@ fun OCRScreen(
             )
             if (visibleHelper) { // TODO 최초 진입 시, 혹은 도움말 아이콘 클릭 시
                 OCRHelperView(onClickClose = { visibleHelper = !visibleHelper })
+            }
+            if (false) { // TODO ocr loading
+                CircularProgressIndicator(
+                    modifier = Modifier.size(74.dp),
+                    color = Mint03,
+                    trackColor = White,
+                    strokeWidth = 7.dp
+                )
             }
         }
     }
