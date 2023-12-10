@@ -36,7 +36,6 @@ fun LedgerTabRowView(
     tabs: List<LedgerTab> = listOf(LedgerTab.Ledger, LedgerTab.Member),
     selectedTabIndex: MutableState<Int>,
 ) {
-    val density = LocalDensity.current
     val coroutineScope = rememberCoroutineScope()
 
     TabRow(

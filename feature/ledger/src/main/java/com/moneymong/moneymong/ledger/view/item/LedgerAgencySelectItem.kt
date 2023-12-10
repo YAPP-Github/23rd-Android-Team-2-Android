@@ -31,7 +31,7 @@ import com.moneymong.moneymong.design_system.theme.Gray05
 import com.moneymong.moneymong.design_system.theme.SkyBlue01
 
 @Composable
-fun LedgerGroupSelectItem(
+fun LedgerAgencySelectItem(
     modifier: Modifier = Modifier,
     onClick: () -> Unit
 ) {
@@ -85,6 +85,6 @@ fun LedgerGroupSelectItem(
 
 @Preview(showBackground = true)
 @Composable
-fun LedgerGroupSelectItemPreview() {
-    LedgerGroupSelectItem() {}
+fun LedgerStaffSelectItemPreview() {
+    LedgerAgencySelectItem() {}
 }
