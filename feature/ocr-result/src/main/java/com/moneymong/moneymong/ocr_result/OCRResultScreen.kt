@@ -10,6 +10,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.moneymong.moneymong.design_system.theme.Black
+import com.moneymong.moneymong.ocr_result.view.OCRResultBottomView
 import com.moneymong.moneymong.ocr_result.view.OCRResultTopbarView
 
 @Composable
@@ -28,7 +29,12 @@ fun OCRResultScreen(
                 onClickBack = { /*TODO*/ },
                 onClickClose = { /*TODO*/ }
             )
-            
+            OCRResultBottomView(
+                modifier = Modifier.align(Alignment.BottomCenter),
+                source = "", // TODO
+                amount = 0L, // TODO
+                date = "" // TODO
+            )
         }
     }
 }
