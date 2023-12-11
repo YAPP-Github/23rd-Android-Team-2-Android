@@ -51,6 +51,7 @@ dependencies {
     implementation(projects.feature.sign)
     implementation(projects.feature.ledger)
     implementation(projects.feature.ocr)
+    implementation(projects.feature.ocrResult)
 
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.compose.material3)
