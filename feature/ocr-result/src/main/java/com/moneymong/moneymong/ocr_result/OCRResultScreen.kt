@@ -33,7 +33,8 @@ fun OCRResultScreen(
                 modifier = Modifier.align(Alignment.BottomCenter),
                 source = "", // TODO
                 amount = 0L, // TODO
-                date = "" // TODO
+                date = "", // TODO
+                onClickRetryOCR = { /*TODO*/ }
             )
         }
     }
