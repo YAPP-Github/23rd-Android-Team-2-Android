@@ -1,12 +1,16 @@
 package com.moneymong.moneymong.feature.agency.search
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -17,19 +21,27 @@ import androidx.compose.ui.unit.dp
 import com.moneymong.moneymong.design_system.R
 import com.moneymong.moneymong.design_system.component.button.MDSFloatingActionButton
 import com.moneymong.moneymong.design_system.theme.Body4
+import com.moneymong.moneymong.design_system.theme.Gray01
 import com.moneymong.moneymong.design_system.theme.Gray08
 import com.moneymong.moneymong.design_system.theme.MMHorizontalSpacing
 import com.moneymong.moneymong.design_system.theme.Red03
+import com.moneymong.moneymong.design_system.theme.White
 import com.moneymong.moneymong.feature.agency.Agency
+import com.moneymong.moneymong.feature.agency.mockAgencies
 import com.moneymong.moneymong.feature.agency.search.component.AgencySearchTopBar
+import com.moneymong.moneymong.feature.agency.search.item.AgencyItem
 
 @Composable
 fun AgencySearchScreen(
     modifier: Modifier = Modifier
 ) {
+//    val agencies = emptyList<Agency>()
+    val agencies = mockAgencies
+
     Box(
         modifier = modifier
             .fillMaxSize()
+            .background(color = if (agencies.isEmpty()) White else Gray01)
             .padding(horizontal = MMHorizontalSpacing)
     ) {
         Column(
@@ -39,7 +51,7 @@ fun AgencySearchScreen(
             AgencySearchTopBar()
             AgencySearchContentView(
                 modifier = Modifier.weight(1f),
-                agencies = emptyList()
+                agencies = agencies
             )
         }
         MDSFloatingActionButton(
@@ -71,6 +83,15 @@ private fun ContentViewWithAgencies(
     modifier: Modifier = Modifier,
     agencies: List<Agency>
 ) {
+    LazyColumn(
+        modifier = modifier,
+        verticalArrangement = Arrangement.spacedBy(12.dp),
+        contentPadding = PaddingValues(vertical = 12.dp)
+    ) {
+        items(items = agencies) {
+            AgencyItem(agency = it)
+        }
+    }
 }
 
 @Composable
