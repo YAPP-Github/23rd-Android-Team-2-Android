@@ -58,7 +58,7 @@ fun OCRResultScreen(
                             scale = (scale * zoom).coerceIn(1f, 3f)
                         }
                     },
-                model = "https://dimg.donga.com/wps/NEWS/IMAGE/2023/05/12/119255016.1.jpg",
+                model = "https://dimg.donga.com/wps/NEWS/IMAGE/2023/05/12/119255016.1.jpg", // TODO 현재는 고양이 사진으로 대체
                 contentDescription = null,
                 contentScale = ContentScale.FillBounds
             )
