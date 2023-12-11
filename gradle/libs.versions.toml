@@ -31,6 +31,10 @@ orbit = "6.0.0"
 retrofit = "2.9.0"
 appcompat = "1.6.1"
 material = "1.10.0"
+lifecycle-runtime-ktx = "2.6.2"
+constraintlayout = "2.1.4"
+navigation-fragment-ktx = "2.7.5"
+navigation-ui-ktx = "2.7.5"
 [libraries]
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "androidxActivity" }
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "androidxComposeBom" }
@@ -71,6 +75,12 @@ ksp-gradlePlugin = { group = "com.google.devtools.ksp", name = "com.google.devto
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidxJunit" }
 appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycle-runtime-ktx" }
+ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
+ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
+constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
+navigation-fragment-ktx = { group = "androidx.navigation", name = "navigation-fragment-ktx", version.ref = "navigation-fragment-ktx" }
+navigation-ui-ktx = { group = "androidx.navigation", name = "navigation-ui-ktx", version.ref = "navigation-ui-ktx" }
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
 android-library = { id = "com.android.library", version.ref = "androidGradlePlugin" }
