@@ -21,8 +21,7 @@ import com.moneymong.moneymong.feature.sign.view.TitleView
 fun LoginScreen() {
     Scaffold(
         content = { innerPadding ->
-            val modifier = Modifier.padding(innerPadding)
-            LoginContent(modifier)
+            LoginContent(modifier = Modifier.padding(innerPadding))
         }
     )
 }
@@ -35,11 +34,10 @@ private fun LoginContent(modifier: Modifier = Modifier) {
         modifier = modifier
             .fillMaxSize()
             .background(color = Color.White)
-            .padding(start = MMHorizontalSpacing, end = MMHorizontalSpacing)
+            .padding(MMHorizontalSpacing)
     ) {
         Column(
-            modifier = Modifier
-                .align(Alignment.TopStart)
+            modifier = Modifier.align(Alignment.TopStart)
         ) {
             TitleView("교내 회계관리를 편리하게\n시작해보세요.")
         }
