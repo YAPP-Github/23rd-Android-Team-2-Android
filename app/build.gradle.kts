@@ -49,6 +49,7 @@ dependencies {
     implementation(projects.domain)
 
     implementation(projects.feature.sign)
+    implementation(projects.feature.agency)
 
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.compose.material3)
