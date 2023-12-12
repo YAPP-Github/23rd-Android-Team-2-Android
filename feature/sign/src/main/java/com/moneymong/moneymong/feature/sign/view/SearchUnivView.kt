@@ -8,30 +8,37 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.moneymong.moneymong.design_system.component.textfield.MDSTextField
 import com.moneymong.moneymong.design_system.component.textfield.util.MDSTextFieldIcons
+import com.moneymong.moneymong.design_system.theme.Body4
+import com.moneymong.moneymong.design_system.theme.Gray05
 import com.moneymong.moneymong.design_system.theme.White
 import com.moneymong.moneymong.feature.sign.University
 import com.moneymong.moneymong.feature.sign.item.UnivItem
 import com.moneymong.moneymong.feature.sign.mockUniversities
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun SearchUnivView(modifier: Modifier = Modifier) {
-    var textValue by remember { mutableStateOf(TextFieldValue()) }
+fun SearchUnivView(modifier : Modifier = Modifier, onClick : (String) -> Unit, onChange : (TextFieldValue) -> Unit , value : TextFieldValue) {
+    var tvalue by remember { mutableStateOf(TextFieldValue()) }
     var filteredUniversities by remember { mutableStateOf(mockUniversities) }
     var isListVisible by remember { mutableStateOf(false) }
     var isFilled by remember { mutableStateOf(false) }
 
+    val keyboardController = LocalSoftwareKeyboardController.current
+    tvalue = value
 
     fun filterUniversities(query: String) {
         filteredUniversities = if (query.isEmpty()) {
@@ -43,13 +50,14 @@ fun SearchUnivView(modifier: Modifier = Modifier) {
     }
 
     Column(
-        modifier = Modifier.background(White)
+        modifier = modifier.background(White)
     ) {
         MDSTextField(
             modifier = Modifier.fillMaxWidth(),
-            value = textValue,
+            value = tvalue,
             onValueChange = {
-                textValue = it
+                onChange(it)
+                tvalue = it
                 filterUniversities(it.text)
                 isListVisible = it.text.isNotEmpty()
                 isFilled = false
@@ -62,55 +70,54 @@ fun SearchUnivView(modifier: Modifier = Modifier) {
             singleLine = true,
             icon = MDSTextFieldIcons.Search,
             onIconClick = {
-                isListVisible = if(textValue.text.isEmpty())
+                isListVisible = if(tvalue.text.isEmpty())
                 {
                     false
                 } else {
-                    filterUniversities(textValue.text)
+                    filterUniversities(tvalue.text)
                     isFilled = true
                     true
                 }
             },
-            keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Text),
-            keyboardActions = KeyboardActions.Default
 
-//                (
-//                onDone = {
-//                    isFilled = true
-//
-//                }
-//            )
+            keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Text),
+            keyboardActions = KeyboardActions(
+                onDone = {
+                    isFilled = true
+                    keyboardController?.hide()
+                }
+            )
         )
 
         if (isListVisible) {
-            UnivList(univs = filteredUniversities)
+            if (filteredUniversities.isNotEmpty()) {
+                UnivList(univs = filteredUniversities, onClick)
+            } else {
+                Column ( modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 28.dp)){
+
+                    Text(text = "검색결과가 없습니다",
+                        style = Body4,
+                        color = Gray05
+                    )
+                }
+
+            }
         }
-
-
     }
 }
 
 
 @Composable
-fun UnivList(univs: List<University>) {
+fun UnivList(univs: List<University>,  onClick: (String) -> Unit) {
     LazyColumn {
-        items(univs) { user ->
-            UnivItem(univs = user)
+        items(univs) { univ ->
+            UnivItem(
+                univs = univ,
+                onClick = onClick
+            )
         }
     }
-}
-
-
-
-@Preview
-@Composable
-fun UnivListPreview() {
-    UnivList(univs = mockUniversities)
-}
-
-@Preview
-@Composable
-fun preview(){
-    SearchUnivView(modifier= Modifier.padding(0.dp, 40.dp, 0.dp, 0.dp))
 }
 
