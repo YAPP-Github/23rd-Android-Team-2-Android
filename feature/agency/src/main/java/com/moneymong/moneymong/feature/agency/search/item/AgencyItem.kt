@@ -96,7 +96,11 @@ fun AgencyItemInfo(name: String, type: AgencyType, memberCount: Int) {
                 maxLines = 1,
                 style = Body3
             )
-            MDSTag(text = type.text, backgroundColor = Blue01, contentColor = Blue04)
+            MDSTag(
+                text = type.text,
+                backgroundColor = Blue01,
+                contentColor = Blue04
+            )
         }
         Text(
             text = "멤버수 $memberCount",
