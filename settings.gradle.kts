@@ -16,9 +16,12 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "moneymong-android"
+
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 include(":app")
 include(":data")
 include(":domain")
 include(":core:design-system")
 include(":feature:sign")
 include(":core:ui")
+include(":core:common")
