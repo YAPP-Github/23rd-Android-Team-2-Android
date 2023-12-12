@@ -17,6 +17,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import com.moneymong.moneymong.design_system.R
 import com.moneymong.moneymong.design_system.theme.Black
@@ -29,7 +30,7 @@ import com.moneymong.moneymong.feature.sign.view.SignCompleteCheckedView
 
 
 @Composable
-fun UnivItem(univs: University) {
+fun UnivItem(univs: University, onClick : (String) -> Unit) {
     var isSelected by remember{ mutableStateOf(false) }
 
     Row(
@@ -39,7 +40,7 @@ fun UnivItem(univs: University) {
             .padding(0.dp, 0.dp, 0.dp, 20.dp)
             .background(White)
             .clickable {
-                isSelected = true
+                onClick(univs.univ)
             }
     ) {
         Image(

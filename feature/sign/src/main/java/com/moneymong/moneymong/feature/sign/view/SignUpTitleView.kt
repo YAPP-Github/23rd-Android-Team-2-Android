@@ -15,7 +15,7 @@ import com.moneymong.moneymong.design_system.theme.Heading2
 import com.moneymong.moneymong.design_system.theme.White
 
 @Composable
-fun SignUpTitleView(modifier : Modifier = Modifier ){
+fun SignUpTitleView(modifier : Modifier = Modifier, subTitleState: Boolean ){
     Column(
         modifier = modifier.background(White) ,
         horizontalAlignment = Alignment.Start) {
@@ -28,7 +28,7 @@ fun SignUpTitleView(modifier : Modifier = Modifier ){
             modifier = Modifier.padding(0.dp, 8.dp, 0.dp, 0.dp),
             text = "아래 항목들을 정확히 채워주세요",
             style = Body3,
-            color = Gray06.copy(alpha = 0.4f)
+            color = if (!subTitleState) Gray06.copy(alpha = 0.4f) else Gray06
 
         )
     }

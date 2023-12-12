@@ -16,8 +16,8 @@ import com.moneymong.moneymong.design_system.component.button.MDSButtonSize
 import com.moneymong.moneymong.design_system.component.button.MDSButtonType
 
 @Composable
-fun SignUpButtonView(modifier: Modifier = Modifier) {
-    var isEnabled by remember { mutableStateOf(false) }
+fun SignUpButtonView(modifier: Modifier = Modifier , isEnabled : Boolean) {
+
 
     Column(
         modifier = modifier
@@ -25,7 +25,7 @@ fun SignUpButtonView(modifier: Modifier = Modifier) {
         MDSButton(
             modifier = Modifier.fillMaxWidth(),
             onClick = {
-                isEnabled = !isEnabled
+
             },
             text = "가입하기",
             type = MDSButtonType.PRIMARY,

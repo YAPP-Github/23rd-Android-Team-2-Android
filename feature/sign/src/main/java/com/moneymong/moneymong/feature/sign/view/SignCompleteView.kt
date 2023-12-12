@@ -26,9 +26,10 @@ import com.moneymong.moneymong.design_system.theme.White
 fun SignCompleteView(modifier: Modifier = Modifier) {
     Column(
         modifier = modifier
-            .background(White),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+            .background(White)
+            .padding(top = 207.dp, bottom = 208.dp),
+//        horizontalAlignment = Alignment.CenterHorizontally,
+//        verticalArrangement = Arrangement.Center
     ) {
         Image(
             painter = painterResource(id = R.drawable.img_congrats2),
