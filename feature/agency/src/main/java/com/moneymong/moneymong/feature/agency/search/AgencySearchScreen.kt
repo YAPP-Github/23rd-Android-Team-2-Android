@@ -112,8 +112,7 @@ private fun ContentViewWithoutAgencies(
             contentDescription = "agency image",
         )
         Text(
-            text = "아직 등록된 소속이 없어요\n" +
-                    "하단 버튼을 통해 등록해보세요",
+            text = "아직 등록된 소속이 없어요\n하단 버튼을 통해 등록해보세요",
             textAlign = TextAlign.Center,
             color = Gray08,
             style = Body4
