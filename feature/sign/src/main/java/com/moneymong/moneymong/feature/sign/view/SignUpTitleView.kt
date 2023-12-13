@@ -15,17 +15,18 @@ import com.moneymong.moneymong.design_system.theme.Heading2
 import com.moneymong.moneymong.design_system.theme.White
 
 @Composable
-fun SignUpTitleView(modifier : Modifier = Modifier, subTitleState: Boolean ){
+fun SignUpTitleView(modifier: Modifier = Modifier, subTitleState: Boolean) {
     Column(
-        modifier = modifier.background(White) ,
-        horizontalAlignment = Alignment.Start) {
+        modifier = modifier.background(White),
+        horizontalAlignment = Alignment.Start
+    ) {
         Text(
             text = "회원가입을 진행해주세요",
             style = Heading2,
             color = Black
         )
         Text(
-            modifier = Modifier.padding(0.dp, 8.dp, 0.dp, 0.dp),
+            modifier = Modifier.padding(top= 8.dp),
             text = "아래 항목들을 정확히 채워주세요",
             style = Body3,
             color = if (!subTitleState) Gray06.copy(alpha = 0.4f) else Gray06

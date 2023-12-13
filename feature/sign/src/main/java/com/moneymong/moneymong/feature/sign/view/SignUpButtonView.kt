@@ -16,9 +16,10 @@ import com.moneymong.moneymong.design_system.component.button.MDSButtonSize
 import com.moneymong.moneymong.design_system.component.button.MDSButtonType
 
 @Composable
-fun SignUpButtonView(modifier: Modifier = Modifier , isEnabled : Boolean) {
-
-
+fun SignUpButtonView(
+    modifier: Modifier = Modifier ,
+    isEnabled : Boolean
+) {
     Column(
         modifier = modifier
     ) {

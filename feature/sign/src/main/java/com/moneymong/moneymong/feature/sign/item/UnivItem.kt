@@ -17,7 +17,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import com.moneymong.moneymong.design_system.R
 import com.moneymong.moneymong.design_system.theme.Black
@@ -26,22 +25,24 @@ import com.moneymong.moneymong.design_system.theme.Body4
 import com.moneymong.moneymong.design_system.theme.Gray03
 import com.moneymong.moneymong.design_system.theme.White
 import com.moneymong.moneymong.feature.sign.University
-import com.moneymong.moneymong.feature.sign.view.SignCompleteCheckedView
 
 
 @Composable
-fun UnivItem(univs: University, onClick : (String) -> Unit) {
+fun UnivItem(
+    univs: University,
+    onClick : (String) -> Unit
+) {
     var isSelected by remember{ mutableStateOf(false) }
 
     Row(
         modifier = Modifier
             .background(White)
             .fillMaxWidth()
-            .padding(0.dp, 0.dp, 0.dp, 20.dp)
-            .background(White)
             .clickable {
                 onClick(univs.univ)
             }
+            .padding(bottom = 20.dp)
+
     ) {
         Image(
             painter = painterResource(id = R.drawable.img_university),
@@ -55,7 +56,7 @@ fun UnivItem(univs: University, onClick : (String) -> Unit) {
             modifier = Modifier
                 .weight(1f)
                 .height(22.dp)
-                .padding(10.dp, 0.dp, 0.dp, 0.dp)
+                .padding(start = 10.dp)
         )
 
         Icon(

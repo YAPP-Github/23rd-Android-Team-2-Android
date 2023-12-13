@@ -42,16 +42,6 @@ import com.moneymong.moneymong.feature.sign.view.SignUpButtonView
 import com.moneymong.moneymong.feature.sign.view.SignUpGradeView
 import com.moneymong.moneymong.feature.sign.view.SignUpTitleView
 
-class SignUpScreenActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContent {
-            MMTheme {
-                SignUpScreen()
-            }
-        }
-    }
-}
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SignUpScreen() {
@@ -59,18 +49,17 @@ fun SignUpScreen() {
         modifier = Modifier
             .fillMaxSize()
             .background(White)
-            .padding(MMHorizontalSpacing)
-            .background(White),
+            .padding(MMHorizontalSpacing),
         topBar = {
             TopAppBar(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(44.dp),
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = White,
                     titleContentColor = Black,
                 ),
                 title = { Text(text = "")},
-                modifier = Modifier
-                    .fillMaxWidth(1f)
-                    .height(44.dp),
                 navigationIcon = {
                     Column(
                         modifier = Modifier.fillMaxSize(),
@@ -89,7 +78,6 @@ fun SignUpScreen() {
                                 painter = painterResource(id = R.drawable.ic_chevron_left),
                                 contentDescription = null,
                                 modifier = Modifier
-                                    .fillMaxSize()
                                     .size(24.dp),
                                 tint = Gray07
                             )
@@ -119,35 +107,17 @@ fun SignUpContent (modifier : Modifier = Modifier ){
     var subTitleState by remember { mutableStateOf(false) }
 
 
-    //대학교 검색 관련
-    fun changeSelected(univ:String) {
-        isSelected = !isSelected
-        selectedUniv = univ
-    }
-
-    fun changeValue(value: TextFieldValue){
-        textValue = value
-    }
-
     SearchUnivView(
-        onClick = {  changeSelected(it) },
-        onChange = { changeValue(it)},
+        onClick = {
+            isSelected = !isSelected
+            selectedUniv = it
+        },
+        onChange = { textValue = it },
         value = textValue
     )
 
-    //가입하기 버튼
-    fun changeEnabled() {
-        isEnabled = true
-    }
-    
-    //가입하기 초기화
-    fun changedInit() {
-        isSelected = !isSelected
-        isEnabled = false
-    }
-
     SignUpGradeView(
-        onClick = {  changeEnabled() },
+        onClick = {  isEnabled = true  },
     )
 
 
@@ -162,8 +132,8 @@ fun SignUpContent (modifier : Modifier = Modifier ){
         ) {
             SignUpTitleView(
                 modifier = Modifier
-                    .padding(0.dp, 8.dp, 0.dp, 0.dp)
-                    .fillMaxWidth(),
+                    .fillMaxWidth()
+                    .padding(top = 8.dp),
                 subTitleState = subTitleState
             )
 
@@ -173,16 +143,24 @@ fun SignUpContent (modifier : Modifier = Modifier ){
                     .fillMaxWidth()
             ){
                 if(!isSelected){
-                    SearchUnivView(onClick = { selectedUniv -> changeSelected(selectedUniv) }, onChange = {value -> changeValue(value)}, value = textValue)
+                    SearchUnivView(
+                        onClick = {
+                            isSelected = !isSelected
+                            selectedUniv = it
+                        },
+                        onChange = {textValue = it},
+                        value = textValue
+                    )
                 } else {
                     Column(modifier = Modifier.fillMaxSize()) {
                         SignCompleteCheckedView(
                             modifier = Modifier.fillMaxWidth(),
                             text = selectedUniv,
-                            onChanged = { changedInit() })
+                            onChanged = { isSelected = !isSelected
+                                isEnabled = false })
                         SignUpGradeView(
                             modifier = Modifier.fillMaxWidth(),
-                            onClick = { changeEnabled() }
+                            onClick = { isEnabled = true  }
                         )
                         }
                     }
@@ -194,7 +172,7 @@ fun SignUpContent (modifier : Modifier = Modifier ){
                 .fillMaxWidth()
                 .align(Alignment.BottomCenter)
         ) {
-            SignUpButtonView(modifier = Modifier.fillMaxWidth(), isEnabled)
+            SignUpButtonView(modifier = Modifier.fillMaxWidth(), isEnabled = isEnabled)
         }
     }
 }
