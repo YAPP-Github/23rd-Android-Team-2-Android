@@ -21,29 +21,33 @@ import com.moneymong.moneymong.design_system.theme.Gray03
 import com.moneymong.moneymong.design_system.theme.White
 
 @Composable
-fun SignCompleteCheckedView(modifier: Modifier = Modifier , text: String, onChanged : () -> Unit) {
+fun SignCompleteCheckedView(
+    modifier: Modifier = Modifier ,
+    text: String,
+    onChanged : () -> Unit
+) {
     Row(
         modifier = modifier
             .background(White)
     ) {
         Image(
-            painter = painterResource(id = R.drawable.img_university),
             modifier = Modifier.size(22.dp),
+            painter = painterResource(id = R.drawable.img_university),
             contentDescription = null
         )
         Text(
-            text = text,
-            color = Black,
-            style = Body4,
             modifier = Modifier
                 .weight(1f)
                 .height(22.dp)
-                .padding(10.dp, 0.dp, 0.dp, 0.dp)
+                .padding(start= 10.dp),
+            text = text,
+            color = Black,
+            style = Body4
         )
 
         IconButton(
-            onClick = { onChanged() },
-            modifier = Modifier.size(24.dp)
+            modifier = Modifier.size(24.dp),
+            onClick = { onChanged() }
         ) {
 
             Icon(
@@ -55,9 +59,3 @@ fun SignCompleteCheckedView(modifier: Modifier = Modifier , text: String, onChan
         }
     }
 }
-
-//@Preview
-//@Composable
-//fun SignCompleteCheckedViewPre(){
-//    SignCompleteCheckedView( text = "홍익대학교 서울캠퍼스 ")
-//}

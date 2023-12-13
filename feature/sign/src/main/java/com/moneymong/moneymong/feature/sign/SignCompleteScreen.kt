@@ -27,13 +27,11 @@ import com.moneymong.moneymong.feature.sign.view.SignCompleteView
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SignCompleteScreen(){
-
     Scaffold(
         modifier = Modifier
             .fillMaxSize()
             .background(White)
-            .padding(MMHorizontalSpacing)
-            .background(White),
+            .padding(MMHorizontalSpacing),
         topBar = {
             TopAppBar(
                 colors = TopAppBarDefaults.topAppBarColors(
@@ -51,7 +49,7 @@ fun SignCompleteScreen(){
                         color = Black,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(top= 8.dp, bottom= 8.dp),
+                            .padding(vertical = 8.dp),
                     )
                 },
             )
@@ -71,14 +69,11 @@ fun SignCompleteContent (modifier : Modifier = Modifier ){
             .background(White)
     ) {
         SignCompleteView(modifier = Modifier.fillMaxSize())
-
-        Box(
+        SignCompleteButtonView(
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.BottomCenter)
-        ) {
-            SignCompleteButtonView(modifier = Modifier.fillMaxWidth())
-        }
+        )
     }
 }
 

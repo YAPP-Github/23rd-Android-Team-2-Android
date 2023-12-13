@@ -31,14 +31,19 @@ import com.moneymong.moneymong.feature.sign.mockUniversities
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun SearchUnivView(modifier : Modifier = Modifier, onClick : (String) -> Unit, onChange : (TextFieldValue) -> Unit , value : TextFieldValue) {
-    var tvalue by remember { mutableStateOf(TextFieldValue()) }
+fun SearchUnivView(
+    modifier : Modifier = Modifier,
+    onClick : (String) -> Unit,
+    onChange : (TextFieldValue) -> Unit ,
+    value : TextFieldValue
+) {
+    var tvalue by remember { mutableStateOf(value) }
     var filteredUniversities by remember { mutableStateOf(mockUniversities) }
     var isListVisible by remember { mutableStateOf(false) }
     var isFilled by remember { mutableStateOf(false) }
 
     val keyboardController = LocalSoftwareKeyboardController.current
-    tvalue = value
+
 
     fun filterUniversities(query: String) {
         filteredUniversities = if (query.isEmpty()) {
@@ -48,6 +53,7 @@ fun SearchUnivView(modifier : Modifier = Modifier, onClick : (String) -> Unit, o
         }
 
     }
+
 
     Column(
         modifier = modifier.background(White)
@@ -70,8 +76,7 @@ fun SearchUnivView(modifier : Modifier = Modifier, onClick : (String) -> Unit, o
             singleLine = true,
             icon = MDSTextFieldIcons.Search,
             onIconClick = {
-                isListVisible = if(tvalue.text.isEmpty())
-                {
+                isListVisible = if(tvalue.text.isEmpty()) {
                     false
                 } else {
                     filterUniversities(tvalue.text)
@@ -79,7 +84,6 @@ fun SearchUnivView(modifier : Modifier = Modifier, onClick : (String) -> Unit, o
                     true
                 }
             },
-
             keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Text),
             keyboardActions = KeyboardActions(
                 onDone = {
