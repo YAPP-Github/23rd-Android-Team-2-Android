@@ -122,13 +122,14 @@ private fun InputNameView(
     }
 
     val focusManager = LocalFocusManager.current
+    fun filterText(text: String) = text.filter { it.isLetterOrDigit() || it == ' ' }
 
     MDSTextField(
         modifier = Modifier
             .fillMaxWidth()
             .onFocusChanged { isFilled = !it.isFocused },
         value = agencyNameValue,
-        onValueChange = onAgencyNameChange,
+        onValueChange = { onAgencyNameChange(it.copy(text = filterText(it.text))) },
         title = "소속 이름",
         placeholder = "소속 이름을 입력해주세요",
         isFilled = isFilled,
