@@ -33,7 +33,7 @@ fun MDSButton(
     val contentColor = if (enabled) type.contentColor else disabledContentColor
 
     Box(
-        modifier = Modifier
+        modifier = modifier
             .background(
                 color = backgroundColor,
                 shape = RoundedCornerShape(12.dp)
@@ -44,12 +44,11 @@ fun MDSButton(
             .clickable(
                 onClick = onClick,
                 enabled = enabled
-            )
-            .padding(vertical = size.verticalPadding)
-            .then(other = modifier),
+            ),
         contentAlignment = Alignment.Center
     ) {
         Row(
+            modifier = Modifier.padding(vertical = size.verticalPadding),
             horizontalArrangement = Arrangement.spacedBy(6.dp)
         ) {
             if (iconResource != null) {
