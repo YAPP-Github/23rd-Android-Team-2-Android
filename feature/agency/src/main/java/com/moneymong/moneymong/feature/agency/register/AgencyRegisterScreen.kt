@@ -27,6 +27,7 @@ import com.moneymong.moneymong.design_system.theme.Gray07
 import com.moneymong.moneymong.design_system.theme.MMHorizontalSpacing
 import com.moneymong.moneymong.design_system.theme.White
 import com.moneymong.moneymong.feature.agency.AgencyType
+import com.moneymong.moneymong.feature.agency.register.component.AgencyOutDialog
 import com.moneymong.moneymong.feature.agency.register.view.AgencyResisterContentView
 
 @Composable
@@ -36,7 +37,15 @@ fun AgencyRegisterScreen(
     var agencyType: AgencyType? by remember { mutableStateOf(null) }
     var agencyName by remember { mutableStateOf(TextFieldValue()) }
     var nameTextFieldIsError by remember { mutableStateOf(false) }
+    var showOutDialog by remember { mutableStateOf(false) }
 
+    if (showOutDialog) {
+        AgencyOutDialog(
+            onDismissRequest = { showOutDialog = false },
+            onPositive = { showOutDialog = false /* todo back home */ },
+            onNegative = { showOutDialog = false }
+        )
+    }
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -48,9 +57,7 @@ fun AgencyRegisterScreen(
                 .align(Alignment.End)
                 .padding(vertical = 10.dp)
                 .size(24.dp)
-                .clickable {
-                    /*TODO navigate to back*/
-                },
+                .clickable { showOutDialog = true },
             painter = painterResource(id = R.drawable.ic_close_default),
             tint = Gray07,
             contentDescription = null
