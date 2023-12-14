@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import com.moneymong.moneymong.common.ui.noRippleClickable
 import com.moneymong.moneymong.design_system.R
 import com.moneymong.moneymong.design_system.theme.Heading1
+import com.moneymong.moneymong.design_system.theme.MMHorizontalSpacing
 import com.moneymong.moneymong.design_system.theme.White
 
 @Composable
@@ -32,7 +33,7 @@ fun OCRResultTopbarView(
     ) {
         Icon(
             modifier = Modifier
-                .padding(vertical = 10.dp, horizontal = 20.dp)
+                .padding(vertical = 10.dp, horizontal = MMHorizontalSpacing)
                 .noRippleClickable { onClickBack() },
             painter = painterResource(id = R.drawable.ic_chevron_left),
             contentDescription = null,
@@ -46,7 +47,7 @@ fun OCRResultTopbarView(
         )
         Icon(
             modifier = Modifier
-                .padding(vertical = 10.dp, horizontal = 20.dp)
+                .padding(vertical = 10.dp, horizontal = MMHorizontalSpacing)
                 .noRippleClickable { onClickClose() },
             painter = painterResource(id = R.drawable.ic_close_default),
             contentDescription = null,

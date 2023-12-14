@@ -28,13 +28,9 @@ import com.moneymong.moneymong.design_system.component.button.MDSButtonSize
 import com.moneymong.moneymong.design_system.component.button.MDSButtonType
 import com.moneymong.moneymong.design_system.theme.Body4
 import com.moneymong.moneymong.design_system.theme.Gray07
+import com.moneymong.moneymong.design_system.theme.MMHorizontalSpacing
 import com.moneymong.moneymong.design_system.theme.White
-import com.moneymong.moneymong.ocr_result.R
 import com.moneymong.moneymong.ocr_result.view.item.OCRResultBottomItem
-
-fun Icon(painter: Int, contentDescription: Any?) {
-
-}
 
 @Composable
 fun OCRResultBottomView(
@@ -81,7 +77,7 @@ fun OCRResultBottomView(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 20.dp),
+                    .padding(horizontal = MMHorizontalSpacing),
             ) {
                 Spacer(modifier = Modifier.height(24.dp))
                 OCRResultBottomItem(
