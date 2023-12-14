@@ -27,8 +27,13 @@ fun MDSNumberTextField(
 
     MDSBaseTextField(
         modifier = modifier,
-        value = value.copy(text = value.text.filter { it.isDigit() }.trimStart { it == '0' }),
-        onValueChange = onValueChange,
+        value = value,
+        onValueChange = { original ->
+            onValueChange(original.copy(text = original.text
+                .filter { char -> char.isDigit() }
+                .trimStart { char -> char == '0' })
+            )
+        },
         title = title,
         placeholder = placeholder,
         isFilled = isFilled,
