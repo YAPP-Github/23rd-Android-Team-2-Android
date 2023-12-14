@@ -22,6 +22,7 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import com.moneymong.moneymong.design_system.component.textfield.MDSTextField
+import com.moneymong.moneymong.design_system.component.textfield.util.MDSTextFieldIcons
 import com.moneymong.moneymong.design_system.theme.Body2
 import com.moneymong.moneymong.design_system.theme.Gray06
 import com.moneymong.moneymong.design_system.theme.Gray10
@@ -137,6 +138,8 @@ private fun InputNameView(
         helperText = "${maxCount}자 이하로 입력해주세요",
         maxCount = maxCount,
         singleLine = true,
+        icon = MDSTextFieldIcons.Clear,
+        onIconClick = { onAgencyNameChange(agencyName.copy(text = "")) },
         keyboardActions = KeyboardActions(onDone = {
             focusManager.clearFocus()
         })
