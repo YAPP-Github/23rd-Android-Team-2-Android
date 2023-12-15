@@ -50,6 +50,7 @@ dependencies {
 
     implementation(projects.feature.sign)
     implementation(projects.feature.ledger)
+    implementation(projects.feature.ledgermanual)
     implementation(projects.feature.ocr)
     implementation(projects.feature.ocrResult)
     implementation(projects.feature.ocrDetail)
