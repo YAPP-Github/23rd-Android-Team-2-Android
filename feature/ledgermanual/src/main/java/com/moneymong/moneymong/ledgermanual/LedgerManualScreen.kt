@@ -37,6 +37,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.moneymong.moneymong.design_system.R.*
+import com.moneymong.moneymong.design_system.component.modal.MDSModal
 import com.moneymong.moneymong.design_system.component.selection.MDSSelection
 import com.moneymong.moneymong.design_system.component.textfield.MDSTextField
 import com.moneymong.moneymong.design_system.theme.Blue03
@@ -57,6 +58,18 @@ fun LedgerManualScreen(
     var userInput by remember { mutableStateOf(TextFieldValue()) }
     var isFilled by remember { mutableStateOf(false) }
     val isError by remember { derivedStateOf { validate(userInput.text, 20) } }
+
+    if (false) { // TODO
+        MDSModal(
+            icon = drawable.ic_warning_filled,
+            title = "정말 나가시겠습니까?",
+            description = "작성한 내용이 저장되지 않습니다",
+            negativeBtnText = "취소",
+            positiveBtnText = "확인",
+            onClickNegative = { /*TODO*/ },
+            onClickPositive = { /*TODO*/ },
+        )
+    }
 
     Scaffold(
         topBar = {
@@ -79,7 +92,8 @@ fun LedgerManualScreen(
                     .padding(horizontal = MMHorizontalSpacing)
             ) {
                 MDSTextField( // TODO
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
                         .onFocusChanged {
                             isFilled = !it.isFocused
                         },
