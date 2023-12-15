@@ -40,7 +40,6 @@ import com.moneymong.moneymong.feature.sign.view.SignUpButtonView
 import com.moneymong.moneymong.feature.sign.view.SignUpGradeView
 import com.moneymong.moneymong.feature.sign.view.SignUpTitleView
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SignUpScreen() {
     Scaffold(
@@ -53,10 +52,7 @@ fun SignUpScreen() {
                 modifier = Modifier
                 .fillMaxWidth()
                 .height(44.dp)
-                .background(White)
-                .clickable {
-
-                },
+                .background(White),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Start
             ){
@@ -65,7 +61,8 @@ fun SignUpScreen() {
                         contentDescription = null,
                         modifier = Modifier
                             .size(24.dp)
-                            .background(White),
+                            .background(White)
+                            .clickable { },
                         tint = Gray07
                     )
             }

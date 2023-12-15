@@ -68,7 +68,7 @@ fun SignCompleteContent (modifier : Modifier = Modifier ){
             .fillMaxSize()
             .background(White)
     ) {
-        SignCompleteView(modifier = Modifier.fillMaxSize())
+        SignCompleteView(modifier)
         SignCompleteButtonView(
             modifier = Modifier
                 .fillMaxWidth()
