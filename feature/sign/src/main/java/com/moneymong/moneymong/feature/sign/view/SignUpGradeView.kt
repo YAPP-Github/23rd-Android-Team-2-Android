@@ -27,7 +27,8 @@ import com.moneymong.moneymong.design_system.theme.White
 @Composable
 fun SignUpGradeView(
     modifier: Modifier = Modifier,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    gradeInfor : (String) -> Unit
 ) {
     var selectedGrade by remember { mutableStateOf<Grade?>(null) }
 
@@ -60,7 +61,8 @@ fun SignUpGradeView(
                     onClick = {
                         selectedGrade = grade
                         onClick()
-                    }
+                        gradeInfor(grade.text)
+                    },
                 )
             }
         }

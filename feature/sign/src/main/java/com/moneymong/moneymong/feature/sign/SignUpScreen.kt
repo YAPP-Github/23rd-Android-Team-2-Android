@@ -1,12 +1,12 @@
 package com.moneymong.moneymong.feature.sign
 
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -34,7 +33,6 @@ import com.moneymong.moneymong.design_system.R
 import com.moneymong.moneymong.design_system.theme.Black
 import com.moneymong.moneymong.design_system.theme.Gray07
 import com.moneymong.moneymong.design_system.theme.MMHorizontalSpacing
-import com.moneymong.moneymong.design_system.theme.MMTheme
 import com.moneymong.moneymong.design_system.theme.White
 import com.moneymong.moneymong.feature.sign.view.SearchUnivView
 import com.moneymong.moneymong.feature.sign.view.SignCompleteCheckedView
@@ -51,40 +49,26 @@ fun SignUpScreen() {
             .background(White)
             .padding(MMHorizontalSpacing),
         topBar = {
-            TopAppBar(
+            Row(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .height(44.dp),
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = White,
-                    titleContentColor = Black,
-                ),
-                title = { Text(text = "")},
-                navigationIcon = {
-                    Column(
-                        modifier = Modifier.fillMaxSize(),
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.Start
-                    ) {
-                        IconButton(
-                            modifier = Modifier
-                                .background(White)
-                                .size(24.dp),
-                            onClick = {
+                .fillMaxWidth()
+                .height(44.dp)
+                .background(White)
+                .clickable {
 
-                            },
-                        ) {
-                            Icon(
-                                painter = painterResource(id = R.drawable.ic_chevron_left),
-                                contentDescription = null,
-                                modifier = Modifier
-                                    .size(24.dp),
-                                tint = Gray07
-                            )
-                        }
-                    }
-                }
-            )
+                },
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Start
+            ){
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_chevron_left),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .size(24.dp)
+                            .background(White),
+                        tint = Gray07
+                    )
+            }
         },
         content = { innerPadding ->
             SignUpContent(modifier = Modifier.padding(innerPadding))
@@ -98,27 +82,15 @@ fun SignUpContent (modifier : Modifier = Modifier ){
     //대학교 선택 상태
     var isSelected by remember{ mutableStateOf(false) }
     //선택한 대학 정보
-    var selectedUniv by remember { mutableStateOf(" ") }
+    var selectedUniv by remember { mutableStateOf("") }
     //가입하기 Button 상태
     var isEnabled by remember { mutableStateOf(false) }
     //대학교 검색 정보
     var textValue by remember { mutableStateOf(TextFieldValue()) }
     //subtitle enabled 상태
     var subTitleState by remember { mutableStateOf(false) }
-
-
-    SearchUnivView(
-        onClick = {
-            isSelected = !isSelected
-            selectedUniv = it
-        },
-        onChange = { textValue = it },
-        value = textValue
-    )
-
-    SignUpGradeView(
-        onClick = {  isEnabled = true  },
-    )
+    //선택한 학년 정보
+    var gradeInfor by remember { mutableStateOf("") }
 
 
     Box(
@@ -157,10 +129,12 @@ fun SignUpContent (modifier : Modifier = Modifier ){
                             modifier = Modifier.fillMaxWidth(),
                             text = selectedUniv,
                             onChanged = { isSelected = !isSelected
-                                isEnabled = false })
+                                isEnabled = false
+                            })
                         SignUpGradeView(
                             modifier = Modifier.fillMaxWidth(),
-                            onClick = { isEnabled = true  }
+                            onClick = { isEnabled = true  },
+                            gradeInfor = { gradeInfor = it }
                         )
                         }
                     }
@@ -172,7 +146,10 @@ fun SignUpContent (modifier : Modifier = Modifier ){
                 .fillMaxWidth()
                 .align(Alignment.BottomCenter)
         ) {
-            SignUpButtonView(modifier = Modifier.fillMaxWidth(), isEnabled = isEnabled)
+            SignUpButtonView(
+                modifier = Modifier.fillMaxWidth(),
+                isEnabled = isEnabled
+            )
         }
     }
 }
@@ -181,6 +158,6 @@ fun SignUpContent (modifier : Modifier = Modifier ){
 
 @Preview
 @Composable
-fun preview(){
+fun Preview(){
     SignUpScreen()
 }
