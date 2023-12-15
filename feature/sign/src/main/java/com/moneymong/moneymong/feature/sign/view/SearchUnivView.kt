@@ -32,10 +32,10 @@ import com.moneymong.moneymong.feature.sign.mockUniversities
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun SearchUnivView(
-    modifier : Modifier = Modifier,
-    onClick : (String) -> Unit,
-    onChange : (TextFieldValue) -> Unit ,
-    value : TextFieldValue
+    modifier: Modifier = Modifier,
+    onClick: (String) -> Unit,
+    onChange: (TextFieldValue) -> Unit,
+    value: TextFieldValue
 ) {
     var tvalue by remember { mutableStateOf(value) }
     var filteredUniversities by remember { mutableStateOf(mockUniversities) }
@@ -76,7 +76,7 @@ fun SearchUnivView(
             singleLine = true,
             icon = MDSTextFieldIcons.Search,
             onIconClick = {
-                isListVisible = if(tvalue.text.isEmpty()) {
+                isListVisible = if (tvalue.text.isEmpty()) {
                     false
                 } else {
                     filterUniversities(tvalue.text)
@@ -97,11 +97,14 @@ fun SearchUnivView(
             if (filteredUniversities.isNotEmpty()) {
                 UnivList(univs = filteredUniversities, onClick)
             } else {
-                Column ( modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 28.dp)){
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 28.dp)
+                ) {
 
-                    Text(text = "검색결과가 없습니다",
+                    Text(
+                        text = "검색결과가 없습니다",
                         style = Body4,
                         color = Gray05
                     )
@@ -114,7 +117,7 @@ fun SearchUnivView(
 
 
 @Composable
-fun UnivList(univs: List<University>,  onClick: (String) -> Unit) {
+fun UnivList(univs: List<University>, onClick: (String) -> Unit) {
     LazyColumn {
         items(univs) { univ ->
             UnivItem(
