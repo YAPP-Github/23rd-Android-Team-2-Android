@@ -11,8 +11,18 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.ModalBottomSheetLayout
+import androidx.compose.material.ModalBottomSheetValue
+import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -23,45 +33,85 @@ import com.moneymong.moneymong.design_system.component.button.MDSFloatingActionB
 import com.moneymong.moneymong.design_system.theme.Body4
 import com.moneymong.moneymong.design_system.theme.Gray01
 import com.moneymong.moneymong.design_system.theme.Gray08
+import com.moneymong.moneymong.design_system.theme.Gray10
 import com.moneymong.moneymong.design_system.theme.MMHorizontalSpacing
 import com.moneymong.moneymong.design_system.theme.Red03
 import com.moneymong.moneymong.design_system.theme.White
 import com.moneymong.moneymong.feature.agency.Agency
 import com.moneymong.moneymong.feature.agency.mockAgencies
+import com.moneymong.moneymong.feature.agency.search.component.AgencyBottomSheetType
+import com.moneymong.moneymong.feature.agency.search.component.AgencySearchBottomSheetContent
 import com.moneymong.moneymong.feature.agency.search.component.AgencySearchTopBar
 import com.moneymong.moneymong.feature.agency.search.item.AgencyItem
+import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun AgencySearchScreen(
     modifier: Modifier = Modifier
 ) {
 //    val agencies = emptyList<Agency>()
     val agencies = mockAgencies
+    val coroutineScope = rememberCoroutineScope()
+    var registerType: AgencyBottomSheetType? by remember { mutableStateOf(null) }
 
-    Box(
-        modifier = modifier
-            .fillMaxSize()
-            .background(color = if (agencies.isEmpty()) White else Gray01)
-            .padding(horizontal = MMHorizontalSpacing)
+    val sheetState = rememberModalBottomSheetState(
+        initialValue = ModalBottomSheetValue.Hidden,
+        confirmValueChange = {
+            if (it == ModalBottomSheetValue.Hidden) {
+                registerType = null
+            }
+            true
+        }
+    )
+    val showSheet: () -> Unit = {
+        coroutineScope.launch {
+            sheetState.show()
+        }
+    }
+    val hideSheet: () -> Unit = {
+        coroutineScope.launch {
+            sheetState.hide()
+        }
+    }
+
+    ModalBottomSheetLayout(
+        sheetContent = {
+            AgencySearchBottomSheetContent(
+                checkedType = registerType,
+                changeType = { registerType = it },
+                hide = hideSheet
+            )
+        },
+        sheetState = sheetState,
+        sheetShape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp),
+        scrimColor = Gray10.copy(alpha = 0.7f),
     ) {
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally
+        Box(
+            modifier = modifier
+                .fillMaxSize()
+                .background(color = if (agencies.isEmpty()) White else Gray01)
+                .padding(horizontal = MMHorizontalSpacing)
         ) {
-            AgencySearchTopBar()
-            AgencySearchContentView(
-                modifier = Modifier.weight(1f),
-                agencies = agencies
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                AgencySearchTopBar()
+                AgencySearchContentView(
+                    modifier = Modifier.weight(1f),
+                    agencies = agencies
+                )
+            }
+            MDSFloatingActionButton(
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .padding(bottom = 20.dp),
+                onClick = showSheet,
+                iconResource = R.drawable.ic_plus_default,
+                containerColor = Red03
             )
         }
-        MDSFloatingActionButton(
-            modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .padding(bottom = 20.dp),
-            onClick = { }, // todo: navigate to 소속 등록
-            iconResource = R.drawable.ic_plus_default,
-            containerColor = Red03
-        )
     }
 }
 
