@@ -34,7 +34,7 @@ import com.moneymong.moneymong.feature.agency.register.view.AgencyResisterConten
 fun AgencyRegisterScreen(
     modifier: Modifier = Modifier
 ) {
-    var agencyType: AgencyType? by remember { mutableStateOf(null) }
+    var agencyType by remember { mutableStateOf(AgencyType.CLUB) }
     var agencyName by remember { mutableStateOf(TextFieldValue()) }
     var nameTextFieldIsError by remember { mutableStateOf(false) }
     var showOutDialog by remember { mutableStateOf(false) }
@@ -71,13 +71,14 @@ fun AgencyRegisterScreen(
             onAgencyNameChange = { agencyName = it },
             changeNameTextFieldIsError = { nameTextFieldIsError = it },
         )
+        val canRegister = agencyName.text.isNotEmpty() && nameTextFieldIsError.not()
         MDSButton(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 28.dp),
             onClick = { /*TODO navigate to 소속 등록 성공*/ },
             text = "등록하기",
-            enabled = agencyType != null && agencyName.text.isNotEmpty() && nameTextFieldIsError.not()
+            enabled = canRegister
         )
     }
 }
