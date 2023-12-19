@@ -59,7 +59,7 @@ private fun Profile(
             painter = painterResource(id = R.drawable.img_profile),
             contentDescription = "profile Image"
         )
-        Spacer(modifier = Modifier.width((6 + 10).dp))
+        Spacer(modifier = Modifier.width(16.dp))
         Column {
             Text(
                 text = "김마이몽",

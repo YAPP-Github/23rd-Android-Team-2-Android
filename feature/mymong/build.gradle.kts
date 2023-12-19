@@ -6,7 +6,6 @@ plugins {
 
 android {
     namespace = "com.moneymong.moneymong.feature.mymong"
-    compileSdk = 33
 }
 
 dependencies {
