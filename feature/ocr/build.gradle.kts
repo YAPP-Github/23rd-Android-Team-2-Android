@@ -20,6 +20,9 @@ dependencies {
     implementation(libs.androidx.cameraX.video)
     implementation(libs.androidx.cameraX.view)
     implementation(libs.androidx.cameraX.extensions)
+    implementation(libs.orbit.core)
+    implementation(libs.orbit.compose)
+    implementation(libs.orbit.viewModel)
 
     testImplementation(libs.junit4)
     androidTestImplementation(libs.androidx.junit)
