@@ -6,6 +6,10 @@ plugins {
 
 android {
     namespace = "com.moneymong.moneymong.network"
+
+    buildFeatures {
+        buildConfig = true
+    }
 }
 
 dependencies {

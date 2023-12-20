@@ -6,6 +6,7 @@ import com.chuckerteam.chucker.api.ChuckerInterceptor
 import com.chuckerteam.chucker.api.RetentionManager
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import com.moneymong.moneymong.network.BuildConfig
 import com.moneymong.moneymong.network.util.MoneyMongTokenAuthenticator
 import dagger.Module
 import dagger.Provides
@@ -27,8 +28,11 @@ object NetworkModule {
         chuckerInterceptor: ChuckerInterceptor,
         moneymongAuthenticator: MoneyMongTokenAuthenticator
     ): OkHttpClient {
-        val okhttpLoggingClient =
+        val okhttpLoggingClient = if (BuildConfig.DEBUG) {
             HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
+        } else {
+            HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.NONE)
+        }
 
         return OkHttpClient.Builder()
             .authenticator(moneymongAuthenticator)
