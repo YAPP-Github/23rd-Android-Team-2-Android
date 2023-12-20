@@ -2,6 +2,7 @@
 plugins {
     alias(libs.plugins.moneymong.android.library.compose)
     alias(libs.plugins.moneymong.android.feature)
+    alias(libs.plugins.moneymong.android.hilt)
 }
 
 android {
