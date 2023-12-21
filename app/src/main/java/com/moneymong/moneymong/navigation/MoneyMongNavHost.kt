@@ -11,11 +11,11 @@ fun MoneyMongNavHost(
     startDestination: String = "" // TODO
 ) {
     val navController = rememberNavController()
-    NavHost(
-        modifier = modifier,
-        navController = navController,
-        startDestination = startDestination
-    ) {
-
-    }
+//    NavHost(
+//        modifier = modifier,
+//        navController = navController,
+//        startDestination = startDestination
+//    ) {
+//
+//    }
 }
