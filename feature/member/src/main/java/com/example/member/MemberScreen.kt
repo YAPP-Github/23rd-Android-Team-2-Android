@@ -34,6 +34,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.member.component.MemberCardView
+import com.example.member.component.MemberDialogView
 import com.example.member.component.MemberListView
 import com.moneymong.moneymong.design_system.component.button.MDSButton
 import com.moneymong.moneymong.design_system.component.button.MDSButtonSize
@@ -69,6 +70,7 @@ fun Memberscreen() {
     val isStaffChecked = remember { mutableStateOf(false) }
     val isMemberChecked = remember { mutableStateOf(false) }
     val roleChanged = remember { mutableStateOf(false) }
+    val showDialog = remember { mutableStateOf(false) }
 
     fun onIconClick() {
         vertClick.value = true
@@ -76,6 +78,18 @@ fun Memberscreen() {
 
     fun onChange() {
         onClick.value = true
+    }
+
+    if (showDialog.value) {
+        MemberDialogView(
+            onDismissRequest = {
+                showDialog.value = false
+            },
+            onConfirmation = {
+                // 확인 버튼 클릭 시 수행할 작업
+                showDialog.value = false
+            }
+        )
     }
 
     if (vertClick.value) {
@@ -131,8 +145,11 @@ fun Memberscreen() {
                     }
                     Spacer(modifier = Modifier.height(20.dp))
                     Text(
-                        modifier = Modifier.clickable {
-
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable {
+                            vertClick.value = false
+                            showDialog.value = true
                         },
                         text = "내보내기",
                         style = Body4,
@@ -176,10 +193,10 @@ fun Memberscreen() {
                             .fillMaxWidth()
                             .height(24.dp)
                             .clickable {
-                            isMemberChecked.value = !isMemberChecked.value
-                            Log.d("isMemberChecked", isMemberChecked.value.toString())
-                            isStaffChecked.value = false
-                        },
+                                isMemberChecked.value = !isMemberChecked.value
+                                Log.d("isMemberChecked", isMemberChecked.value.toString())
+                                isStaffChecked.value = false
+                            },
                     ) {
                         Text(
                             modifier = Modifier.weight(1f),
@@ -247,7 +264,6 @@ fun Memberscreen() {
 
         }
     }
-
 
     Column(
         modifier = Modifier
