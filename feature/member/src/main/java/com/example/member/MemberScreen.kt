@@ -1,6 +1,5 @@
 package com.example.member
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -86,7 +85,6 @@ fun Memberscreen() {
                 showDialog.value = false
             },
             onConfirmation = {
-                // 확인 버튼 클릭 시 수행할 작업
                 showDialog.value = false
             }
         )
@@ -148,9 +146,9 @@ fun Memberscreen() {
                         modifier = Modifier
                             .fillMaxWidth()
                             .clickable {
-                            vertClick.value = false
-                            showDialog.value = true
-                        },
+                                vertClick.value = false
+                                showDialog.value = true
+                            },
                         text = "내보내기",
                         style = Body4,
                         color = Red03
@@ -170,7 +168,6 @@ fun Memberscreen() {
                             .height(24.dp)
                             .clickable {
                                 isStaffChecked.value = !isStaffChecked.value
-                                Log.d("isStaffChecked", isStaffChecked.value.toString())
                                 isMemberChecked.value = false
                             }
                     ) {
@@ -194,7 +191,6 @@ fun Memberscreen() {
                             .height(24.dp)
                             .clickable {
                                 isMemberChecked.value = !isMemberChecked.value
-                                Log.d("isMemberChecked", isMemberChecked.value.toString())
                                 isStaffChecked.value = false
                             },
                     ) {
@@ -234,7 +230,7 @@ fun Memberscreen() {
     }
 
     // vertClick 상태가 변경될 때 바텀 시트의 상태를 제어
-    LaunchedEffect(vertClick.value) {
+    LaunchedEffect(key1 = vertClick.value) {
         if (vertClick.value) {
             coroutineScope.launch {
                 sheetState.show()
@@ -242,7 +238,7 @@ fun Memberscreen() {
         }
     }
 
-    LaunchedEffect(onClick.value) {
+    LaunchedEffect(key1 = onClick.value) {
         if (onClick.value) {
             val result = snackbarHostState.showSnackbar(
                 message = "초대코드를 복사했습니다",
@@ -273,7 +269,7 @@ fun Memberscreen() {
             .background(White)
     ) {
         Text(
-            modifier = Modifier.padding(top = 24.dp),
+            modifier = Modifier.padding(top = 24.dp, bottom = 8.dp),
             text = "나",
             style = Body3,
             color = Color(0xFF37404F)

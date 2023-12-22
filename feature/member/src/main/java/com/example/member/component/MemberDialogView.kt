@@ -35,8 +35,9 @@ fun MemberDialogView(
                 painterResource(
                     id = com.moneymong.moneymong.design_system.R.drawable.ic_warning_filled
                 ),
-                contentDescription = null,
                 modifier = Modifier.size(60.dp),
+                contentDescription = null,
+
             )
         },
         title = {
