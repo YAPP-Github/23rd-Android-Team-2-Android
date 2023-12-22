@@ -41,12 +41,12 @@ fun MemberCardView(
 
     OutlinedCard(
         modifier = modifier
-            .size(width = 320.dp, height = 130.dp)
+            .fillMaxWidth()
             .padding(top = 8.dp),
         colors = CardDefaults.cardColors(containerColor = White),
         border = BorderStroke(1.dp, Gray02),
         elevation = CardDefaults.cardElevation(
-            defaultElevation = 1.dp
+            defaultElevation = 4.dp //Todo : 그림자 및 그림자 색상 수정
         )
     ) {
         Column(
@@ -82,7 +82,7 @@ fun MemberCardView(
 
             Divider(
                 modifier = Modifier
-                    .width(288.dp)
+                    .fillMaxWidth()
                     .padding(top = 12.dp, bottom = 12.dp),
                 thickness = 1.dp,
                 color = Gray02
