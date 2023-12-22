@@ -1,7 +1,7 @@
 package com.example.member.component
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -10,18 +10,18 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.material3.CardDefaults
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.member.User
+import com.example.member.util.MemberRoundRectShadow
 import com.moneymong.moneymong.design_system.R
 import com.moneymong.moneymong.design_system.component.tag.MDSTag
 import com.moneymong.moneymong.design_system.theme.Blue04
@@ -39,18 +39,14 @@ fun MemberCardView(
 ) {
     val user = User("김세현", 2)
 
-    OutlinedCard(
+    Column(
         modifier = modifier
             .fillMaxWidth()
-            .padding(top = 8.dp),
-        colors = CardDefaults.cardColors(containerColor = White),
-        border = BorderStroke(1.dp, Gray02),
-        elevation = CardDefaults.cardElevation(
-            defaultElevation = 4.dp //Todo : 그림자 및 그림자 색상 수정
-        )
+            .MemberRoundRectShadow()
+            .background(color = Color.White, shape = RoundedCornerShape(16.dp)),
     ) {
         Column(
-            modifier = Modifier.padding(start = 15.dp, top = 16.dp, end = 15.dp, bottom = 16.dp)
+            modifier = Modifier.padding(horizontal = 15.dp, vertical = 16.dp)
         ) {
             Row(
                 modifier = Modifier
