@@ -17,6 +17,7 @@ dependencies {
     implementation(libs.orbit.core)
     implementation(libs.orbit.compose)
     implementation(libs.orbit.viewModel)
+    implementation(libs.okhttp)
 
     testImplementation(libs.junit4)
     androidTestImplementation(libs.androidx.junit)

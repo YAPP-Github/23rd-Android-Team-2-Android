@@ -4,7 +4,7 @@ plugins {
     alias(libs.plugins.moneymong.android.application.compose)
     alias(libs.plugins.moneymong.android.application.flavors)
     alias(libs.plugins.moneymong.android.application.firebase)
-//    alias(libs.plugins.moneymong.android.hilt) hilt compiler was found error
+    alias(libs.plugins.moneymong.android.hilt)
 }
 
 android {
