@@ -19,8 +19,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.member.User
+import com.example.member.UserType
 import com.example.member.util.MemberRoundRectShadow
 import com.moneymong.moneymong.design_system.R
 import com.moneymong.moneymong.design_system.component.tag.MDSTag
@@ -37,7 +39,7 @@ fun MemberCardView(
     modifier : Modifier = Modifier,
     onChange : ()-> Unit
 ) {
-    val user = User("김세현", 2)
+    val user = User("김세현", UserType.ADMINISTRATOR)
 
     Column(
         modifier = modifier
@@ -50,12 +52,11 @@ fun MemberCardView(
         ) {
             Row(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .height(44.dp),
+                    .fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
             ){
                 Image(
-                    modifier = Modifier.size(29.dp),
+                    modifier = Modifier.size(44.dp),
                     painter = painterResource(id = R.drawable.img_profile),
                     contentDescription = null
                 )
@@ -69,8 +70,8 @@ fun MemberCardView(
 
                 MDSTag(
                     modifier = Modifier.padding(start = 6.dp),
-                    text = if(user.type == 1) "일반멤버" else "운영진",
-                    backgroundColor = if(user.type == 1) Mint03 else Blue04,
+                    text = if(user.type == UserType.GENERAL_MEMBER) "일반멤버" else "운영진",
+                    backgroundColor = if(user.type == UserType.GENERAL_MEMBER) Mint03 else Blue04,
                     contentColor = White,
                 )
 
@@ -79,7 +80,7 @@ fun MemberCardView(
             Divider(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 12.dp, bottom = 12.dp),
+                    .padding(vertical = 12.dp),
                 thickness = 1.dp,
                 color = Gray02
             )
@@ -87,16 +88,16 @@ fun MemberCardView(
             Row (
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(20.dp)
                     .clickable {
                         onChange()
                     },
                 horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
                     text = "동아리 초대 코드 복사하기",
                     style = Body3,
-                    color = Blue04
+                    color = Blue04,
                 )
 
                 Icon(

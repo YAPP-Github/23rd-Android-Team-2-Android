@@ -28,10 +28,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment.Companion.BottomCenter
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.moneymong.moneymong.design_system.R
 import com.example.member.component.MemberCardView
 import com.example.member.component.MemberDialogView
 import com.example.member.component.MemberListView
@@ -45,6 +45,7 @@ import com.moneymong.moneymong.design_system.theme.Body3
 import com.moneymong.moneymong.design_system.theme.Body4
 import com.moneymong.moneymong.design_system.theme.Gray03
 import com.moneymong.moneymong.design_system.theme.Gray05
+import com.moneymong.moneymong.design_system.theme.Gray07
 import com.moneymong.moneymong.design_system.theme.Gray08
 import com.moneymong.moneymong.design_system.theme.MMHorizontalSpacing
 import com.moneymong.moneymong.design_system.theme.Red03
@@ -54,13 +55,13 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Memberscreen() {
+fun MemberScreen() {
     val sheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = true,
         confirmValueChange = { true }
     )
 
-    val bottomSheetType = remember { mutableStateOf(1) } //1 = 역할지정/내보내기 , 2= 운영진/ 일반멤버
+    val bottomSheetType = remember { mutableStateOf(BottomSheetType.ROLE_ASSIGNMENT_EXPORT) }
     val coroutineScope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
 
@@ -111,11 +112,11 @@ fun Memberscreen() {
             windowInsets = BottomSheetDefaults.windowInsets
         ) {
 
-            if (bottomSheetType.value == 1) {
+            if (bottomSheetType.value == BottomSheetType.ROLE_ASSIGNMENT_EXPORT) {
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(start = 20.dp, end = 20.dp)
+                        .padding(horizontal = 20.dp)
                         .windowInsetsPadding(BottomSheetDefaults.windowInsets)
                 ) {
                     Row(
@@ -123,7 +124,7 @@ fun Memberscreen() {
                             .fillMaxWidth()
                             .height(24.dp)
                             .clickable {
-                                bottomSheetType.value = 2
+                                bottomSheetType.value = BottomSheetType.ADMIN_GENERAL_MEMBER
                             }
                     ) {
                         Text(
@@ -137,7 +138,7 @@ fun Memberscreen() {
                         Icon(
                             modifier = Modifier
                                 .size(24.dp),
-                            painter = painterResource(id = com.moneymong.moneymong.design_system.R.drawable.ic_chevron_right),
+                            painter = painterResource(id = R.drawable.ic_chevron_right),
                             contentDescription = null
                         )
                     }
@@ -159,27 +160,28 @@ fun Memberscreen() {
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(start = 20.dp, end = 20.dp)
+                        .padding(vertical = 20.dp)
                         .windowInsetsPadding(BottomSheetDefaults.windowInsets)
                 ) {
                     Row(
                         modifier = Modifier
-                            .weight(1f)
-                            .height(24.dp)
+                            .fillMaxWidth()
                             .clickable {
                                 isStaffChecked.value = !isStaffChecked.value
                                 isMemberChecked.value = false
                             }
                     ) {
                         Text(
-                            modifier = Modifier.weight(1f),
+                            modifier = Modifier,
                             text = "운영진",
                             style = Body4,
                             color = if (isStaffChecked.value) Blue04 else Gray05
                         )
                         Icon(
-                            modifier = Modifier.size(24.dp),
-                            painter = painterResource(id = com.moneymong.moneymong.design_system.R.drawable.ic_check),
+                            modifier = Modifier
+                                .size(24.dp)
+                                .padding(start = 253.dp),
+                            painter = painterResource(id = R.drawable.ic_check),
                             contentDescription = null,
                             tint = if (isStaffChecked.value) Blue04 else Gray03
                         )
@@ -188,20 +190,21 @@ fun Memberscreen() {
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(24.dp)
                             .clickable {
                                 isMemberChecked.value = !isMemberChecked.value
                                 isStaffChecked.value = false
                             },
                     ) {
                         Text(
-                            modifier = Modifier.weight(1f),
+                            modifier = Modifier,
                             text = "일반멤버",
                             style = Body4,
                             color = if (isMemberChecked.value) Blue04 else Gray05
                         )
                         Icon(
-                            modifier = Modifier.size(24.dp),
+                            modifier = Modifier
+                                .size(24.dp)
+                                .padding(start = 253.dp),
                             painter = painterResource(id = com.moneymong.moneymong.design_system.R.drawable.ic_check),
                             contentDescription = null,
                             tint = if (isMemberChecked.value) Blue04 else Gray03
@@ -210,12 +213,13 @@ fun Memberscreen() {
                     }
                     Spacer(modifier = Modifier.height(20.dp))
                     MDSButton(
+                        modifier = Modifier.fillMaxWidth(),
                         onClick = {
                             coroutineScope.launch {
                                 sheetState.hide()
                             }
                             roleChanged.value = isStaffChecked.value || isMemberChecked.value
-                            bottomSheetType.value = 1
+                            bottomSheetType.value = BottomSheetType.ROLE_ASSIGNMENT_EXPORT
                             vertClick.value = false
 
                         },
@@ -265,14 +269,13 @@ fun Memberscreen() {
         modifier = Modifier
             .fillMaxSize()
             .background(White)
-            .padding(MMHorizontalSpacing)
-            .background(White)
+            .padding(horizontal = MMHorizontalSpacing)
     ) {
         Text(
-            modifier = Modifier.padding(top = 24.dp, bottom = 8.dp),
+            modifier = Modifier.padding(vertical = 8.dp),
             text = "나",
             style = Body3,
-            color = Color(0xFF37404F)
+            color = Gray07
         )
         MemberCardView(
             modifier = Modifier,
@@ -300,5 +303,5 @@ fun Memberscreen() {
 @Preview
 @Composable
 fun Preview() {
-    Memberscreen()
+    MemberScreen()
 }

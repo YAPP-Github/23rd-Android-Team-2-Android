@@ -17,6 +17,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.member.Member
+import com.example.member.MemberType
 import com.moneymong.moneymong.design_system.R
 import com.moneymong.moneymong.design_system.component.tag.MDSTag
 import com.moneymong.moneymong.design_system.theme.Blue04
@@ -27,13 +28,13 @@ import com.moneymong.moneymong.design_system.theme.Mint03
 import com.moneymong.moneymong.design_system.theme.White
 
 @Composable
-fun MemberListItem(member : Member,  onIconClick : () ->  Unit) {
-    Row (
+fun MemberListItem(member: Member, onIconClick: () -> Unit) {
+    Row(
         modifier = Modifier
             .fillMaxWidth()
             .height(44.dp),
         verticalAlignment = Alignment.CenterVertically
-    ){
+    ) {
         Image(
             modifier = Modifier.size(44.dp),
             painter = painterResource(id = R.drawable.img_profile),
@@ -48,8 +49,8 @@ fun MemberListItem(member : Member,  onIconClick : () ->  Unit) {
 
         MDSTag(
             modifier = Modifier.padding(start = 6.dp),
-            text = if (member.type == 1) "일반 멤버" else "운영진",
-            backgroundColor =  if (member.type == 1) Mint03 else Blue04 ,
+            text = if (member.type == MemberType.GENERAL_MEMBER) "일반 멤버" else "운영진",
+            backgroundColor = if (member.type == MemberType.GENERAL_MEMBER) Mint03 else Blue04,
             contentColor = White,
         )
 
