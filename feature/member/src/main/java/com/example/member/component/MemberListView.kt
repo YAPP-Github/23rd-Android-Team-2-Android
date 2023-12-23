@@ -17,32 +17,33 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.member.Member
+import com.example.member.MemberType
 import com.example.member.item.MemberListItem
 import com.moneymong.moneymong.design_system.theme.Body3
+import com.moneymong.moneymong.design_system.theme.Gray07
 import com.moneymong.moneymong.design_system.theme.White
 
 @Composable
-fun MemberListView(modifier : Modifier = Modifier, onIconClick : ()-> Unit) {
+fun MemberListView(modifier: Modifier = Modifier, onIconClick: () -> Unit) {
     val memberList = listOf(
-        Member(1, "김도하", 1),
-        Member(2, "구나연", 2),
-        Member(3, "기은서", 1),
-        Member(4, "김기서", 1),
-        Member(5, "안병헌", 1),
-        Member(6, "장희직", 1)
+        Member(1, "김도하", MemberType.GENERAL_MEMBER),
+        Member(2, "구나연", MemberType.ADMINISTRATOR),
+        Member(3, "기은서", MemberType.GENERAL_MEMBER),
+        Member(4, "김기서", MemberType.GENERAL_MEMBER),
+        Member(5, "안병헌", MemberType.GENERAL_MEMBER),
+        Member(6, "장희직", MemberType.GENERAL_MEMBER)
     )
     val members = remember { memberList }
 
     Column(
         modifier = modifier
-        .fillMaxWidth()
-        .background(White)
-        .background(White)
-    ){
+            .fillMaxWidth()
+            .background(White)
+    ) {
         Text(
             text = "멤버 목록",
             style = Body3,
-            color = Color(0xFF37404F)
+            color = Gray07
         )
 
         LazyColumn(
@@ -51,7 +52,7 @@ fun MemberListView(modifier : Modifier = Modifier, onIconClick : ()-> Unit) {
         ) {
             items(
                 items = members,
-                itemContent = { MemberListItem(it, onIconClick = { onIconClick() } ) }
+                itemContent = { MemberListItem(it, onIconClick = { onIconClick() }) }
             )
         }
     }
