@@ -34,7 +34,7 @@ import com.moneymong.moneymong.design_system.theme.Gray10
 import com.moneymong.moneymong.design_system.theme.Heading3
 import com.moneymong.moneymong.design_system.theme.MMHorizontalSpacing
 import com.moneymong.moneymong.design_system.theme.White
-import com.moneymong.moneymong.feature.agency.join.component.AgencyCodeView
+import com.moneymong.moneymong.feature.agency.join.component.AgencyInviteCodeView
 
 
 @Composable
@@ -43,8 +43,7 @@ fun AgencyJoinScreen() {
         modifier = Modifier
             .fillMaxSize()
             .background(White)
-            .padding(MMHorizontalSpacing)
-            .background(White),
+            .padding(horizontal = MMHorizontalSpacing),
         topBar = {
             Row(
                 modifier = Modifier
@@ -91,7 +90,7 @@ private fun JoinContent(modifier: Modifier = Modifier) {
     }
 
     //초대 코드와 입력된 값 비교
-    fun CompareError(): Boolean {
+    fun compareError(): Boolean {
         return isError
     }
 
@@ -129,13 +128,13 @@ private fun JoinContent(modifier: Modifier = Modifier) {
                 .padding(top = 151.dp),
             horizontalArrangement = Arrangement.Start
         ) {
-            AgencyCodeView(
+            AgencyInviteCodeView (
                 numbers = numbers,
                 focusRequesters = focusRequesters,
                 onIsErrorChanged = onIsErrorChanged,
                 isError = isError,
                 onIsNumbersChanged = onIsNumbersChanged,
-                compareError = CompareError()
+                compareError = compareError()
             )
 
         }

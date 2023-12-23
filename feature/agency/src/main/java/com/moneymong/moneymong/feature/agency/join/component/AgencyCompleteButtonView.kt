@@ -27,7 +27,7 @@ fun AgencyCompleteButtonView (modifier: Modifier = Modifier){
             size = MDSButtonSize.LARGE,
             enabled = true
         )
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(28.dp))
 
     }
 }
