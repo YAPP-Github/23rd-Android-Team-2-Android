@@ -21,7 +21,7 @@ import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.moneymong.moneymong.common.ext.toMultipart
+import com.moneymong.moneymong.ocr.util.toMultipart
 import com.moneymong.moneymong.design_system.theme.Gray10
 import com.moneymong.moneymong.ocr.OCRSideEffect
 import com.moneymong.moneymong.ocr.OCRViewModel
@@ -63,6 +63,7 @@ fun OCRCaptureView(
                         }
                     )
                 }
+                else -> {}
             }
         }
     }
