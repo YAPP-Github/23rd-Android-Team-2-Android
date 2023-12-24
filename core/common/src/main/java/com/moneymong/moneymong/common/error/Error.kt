@@ -11,15 +11,4 @@ sealed interface MoneyMongError {
     data object NetworkConnectionError : MoneyMongError {
         override val message: String = "네트워크 연결을 확인해주세요"
     }
-
-    fun getErrorByStatusCode(statusCode: Int, message: String): MoneyMongError {
-        return when (statusCode) {
-            400 -> HttpError.BadRequestError(message = message)
-            401 -> HttpError.UnauthorizedError(message = message)
-            403 -> HttpError.ForbiddenError(message = message)
-            404 -> HttpError.NotFoundError(message = message)
-            500 -> HttpError.InternalServerError(message = message)
-            else -> UnExpectedError
-        }
-    }
 }

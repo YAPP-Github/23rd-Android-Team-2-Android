@@ -1,7 +1,7 @@
 package com.moneymong.moneymong.network.adapter
 
 import com.moneymong.moneymong.common.error.MoneyMongError
-import com.moneymong.moneymong.common.error.MoneyMongError.UnExpectedError.getErrorByStatusCode
+import com.moneymong.moneymong.common.error.getErrorByStatusCode
 import com.moneymong.moneymong.common.result.MoneyMongResult
 import com.moneymong.moneymong.network.response.fromJsonToErrorResponse
 import okhttp3.Request
