@@ -1,4 +1,4 @@
-package com.moneymong.moneymong.common.ext
+package com.moneymong.moneymong.ocr.util
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
