@@ -7,6 +7,7 @@ import com.chuckerteam.chucker.api.RetentionManager
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.moneymong.moneymong.network.BuildConfig
+import com.moneymong.moneymong.network.adapter.ResultCallAdapterFactory
 import com.moneymong.moneymong.network.util.MoneyMongTokenAuthenticator
 import dagger.Module
 import dagger.Provides
@@ -70,6 +71,7 @@ object NetworkModule {
         gson: Gson
     ): Retrofit = Retrofit.Builder().apply {
         addConverterFactory(GsonConverterFactory.create(gson))
+        addCallAdapterFactory(ResultCallAdapterFactory.create())
         client(okHttpClient)
         baseUrl("")
     }.build()
