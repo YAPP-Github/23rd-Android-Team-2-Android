@@ -31,6 +31,7 @@ orbit = "6.0.0"
 retrofit = "2.9.0"
 appcompat = "1.6.1"
 material = "1.10.0"
+constraintlayout = "2.1.4"
 [libraries]
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "androidxActivity" }
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "androidxComposeBom" }
