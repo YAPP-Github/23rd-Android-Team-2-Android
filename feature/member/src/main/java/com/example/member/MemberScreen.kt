@@ -65,7 +65,8 @@ fun MemberScreen() {
     val coroutineScope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
 
-    val onClick = remember { mutableStateOf(false) }
+    val onCopyClick = remember { mutableStateOf(false) }
+    val onReissueChange = remember { mutableStateOf(false) }
     val vertClick = remember { mutableStateOf(false) }
     val isStaffChecked = remember { mutableStateOf(false) }
     val isMemberChecked = remember { mutableStateOf(false) }
@@ -76,8 +77,12 @@ fun MemberScreen() {
         vertClick.value = true
     }
 
-    fun onChange() {
-        onClick.value = true
+    fun onCopyChange() {
+        onCopyClick.value = true
+    }
+
+    fun onReissueChange() {
+        onReissueChange.value = true
     }
 
     if (showDialog.value) {
@@ -205,7 +210,7 @@ fun MemberScreen() {
                             modifier = Modifier
                                 .size(24.dp)
                                 .padding(start = 253.dp),
-                            painter = painterResource(id = com.moneymong.moneymong.design_system.R.drawable.ic_check),
+                            painter = painterResource(id = R.drawable.ic_check),
                             contentDescription = null,
                             tint = if (isMemberChecked.value) Blue04 else Gray03
                         )
@@ -242,15 +247,28 @@ fun MemberScreen() {
         }
     }
 
-    LaunchedEffect(key1 = onClick.value) {
-        if (onClick.value) {
+    LaunchedEffect(key1 = onCopyClick.value) {
+        if (onCopyClick.value) {
             val result = snackbarHostState.showSnackbar(
-                message = "초대코드를 복사했습니다",
+                message = "초대코드 123456이 복사되었습니다",
                 withDismissAction = true
             )
             // 스낵바가 닫히면 onClick 상태를 false로 변경
             if (result == SnackbarResult.Dismissed) {
-                onClick.value = false
+                onCopyClick.value = false
+            }
+        }
+    }
+
+    LaunchedEffect(key1 = onReissueChange.value) {
+        if (onReissueChange.value) {
+            val result = snackbarHostState.showSnackbar(
+                message = "초대코드가 재발급 되었습니다",
+                withDismissAction = true
+            )
+            // 스낵바가 닫히면 onClick 상태를 false로 변경
+            if (result == SnackbarResult.Dismissed) {
+                onReissueChange.value = false
             }
         }
     }
@@ -279,7 +297,8 @@ fun MemberScreen() {
         )
         MemberCardView(
             modifier = Modifier,
-            onChange = { onChange() }
+            onCopyChange = { onCopyChange() },
+            onReissueChange = { onReissueChange() }
         )
 
         MemberListView(
