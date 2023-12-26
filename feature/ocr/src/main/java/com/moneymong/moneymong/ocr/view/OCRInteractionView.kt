@@ -27,16 +27,19 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.moneymong.moneymong.design_system.R.*
 import com.moneymong.moneymong.design_system.theme.Black
 import com.moneymong.moneymong.design_system.theme.Gray02
 import com.moneymong.moneymong.design_system.theme.Gray05
 import com.moneymong.moneymong.design_system.theme.Mint03
+import com.moneymong.moneymong.ocr.OCRViewModel
 import com.moneymong.moneymong.ocr.util.bounceClick
 
 @Composable
 fun OCRInteractionView(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    viewModel: OCRViewModel = hiltViewModel()
 ) {
     val shadowBlurRadius = 12.dp
     val shadowColor = Mint03.copy(alpha = 0.57f).toArgb()
@@ -72,7 +75,7 @@ fun OCRInteractionView(
                 modifier = Modifier
                     .padding(vertical = 24.dp)
                     .size(60.dp)
-                    .bounceClick { /*TODO*/ },
+                    .bounceClick { viewModel.onClickTakePicture() },
                 painter = painterResource(id = drawable.ic_camera_btn),
                 contentDescription = null,
                 tint = Color.White

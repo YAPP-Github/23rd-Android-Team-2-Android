@@ -31,7 +31,7 @@ inline fun Modifier.bounceClick(crossinline onClick: () -> Unit) = composed {
         .clickable(
             interactionSource = remember { MutableInteractionSource() },
             indication = null,
-            onClick = { }
+            onClick = { onClick() }
         )
         .pointerInput(buttonState) {
             awaitPointerEventScope {
