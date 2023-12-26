@@ -101,21 +101,21 @@ fun MemberCardView(
                 )
                 Row(
                     modifier = Modifier
-                        .weight(0.5f)
-                        .padding(start = 26.dp)
+                        .padding(start = 63.dp)
                         .clickable {
                             onCopyChange()
-                        }
+                        },
                 ){
                     Text(
-                        modifier = Modifier.padding(start = 4.dp),
                         text = "복사",
                         style = Body3,
                         color = Blue04
                     )
                     Icon(
                         painter = painterResource(id = R.drawable.ic_copy),
-                        modifier = Modifier.size(18.dp),
+                        modifier = Modifier
+                            .padding(start = 2.dp, top = 1.dp, bottom = 1.dp)
+                            .size(18.dp),
                         contentDescription = null,
                         tint = Blue04
                     )
@@ -123,7 +123,6 @@ fun MemberCardView(
 
                 Row(
                     modifier = Modifier
-                        .weight(0.5f)
                         .padding(start = 10.dp)
                         .clickable {
                             onReissueChange()
@@ -131,33 +130,20 @@ fun MemberCardView(
 
                 ){
                     Text(
-                        modifier = Modifier.padding(start = 4.dp),
                         text = "재발급",
                         style = Body3,
                         color = Blue04
                     )
                     Icon(
                         painter = painterResource(id = R.drawable.ic_reissue),
-                        modifier = Modifier.size(18.dp),
+                        modifier = Modifier
+                            .padding(start = 2.dp, top = 1.dp, bottom = 1.dp)
+                            .size(18.dp),
                         contentDescription = null,
                         tint = Blue04
 
                     )
                 }
-
-
-//                Text(
-//                    text = "동아리 초대 코드 복사하기",
-//                    style = Body3,
-//                    color = Blue04,
-//                )
-//
-//                Icon(
-//                    modifier = Modifier.padding(start = 6.dp),
-//                    painter = painterResource(id = R.drawable.ic_invite),
-//                    contentDescription = null,
-//                    tint = Blue04
-//                )
 
             }
 
