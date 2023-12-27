@@ -25,6 +25,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.moneymong.moneymong.design_system.R
 import com.moneymong.moneymong.design_system.component.button.MDSButton
 import com.moneymong.moneymong.design_system.theme.Body4
@@ -33,10 +34,13 @@ import com.moneymong.moneymong.design_system.theme.Gray08
 import com.moneymong.moneymong.design_system.theme.Heading1
 import com.moneymong.moneymong.design_system.theme.MMHorizontalSpacing
 import com.moneymong.moneymong.design_system.theme.White
+import org.orbitmvi.orbit.compose.collectSideEffect
 
 @Composable
 fun AgencyRegisterCompleteScreen(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    viewModel: AgencyRegisterCompleteViewModel = hiltViewModel(),
+    navigateToSearch: () -> Unit
 ) {
     val view = LocalView.current
     val window = (view.context as Activity).window
@@ -53,13 +57,19 @@ fun AgencyRegisterCompleteScreen(
         }
     }
 
+    viewModel.collectSideEffect {
+        when (it) {
+            is AgencyRegisterCompleteSideEffect.NavigateToAgencySearch -> navigateToSearch()
+        }
+    }
+
     Column(
         modifier = modifier
             .fillMaxSize()
             .background(color = Gray08)
             .padding(horizontal = MMHorizontalSpacing)
     ) {
-        TitleView()
+        TitleView(onBackClick = viewModel::onBackButtonClicked)
         ContentView(
             modifier = Modifier
                 .weight(1f)
@@ -69,7 +79,7 @@ fun AgencyRegisterCompleteScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 28.dp),
-            onClick = { /*TODO back home */ },
+            onClick = viewModel::onCompleteButtonClicked,
             text = "홈으로 돌아가기"
         )
     }
@@ -78,7 +88,7 @@ fun AgencyRegisterCompleteScreen(
 @Composable
 private fun TitleView(
     modifier: Modifier = Modifier,
-    onBackClick: () -> Unit = { /*TODO back home */ }
+    onBackClick: () -> Unit
 ) {
     Box(modifier = modifier.fillMaxWidth()) {
         Text(
@@ -133,5 +143,7 @@ private fun ContentView(
 @Preview(showBackground = true)
 @Composable
 fun AgencyRegisterCompleteScreenPreview() {
-    AgencyRegisterCompleteScreen()
+    AgencyRegisterCompleteScreen(
+        navigateToSearch = {}
+    )
 }
