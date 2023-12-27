@@ -29,6 +29,7 @@
             <option value="$PROJECT_DIR$/core" />
             <option value="$PROJECT_DIR$/core/common" />
             <option value="$PROJECT_DIR$/core/design-system" />
+            <option value="$PROJECT_DIR$/core/network" />
             <option value="$PROJECT_DIR$/core/ui" />
             <option value="$PROJECT_DIR$/data" />
             <option value="$PROJECT_DIR$/domain" />

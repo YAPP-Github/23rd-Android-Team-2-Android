@@ -16,6 +16,7 @@ androidxDatastore = "1.0.0"
 androidxEspresso = "3.5.1"
 androidHiltNavigationCompose = "1.0.0"
 cameraX = "1.2.1"
+chucker-android = "4.0.0"
 desugaring = "1.2.2"
 firebaseBom = "32.6.0"
 firebaseCrashlyticsPlugin = "2.9.9"
@@ -32,6 +33,10 @@ orbit = "6.0.0"
 retrofit = "2.9.0"
 appcompat = "1.6.1"
 material = "1.10.0"
+lifecycle-runtime-ktx = "2.6.2"
+constraintlayout = "2.1.4"
+navigation-fragment-ktx = "2.7.5"
+navigation-ui-ktx = "2.7.5"
 [libraries]
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "androidxActivity" }
 androidx-cameraX-core = { group = "androidx.camera", name = "camera-core", version.ref = "cameraX" }
@@ -54,6 +59,8 @@ androidx-datastore = { group = "androidx.datastore", name = "datastore-preferenc
 androidx-lifecycle-livedata-ktx = { group = "androidx.lifecycle", name = "lifecycle-livedata-ktx", version.ref = "androidxLifecycle" }
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "androidxComposeNavigation" }
 androidx-test-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "androidxEspresso" }
+chucker-debug = { group = "com.github.chuckerteam.chucker", name = "library", version.ref = "chucker-android" }
+chucker-release = { group = "com.github.chuckerteam.chucker", name = "library-no-op", version.ref = "chucker-android" }
 desugaring = { group = "com.android.tools", name = "desugar_jdk_libs", version.ref = "desugaring" }
 firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics-ktx" }
 firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebaseBom"}
@@ -79,6 +86,12 @@ ksp-gradlePlugin = { group = "com.google.devtools.ksp", name = "com.google.devto
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidxJunit" }
 appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycle-runtime-ktx" }
+ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
+ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
+constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
+navigation-fragment-ktx = { group = "androidx.navigation", name = "navigation-fragment-ktx", version.ref = "navigation-fragment-ktx" }
+navigation-ui-ktx = { group = "androidx.navigation", name = "navigation-ui-ktx", version.ref = "navigation-ui-ktx" }
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
 android-library = { id = "com.android.library", version.ref = "androidGradlePlugin" }
