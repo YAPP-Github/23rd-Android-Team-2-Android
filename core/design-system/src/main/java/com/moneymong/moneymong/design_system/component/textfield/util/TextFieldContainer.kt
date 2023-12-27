@@ -19,7 +19,6 @@ import androidx.compose.ui.unit.dp
 import com.moneymong.moneymong.design_system.theme.Body2
 import com.moneymong.moneymong.design_system.theme.Body3
 import com.moneymong.moneymong.design_system.theme.Caption
-import com.moneymong.moneymong.design_system.theme.Gray04
 
 @Composable
 internal fun MDSTextFieldContainer(
@@ -98,7 +97,7 @@ private fun MDSTextFieldContainerCenter(
                 Icon(
                     painter = painterResource(id = icon.resourceId),
                     contentDescription = null,
-                    tint = Gray04
+                    tint = icon.color(state)
                 )
             }
         } else {
