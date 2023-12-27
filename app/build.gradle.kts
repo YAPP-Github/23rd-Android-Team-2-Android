@@ -44,6 +44,7 @@ dependencies {
     implementation(projects.core.ui)
     implementation(projects.core.designSystem)
     implementation(projects.core.common)
+    implementation(projects.core.network)
 
     implementation(projects.data)
     implementation(projects.domain)
@@ -58,4 +59,7 @@ dependencies {
 
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.compose.material3)
+    implementation(libs.orbit.core)
+    implementation(libs.orbit.compose)
+    implementation(libs.orbit.viewModel)
 }
