@@ -8,7 +8,6 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
         with(target) {
             pluginManager.apply {
                 apply("moneymong.android.library")
-//                feature/moneymong-90 주석처리
 //                apply("moneymong.android.hilt")
             }
 
@@ -17,7 +16,6 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
                 add("implementation", project(":core:design-system"))
                 add("implementation", project(":core:common"))
 
-//                feature/moneymong-90 주석처리
 //                add("androidTestImplementation", libs.findLibrary("junit").get())
 
                 add("implementation", libs.findLibrary("kotlinx.coroutines.android").get())
