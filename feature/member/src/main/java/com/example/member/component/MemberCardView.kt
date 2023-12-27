@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.member.User
 import com.example.member.UserType
@@ -37,7 +38,8 @@ import com.moneymong.moneymong.design_system.theme.White
 @Composable
 fun MemberCardView(
     modifier : Modifier = Modifier,
-    onChange : ()-> Unit
+    onCopyChange : () -> Unit,
+    onReissueChange : () -> Unit
 ) {
     val user = User("김세현", UserType.ADMINISTRATOR)
 
@@ -48,7 +50,7 @@ fun MemberCardView(
             .background(color = Color.White, shape = RoundedCornerShape(16.dp)),
     ) {
         Column(
-            modifier = Modifier.padding(horizontal = 15.dp, vertical = 16.dp)
+            modifier = Modifier.padding(16.dp)
         ) {
             Row(
                 modifier = Modifier
@@ -88,24 +90,60 @@ fun MemberCardView(
             Row (
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clickable {
-                        onChange()
-                    },
-                horizontalArrangement = Arrangement.Center,
+                    .padding(horizontal = 4.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "동아리 초대 코드 복사하기",
+                    modifier = Modifier.weight(1f),
+                    text = "초대코드 123456",
                     style = Body3,
-                    color = Blue04,
+                    color = Gray10
                 )
+                Row(
+                    modifier = Modifier
+                        .padding(start = 63.dp)
+                        .clickable {
+                            onCopyChange()
+                        },
+                ){
+                    Text(
+                        text = "복사",
+                        style = Body3,
+                        color = Blue04
+                    )
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_copy),
+                        modifier = Modifier
+                            .padding(start = 2.dp, top = 1.dp, bottom = 1.dp)
+                            .size(18.dp),
+                        contentDescription = null,
+                        tint = Blue04
+                    )
+                }
 
-                Icon(
-                    modifier = Modifier.padding(start = 6.dp),
-                    painter = painterResource(id = R.drawable.ic_invite),
-                    contentDescription = null,
-                    tint = Blue04
-                )
+                Row(
+                    modifier = Modifier
+                        .padding(start = 10.dp)
+                        .clickable {
+                            onReissueChange()
+                        }
+
+                ){
+                    Text(
+                        text = "재발급",
+                        style = Body3,
+                        color = Blue04
+                    )
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_reissue),
+                        modifier = Modifier
+                            .padding(start = 2.dp, top = 1.dp, bottom = 1.dp)
+                            .size(18.dp),
+                        contentDescription = null,
+                        tint = Blue04
+
+                    )
+                }
 
             }
 
