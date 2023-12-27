@@ -42,6 +42,7 @@
             <option value="$PROJECT_DIR$/feature/ocr-result" />
             <option value="$PROJECT_DIR$/feature/mymong" />
             <option value="$PROJECT_DIR$/feature/member" />
+            <option value="$PROJECT_DIR$/feature/agency" />
             <option value="$PROJECT_DIR$/feature/sign" />
           </set>
         </option>

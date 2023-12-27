@@ -23,7 +23,7 @@ internal sealed interface MDSTextFieldState : MDSTextFieldAttribute {
         override val titleColor: Color = Gray06
         override val textColor: Color = Gray04
         override val underLineColor: Color = Gray02
-        override val countVisible: Boolean = false
+        override val countVisible: Boolean = true
     }
 
     data object Active :
@@ -37,7 +37,7 @@ internal sealed interface MDSTextFieldState : MDSTextFieldAttribute {
 
     data object Error :
         MDSTextFieldState {
-        override val titleColor: Color = Gray06
+        override val titleColor: Color = Red03
         override val textColor: Color = Gray08
         override val underLineColor: Color = Red03
         override val countVisible: Boolean = true
@@ -50,7 +50,7 @@ internal sealed interface MDSTextFieldState : MDSTextFieldAttribute {
         override val titleColor: Color = Gray06
         override val textColor: Color = Gray10
         override val underLineColor: Color = Gray02
-        override val countVisible: Boolean = false
+        override val countVisible: Boolean = true
     }
 }
 

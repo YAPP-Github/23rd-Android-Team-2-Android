@@ -28,7 +28,8 @@ internal fun MDSBaseTextField(
     isError: Boolean = false,
     helperText: String? = null,
     maxCount: Int? = null,
-    singleLine: Boolean = true,
+    singleLine: Boolean,
+    minLines: Int = 1,
     icon: MDSTextFieldIcons? = null,
     onIconClick: (() -> Unit) = {},
     visualTransformation: VisualTransformation = VisualTransformation.None,
@@ -52,6 +53,7 @@ internal fun MDSBaseTextField(
         keyboardOptions = keyboardOptions,
         keyboardActions = keyboardActions,
         singleLine = singleLine,
+        minLines = minLines,
         visualTransformation = visualTransformation,
         decorationBox = { innerTextField ->
             MDSTextFieldContainer(
