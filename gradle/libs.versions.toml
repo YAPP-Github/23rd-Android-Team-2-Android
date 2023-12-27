@@ -15,6 +15,7 @@ androidxJunit = "1.1.5"
 androidxDatastore = "1.0.0"
 androidxEspresso = "3.5.1"
 androidHiltNavigationCompose = "1.0.0"
+cameraX = "1.2.1"
 chucker-android = "4.0.0"
 desugaring = "1.2.2"
 firebaseBom = "32.6.0"
@@ -38,6 +39,12 @@ navigation-fragment-ktx = "2.7.5"
 navigation-ui-ktx = "2.7.5"
 [libraries]
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "androidxActivity" }
+androidx-cameraX-core = { group = "androidx.camera", name = "camera-core", version.ref = "cameraX" }
+androidx-cameraX-camera2 = { group = "androidx.camera", name = "camera-camera2", version.ref = "cameraX" }
+androidx-cameraX-lifecycle = { group = "androidx.camera", name = "camera-lifecycle", version.ref = "cameraX" }
+androidx-cameraX-video = { group = "androidx.camera", name = "camera-video", version.ref = "cameraX" }
+androidx-cameraX-view = { group = "androidx.camera", name = "camera-view", version.ref = "cameraX" }
+androidx-cameraX-extensions = { group = "androidx.camera", name = "camera-extensions", version.ref = "cameraX" }
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "androidxComposeBom" }
 androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3" }
 androidx-compose-material = { group = "androidx.compose.material", name = "material" }
@@ -58,6 +65,7 @@ desugaring = { group = "com.android.tools", name = "desugar_jdk_libs", version.r
 firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics-ktx" }
 firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebaseBom"}
 firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics-ktx" }
+glide = { group = "com.github.bumptech.glide", name  = "compose", version.ref = "glide"}
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
 hilt-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
 hilt-navigation = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hiltNavigation" }

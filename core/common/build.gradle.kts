@@ -1,6 +1,7 @@
 @Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
 plugins {
     alias(libs.plugins.moneymong.android.library)
+    alias(libs.plugins.moneymong.android.library.compose)
 }
 
 android {
@@ -16,6 +17,7 @@ dependencies {
     implementation(libs.orbit.core)
     implementation(libs.orbit.compose)
     implementation(libs.orbit.viewModel)
+    implementation(libs.okhttp)
 
     testImplementation(libs.junit4)
     androidTestImplementation(libs.androidx.junit)

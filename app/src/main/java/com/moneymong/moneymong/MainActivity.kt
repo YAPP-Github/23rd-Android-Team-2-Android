@@ -9,9 +9,11 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import dagger.hilt.android.AndroidEntryPoint
 import com.moneymong.moneymong.design_system.theme.MMTheme
 import com.moneymong.moneymong.ui.MoneyMongApp
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
