@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="home_bottom_tabs_label_agency">소속</string>
+    <string name="home_bottom_tabs_label_ledger">장부</string>
+    <string name="home_bottom_tabs_label_mymong">마이몽</string>
+</resources>
