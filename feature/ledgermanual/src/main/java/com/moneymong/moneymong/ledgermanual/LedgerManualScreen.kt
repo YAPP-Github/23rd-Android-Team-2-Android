@@ -104,7 +104,8 @@ fun LedgerManualScreen(
                     helperText = "20자 이하로 입력해주세요",
                     maxCount = 20,
                     isFilled = isFilled,
-                    isError = isError
+                    isError = isError,
+                    singleLine = true
                 )
                 Spacer(modifier = Modifier.height(24.dp))
                 MDSTextField( // TODO
@@ -114,7 +115,8 @@ fun LedgerManualScreen(
                     title = "금액",
                     placeholder = "거래 금액을 입력해주세요",
                     helperText = "99,999,999,999원 이하로 입력해주세요",
-                    isFilled = false
+                    isFilled = false,
+                    singleLine = true
                 )
                 Spacer(modifier = Modifier.height(24.dp))
                 Text(
@@ -148,7 +150,8 @@ fun LedgerManualScreen(
                     title = "날짜",
                     placeholder = "YYYY/MM/DD",
                     helperText = "올바른 날짜를 입력해주세요",
-                    isFilled = false
+                    isFilled = false,
+                    singleLine = true
                 )
                 Spacer(modifier = Modifier.height(24.dp))
                 MDSTextField( // TODO
@@ -158,7 +161,8 @@ fun LedgerManualScreen(
                     title = "시간",
                     placeholder = "00:00 (24시 단위)",
                     helperText = "올바른 시간을 입력해주세요",
-                    isFilled = false
+                    isFilled = false,
+                    singleLine = true
                 )
                 Text(
                     text = "영수증 (최대 12장)",
