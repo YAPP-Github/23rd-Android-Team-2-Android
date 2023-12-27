@@ -34,6 +34,12 @@
             <option value="$PROJECT_DIR$/data" />
             <option value="$PROJECT_DIR$/domain" />
             <option value="$PROJECT_DIR$/feature" />
+            <option value="$PROJECT_DIR$/feature/ledger" />
+            <option value="$PROJECT_DIR$/feature/ledgerdetail" />
+            <option value="$PROJECT_DIR$/feature/ledgermanual" />
+            <option value="$PROJECT_DIR$/feature/ocr" />
+            <option value="$PROJECT_DIR$/feature/ocr-detail" />
+            <option value="$PROJECT_DIR$/feature/ocr-result" />
             <option value="$PROJECT_DIR$/feature/sign" />
           </set>
         </option>
