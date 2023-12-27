@@ -39,6 +39,7 @@ import com.moneymong.moneymong.design_system.theme.Gray06
 import com.moneymong.moneymong.design_system.theme.Gray07
 import com.moneymong.moneymong.design_system.theme.Gray10
 import com.moneymong.moneymong.design_system.theme.Heading5
+import com.moneymong.moneymong.design_system.theme.White
 import com.moneymong.moneymong.ledger.view.item.LedgerTransactionItem
 
 enum class LedgerTransactionType(
@@ -73,7 +74,9 @@ fun LedgerDefaultView(
     val testList = listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15) // TODO
 
     LazyColumn(
-        modifier = modifier.fillMaxSize(),
+        modifier = modifier
+            .fillMaxSize()
+            .background(White),
         state = lazyColumnState
     ) {
         item {
@@ -143,7 +146,8 @@ fun LedgerDefaultView(
             Spacer(modifier = Modifier.height(16.dp))
         }
         if (testList.isEmpty()) { // TODO
-            val descriptionDate = if (chips[selectedTabIndex] == LedgerTransactionType.전체) "11월에 " else "" // TODO
+            val descriptionDate =
+                if (chips[selectedTabIndex] == LedgerTransactionType.전체) "11월에 " else "" // TODO
             item {
                 Spacer(modifier = Modifier.height(121.dp))
                 LedgerTransactionEmptyView(

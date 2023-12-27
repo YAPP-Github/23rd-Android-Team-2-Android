@@ -9,6 +9,7 @@ android {
 }
 
 dependencies {
+    implementation(projects.feature.member)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.appcompat)
