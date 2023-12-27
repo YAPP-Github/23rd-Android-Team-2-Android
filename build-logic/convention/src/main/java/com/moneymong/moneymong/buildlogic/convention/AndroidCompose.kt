@@ -26,6 +26,7 @@ internal fun Project.configureAndroidCompose(
             add("implementation" ,libs.findLibrary("androidx.compose.ui.tooling.preview").get())
             add("implementation" ,libs.findLibrary("androidx.compose.material").get())
             add("implementation" ,libs.findLibrary("androidx.compose.material3").get())
+            add("implementation" ,libs.findLibrary("androidx.navigation.compose").get())
         }
     }
 }
