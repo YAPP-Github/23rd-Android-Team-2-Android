@@ -1,6 +1,5 @@
 package com.moneymong.moneymong.network.adapter
 
-import com.moneymong.moneymong.common.result.MoneyMongResult
 import retrofit2.Call
 import retrofit2.CallAdapter
 import retrofit2.Retrofit
@@ -24,7 +23,7 @@ class ResultCallAdapterFactory private constructor() : CallAdapter.Factory() {
         }
 
         val wrapperType = getParameterUpperBound(0, returnType as ParameterizedType)
-        if (getRawType(wrapperType) != MoneyMongResult::class.java) {
+        if (getRawType(wrapperType) != Result::class.java) {
             return null
         }
 
