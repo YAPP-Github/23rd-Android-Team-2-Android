@@ -2,6 +2,8 @@ package com.moneymong.moneymong.feature.agency.register
 
 import androidx.compose.ui.text.input.TextFieldValue
 import com.moneymong.moneymong.common.base.BaseViewModel
+import com.moneymong.moneymong.domain.param.AgencyRegisterParams
+import com.moneymong.moneymong.domain.usecase.RegisterAgencyUseCase
 import com.moneymong.moneymong.feature.agency.AgencyType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import org.orbitmvi.orbit.annotation.OrbitExperimental
@@ -12,7 +14,9 @@ import org.orbitmvi.orbit.syntax.simple.reduce
 import javax.inject.Inject
 
 @HiltViewModel
-class AgencyRegisterViewModel @Inject constructor() :
+class AgencyRegisterViewModel @Inject constructor(
+    private val registerAgencyUseCase: RegisterAgencyUseCase
+) :
     BaseViewModel<AgencyRegisterState, AgencyRegisterSideEffect>(AgencyRegisterState()) {
 
     @OptIn(OrbitExperimental::class)
@@ -42,8 +46,16 @@ class AgencyRegisterViewModel @Inject constructor() :
     }
 
     fun onRegisterButtonClicked() = intent {
-        // todo: call register use case
-        postSideEffect(AgencyRegisterSideEffect.NavigateToComplete)
+        registerAgencyUseCase(
+            params = AgencyRegisterParams(
+                name = state.agencyName.text,
+                type = state.agencyType.toParams()
+            )
+        ).onSuccess {
+            postSideEffect(AgencyRegisterSideEffect.NavigateToComplete)
+        }.onFailure {
+            // TODO: 에러 처라
+        }
     }
 
 

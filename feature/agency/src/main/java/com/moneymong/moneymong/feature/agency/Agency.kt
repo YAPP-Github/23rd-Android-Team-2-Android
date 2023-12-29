@@ -1,5 +1,7 @@
 package com.moneymong.moneymong.feature.agency
 
+import com.moneymong.moneymong.domain.param.AgencyRegisterParams
+
 data class Agency(
     val type: AgencyType,
     val name: String,
@@ -8,7 +10,12 @@ data class Agency(
 
 enum class AgencyType(val text: String) {
     CLUB(text = "동아리"),
-    COUNCIL(text = "학생회"),
+    COUNCIL(text = "학생회");
+
+    fun toParams(): AgencyRegisterParams.AgencyRegisterType = when (this) {
+        CLUB -> AgencyRegisterParams.AgencyRegisterType.CLUB
+        COUNCIL -> AgencyRegisterParams.AgencyRegisterType.COUNCIL
+    }
 }
 
 
