@@ -1,6 +1,6 @@
 package com.moneymong.moneymong.domain.param
 
-data class AgencyRegisterParams(
+data class AgencyRegisterParam(
     val name: String,
     val type: AgencyRegisterType,
 ) {

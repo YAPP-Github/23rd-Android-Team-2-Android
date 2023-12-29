@@ -2,7 +2,7 @@ package com.moneymong.moneymong.feature.agency.register
 
 import androidx.compose.ui.text.input.TextFieldValue
 import com.moneymong.moneymong.common.base.BaseViewModel
-import com.moneymong.moneymong.domain.param.AgencyRegisterParams
+import com.moneymong.moneymong.domain.param.AgencyRegisterParam
 import com.moneymong.moneymong.domain.usecase.RegisterAgencyUseCase
 import com.moneymong.moneymong.feature.agency.AgencyType
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -47,9 +47,9 @@ class AgencyRegisterViewModel @Inject constructor(
 
     fun onRegisterButtonClicked() = intent {
         registerAgencyUseCase(
-            params = AgencyRegisterParams(
+            param = AgencyRegisterParam(
                 name = state.agencyName.text,
-                type = state.agencyType.toParams()
+                type = state.agencyType.toParam()
             )
         ).onSuccess {
             postSideEffect(AgencyRegisterSideEffect.NavigateToComplete)

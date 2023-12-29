@@ -1,8 +1,8 @@
 package com.moneymong.moneymong.domain.repository
 
-import com.moneymong.moneymong.domain.param.AgencyRegisterParams
+import com.moneymong.moneymong.domain.param.AgencyRegisterParam
 
 interface AgencyRepository {
 
-    suspend fun registerAgency(params: AgencyRegisterParams): Result<Unit>
+    suspend fun registerAgency(param: AgencyRegisterParam): Result<Unit>
 }
