@@ -2,7 +2,6 @@ package com.moneymong.moneymong.network.adapter
 
 import com.moneymong.moneymong.common.error.MoneyMongError
 import com.moneymong.moneymong.common.error.getErrorByStatusCode
-import com.moneymong.moneymong.common.result.MoneyMongResult
 import com.moneymong.moneymong.network.response.fromJsonToErrorResponse
 import okhttp3.Request
 import okio.Timeout
@@ -15,34 +14,38 @@ import java.lang.reflect.Type
 
 internal class ResultCallAdapter(
     private val responseType: Type
-) : CallAdapter<Type, Call<MoneyMongResult<Type>>> {
+) : CallAdapter<Type, Call<Result<Type>>> {
 
     override fun responseType(): Type = responseType
 
-    override fun adapt(call: Call<Type>): Call<MoneyMongResult<Type>> = ResultCall(call)
+    override fun adapt(call: Call<Type>): Call<Result<Type>> = ResultCall(call)
 }
 
 
 private class ResultCall<T>(
     private val delegate: Call<T>,
-) : Call<MoneyMongResult<T>> {
+) : Call<Result<T>> {
 
-    override fun enqueue(callback: Callback<MoneyMongResult<T>>) {
+    override fun enqueue(callback: Callback<Result<T>>) {
         delegate.enqueue(object : Callback<T> {
             override fun onResponse(call: Call<T>, response: Response<T>) {
-                callback.onResponse(this@ResultCall, Response.success(response.toMoneyMongResult()))
+                callback.onResponse(this@ResultCall, Response.success(response.toResult()))
             }
 
-            private fun Response<T>.toMoneyMongResult(): MoneyMongResult<T> {
+            private fun Response<T>.toResult(): Result<T> {
                 val body = body()
                 val errorBody = errorBody()?.string()
 
-                if (isSuccessful && body != null) {
-                    return MoneyMongResult.Success(body)
+                if (isSuccessful) {
+                    return if (body != null) {
+                        Result.success(body)
+                    } else {
+                        Result.failure(MoneyMongError.UnExpectedError)
+                    }
                 }
 
-                if (body == null || errorBody == null) {
-                    return MoneyMongResult.Failure(MoneyMongError.UnExpectedError)
+                if (errorBody == null) {
+                    return Result.failure(MoneyMongError.UnExpectedError)
                 }
 
                 val errorResponse = fromJsonToErrorResponse(errorBody)
@@ -50,7 +53,7 @@ private class ResultCall<T>(
                     statusCode = errorResponse.status,
                     message = errorResponse.message
                 )
-                return MoneyMongResult.Failure(httpError)
+                return Result.failure(httpError)
             }
 
             override fun onFailure(call: Call<T>, t: Throwable) {
@@ -60,16 +63,16 @@ private class ResultCall<T>(
                 }
                 callback.onResponse(
                     this@ResultCall,
-                    Response.success(MoneyMongResult.Failure(failure))
+                    Response.success(Result.failure(failure))
                 )
             }
         })
     }
 
 
-    override fun clone(): Call<MoneyMongResult<T>> = ResultCall(delegate.clone())
+    override fun clone(): Call<Result<T>> = ResultCall(delegate.clone())
 
-    override fun execute(): Response<MoneyMongResult<T>> = throw UnsupportedOperationException()
+    override fun execute(): Response<Result<T>> = throw UnsupportedOperationException()
 
     override fun isExecuted(): Boolean = delegate.isExecuted
 
