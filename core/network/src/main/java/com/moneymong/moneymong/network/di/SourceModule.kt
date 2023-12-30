@@ -1,7 +1,7 @@
 package com.moneymong.moneymong.network.di
 
-import com.moneymong.moneymong.network.source.AgencyRemoteDataSource
-import com.moneymong.moneymong.network.source.mock.AgencyRemoteDataSourceMock
+import com.moneymong.moneymong.network.datasource.AgencyRemoteDataSource
+import com.moneymong.moneymong.network.datasource.mock.AgencyRemoteDataSourceMock
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
