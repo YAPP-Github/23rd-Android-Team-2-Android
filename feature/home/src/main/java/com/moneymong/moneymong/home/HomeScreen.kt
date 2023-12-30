@@ -13,6 +13,7 @@ import com.moneymong.moneymong.feature.agency.navigation.agencyRegisterScreen
 import com.moneymong.moneymong.feature.agency.navigation.agencyRoute
 import com.moneymong.moneymong.feature.agency.navigation.agencyScreen
 import com.moneymong.moneymong.feature.agency.navigation.navigateAgency
+import com.moneymong.moneymong.feature.agency.navigation.navigateAgencyRegister
 import com.moneymong.moneymong.feature.agency.navigation.navigateAgencyRegisterComplete
 import com.moneymong.moneymong.feature.mymong.navigation.mymongScreen
 import com.moneymong.moneymong.home.navigation.rememberHomeNavController
@@ -39,7 +40,10 @@ fun HomeScreen(
             enterTransition = { EnterTransition.None },
             exitTransition = { ExitTransition.None }
         ) {
-            agencyScreen(padding = it)
+            agencyScreen(
+                padding = it,
+                navigateToRegister = { homeNavController.navHostController.navigateAgencyRegister() }
+            )
             agencyRegisterScreen(
                 padding = it,
                 navigateToComplete = { homeNavController.navHostController.navigateAgencyRegisterComplete() },
