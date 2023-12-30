@@ -1,6 +1,6 @@
 package com.moneymong.moneymong.domain.repository
 
-import com.moneymong.moneymong.domain.param.AgencyRegisterParam
+import com.moneymong.moneymong.domain.param.agency.AgencyRegisterParam
 
 interface AgencyRepository {
 

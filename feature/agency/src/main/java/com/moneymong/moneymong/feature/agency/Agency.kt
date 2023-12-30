@@ -1,6 +1,6 @@
 package com.moneymong.moneymong.feature.agency
 
-import com.moneymong.moneymong.domain.param.AgencyRegisterParam
+import com.moneymong.moneymong.domain.param.agency.AgencyRegisterParam
 
 data class Agency(
     val type: AgencyType,

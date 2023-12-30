@@ -2,7 +2,7 @@ package com.moneymong.moneymong.feature.agency.register
 
 import androidx.compose.ui.text.input.TextFieldValue
 import com.moneymong.moneymong.common.base.BaseViewModel
-import com.moneymong.moneymong.domain.param.AgencyRegisterParam
+import com.moneymong.moneymong.domain.param.agency.AgencyRegisterParam
 import com.moneymong.moneymong.domain.usecase.RegisterAgencyUseCase
 import com.moneymong.moneymong.feature.agency.AgencyType
 import dagger.hilt.android.lifecycle.HiltViewModel

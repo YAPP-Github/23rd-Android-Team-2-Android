@@ -1,7 +1,7 @@
-package com.moneymong.moneymong.data.mapper
+package com.moneymong.moneymong.data.mapper.agency
 
-import com.moneymong.moneymong.domain.param.AgencyRegisterParam
-import com.moneymong.moneymong.network.request.AgencyRegisterRequest
+import com.moneymong.moneymong.domain.param.agency.AgencyRegisterParam
+import com.moneymong.moneymong.network.request.agency.AgencyRegisterRequest
 
 fun AgencyRegisterParam.toRequest(): AgencyRegisterRequest {
     fun typeParamToTypeRequest(type: AgencyRegisterParam.AgencyRegisterType) = when (type) {
