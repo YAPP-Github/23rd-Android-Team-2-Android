@@ -16,8 +16,7 @@ import javax.inject.Inject
 @HiltViewModel
 class AgencyRegisterViewModel @Inject constructor(
     private val registerAgencyUseCase: RegisterAgencyUseCase
-) :
-    BaseViewModel<AgencyRegisterState, AgencyRegisterSideEffect>(AgencyRegisterState()) {
+) : BaseViewModel<AgencyRegisterState, AgencyRegisterSideEffect>(AgencyRegisterState()) {
 
     @OptIn(OrbitExperimental::class)
     fun onAgencyNameChanged(agencyName: TextFieldValue) = blockingIntent {
