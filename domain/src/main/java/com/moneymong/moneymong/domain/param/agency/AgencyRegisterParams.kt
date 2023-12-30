@@ -1,4 +1,4 @@
-package com.moneymong.moneymong.domain.param
+package com.moneymong.moneymong.domain.param.agency
 
 data class AgencyRegisterParam(
     val name: String,

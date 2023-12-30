@@ -1,4 +1,4 @@
-package com.moneymong.moneymong.network.request
+package com.moneymong.moneymong.network.request.agency
 
 import com.google.gson.annotations.SerializedName
 

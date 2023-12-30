@@ -1,7 +1,7 @@
 package com.moneymong.moneymong.data.repository
 
-import com.moneymong.moneymong.data.mapper.toRequest
-import com.moneymong.moneymong.domain.param.AgencyRegisterParam
+import com.moneymong.moneymong.data.mapper.agency.toRequest
+import com.moneymong.moneymong.domain.param.agency.AgencyRegisterParam
 import com.moneymong.moneymong.domain.repository.AgencyRepository
 import com.moneymong.moneymong.network.source.AgencyRemoteDataSource
 import javax.inject.Inject

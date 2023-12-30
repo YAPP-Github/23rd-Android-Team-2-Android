@@ -1,6 +1,6 @@
 package com.moneymong.moneymong.network.source
 
-import com.moneymong.moneymong.network.request.AgencyRegisterRequest
+import com.moneymong.moneymong.network.request.agency.AgencyRegisterRequest
 
 interface AgencyRemoteDataSource {
 

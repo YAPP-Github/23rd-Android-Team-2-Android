@@ -1,7 +1,7 @@
 package com.moneymong.moneymong.domain.usecase
 
 
-import com.moneymong.moneymong.domain.param.AgencyRegisterParam
+import com.moneymong.moneymong.domain.param.agency.AgencyRegisterParam
 import com.moneymong.moneymong.domain.repository.AgencyRepository
 import javax.inject.Inject
 
