@@ -63,6 +63,7 @@ fun HomeScreen(
                     homeNavController.navHostController.navigate(
                         route = ledgerRoute,
                         navOptions = navOptions {
+                            launchSingleTop = true
                             popUpTo(agencyRoute) { inclusive = true }
                         }
                     )
