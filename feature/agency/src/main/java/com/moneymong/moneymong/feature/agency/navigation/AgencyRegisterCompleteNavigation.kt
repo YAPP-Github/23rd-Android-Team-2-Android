@@ -18,11 +18,13 @@ fun NavController.navigateAgencyRegisterComplete(navOptions: NavOptions? = null)
 fun NavGraphBuilder.agencyRegisterCompleteScreen(
     padding: PaddingValues,
     navigateToSearch: () -> Unit,
+    navigateToLedger: () -> Unit
 ) {
     composable(route = agencyRegisterCompleteRoute) {
         AgencyRegisterCompleteScreen(
             modifier = Modifier.padding(padding),
-            navigateToSearch = navigateToSearch
+            navigateToSearch = navigateToSearch,
+            navigateToLedger = navigateToLedger
         )
     }
 }

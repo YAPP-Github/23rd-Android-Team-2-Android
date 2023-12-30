@@ -28,6 +28,7 @@ import androidx.core.view.WindowCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.moneymong.moneymong.design_system.R
 import com.moneymong.moneymong.design_system.component.button.MDSButton
+import com.moneymong.moneymong.design_system.component.button.MDSButtonType
 import com.moneymong.moneymong.design_system.theme.Body4
 import com.moneymong.moneymong.design_system.theme.Gray03
 import com.moneymong.moneymong.design_system.theme.Gray08
@@ -40,7 +41,8 @@ import org.orbitmvi.orbit.compose.collectSideEffect
 fun AgencyRegisterCompleteScreen(
     modifier: Modifier = Modifier,
     viewModel: AgencyRegisterCompleteViewModel = hiltViewModel(),
-    navigateToSearch: () -> Unit
+    navigateToSearch: () -> Unit,
+    navigateToLedger: () -> Unit
 ) {
     val view = LocalView.current
     val window = (view.context as Activity).window
@@ -60,6 +62,7 @@ fun AgencyRegisterCompleteScreen(
     viewModel.collectSideEffect {
         when (it) {
             is AgencyRegisterCompleteSideEffect.NavigateToAgencySearch -> navigateToSearch()
+            is AgencyRegisterCompleteSideEffect.NavigateToLedger -> navigateToLedger()
         }
     }
 
@@ -76,11 +79,18 @@ fun AgencyRegisterCompleteScreen(
                 .align(Alignment.CenterHorizontally)
         )
         MDSButton(
+            modifier = Modifier.fillMaxWidth(),
+            onClick = viewModel::onNavigateLedgerButtonClicked,
+            text = "소속 장부 확인하러 가기",
+            type = MDSButtonType.SECONDARY
+        )
+        Spacer(modifier = Modifier.height(12.dp))
+        MDSButton(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 28.dp),
-            onClick = viewModel::onCompleteButtonClicked,
-            text = "홈으로 돌아가기"
+            onClick = { /*TODO*/ },
+            text = "동아리 운영비 등록하러 가기"
         )
     }
 }
@@ -144,6 +154,7 @@ private fun ContentView(
 @Composable
 fun AgencyRegisterCompleteScreenPreview() {
     AgencyRegisterCompleteScreen(
-        navigateToSearch = {}
+        navigateToSearch = {},
+        navigateToLedger = {}
     )
 }

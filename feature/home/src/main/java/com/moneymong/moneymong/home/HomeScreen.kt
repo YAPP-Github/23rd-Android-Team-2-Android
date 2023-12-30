@@ -18,6 +18,7 @@ import com.moneymong.moneymong.feature.agency.navigation.navigateAgencyRegisterC
 import com.moneymong.moneymong.feature.mymong.navigation.mymongScreen
 import com.moneymong.moneymong.home.navigation.rememberHomeNavController
 import com.moneymong.moneymong.home.view.HomeBottomBarView
+import com.moneymong.moneymong.ledger.navigation.ledgerRoute
 import com.moneymong.moneymong.ledger.navigation.ledgerScreen
 
 @Composable
@@ -53,6 +54,14 @@ fun HomeScreen(
                 padding = it,
                 navigateToSearch = {
                     homeNavController.navHostController.navigateAgency(
+                        navOptions = navOptions {
+                            popUpTo(agencyRoute) { inclusive = true }
+                        }
+                    )
+                },
+                navigateToLedger = {
+                    homeNavController.navHostController.navigate(
+                        route = ledgerRoute,
                         navOptions = navOptions {
                             popUpTo(agencyRoute) { inclusive = true }
                         }
