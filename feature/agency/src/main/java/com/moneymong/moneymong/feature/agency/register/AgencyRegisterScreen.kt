@@ -60,8 +60,8 @@ fun AgencyRegisterScreen(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(horizontal = MMHorizontalSpacing)
             .background(color = White)
+            .padding(horizontal = MMHorizontalSpacing)
     ) {
         Icon(
             modifier = Modifier
