@@ -1,4 +1,4 @@
-package com.moneymong.moneymong.network.source
+package com.moneymong.moneymong.network.datasource
 
 import com.moneymong.moneymong.network.request.agency.AgencyRegisterRequest
 
