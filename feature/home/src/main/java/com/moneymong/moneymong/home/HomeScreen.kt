@@ -42,7 +42,8 @@ fun HomeScreen(
             agencyScreen(padding = it)
             agencyRegisterScreen(
                 padding = it,
-                navigateToComplete = { homeNavController.navHostController.navigateAgencyRegisterComplete() }
+                navigateToComplete = { homeNavController.navHostController.navigateAgencyRegisterComplete() },
+                navigateUp = { homeNavController.navHostController.navigateUp() }
             )
             agencyRegisterCompleteScreen(
                 padding = it,
