@@ -1,7 +1,6 @@
 package com.moneymong.moneymong.feature.agency.register
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,6 +17,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.moneymong.moneymong.common.ui.noRippleClickable
 import com.moneymong.moneymong.design_system.R
 import com.moneymong.moneymong.design_system.component.button.MDSButton
 import com.moneymong.moneymong.design_system.theme.Gray07
@@ -68,7 +68,7 @@ fun AgencyRegisterScreen(
                 .align(Alignment.End)
                 .padding(vertical = 10.dp)
                 .size(24.dp)
-                .clickable(onClick = { viewModel.changeVisibleDialog(true) }),
+                .noRippleClickable(onClick = { viewModel.changeVisibleDialog(true) }),
             painter = painterResource(id = R.drawable.ic_close_default),
             tint = Gray07,
             contentDescription = null
