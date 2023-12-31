@@ -8,6 +8,7 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.moneymong.moneymong.network.BuildConfig
 import com.moneymong.moneymong.network.adapter.ResultCallAdapterFactory
+import com.moneymong.moneymong.network.api.ClovaApi
 import com.moneymong.moneymong.network.util.MoneyMongTokenAuthenticator
 import dagger.Module
 import dagger.Provides
@@ -18,11 +19,17 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.create
+import javax.inject.Qualifier
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
+
+    @Qualifier
+    @Retention
+    annotation class ClovaRetrofit
 
     @Provides
     fun provideOkhttpClient(
@@ -76,5 +83,17 @@ object NetworkModule {
         baseUrl("")
     }.build()
 
-    // TODO Api Provider
+    @Provides
+    @Singleton
+    @ClovaRetrofit
+    fun provideClovaClient(okHttpClient: OkHttpClient, gson: Gson): Retrofit =
+        Retrofit.Builder().apply {
+            client(okHttpClient)
+            baseUrl(BuildConfig.CLOVA_OCR_DOCUMENT_BASEURL)
+            addConverterFactory(GsonConverterFactory.create(gson))
+        }.build()
+
+    @Provides
+    fun provideClovaApi(@ClovaRetrofit retrofit: Retrofit): ClovaApi =
+        retrofit.create(ClovaApi::class.java)
 }
