@@ -140,9 +140,9 @@ data class SubResultItemEntity(
 
 data class SubResultNameEntity(
     val text: String,
-    val formatted: SubResultEntityFormatted
+    val formatted: SubResultNameEntityFormatted
 ) {
-    data class SubResultEntityFormatted(
+    data class SubResultNameEntityFormatted(
         val formatted: String
     )
 }
