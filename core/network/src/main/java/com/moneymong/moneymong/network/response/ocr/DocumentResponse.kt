@@ -141,9 +141,9 @@ data class SubResultItem(
 
 data class SubResultName(
     val text: String,
-    val formatted: SubResultFormatted
+    val formatted: SubResultNameFormatted
 ) {
-    data class SubResultFormatted(
+    data class SubResultNameFormatted(
         val formatted: String
     )
 }
