@@ -1,11 +1,10 @@
 package com.moneymong.moneymong.network.response.ocr
 
-import java.sql.Timestamp
 
 data class DocumentResponse(
     val version: String,
     val requestId: String,
-    val timestamp: Timestamp,
+    val timestamp: Long,
     val meta: DocumentMeta,
     val result: DocumentResult,
 )
