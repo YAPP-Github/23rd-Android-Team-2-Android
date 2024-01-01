@@ -1,9 +1,9 @@
 package com.moneymong.moneymong.data.repository
 
+import com.moneymong.moneymong.data.datasource.AgencyRemoteDataSource
 import com.moneymong.moneymong.data.mapper.agency.toRequest
 import com.moneymong.moneymong.domain.param.agency.AgencyRegisterParam
 import com.moneymong.moneymong.domain.repository.AgencyRepository
-import com.moneymong.moneymong.network.datasource.AgencyRemoteDataSource
 import javax.inject.Inject
 
 class AgencyRepositoryImpl @Inject constructor(

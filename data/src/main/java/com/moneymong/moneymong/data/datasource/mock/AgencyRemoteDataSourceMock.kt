@@ -1,7 +1,7 @@
-package com.moneymong.moneymong.network.datasource.mock
+package com.moneymong.moneymong.data.datasource.mock
 
+import com.moneymong.moneymong.data.datasource.AgencyRemoteDataSource
 import com.moneymong.moneymong.network.request.agency.AgencyRegisterRequest
-import com.moneymong.moneymong.network.datasource.AgencyRemoteDataSource
 import javax.inject.Inject
 
 class AgencyRemoteDataSourceMock @Inject constructor() : AgencyRemoteDataSource {
