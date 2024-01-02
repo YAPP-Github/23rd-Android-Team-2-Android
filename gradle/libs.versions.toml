@@ -24,6 +24,7 @@ glide = "1.0.0-alpha.1"
 gmsPlugin = "4.4.0"
 hilt = "2.48.1"
 hiltNavigation = "1.0.0"
+javaxInject = "1"
 junit4 = "4.13.2"
 kotlin = "1.9.10"
 kotlinxCoroutines = "1.7.3"
@@ -69,6 +70,7 @@ glide = { group = "com.github.bumptech.glide", name  = "compose", version.ref = 
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
 hilt-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
 hilt-navigation = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hiltNavigation" }
+javax-inject = { module = "javax.inject:javax.inject", version.ref = "javaxInject" }
 junit4 = { group = "junit", name = "junit", version.ref = "junit4" }
 kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "kotlinxCoroutines" }
 okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp" }

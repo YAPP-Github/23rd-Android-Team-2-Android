@@ -21,6 +21,7 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import com.moneymong.moneymong.design_system.component.selection.MDSSelection
 import com.moneymong.moneymong.design_system.component.textfield.MDSTextField
 import com.moneymong.moneymong.design_system.component.textfield.util.MDSTextFieldIcons
 import com.moneymong.moneymong.design_system.theme.Body2
@@ -28,7 +29,6 @@ import com.moneymong.moneymong.design_system.theme.Gray06
 import com.moneymong.moneymong.design_system.theme.Gray10
 import com.moneymong.moneymong.design_system.theme.Heading2
 import com.moneymong.moneymong.feature.agency.AgencyType
-import com.moneymong.moneymong.feature.agency.register.component.AgencySelection
 
 @Composable
 internal fun AgencyResisterContentView(
@@ -81,13 +81,13 @@ private fun SelectTypeView(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(10.dp)
         ) {
-            AgencySelection(
+            MDSSelection(
                 modifier = Modifier.weight(1f),
                 text = "동아리",
                 isSelected = agencyType == AgencyType.CLUB,
                 onClick = { onAgencyTypeChange(AgencyType.CLUB) }
             )
-            AgencySelection(
+            MDSSelection(
                 modifier = Modifier.weight(1f),
                 text = "학생회",
                 isSelected = agencyType == AgencyType.COUNCIL,
