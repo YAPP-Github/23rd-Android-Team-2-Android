@@ -48,7 +48,8 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun AgencySearchScreen(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    navigateToRegister: () -> Unit
 ) {
 //    val agencies = emptyList<Agency>()
     val agencies = mockAgencies
@@ -69,18 +70,13 @@ fun AgencySearchScreen(
             sheetState.show()
         }
     }
-    val hideSheet: () -> Unit = {
-        coroutineScope.launch {
-            sheetState.hide()
-        }
-    }
 
     ModalBottomSheetLayout(
         sheetContent = {
             AgencySearchBottomSheetContent(
                 checkedType = registerType,
                 changeType = { registerType = it },
-                hide = hideSheet
+                onConfirm = navigateToRegister
             )
         },
         sheetState = sheetState,
