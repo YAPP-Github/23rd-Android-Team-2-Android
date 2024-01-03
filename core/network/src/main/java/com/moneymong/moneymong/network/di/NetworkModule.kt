@@ -19,7 +19,6 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.create
 import javax.inject.Qualifier
 import javax.inject.Singleton
 
@@ -91,6 +90,7 @@ object NetworkModule {
             client(okHttpClient)
             baseUrl(BuildConfig.CLOVA_OCR_DOCUMENT_BASEURL)
             addConverterFactory(GsonConverterFactory.create(gson))
+            addCallAdapterFactory(ResultCallAdapterFactory.create())
         }.build()
 
     @Provides
