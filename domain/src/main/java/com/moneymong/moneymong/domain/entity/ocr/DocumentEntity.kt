@@ -4,192 +4,128 @@ data class DocumentEntity(
     val version: String,
     val requestId: String,
     val timestamp: Long,
-    val meta: DocumentMetaEntity,
-    val result: DocumentResultEntity,
+    val images: List<DocumentImageEntity>
+)
+
+data class DocumentImageEntity(
+    val receipt: DocumentReceiptEntity?,
+    val uid: String?,
+    val name: String?,
+    val inferResult: String?,
+    val message: String?,
+    val validationResult: ValidationResultEntity?
+)
+
+data class DocumentReceiptEntity(
+    val meta: DocumentMetaEntity?,
+    val result: DocumentResultEntity?
 )
 
 data class DocumentMetaEntity(
-    val estimatedLanguage: String
+    val estimatedLanguage: String?
 )
 
 data class DocumentResultEntity(
-    val storeInfo: StoreInfoEntity,
-    val paymentInfo: PaymentInfoEntity,
-    val subResults: List<SubResultEntity>,
-    val totalPrice: TotalPriceEntity
+    val storeInfo: StoreInfoEntity?,
+    val paymentInfo: PaymentInfoEntity?,
+    val subResults: List<SubResultEntity>?,
+    val totalPrice: TotalPriceEntity?,
+    val subTotal: List<SubTotalEntity>?
 )
 data class StoreInfoEntity(
-    val name: StoreNameEntity,
-    val subName: SubNameEntity,
-    val bizNum: BizNumEntity,
-    val address: List<StoreAddressEntity>,
-    val tel: List<StoreTelEntity>
+    val name: TextInfoEntity?,
+    val subName: TextInfoEntity?,
+    val bizNum: TextInfoEntity?,
+    val addresses: List<TextInfoEntity>?,
+    val tel: List<TextInfoEntity>?
 )
-
-data class StoreNameEntity(
-    val text: String,
-    val formatted: StoreNameEntityFormatted,
-) {
-    data class StoreNameEntityFormatted(
-        val formatted: String
-    )
-}
-
-data class SubNameEntity(
-    val text: String,
-    val formatted: SubNameEntityFormatted
-) {
-    data class SubNameEntityFormatted(
-        val formatted: String
-    )
-}
-
-data class BizNumEntity(
-    val text: String,
-    val formatted: BizNumEntityFormatted
-) {
-    data class BizNumEntityFormatted(
-        val formatted: String
-    )
-}
-
-data class StoreAddressEntity(
-    val text: String,
-    val formatted: StoreAddressEntityFormatted
-) {
-    data class StoreAddressEntityFormatted(
-        val formatted: String
-    )
-}
-
-data class StoreTelEntity(
-    val text: String,
-    val formatted: StoreTelEntityFormatted
-) {
-    data class StoreTelEntityFormatted(
-        val formatted: String
-    )
-}
 
 data class PaymentInfoEntity(
-    val date: PaymentDateEntity,
-    val time: PaymentTimeEntity,
-    val cardInfo: PaymentCardInfoEntity,
-    val confirmNum: PaymentConfirmNumberEntity
+    val date: DateInfoEntity?,
+    val time: TimeInfoEntity?,
+    val cardInfo: CardInfoEntity?,
+    val confirmNum: TextInfoEntity?
 )
-
-data class PaymentDateEntity(
-    val text: String,
-    val formatted: PaymentDateEntityFormatted
-) {
-    data class PaymentDateEntityFormatted(
-        val formatted: String
-    )
-}
-
-data class PaymentTimeEntity(
-    val text: String,
-    val formatted: PaymentTimeEntityFormatted
-) {
-    data class PaymentTimeEntityFormatted(
-        val formatted: String
-    )
-}
-
-data class PaymentCardInfoEntity(
-    val company: CardCompanyEntity,
-    val number: CardNumberEntity
-)
-
-data class CardCompanyEntity(
-    val text: String,
-    val formatted: CardCompanyEntityFormatted
-) {
-    data class CardCompanyEntityFormatted(
-        val formatted: String
-    )
-}
-
-data class CardNumberEntity(
-    val text: String,
-    val formatted: CardNumberEntityFormatted
-) {
-    data class CardNumberEntityFormatted(
-        val formatted: String
-    )
-}
-
-data class PaymentConfirmNumberEntity(
-    val text: String,
-    val formatted: PaymentConfirmNumberEntityFormatted
-) {
-    data class PaymentConfirmNumberEntityFormatted(
-        val formatted: String
-    )
-}
 
 data class SubResultEntity(
-    val items: List<SubResultItemEntity>
+    val items: List<SubResultItemEntity>?
 )
 
 data class SubResultItemEntity(
-    val name: SubResultNameEntity,
-    val count: SubResultCountEntity,
-    val price: SubResultPriceInfoEntity
+    val name: TextInfoEntity?,
+    val code: TextInfoEntity?,
+    val count: TextInfoEntity?,
+    val price: PriceInfoEntity?
 )
 
-data class SubResultNameEntity(
-    val text: String,
-    val formatted: SubResultNameEntityFormatted
-) {
-    data class SubResultNameEntityFormatted(
-        val formatted: String
-    )
-}
-
-data class SubResultCountEntity(
-    val text: String,
-    val formatted: SubResultCountEntityFormatted
-) {
-    data class SubResultCountEntityFormatted(
-        val formatted: String
-    )
-}
-
-data class SubResultPriceInfoEntity(
-    val price: SubResultPriceEntity,
-    val unitPrice: SubResultUnitPriceEntity
-) {
-}
-
-data class SubResultPriceEntity(
-    val text: String,
-    val formatted: SubResultPriceEntityFormatted
-
-) {
-    data class SubResultPriceEntityFormatted(
-        val formatted: String
-    )
-}
-
-data class SubResultUnitPriceEntity(
-    val text: String,
-    val formatted: SubResultUnitPriceEntityFormatted
-) {
-    data class SubResultUnitPriceEntityFormatted(
-        val formatted: String
-    )
-}
+data class PriceInfoEntity(
+    val price: TextInfoEntity?,
+    val unitPrice: TextInfoEntity?
+)
 
 data class TotalPriceEntity(
-    val price: TotalPriceInfoEntity
+    val price: TextInfoEntity?
 )
 
-data class TotalPriceInfoEntity(
-    val text: String,
-    val formatted: TotalPriceInfoEntityFormatted
-) {
-    data class TotalPriceInfoEntityFormatted(
-        val formatted: String
-    )
-}
+data class SubTotalEntity(
+    val taxPrice: List<TextInfoEntity>?,
+    val discountPrice: List<TextInfoEntity>?
+)
+
+data class TextInfoEntity(
+    val text: String?,
+    val formatted: TextFormattedEntity?,
+    val keyText: String?,
+    val confidenceScore: Double?,
+    val boundingPolys: List<VertexEntity>?
+)
+
+data class DateInfoEntity(
+    val text: String?,
+    val formatted: DateFormattedEntity?,
+    val keyText: String?,
+    val confidenceScore: Double?,
+    val boundingPolys: List<VertexEntity>?
+)
+
+data class TimeInfoEntity(
+    val text: String?,
+    val formatted: TimeFormattedEntity?,
+    val keyText: String?,
+    val confidenceScore: Double?,
+    val boundingPolys: List<VertexEntity>?
+)
+
+data class CardInfoEntity(
+    val company: TextInfoEntity?,
+    val number: TextInfoEntity?
+)
+
+data class TextFormattedEntity(
+    val value: String?
+)
+
+data class DateFormattedEntity(
+    val year: String?,
+    val month: String?,
+    val day: String?
+)
+
+data class TimeFormattedEntity(
+    val hour: String?,
+    val minute: String?,
+    val second: String?
+)
+
+data class VertexEntity(
+    val vertices: List<PointEntity>?
+)
+
+data class PointEntity(
+    val x: Double?,
+    val y: Double?
+)
+
+data class ValidationResultEntity(
+    val result: String?
+)

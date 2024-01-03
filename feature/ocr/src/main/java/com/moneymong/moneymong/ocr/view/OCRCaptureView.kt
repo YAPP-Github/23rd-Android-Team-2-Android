@@ -25,6 +25,7 @@ import com.moneymong.moneymong.ocr.util.toMultipart
 import com.moneymong.moneymong.design_system.theme.Gray10
 import com.moneymong.moneymong.ocr.OCRSideEffect
 import com.moneymong.moneymong.ocr.OCRViewModel
+import com.moneymong.moneymong.ocr.util.encodingBase64
 import org.orbitmvi.orbit.compose.collectAsState
 import java.io.File
 
@@ -54,8 +55,8 @@ fun OCRCaptureView(
                         mainExecutor,
                         object : ImageCapture.OnImageSavedCallback {
                             override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
-                                outputFileResults.savedUri
-                                Log.d("OCRCaptureView", "${imageFile.toMultipart()}")
+                                val base64String = outputFileResults.savedUri?.encodingBase64(context).orEmpty()
+                                viewModel.eventEmit(OCRSideEffect.OCRPostDocumentApi(base64String))
                             }
 
                             override fun onError(exception: ImageCaptureException) {

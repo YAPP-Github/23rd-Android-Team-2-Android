@@ -1,46 +1,51 @@
 package com.moneymong.moneymong.data.mapper.ocr
 
-import com.moneymong.moneymong.domain.entity.ocr.BizNumEntity
-import com.moneymong.moneymong.domain.entity.ocr.CardCompanyEntity
-import com.moneymong.moneymong.domain.entity.ocr.CardNumberEntity
+import com.moneymong.moneymong.domain.entity.ocr.CardInfoEntity
+import com.moneymong.moneymong.domain.entity.ocr.DateFormattedEntity
+import com.moneymong.moneymong.domain.entity.ocr.DateInfoEntity
 import com.moneymong.moneymong.domain.entity.ocr.DocumentEntity
+import com.moneymong.moneymong.domain.entity.ocr.DocumentImageEntity
 import com.moneymong.moneymong.domain.entity.ocr.DocumentMetaEntity
+import com.moneymong.moneymong.domain.entity.ocr.DocumentReceiptEntity
 import com.moneymong.moneymong.domain.entity.ocr.DocumentResultEntity
-import com.moneymong.moneymong.domain.entity.ocr.PaymentCardInfoEntity
-import com.moneymong.moneymong.domain.entity.ocr.PaymentConfirmNumberEntity
-import com.moneymong.moneymong.domain.entity.ocr.PaymentDateEntity
 import com.moneymong.moneymong.domain.entity.ocr.PaymentInfoEntity
-import com.moneymong.moneymong.domain.entity.ocr.PaymentTimeEntity
-import com.moneymong.moneymong.domain.entity.ocr.StoreAddressEntity
+import com.moneymong.moneymong.domain.entity.ocr.PointEntity
+import com.moneymong.moneymong.domain.entity.ocr.PriceInfoEntity
 import com.moneymong.moneymong.domain.entity.ocr.StoreInfoEntity
-import com.moneymong.moneymong.domain.entity.ocr.StoreNameEntity
-import com.moneymong.moneymong.domain.entity.ocr.StoreTelEntity
-import com.moneymong.moneymong.domain.entity.ocr.SubNameEntity
-import com.moneymong.moneymong.domain.entity.ocr.SubResultCountEntity
 import com.moneymong.moneymong.domain.entity.ocr.SubResultEntity
 import com.moneymong.moneymong.domain.entity.ocr.SubResultItemEntity
-import com.moneymong.moneymong.domain.entity.ocr.SubResultNameEntity
-import com.moneymong.moneymong.domain.entity.ocr.SubResultPriceEntity
-import com.moneymong.moneymong.domain.entity.ocr.SubResultPriceInfoEntity
-import com.moneymong.moneymong.domain.entity.ocr.SubResultUnitPriceEntity
+import com.moneymong.moneymong.domain.entity.ocr.SubTotalEntity
+import com.moneymong.moneymong.domain.entity.ocr.TextFormattedEntity
+import com.moneymong.moneymong.domain.entity.ocr.TextInfoEntity
+import com.moneymong.moneymong.domain.entity.ocr.TimeFormattedEntity
+import com.moneymong.moneymong.domain.entity.ocr.TimeInfoEntity
 import com.moneymong.moneymong.domain.entity.ocr.TotalPriceEntity
-import com.moneymong.moneymong.domain.entity.ocr.TotalPriceInfoEntity
+import com.moneymong.moneymong.domain.entity.ocr.ValidationResultEntity
+import com.moneymong.moneymong.domain.entity.ocr.VertexEntity
 import com.moneymong.moneymong.domain.param.ocr.DocumentParam
 import com.moneymong.moneymong.network.request.ocr.DocumentRequest
-import com.moneymong.moneymong.network.response.ocr.BizNum
+import com.moneymong.moneymong.network.response.ocr.CardInfo
+import com.moneymong.moneymong.network.response.ocr.DateFormatted
+import com.moneymong.moneymong.network.response.ocr.DateInfo
+import com.moneymong.moneymong.network.response.ocr.DocumentImage
 import com.moneymong.moneymong.network.response.ocr.DocumentMeta
+import com.moneymong.moneymong.network.response.ocr.DocumentReceipt
 import com.moneymong.moneymong.network.response.ocr.DocumentResponse
 import com.moneymong.moneymong.network.response.ocr.DocumentResult
-import com.moneymong.moneymong.network.response.ocr.PaymentCardInfo
 import com.moneymong.moneymong.network.response.ocr.PaymentInfo
-import com.moneymong.moneymong.network.response.ocr.StoreAddress
+import com.moneymong.moneymong.network.response.ocr.Point
+import com.moneymong.moneymong.network.response.ocr.PriceInfo
 import com.moneymong.moneymong.network.response.ocr.StoreInfo
-import com.moneymong.moneymong.network.response.ocr.StoreName
-import com.moneymong.moneymong.network.response.ocr.StoreTel
-import com.moneymong.moneymong.network.response.ocr.SubName
 import com.moneymong.moneymong.network.response.ocr.SubResult
-import com.moneymong.moneymong.network.response.ocr.SubResultPriceInfo
+import com.moneymong.moneymong.network.response.ocr.SubResultItem
+import com.moneymong.moneymong.network.response.ocr.SubTotal
+import com.moneymong.moneymong.network.response.ocr.TextFormatted
+import com.moneymong.moneymong.network.response.ocr.TextInfo
+import com.moneymong.moneymong.network.response.ocr.TimeFormatted
+import com.moneymong.moneymong.network.response.ocr.TimeInfo
 import com.moneymong.moneymong.network.response.ocr.TotalPrice
+import com.moneymong.moneymong.network.response.ocr.ValidationResult
+import com.moneymong.moneymong.network.response.ocr.Vertex
 
 fun DocumentParam.toRequest() =
     DocumentRequest(
@@ -62,8 +67,23 @@ fun DocumentResponse.toEntity() =
         version = this.version,
         requestId = this.requestId,
         timestamp = this.timestamp,
-        meta = this.meta.toEntity(),
-        result = this.result.toEntity()
+        images = this.images.map { it.toEntity() }
+    )
+
+fun DocumentImage.toEntity() =
+    DocumentImageEntity(
+        receipt = this.receipt?.toEntity(),
+        uid = this.uid,
+        name = this.name,
+        inferResult = this.inferResult,
+        message = this.message,
+        validationResult = this.validationResult?.toEntity()
+    )
+
+fun DocumentReceipt.toEntity() =
+    DocumentReceiptEntity(
+        meta = this.meta?.toEntity(),
+        result = this.result?.toEntity()
     )
 
 fun DocumentMeta.toEntity() =
@@ -73,131 +93,124 @@ fun DocumentMeta.toEntity() =
 
 fun DocumentResult.toEntity() =
     DocumentResultEntity(
-        storeInfo = this.storeInfo.toEntity(),
-        paymentInfo = this.paymentInfo.toEntity(),
-        subResults = this.subResults.map { it.toEntity() },
-        totalPrice = this.totalPrice.toEntity()
+        storeInfo = this.storeInfo?.toEntity(),
+        paymentInfo = this.paymentInfo?.toEntity(),
+        subResults = this.subResults?.map { it.toEntity() },
+        totalPrice = this.totalPrice?.toEntity(),
+        subTotal = this.subTotal?.map { it.toEntity() }
     )
 
-
-// Store Entity Mapper
 fun StoreInfo.toEntity() =
     StoreInfoEntity(
-        name = this.name.toEntity(),
-        subName = this.subName.toEntity(),
-        bizNum = this.bizNum.toEntity(),
-        address = this.address.map { it.toEntity() },
-        tel = this.tel.map { it.toEntity() }
+        name = this.name?.toEntity(),
+        subName = this.subName?.toEntity(),
+        bizNum = this.bizNum?.toEntity(),
+        addresses = this.addresses?.map { it.toEntity() },
+        tel = this.tel?.map { it.toEntity() }
     )
 
-fun StoreName.toEntity() =
-    StoreNameEntity(
-        text = this.text,
-        formatted = StoreNameEntity.StoreNameEntityFormatted(this.formatted.formatted)
+fun PaymentInfo.toEntity() =
+    PaymentInfoEntity(
+        date = this.date?.toEntity(),
+        time = this.time?.toEntity(),
+        cardInfo = this.cardInfo?.toEntity(),
+        confirmNum = this.confirmNum?.toEntity()
     )
 
-fun SubName.toEntity() =
-    SubNameEntity(
-        text = this.text,
-        formatted = SubNameEntity.SubNameEntityFormatted(this.formatted.formatted)
-    )
-
-fun BizNum.toEntity() =
-    BizNumEntity(
-        text = this.text,
-        formatted = BizNumEntity.BizNumEntityFormatted(this.formatted.formatted)
-    )
-
-fun StoreAddress.toEntity() =
-    StoreAddressEntity(
-        text = this.text,
-        formatted = StoreAddressEntity.StoreAddressEntityFormatted(this.formatted.formatted)
-    )
-
-fun StoreTel.toEntity() =
-    StoreTelEntity(
-        text = this.text,
-        formatted = StoreTelEntity.StoreTelEntityFormatted(this.formatted.formatted)
-    )
-
-// PaymentInfo Entity Mapper
-fun PaymentInfo.toEntity(): PaymentInfoEntity {
-    val date = PaymentDateEntity(
-        text = this.date.text,
-        formatted = PaymentDateEntity.PaymentDateEntityFormatted(this.date.formatted.formatted)
-    )
-    val time = PaymentTimeEntity(
-        text = this.time.text,
-        formatted = PaymentTimeEntity.PaymentTimeEntityFormatted(this.time.formatted.formatted)
-    )
-    val confirmNum = PaymentConfirmNumberEntity(
-        text = this.confirmNum.text,
-        formatted = PaymentConfirmNumberEntity.PaymentConfirmNumberEntityFormatted(this.confirmNum.formatted.formatted)
-    )
-    return PaymentInfoEntity(
-        date = date,
-        time = time,
-        cardInfo = this.cardInfo.toEntity(),
-        confirmNum = confirmNum
-    )
-}
-
-fun PaymentCardInfo.toEntity(): PaymentCardInfoEntity {
-    val company = CardCompanyEntity(
-        text = this.company.text,
-        formatted = CardCompanyEntity.CardCompanyEntityFormatted(this.company.formatted.formatted)
-    )
-    val number = CardNumberEntity(
-        text = this.number.text,
-        formatted = CardNumberEntity.CardNumberEntityFormatted(this.number.formatted.formatted)
-    )
-
-    return PaymentCardInfoEntity(
-        company = company,
-        number = number
-    )
-}
-
-// SubResult Entity Mapper
 fun SubResult.toEntity() =
     SubResultEntity(
-        items = this.items.map {
-            SubResultItemEntity(
-                name = SubResultNameEntity(
-                    text = it.name.text,
-                    formatted = SubResultNameEntity.SubResultNameEntityFormatted(it.name.formatted.formatted)
-                ),
-                count = SubResultCountEntity(
-                    text = it.count.text,
-                    formatted = SubResultCountEntity.SubResultCountEntityFormatted(it.count.formatted.formatted)
-                ),
-                price = it.price.toEntity()
-            )
-        }
+        items = this.items?.map { it.toEntity() }
     )
 
-fun SubResultPriceInfo.toEntity(): SubResultPriceInfoEntity {
-    val price = SubResultPriceEntity(
-        text = this.price.text,
-        formatted = SubResultPriceEntity.SubResultPriceEntityFormatted(this.price.formatted.formatted)
-    )
-    val unitPrice = SubResultUnitPriceEntity(
-        text = this.unitPrice.text,
-        formatted = SubResultUnitPriceEntity.SubResultUnitPriceEntityFormatted(this.unitPrice.formatted.formatted)
+fun SubResultItem.toEntity() =
+    SubResultItemEntity(
+        name = this.name?.toEntity(),
+        code = this.code?.toEntity(),
+        count = this.count?.toEntity(),
+        price = this.price?.toEntity()
     )
 
-    return SubResultPriceInfoEntity(
-        price = price,
-        unitPrice = unitPrice
-    )
-}
-
-// TotalPrice Entity Mapper
-fun TotalPrice.toEntity(): TotalPriceEntity {
-    val price = TotalPriceInfoEntity(
-        text = this.price.text,
-        formatted = TotalPriceInfoEntity.TotalPriceInfoEntityFormatted(this.price.formatted.formatted)
+fun PriceInfo.toEntity() =
+    PriceInfoEntity(
+        price = this.price?.toEntity(),
+        unitPrice = this.unitPrice?.toEntity()
     )
 
-    return TotalPriceEntity(price = price)
-}
+fun TotalPrice.toEntity() =
+    TotalPriceEntity(
+        price = this.price?.toEntity()
+    )
+
+fun SubTotal.toEntity() =
+    SubTotalEntity(
+        taxPrice = this.taxPrice?.map { it.toEntity() },
+        discountPrice = this.discountPrice?.map { it.toEntity() }
+    )
+
+fun TextInfo.toEntity() =
+    TextInfoEntity(
+        text = this.text,
+        formatted = this.formatted?.toEntity(),
+        keyText = this.keyText,
+        confidenceScore = this.confidenceScore,
+        boundingPolys = this.boundingPolys?.map { it.toEntity() }
+    )
+
+fun DateInfo.toEntity() =
+    DateInfoEntity(
+        text = this.text,
+        formatted = this.formatted?.toEntity(),
+        keyText = this.keyText,
+        confidenceScore = this.confidenceScore,
+        boundingPolys = this.boundingPolys?.map { it.toEntity() }
+    )
+
+fun TimeInfo.toEntity() =
+    TimeInfoEntity(
+        text = this.text,
+        formatted = this.formatted?.toEntity(),
+        keyText = this.keyText,
+        confidenceScore = this.confidenceScore,
+        boundingPolys = this.boundingPolys?.map { it.toEntity() }
+    )
+
+fun CardInfo.toEntity() =
+    CardInfoEntity(
+        company = this.company?.toEntity(),
+        number = this.number?.toEntity()
+    )
+
+fun TextFormatted.toEntity() =
+    TextFormattedEntity(
+        value = this.value
+    )
+
+fun DateFormatted.toEntity() =
+    DateFormattedEntity(
+        year = this.year,
+        month = this.month,
+        day = this.day
+    )
+
+fun TimeFormatted.toEntity() =
+    TimeFormattedEntity(
+        hour = this.hour,
+        minute = this.minute,
+        second = this.second
+    )
+
+fun Vertex.toEntity() =
+    VertexEntity(
+        vertices = this.vertices?.map { it.toEntity() }
+    )
+
+fun Point.toEntity() =
+    PointEntity(
+        x = this.x,
+        y = this.y
+    )
+
+fun ValidationResult.toEntity() =
+    ValidationResultEntity(
+        result = this.result
+    )

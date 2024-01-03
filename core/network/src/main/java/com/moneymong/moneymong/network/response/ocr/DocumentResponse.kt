@@ -5,192 +5,128 @@ data class DocumentResponse(
     val version: String,
     val requestId: String,
     val timestamp: Long,
-    val meta: DocumentMeta,
-    val result: DocumentResult,
+    val images: List<DocumentImage>
+)
+
+data class DocumentImage(
+    val receipt: DocumentReceipt?,
+    val uid: String?,
+    val name: String?,
+    val inferResult: String?,
+    val message: String?,
+    val validationResult: ValidationResult?
+)
+
+data class DocumentReceipt(
+    val meta: DocumentMeta? = null,
+    val result: DocumentResult? = null
 )
 
 data class DocumentMeta(
-    val estimatedLanguage: String
+    val estimatedLanguage: String? = null
 )
 
 data class DocumentResult(
-    val storeInfo: StoreInfo,
-    val paymentInfo: PaymentInfo,
-    val subResults: List<SubResult>,
-    val totalPrice: TotalPrice
+    val storeInfo: StoreInfo? = null,
+    val paymentInfo: PaymentInfo? = null,
+    val subResults: List<SubResult>? = null,
+    val totalPrice: TotalPrice? = null,
+    val subTotal: List<SubTotal>? = null
 )
 data class StoreInfo(
-    val name: StoreName,
-    val subName: SubName,
-    val bizNum: BizNum,
-    val address: List<StoreAddress>,
-    val tel: List<StoreTel>
+    val name: TextInfo? = null,
+    val subName: TextInfo? = null,
+    val bizNum: TextInfo? = null,
+    val addresses: List<TextInfo>? = null,
+    val tel: List<TextInfo>? = null
 )
-
-data class StoreName(
-    val text: String,
-    val formatted: StoreNameFormatted,
-) {
-    data class StoreNameFormatted(
-        val formatted: String
-    )
-}
-
-data class SubName(
-    val text: String,
-    val formatted: SubNameFormatted
-) {
-    data class SubNameFormatted(
-        val formatted: String
-    )
-}
-
-data class BizNum(
-    val text: String,
-    val formatted: BizNumFormatted
-) {
-    data class BizNumFormatted(
-        val formatted: String
-    )
-}
-
-data class StoreAddress(
-    val text: String,
-    val formatted: StoreAddressFormatted
-) {
-    data class StoreAddressFormatted(
-        val formatted: String
-    )
-}
-
-data class StoreTel(
-    val text: String,
-    val formatted: StoreTelFormatted
-) {
-    data class StoreTelFormatted(
-        val formatted: String
-    )
-}
 
 data class PaymentInfo(
-    val date: PaymentDate,
-    val time: PaymentTime,
-    val cardInfo: PaymentCardInfo,
-    val confirmNum: PaymentConfirmNumber
+    val date: DateInfo? = null,
+    val time: TimeInfo? = null,
+    val cardInfo: CardInfo? = null,
+    val confirmNum: TextInfo? = null
 )
-
-data class PaymentDate(
-    val text: String,
-    val formatted: PaymentDateFormatted
-) {
-    data class PaymentDateFormatted(
-        val formatted: String
-    )
-}
-
-data class PaymentTime(
-    val text: String,
-    val formatted: PaymentTimeFormatted
-) {
-    data class PaymentTimeFormatted(
-        val formatted: String
-    )
-}
-
-data class PaymentCardInfo(
-    val company: CardCompany,
-    val number: CardNumber
-)
-
-data class CardCompany(
-    val text: String,
-    val formatted: CardCompanyFormatted
-) {
-    data class CardCompanyFormatted(
-        val formatted: String
-    )
-}
-
-data class CardNumber(
-    val text: String,
-    val formatted: CardNumberFormatted
-) {
-    data class CardNumberFormatted(
-        val formatted: String
-    )
-}
-
-data class PaymentConfirmNumber(
-    val text: String,
-    val formatted: PaymentConfirmNumberFormatted
-) {
-    data class PaymentConfirmNumberFormatted(
-        val formatted: String
-    )
-}
 
 data class SubResult(
-    val items: List<SubResultItem>
+    val items: List<SubResultItem>? = null
 )
 
 data class SubResultItem(
-    val name: SubResultName,
-    val count: SubResultCount,
-    val price: SubResultPriceInfo
+    val name: TextInfo? = null,
+    val code: TextInfo? = null,
+    val count: TextInfo? = null,
+    val price: PriceInfo? = null
 )
 
-data class SubResultName(
-    val text: String,
-    val formatted: SubResultNameFormatted
-) {
-    data class SubResultNameFormatted(
-        val formatted: String
-    )
-}
-
-data class SubResultCount(
-    val text: String,
-    val formatted: SubResultCountFormatted
-) {
-    data class SubResultCountFormatted(
-        val formatted: String
-    )
-}
-
-data class SubResultPriceInfo(
-    val price: SubResultPrice,
-    val unitPrice: SubResultUnitPrice
-) {
-}
-
-data class SubResultPrice(
-    val text: String,
-    val formatted: SubResultPriceFormatted
-
-) {
-    data class SubResultPriceFormatted(
-        val formatted: String
-    )
-}
-
-data class SubResultUnitPrice(
-    val text: String,
-    val formatted: SubResultUnitPriceFormatted
-) {
-    data class SubResultUnitPriceFormatted(
-        val formatted: String
-    )
-}
+data class PriceInfo(
+    val price: TextInfo? = null,
+    val unitPrice: TextInfo? = null
+)
 
 data class TotalPrice(
-    val price: TotalPriceInfo
+    val price: TextInfo? = null
 )
 
-data class TotalPriceInfo(
-    val text: String,
-    val formatted: TotalPriceInfoFormatted
-) {
-    data class TotalPriceInfoFormatted(
-        val formatted: String
-    )
-}
+data class SubTotal(
+    val taxPrice: List<TextInfo>? = null,
+    val discountPrice: List<TextInfo>?  = null
+)
+
+data class TextInfo(
+    val text: String? = null,
+    val formatted: TextFormatted? = null,
+    val keyText: String? = null,
+    val confidenceScore: Double? = null,
+    val boundingPolys: List<Vertex>? = null
+)
+
+data class DateInfo(
+    val text: String? = null,
+    val formatted: DateFormatted? = null,
+    val keyText: String? = null,
+    val confidenceScore: Double? = null,
+    val boundingPolys: List<Vertex>?  = null
+)
+
+data class TimeInfo(
+    val text: String? = null,
+    val formatted: TimeFormatted? = null,
+    val keyText: String? = null,
+    val confidenceScore: Double? = null,
+    val boundingPolys: List<Vertex>? = null
+)
+
+data class CardInfo(
+    val company: TextInfo? = null,
+    val number: TextInfo? = null
+)
+
+data class TextFormatted(
+    val value: String? = null
+)
+
+data class DateFormatted(
+    val year: String? = null,
+    val month: String? = null,
+    val day: String? = null
+)
+
+data class TimeFormatted(
+    val hour: String? = null,
+    val minute: String? = null,
+    val second: String? = null
+)
+
+data class Vertex(
+    val vertices: List<Point>? = null
+)
+
+data class Point(
+    val x: Double? = null,
+    val y: Double? = null
+)
+
+data class ValidationResult(
+    val result: String? = null
+)
