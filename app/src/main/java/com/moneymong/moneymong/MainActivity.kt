@@ -20,8 +20,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             MMTheme {
-                OCRScreen()
-//                MoneyMongApp()
+                MoneyMongApp()
             }
         }
     }

@@ -22,6 +22,8 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.moneymong.moneymong.design_system.theme.Black
@@ -32,7 +34,8 @@ import com.moneymong.moneymong.ocr_result.view.OCRResultTopbarView
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun OCRResultScreen(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    navController: NavController
 ) {
     var visibleGuide by remember { mutableStateOf(true) }
     var scale by remember { mutableStateOf(1f) }
@@ -93,5 +96,5 @@ fun OCRResultScreen(
 @Preview(showBackground = true)
 @Composable
 fun OCRResultScreenPreview() {
-    OCRResultScreen()
+    OCRResultScreen(navController = rememberNavController())
 }
