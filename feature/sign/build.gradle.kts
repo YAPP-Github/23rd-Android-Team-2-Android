@@ -3,7 +3,8 @@ plugins {
     alias(libs.plugins.moneymong.android.library)
     alias(libs.plugins.moneymong.android.library.compose)
     alias(libs.plugins.kotlin.android)
-
+    alias(libs.plugins.moneymong.android.hilt)
+    alias(libs.plugins.secretsGradlePlugin)
 }
 
 android {
@@ -36,4 +37,16 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.testManifest)
 
     implementation(project(":core:design-system"))
+    // 카카오 SDK 의존성
+    implementation(libs.kakao.v2.user)
+
+    implementation(projects.core.common)
+    implementation(projects.domain)
+
+    implementation(libs.orbit.compose)
+    implementation(libs.orbit.core)
+    implementation(libs.orbit.viewModel)
+
+
+
 }
