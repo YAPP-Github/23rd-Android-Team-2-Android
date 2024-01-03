@@ -59,7 +59,7 @@ fun OCRScreen(
     LaunchedEffect(viewModel) {
         sideEffect.collect {
             when (it) {
-                OCRSideEffect.OCRMoveToPermissionSetting -> {
+                is OCRSideEffect.OCRMoveToPermissionSetting -> {
                     context.startActivity(
                         Intent(
                             Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
@@ -67,14 +67,14 @@ fun OCRScreen(
                         )
                     )
                 }
+                is OCRSideEffect.OCRPostDocumentApi -> {
+                    viewModel.postDocumentOCR(it.base64)
+                }
+
                 else -> {}
             }
         }
     }
-
-
-
-
 
     if (state.showPermissionDialog) {
         MDSModal(
@@ -100,13 +100,22 @@ fun OCRScreen(
                 OCRCameraPermissionDeniedView(onClickRequestPermission = { /* TODO */ })
             } else {
                 OCRCaptureView()
-                Text(
-                    modifier = Modifier.align(Alignment.Center),
-                    text = "영수증의 처음과 끝이\n모두 포함되게 촬영해주세요",
-                    style = Heading1,
-                    color = Color.White,
-                    textAlign = TextAlign.Center
-                )
+                if (state.isLoading) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.size(74.dp),
+                        color = Mint03,
+                        trackColor = White,
+                        strokeWidth = 7.dp
+                    )
+                } else {
+                    Text(
+                        modifier = Modifier.align(Alignment.Center),
+                        text = "영수증의 처음과 끝이\n모두 포함되게 촬영해주세요",
+                        style = Heading1,
+                        color = Color.White,
+                        textAlign = TextAlign.Center
+                    )
+                }
                 if (visibleHelper) { // TODO 최초 진입 시, 혹은 도움말 아이콘 클릭 시
                     OCRHelperView(onClickClose = { visibleHelper = !visibleHelper })
                 }
@@ -119,14 +128,6 @@ fun OCRScreen(
             OCRInteractionView(
                 modifier = Modifier.align(Alignment.BottomCenter),
             )
-            if (false) { // TODO ocr loading
-                CircularProgressIndicator(
-                    modifier = Modifier.size(74.dp),
-                    color = Mint03,
-                    trackColor = White,
-                    strokeWidth = 7.dp
-                )
-            }
         }
     }
 }

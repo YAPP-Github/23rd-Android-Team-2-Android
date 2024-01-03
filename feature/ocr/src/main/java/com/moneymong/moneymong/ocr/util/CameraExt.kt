@@ -31,15 +31,14 @@ fun File.toMultipart(): MultipartBody.Part {
     return MultipartBody.Part.createFormData(name = "file", this.name, requestBody)
 }
 
-fun String.encodingBase64(context: Context): String {
-    val parse = Uri.parse(this)
-    val fileInputStream = context.contentResolver.openInputStream(parse)
+fun Uri.encodingBase64(context: Context): String {
+    val fileInputStream = context.contentResolver.openInputStream(this)
     val stream = ByteArrayOutputStream()
     val bitmap = BitmapFactory.decodeStream(fileInputStream)
     val rotatedBitmap = rotateImageIfRequired(
         context = context,
         bitmap = bitmap,
-        uri = parse
+        uri = this
     )
 
     if (rotatedBitmap != null) {
