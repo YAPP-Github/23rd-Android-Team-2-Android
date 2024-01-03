@@ -11,6 +11,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.moneymong.moneymong.design_system.theme.MMHorizontalSpacing
 import com.moneymong.moneymong.feature.sign.view.KakaoLoginView
 import com.moneymong.moneymong.feature.sign.view.TitleView
@@ -29,7 +31,9 @@ fun LoginScreen() {
 
 
 @Composable
-private fun LoginContent(modifier: Modifier = Modifier) {
+private fun LoginContent(
+    modifier: Modifier = Modifier,
+) {
     Box(
         modifier = modifier
             .fillMaxSize()
@@ -54,7 +58,11 @@ private fun LoginContent(modifier: Modifier = Modifier) {
 }
 
 
-
+@Preview
+@Composable
+fun pre(){
+    LoginScreen()
+}
 
 
 

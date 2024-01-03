@@ -1,3 +1,6 @@
+import java.io.FileInputStream
+import java.util.Properties
+
 @Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     alias(libs.plugins.moneymong.android.application)
@@ -5,7 +8,12 @@ plugins {
     alias(libs.plugins.moneymong.android.application.flavors)
     alias(libs.plugins.moneymong.android.application.firebase)
     alias(libs.plugins.moneymong.android.hilt)
+    alias(libs.plugins.secretsGradlePlugin)
+
 }
+
+val properties = Properties()
+properties.load(FileInputStream(rootProject.file("local.properties")))
 
 android {
     namespace = "com.moneymong.moneymong"
@@ -22,6 +30,10 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+        buildConfigField("String", "NATIVE_APP_KEY", properties.getProperty("native_app_key"))
+    }
+    buildFeatures{
+        buildConfig = true
     }
 
     buildTypes {
@@ -65,4 +77,6 @@ dependencies {
     implementation(libs.orbit.core)
     implementation(libs.orbit.compose)
     implementation(libs.orbit.viewModel)
+
+    implementation(libs.kakao.v2.user)
 }

@@ -73,7 +73,7 @@ object NetworkModule {
         addConverterFactory(GsonConverterFactory.create(gson))
         addCallAdapterFactory(ResultCallAdapterFactory.create())
         client(okHttpClient)
-        baseUrl("")
+        baseUrl("https://dev.moneymong.site/")
     }.build()
 
     // TODO Api Provider
