@@ -28,6 +28,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavOptions
+import com.google.gson.Gson
 import com.moneymong.moneymong.design_system.component.modal.MDSModal
 import com.moneymong.moneymong.design_system.theme.Heading1
 import com.moneymong.moneymong.design_system.theme.Mint03
@@ -46,7 +47,7 @@ import org.orbitmvi.orbit.compose.collectSideEffect
 fun OCRScreen(
     modifier: Modifier = Modifier,
     viewModel: OCRViewModel = hiltViewModel(),
-    navigateToOCRResult: (NavOptions?) -> Unit
+    navigateToOCRResult: (NavOptions?, String) -> Unit
 ) {
     val state = viewModel.collectAsState().value
     val context = LocalContext.current
@@ -73,7 +74,8 @@ fun OCRScreen(
             }
 
             is OCRSideEffect.OCRNavigateToOCRResult -> {
-                navigateToOCRResult(null)
+                val documentString = it.document?.let { Gson().toJson(it) }.orEmpty()
+                navigateToOCRResult(null, documentString)
             }
 
             else -> {}
@@ -145,5 +147,5 @@ fun OCRScreen(
 @Preview(showBackground = true)
 @Composable
 fun OCRScreenPreview() {
-    OCRScreen(navigateToOCRResult = {})
+    OCRScreen(navigateToOCRResult = { navOptions, s->  })
 }

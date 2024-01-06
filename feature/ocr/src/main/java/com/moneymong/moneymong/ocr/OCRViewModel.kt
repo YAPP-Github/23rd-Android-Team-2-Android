@@ -1,5 +1,7 @@
 package com.moneymong.moneymong.ocr
 
+import android.content.SharedPreferences
+import androidx.core.content.edit
 import com.moneymong.moneymong.common.base.BaseViewModel
 import com.moneymong.moneymong.domain.param.ocr.DocumentParam
 import com.moneymong.moneymong.domain.usecase.ocr.DocumentOCRUseCase
@@ -12,12 +14,16 @@ import javax.inject.Inject
 
 @HiltViewModel
 class OCRViewModel @Inject constructor(
-    private val documentOCRUseCase: DocumentOCRUseCase
+    private val documentOCRUseCase: DocumentOCRUseCase,
+    private val prefs: SharedPreferences
 ) : BaseViewModel<OCRState, OCRSideEffect>(OCRState()) {
 
     fun postDocumentOCR(receiptImage: String) = intent {
         if (!state.isLoading) {
-            reduce { state.copy(isLoading = true) }
+            prefs.edit { putString("receiptImage", receiptImage) }
+            reduce {
+                state.copy(isLoading = true)
+            }
 
             val documentParam = DocumentParam(
                 requestId = "moneymong",
@@ -40,7 +46,7 @@ class OCRViewModel @Inject constructor(
     private fun possibleNavigateToOCRResult(message: String) = intent {
         val receiptSuccess = message == "SUCCESS" && state.isReceipt
         if (receiptSuccess) {
-            postSideEffect(OCRSideEffect.OCRNavigateToOCRResult)
+            postSideEffect(OCRSideEffect.OCRNavigateToOCRResult(state.document))
         } else {
             // TODO
         }
