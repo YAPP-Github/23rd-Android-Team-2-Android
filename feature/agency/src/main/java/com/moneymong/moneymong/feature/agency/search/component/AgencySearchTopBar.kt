@@ -13,7 +13,7 @@ fun AgencySearchTopBar(
     modifier: Modifier = Modifier,
 ) {
     Text(
-        modifier = modifier.padding(vertical = 8.dp),
+        modifier = modifier.padding(vertical = 16.dp),
         text = "소속 찾기",
         color = Gray10,
         style = Heading1
