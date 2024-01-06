@@ -39,7 +39,10 @@ fun OCRResultBottomView(
     amount: String,
     date: String,
     time: String,
-    onClickRetryOCR: () -> Unit
+    btnEnabled: Boolean,
+    onClickRetryOCR: () -> Unit,
+    onClickRegister: () -> Unit,
+    onClickEdit: () -> Unit
 ) {
     Column(
         modifier = modifier.fillMaxWidth(),
@@ -121,7 +124,7 @@ fun OCRResultBottomView(
                         text = "수정하기",
                         size = MDSButtonSize.LARGE,
                         type = MDSButtonType.SECONDARY,
-                        onClick = { /*TODO*/ }
+                        onClick = onClickEdit
                     )
                     Spacer(modifier = Modifier.width(10.dp))
                     MDSButton(
@@ -131,7 +134,8 @@ fun OCRResultBottomView(
                         text = "등록하기",
                         size = MDSButtonSize.LARGE,
                         type = MDSButtonType.PRIMARY,
-                        onClick = { /*TODO*/ }
+                        enabled = btnEnabled,
+                        onClick = onClickRegister
                     )
                 }
                 Spacer(modifier = Modifier.height(24.dp))
@@ -148,6 +152,9 @@ fun OCRResultBottomPreview() {
         amount = "",
         date = "",
         time = "",
-        onClickRetryOCR = {}
+        onClickRetryOCR = {},
+        btnEnabled = true,
+        onClickRegister = {},
+        onClickEdit = {}
     )
 }
