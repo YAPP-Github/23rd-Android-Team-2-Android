@@ -13,7 +13,7 @@ fun NavController.navigateToOCR(navOptions: NavOptions? = null) {
 }
 
 fun NavGraphBuilder.ocrScreen(
-    navigateToOCRResult: (NavOptions?) -> Unit
+    navigateToOCRResult: (NavOptions?, String) -> Unit
 ) {
     composable(route = ocrRoute) {
         OCRScreen(

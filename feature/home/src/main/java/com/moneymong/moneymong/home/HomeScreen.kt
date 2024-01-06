@@ -8,6 +8,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.moneymong.moneymong.feature.agency.navigation.agencyRoute
@@ -20,6 +21,7 @@ import com.moneymong.moneymong.ledger.navigation.ledgerScreen
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
+    navController: NavController
 ) {
     val homeNavController = rememberHomeNavController()
     Scaffold(
@@ -49,5 +51,5 @@ fun HomeScreen(
 @Preview(showBackground = true)
 @Composable
 fun HomeScreenPreview() {
-    HomeScreen()
+    HomeScreen(navController = rememberNavController())
 }

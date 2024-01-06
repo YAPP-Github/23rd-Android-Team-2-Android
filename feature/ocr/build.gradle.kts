@@ -27,6 +27,7 @@ dependencies {
     implementation(libs.orbit.compose)
     implementation(libs.orbit.viewModel)
     implementation(libs.okhttp)
+    implementation(libs.retrofit.gson.converter)
 
     testImplementation(libs.junit4)
     androidTestImplementation(libs.androidx.junit)
