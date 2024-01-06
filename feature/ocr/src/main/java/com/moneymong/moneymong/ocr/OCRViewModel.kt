@@ -19,8 +19,8 @@ class OCRViewModel @Inject constructor(
 ) : BaseViewModel<OCRState, OCRSideEffect>(OCRState()) {
 
     fun postDocumentOCR(receiptImage: String) = intent {
+        prefs.edit { putString("receiptImage", receiptImage) }
         if (!state.isLoading) {
-            prefs.edit { putString("receiptImage", receiptImage) }
             reduce {
                 state.copy(isLoading = true)
             }

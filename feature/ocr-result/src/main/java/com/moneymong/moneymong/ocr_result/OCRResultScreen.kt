@@ -10,11 +10,14 @@ import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -26,12 +29,15 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
+import com.moneymong.moneymong.design_system.component.snackbar.MDSSnackbarHost
 import com.moneymong.moneymong.design_system.theme.Black
 import com.moneymong.moneymong.domain.entity.ocr.DocumentEntity
 import com.moneymong.moneymong.ocr_result.view.OCRResultBottomView
 import com.moneymong.moneymong.ocr_result.view.OCRResultImageGuideView
 import com.moneymong.moneymong.ocr_result.view.OCRResultTopbarView
+import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.compose.collectAsState
+import org.orbitmvi.orbit.compose.collectSideEffect
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
@@ -42,12 +48,40 @@ fun OCRResultScreen(
     popBackStack: () -> Unit
 ) {
     val state = viewModel.collectAsState().value
+    val snackbarHostState = remember { SnackbarHostState() }
+    val coroutineScope = rememberCoroutineScope()
     var visibleGuide by remember { mutableStateOf(true) }
     var scale by remember { mutableStateOf(1f) }
     val result = document?.images?.first()?.receipt?.result
     val decodeImage by remember { mutableStateOf(Base64.decode(state.receiptImage, Base64.DEFAULT)) }
 
-    Scaffold {
+    LaunchedEffect(Unit) {
+        viewModel.updateDocument(document)
+    }
+
+    viewModel.collectSideEffect {
+        when (it) {
+            is OCRResultSideEffect.OCRResultShowSnackbar -> {
+                coroutineScope.launch {
+                    snackbarHostState.showSnackbar(
+                        message = "일부 내용을 스캔하지 못했습니다",
+                        withDismissAction = true,
+                        actionLabel = ""
+                    )
+                }
+            }
+            else -> {}
+        }
+    }
+
+    Scaffold(
+        snackbarHost = {
+            MDSSnackbarHost(
+                modifier = Modifier.padding(vertical = 12.dp, horizontal = 20.dp),
+                hostState = snackbarHostState
+            )
+        }
+    ) {
         Box(
             modifier = modifier
                 .fillMaxSize()
@@ -74,8 +108,8 @@ fun OCRResultScreen(
             )
             OCRResultTopbarView(
                 modifier = Modifier.align(Alignment.TopCenter),
-                onClickBack = { /*TODO*/ },
-                onClickClose = { /*TODO*/ }
+                onClickBack = popBackStack,
+                onClickClose = popBackStack
             )
             OCRResultBottomView(
                 modifier = Modifier.align(Alignment.BottomCenter),
@@ -83,7 +117,10 @@ fun OCRResultScreen(
                 amount = result?.totalPrice?.price?.text.orEmpty(),
                 date = result?.paymentInfo?.date?.text.orEmpty(),
                 time = result?.paymentInfo?.time?.text.orEmpty(),
-                onClickRetryOCR = popBackStack
+                btnEnabled = state.btnEnabled,
+                onClickRetryOCR = popBackStack,
+                onClickRegister = {},
+                onClickEdit = {}
             )
             AnimatedVisibility(
                 modifier = Modifier.align(Alignment.Center),
