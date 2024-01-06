@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.navigation.NavBackStackEntry
+import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
@@ -15,9 +16,11 @@ import com.moneymong.moneymong.home.HomeScreen
 
 const val homeRoute = "home_route"
 
-fun NavGraphBuilder.homeScreen() {
+fun NavGraphBuilder.homeScreen(
+    navController: NavController
+) {
     composable(route = homeRoute) {
-        HomeScreen()
+        HomeScreen(navController = navController)
     }
 }
 
