@@ -1,5 +1,6 @@
 package com.moneymong.moneymong.ocr_result
 
+import android.util.Base64
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.FastOutLinearInEasing
 import androidx.compose.animation.core.tween
@@ -22,23 +23,29 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.moneymong.moneymong.design_system.theme.Black
+import com.moneymong.moneymong.domain.entity.ocr.DocumentEntity
 import com.moneymong.moneymong.ocr_result.view.OCRResultBottomView
 import com.moneymong.moneymong.ocr_result.view.OCRResultImageGuideView
 import com.moneymong.moneymong.ocr_result.view.OCRResultTopbarView
+import org.orbitmvi.orbit.compose.collectAsState
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun OCRResultScreen(
     modifier: Modifier = Modifier,
-    navController: NavController
+    viewModel: OCRResultViewModel = hiltViewModel(),
+    document: DocumentEntity?,
+    popBackStack: () -> Unit
 ) {
+    val state = viewModel.collectAsState().value
     var visibleGuide by remember { mutableStateOf(true) }
     var scale by remember { mutableStateOf(1f) }
+    val result = document?.images?.first()?.receipt?.result
+    val decodeImage by remember { mutableStateOf(Base64.decode(state.receiptImage, Base64.DEFAULT)) }
 
     Scaffold {
         Box(
@@ -61,7 +68,7 @@ fun OCRResultScreen(
                             scale = (scale * zoom).coerceIn(1f, 3f)
                         }
                     },
-                model = "https://dimg.donga.com/wps/NEWS/IMAGE/2023/05/12/119255016.1.jpg", // TODO 현재는 고양이 사진으로 대체
+                model = decodeImage,
                 contentDescription = null,
                 contentScale = ContentScale.FillBounds
             )
@@ -72,10 +79,11 @@ fun OCRResultScreen(
             )
             OCRResultBottomView(
                 modifier = Modifier.align(Alignment.BottomCenter),
-                source = "", // TODO
-                amount = 0L, // TODO
-                date = "", // TODO
-                onClickRetryOCR = { /*TODO*/ }
+                source = result?.storeInfo?.name?.text.orEmpty(),
+                amount = result?.totalPrice?.price?.text.orEmpty(),
+                date = result?.paymentInfo?.date?.text.orEmpty(),
+                time = result?.paymentInfo?.time?.text.orEmpty(),
+                onClickRetryOCR = popBackStack
             )
             AnimatedVisibility(
                 modifier = Modifier.align(Alignment.Center),
@@ -96,5 +104,5 @@ fun OCRResultScreen(
 @Preview(showBackground = true)
 @Composable
 fun OCRResultScreenPreview() {
-    OCRResultScreen(navController = rememberNavController())
+    OCRResultScreen(document = null, popBackStack = {})
 }
