@@ -1,12 +1,12 @@
 package com.moneymong.moneymong.ocr
 
-import android.util.Log
 import com.moneymong.moneymong.common.base.BaseViewModel
 import com.moneymong.moneymong.domain.param.ocr.DocumentParam
 import com.moneymong.moneymong.domain.usecase.ocr.DocumentOCRUseCase
 import com.moneymong.moneymong.ocr.util.ModalType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import org.orbitmvi.orbit.syntax.simple.intent
+import org.orbitmvi.orbit.syntax.simple.postSideEffect
 import org.orbitmvi.orbit.syntax.simple.reduce
 import javax.inject.Inject
 
@@ -16,29 +16,37 @@ class OCRViewModel @Inject constructor(
 ) : BaseViewModel<OCRState, OCRSideEffect>(OCRState()) {
 
     fun postDocumentOCR(receiptImage: String) = intent {
-        reduce { state.copy(isLoading = true) }
-        val documentParam = DocumentParam(
-            requestId = "moneymong",
-            timestamp = System.currentTimeMillis(),
-            images = listOf(
-                DocumentParam.DocumentImageParam(
-                    data = receiptImage,
-                    name = "moneymong_receipt"
+        if (!state.isLoading) {
+            reduce { state.copy(isLoading = true) }
+
+            val documentParam = DocumentParam(
+                requestId = "moneymong",
+                timestamp = System.currentTimeMillis(),
+                images = listOf(
+                    DocumentParam.DocumentImageParam(
+                        data = receiptImage,
+                        name = "moneymong_receipt"
+                    )
                 )
             )
-        )
-        val a = documentOCRUseCase(documentParam)
-//            .onSuccess {
-//                it
-//            }.onFailure {
-//                it
-//            }
-            .also { reduce { state.copy(isLoading = false) } }
-        Log.d("OCR", a.toString())
+            documentOCRUseCase(documentParam)
+                .onSuccess {
+                    reduce { state.copy(document = it) }
+                    possibleNavigateToOCRResult(it.images.first().inferResult.orEmpty())
+                }.also { reduce { state.copy(isLoading = false) } }
+        }
     }
 
-    fun onClickTakePicture() = eventEmit(OCRSideEffect.OCRTakePicture)
+    private fun possibleNavigateToOCRResult(message: String) = intent {
+        val receiptSuccess = message == "SUCCESS" && state.isReceipt
+        if (receiptSuccess) {
+            postSideEffect(OCRSideEffect.OCRNavigateToOCRResult)
+        } else {
+            // TODO
+        }
+    }
 
+    // onClick
     fun visiblePermissionDialog(hasPermission: Boolean) = intent {
         reduce { state.copy(showPermissionDialog = !hasPermission) }
     }
@@ -60,5 +68,9 @@ class OCRViewModel @Inject constructor(
                 reduce { state.copy(showPermissionDialog = false) }
             }
         }
+    }
+
+    fun onClickHelper() = intent {
+        reduce { state.copy(visibleHelper = !state.visibleHelper) }
     }
 }
