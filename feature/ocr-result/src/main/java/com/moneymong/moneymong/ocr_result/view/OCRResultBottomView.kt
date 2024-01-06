@@ -36,8 +36,9 @@ import com.moneymong.moneymong.ocr_result.view.item.OCRResultBottomItem
 fun OCRResultBottomView(
     modifier: Modifier = Modifier,
     source: String,
-    amount: Long,
+    amount: String,
     date: String,
+    time: String,
     onClickRetryOCR: () -> Unit
 ) {
     Column(
@@ -84,7 +85,7 @@ fun OCRResultBottomView(
                     modifier = Modifier.fillMaxWidth(),
                     icon = drawable.ic_agency,
                     prefix = "수입·지출 출처",
-                    suffix = "팬도로시(아주대학생회관점)" // TODO
+                    suffix = source
                 )
                 Spacer(modifier = Modifier.height(14.dp))
                 OCRResultBottomItem(
@@ -92,21 +93,21 @@ fun OCRResultBottomView(
                         .fillMaxWidth(),
                     icon = drawable.ic_agency,
                     prefix = "금액",
-                    suffix = "1,800원" //TODO
+                    suffix = amount
                 )
                 Spacer(modifier = Modifier.height(14.dp))
                 OCRResultBottomItem(
                     modifier = Modifier.fillMaxWidth(),
                     icon = drawable.ic_agency,
                     prefix = "날짜",
-                    suffix = "2023년 11월 15일" // TODO
+                    suffix = date
                 )
                 Spacer(modifier = Modifier.height(14.dp))
                 OCRResultBottomItem(
                     modifier = Modifier.fillMaxWidth(),
                     icon = drawable.ic_agency,
                     prefix = "시간",
-                    suffix = "14:02" // TODO
+                    suffix = time
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 Row(
@@ -144,8 +145,9 @@ fun OCRResultBottomView(
 fun OCRResultBottomPreview() {
     OCRResultBottomView(
         source = "",
-        amount = 0L,
+        amount = "",
         date = "",
+        time = "",
         onClickRetryOCR = {}
     )
 }
