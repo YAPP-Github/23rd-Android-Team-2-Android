@@ -27,7 +27,7 @@ class SignUpViewModel @Inject constructor(
                 Log.d("University success", it.toString())
             }
             .onFailure {
-                Log.d("University failure", it.toString())
+                Log.d("University failure", it.message.toString())
                 reduce {
                     state.copy(
                         isError = true

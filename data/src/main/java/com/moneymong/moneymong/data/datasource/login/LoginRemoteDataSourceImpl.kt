@@ -2,15 +2,25 @@ package com.moneymong.moneymong.data.datasource.login
 
 import android.content.Context
 import android.util.Log
+import androidx.datastore.preferences.preferencesDataStore
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
+import com.moneymong.moneymong.network.api.login.AccessTokenApi
+import com.moneymong.moneymong.network.request.signup.TokenRequest
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+
+
 class LoginRemoteDataSourceImpl @Inject constructor(
-    @ApplicationContext private val context: Context
+    @ApplicationContext private val context: Context,
+    private val accessTokenApi: AccessTokenApi
 ) : LoginRemoteDataSource {
 
     private val callback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
@@ -27,6 +37,11 @@ class LoginRemoteDataSourceImpl @Inject constructor(
                             "refreshtokenExpireAt : ${token.refreshTokenExpiresAt} \n\n" +
                             "me: $user",
                 )
+
+                // 코루틴 스코프 내에서 sendToken 호출
+                CoroutineScope(Dispatchers.IO).launch {
+                    sendToken(token.accessToken)
+                }
             }
         }
     }
@@ -54,6 +69,20 @@ class LoginRemoteDataSourceImpl @Inject constructor(
     override suspend fun loginWithKakaoAccount(
     ) {
         UserApiClient.instance.loginWithKakaoAccount(context, callback = callback)
+    }
+
+    private suspend fun sendToken(accessToken : String){
+        accessTokenApi.accessTokenApi(TokenRequest(accessToken))
+            .onSuccess {
+                Log.d("success", "${it.accessToken}\n" +
+                        "${it.refreshToken}\n" +
+                "${it.loginSuccess}\n" +
+                "${it.schoolInfoExist}")
+            }
+            .onFailure {
+                Log.d("failure", it.message.toString())
+            }
+
     }
 
 }
