@@ -1,5 +1,4 @@
-import java.io.FileInputStream
-import java.util.Properties
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 
 @Suppress("DSL_SCOPE_VIOLATION")
 plugins {
@@ -12,8 +11,9 @@ plugins {
 
 }
 
-val properties = Properties()
-properties.load(FileInputStream(rootProject.file("local.properties")))
+fun getApiKey(propertyKey : String): String {
+    return gradleLocalProperties(rootDir).getProperty(propertyKey)
+}
 
 android {
     namespace = "com.moneymong.moneymong"
@@ -30,7 +30,7 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
-        buildConfigField("String", "NATIVE_APP_KEY", properties.getProperty("native_app_key"))
+        buildConfigField("String", "NATIVE_APP_KEY", getApiKey("native_app_key"))
     }
     buildFeatures{
         buildConfig = true

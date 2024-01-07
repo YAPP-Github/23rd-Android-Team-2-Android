@@ -10,7 +10,7 @@ class MoneyMongTokenAuthenticator @Inject constructor(): Authenticator {
     override fun authenticate(route: Route?, response: Response): Request? {
         if (response.code == 401) {
             response.request.newBuilder().apply {
-                // TODO token refresh verification logic
+                // TODO token refresh veraification logic
                 removeHeader("Authorization")
                 addHeader("Authorization", "token") // TODO
             }.build()
