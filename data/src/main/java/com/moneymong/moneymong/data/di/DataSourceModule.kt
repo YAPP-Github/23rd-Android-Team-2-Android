@@ -1,5 +1,7 @@
 package com.moneymong.moneymong.data.di
 
+import com.moneymong.moneymong.data.datasource.ledger.LedgerRemoteDataSource
+import com.moneymong.moneymong.data.datasource.ledger.LedgerRemoteDataSourceImpl
 import com.moneymong.moneymong.data.datasource.ocr.OCRRemoteDataSource
 import com.moneymong.moneymong.data.datasource.ocr.OCRRemoteDataSourceImpl
 import dagger.Binds
@@ -15,4 +17,9 @@ interface DataSourceModule {
     fun provideOCRRemoteDataSource(
         ocrRemoteDataSourceImpl: OCRRemoteDataSourceImpl
     ): OCRRemoteDataSource
+
+    @Binds
+    fun provideLedgerRemoteDataSource(
+        ledgerRemoteDataSourceImpl: LedgerRemoteDataSourceImpl
+    ): LedgerRemoteDataSource
 }
