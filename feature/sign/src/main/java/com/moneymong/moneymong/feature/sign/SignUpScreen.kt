@@ -140,7 +140,9 @@ fun SignUpContent(
                             onChanged = {
                                 viewModel.isSelectedChanged(false)
                                 viewModel.isEnabledChanged(false)
-                            })
+                            },
+                            onItemSelectedChange = { viewModel.isItemSelectedChanged(it) },
+                        )
                         SignUpGradeView(
                             modifier = Modifier.fillMaxWidth(),
                             onClick = { viewModel.isEnabledChanged(true) },

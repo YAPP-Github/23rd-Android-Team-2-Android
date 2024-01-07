@@ -62,7 +62,7 @@ fun SearchUnivView(
                 onChange(it)
                 job?.cancel() // 이전에 실행된 Job 취소
                 job = scope.launch {
-                    delay(800) // 0.8초 대기
+                    delay(500) // 0.5초 대기
                     onSearchIconClicked(it.text)
                 }
                 viewModel.isListVisibleChanged(it.text.isNotEmpty())
@@ -79,7 +79,7 @@ fun SearchUnivView(
                 if (value.text.isEmpty()) {
                     viewModel.isListVisibleChanged(false)
                 } else {
-                    onSearchIconClicked(state.textValue.toString())                  //filterUniversities(value.text)
+                    onSearchIconClicked(state.textValue.toString())
                     viewModel.isFilledChanged(true)
                     viewModel.isListVisibleChanged(true)
                 }

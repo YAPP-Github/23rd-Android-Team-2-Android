@@ -24,7 +24,8 @@ import com.moneymong.moneymong.design_system.theme.White
 fun SignCompleteCheckedView(
     modifier: Modifier = Modifier ,
     text: String,
-    onChanged : () -> Unit
+    onChanged : () -> Unit,
+    onItemSelectedChange : (Boolean) -> Unit,
 ) {
     Row(
         modifier = modifier
@@ -47,7 +48,9 @@ fun SignCompleteCheckedView(
 
         IconButton(
             modifier = Modifier.size(24.dp),
-            onClick = { onChanged() }
+            onClick = { onChanged()
+                onItemSelectedChange(false)
+            }
         ) {
 
             Icon(
