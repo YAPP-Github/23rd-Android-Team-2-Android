@@ -1,4 +1,4 @@
-package com.moneymong.moneymong.network.request.signup
+package com.moneymong.moneymong.network.request.login
 
 data class TokenRequest (
     val accessToken : String
