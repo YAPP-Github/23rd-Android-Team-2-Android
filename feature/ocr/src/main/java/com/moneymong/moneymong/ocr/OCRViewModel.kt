@@ -7,6 +7,7 @@ import com.moneymong.moneymong.domain.param.ocr.DocumentParam
 import com.moneymong.moneymong.domain.usecase.ocr.DocumentOCRUseCase
 import com.moneymong.moneymong.ocr.util.ModalType
 import dagger.hilt.android.lifecycle.HiltViewModel
+import org.orbitmvi.orbit.syntax.simple.blockingIntent
 import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.postSideEffect
 import org.orbitmvi.orbit.syntax.simple.reduce
@@ -19,8 +20,8 @@ class OCRViewModel @Inject constructor(
 ) : BaseViewModel<OCRState, OCRSideEffect>(OCRState()) {
 
     fun postDocumentOCR(receiptImage: String) = intent {
-        prefs.edit { putString("receiptImage", receiptImage) }
         if (!state.isLoading) {
+            savedReceiptImage(receiptImage)
             reduce {
                 state.copy(isLoading = true)
             }
@@ -50,6 +51,10 @@ class OCRViewModel @Inject constructor(
         } else {
             // TODO
         }
+    }
+
+    private fun savedReceiptImage(image: String) = blockingIntent {
+        prefs.edit { putString("receiptImage", image).apply() }
     }
 
     // onClick
