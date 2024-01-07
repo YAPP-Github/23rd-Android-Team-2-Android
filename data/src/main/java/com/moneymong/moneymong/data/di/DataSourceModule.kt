@@ -2,6 +2,8 @@ package com.moneymong.moneymong.data.di
 
 import com.moneymong.moneymong.data.datasource.login.LoginRemoteDataSource
 import com.moneymong.moneymong.data.datasource.login.LoginRemoteDataSourceImpl
+import com.moneymong.moneymong.data.datasource.signup.UnivRemoteDataSource
+import com.moneymong.moneymong.data.datasource.signup.UnivRemoteDataSourceImpl
 import com.moneymong.moneymong.network.di.NetworkModule
 import dagger.Binds
 import dagger.Module
@@ -18,4 +20,9 @@ class DataSourceModule {
     fun bindLoginDataSource(
         loginRemoteDataSourceImpl: LoginRemoteDataSourceImpl
     ): LoginRemoteDataSource = loginRemoteDataSourceImpl
+
+    @Provides
+    fun bindUnivDataSource(
+        univRemoteDataSourceImpl: UnivRemoteDataSourceImpl
+    ): UnivRemoteDataSource = univRemoteDataSourceImpl
 }

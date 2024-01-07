@@ -11,35 +11,37 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.moneymong.moneymong.design_system.R
 import com.moneymong.moneymong.design_system.theme.Black
 import com.moneymong.moneymong.design_system.theme.Blue04
 import com.moneymong.moneymong.design_system.theme.Body4
 import com.moneymong.moneymong.design_system.theme.Gray03
 import com.moneymong.moneymong.design_system.theme.White
-import com.moneymong.moneymong.feature.sign.University
+import com.moneymong.moneymong.domain.entity.signup.UniversityX
+import com.moneymong.moneymong.feature.sign.viewmodel.SignUpViewModel
+import org.orbitmvi.orbit.compose.collectAsState
 
 
 @Composable
 fun UnivItem(
-    univs: University,
-    onClick : (String) -> Unit
+    univs: UniversityX,
+    onClick: (String) -> Unit,
+    viewModel: SignUpViewModel = hiltViewModel()
 ) {
-    var isSelected by remember{ mutableStateOf(false) }
+
+    val state = viewModel.collectAsState().value
 
     Row(
         modifier = Modifier
             .background(White)
             .fillMaxWidth()
             .clickable {
-                onClick(univs.univ)
+                viewModel.isItemSelectedChanged(!state.isItemSelected)
+                onClick(univs.schoolName)
             }
             .padding(bottom = 20.dp)
 
@@ -50,8 +52,8 @@ fun UnivItem(
             contentDescription = null
         )
         Text(
-            text = univs.univ,
-            color = if(isSelected) Blue04 else Black,
+            text = univs.schoolName,
+            color = if (state.isItemSelected) Blue04 else Black,
             style = Body4,
             modifier = Modifier
                 .weight(1f)
@@ -63,7 +65,7 @@ fun UnivItem(
             painter = painterResource(id = R.drawable.ic_check),
             contentDescription = null,
             modifier = Modifier.size(24.dp),
-            tint = if(isSelected) Blue04 else Gray03
+            tint = if (state.isItemSelected) Blue04 else Gray03
         )
     }
 }

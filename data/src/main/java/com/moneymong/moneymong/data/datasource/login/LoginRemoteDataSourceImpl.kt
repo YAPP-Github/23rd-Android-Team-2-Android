@@ -6,8 +6,6 @@ import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
-import com.moneymong.moneymong.data.api.login.kakaoLoginApi
-import com.moneymong.moneymong.data.response.login.kakaoLoginResponse
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 

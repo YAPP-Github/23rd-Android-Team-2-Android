@@ -10,27 +10,31 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.moneymong.moneymong.design_system.component.selection.MDSSelection
 import com.moneymong.moneymong.design_system.theme.Body2
 import com.moneymong.moneymong.design_system.theme.Gray06
 import com.moneymong.moneymong.design_system.theme.White
+import com.moneymong.moneymong.feature.sign.util.Grade
+import com.moneymong.moneymong.feature.sign.util.gradeNumber
+import com.moneymong.moneymong.feature.sign.viewmodel.SignUpViewModel
+import org.orbitmvi.orbit.compose.collectAsState
 
 
 @Composable
 fun SignUpGradeView(
     modifier: Modifier = Modifier,
     onClick: () -> Unit,
-    gradeInfor : (String) -> Unit
+    gradeInfor : (Int) -> Unit,
+    viewModel : SignUpViewModel = hiltViewModel()
 ) {
-    var selectedGrade by remember { mutableStateOf<Grade?>(null) }
+
+    val state = viewModel.collectAsState().value
+
+    //var selectedGrade by remember { mutableStateOf<Grade?>(null) }
 
     Column(
         modifier = modifier
@@ -57,24 +61,16 @@ fun SignUpGradeView(
                 MDSSelection(
                     modifier = Modifier.weight(1f),
                     text = grade.text,
-                    isSelected = grade == selectedGrade,
+                    isSelected = grade == state.selectedGrade,
                     onClick = {
-                        selectedGrade = grade
+                        //viewModel.selectedGradeChange(grade)
                         onClick()
-                        gradeInfor(grade.text)
+                        gradeInfor(gradeNumber(grade.text))
                     },
                 )
             }
         }
     }
-
 }
 
 
-enum class Grade(val text: String) {
-    FIRST("1학년"),
-    SECOND("2학년"),
-    THIRD("3학년"),
-    FOURTH("4학년"),
-    FIFTH_OR_ABOVE("5학년 이상")
-}

@@ -8,6 +8,7 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.moneymong.moneymong.network.BuildConfig
 import com.moneymong.moneymong.network.adapter.ResultCallAdapterFactory
+import com.moneymong.moneymong.network.api.signup.UniversityApi
 import com.moneymong.moneymong.network.util.MoneyMongTokenAuthenticator
 import dagger.Module
 import dagger.Provides
@@ -36,7 +37,7 @@ object NetworkModule {
         }
 
         return OkHttpClient.Builder()
-            .authenticator(moneymongAuthenticator)
+//            .authenticator(moneymongAuthenticator)
             .addInterceptor(okhttpLoggingClient)
             .addInterceptor(chuckerInterceptor)
             .build()
@@ -73,8 +74,11 @@ object NetworkModule {
         addConverterFactory(GsonConverterFactory.create(gson))
         addCallAdapterFactory(ResultCallAdapterFactory.create())
         client(okHttpClient)
-        baseUrl("https://dev.moneymong.site/")
+        baseUrl(BuildConfig.BASE_URL)
     }.build()
 
-    // TODO Api Provider
+    @Provides
+    fun provideUnivApi(retrofit: Retrofit) : UniversityApi {
+        return retrofit.create(UniversityApi::class.java)
+    }
 }

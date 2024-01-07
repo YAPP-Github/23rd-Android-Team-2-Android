@@ -14,10 +14,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.LifecycleCoroutineScope
 import com.moneymong.moneymong.design_system.R
-import com.moneymong.moneymong.feature.sign.LoginViewModel
-import kotlinx.coroutines.CoroutineScope
+import com.moneymong.moneymong.feature.sign.viewmodel.LoginViewModel
 import kotlinx.coroutines.launch
 
 @Composable

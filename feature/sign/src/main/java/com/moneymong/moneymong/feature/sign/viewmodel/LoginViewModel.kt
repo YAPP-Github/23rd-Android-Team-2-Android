@@ -1,11 +1,10 @@
-package com.moneymong.moneymong.feature.sign
+package com.moneymong.moneymong.feature.sign.viewmodel
 
-import android.util.Log
-import com.kakao.sdk.auth.model.OAuthToken
 import com.moneymong.moneymong.common.base.BaseViewModel
 import com.moneymong.moneymong.domain.usecase.login.LoginUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import com.kakao.sdk.user.UserApiClient
+import com.moneymong.moneymong.feature.sign.LoginSideEffect
+import com.moneymong.moneymong.feature.sign.LoginState
 import javax.inject.Inject
 
 @HiltViewModel
