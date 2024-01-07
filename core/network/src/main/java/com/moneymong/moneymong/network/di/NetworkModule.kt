@@ -10,6 +10,7 @@ import com.moneymong.moneymong.network.BuildConfig
 import com.moneymong.moneymong.network.adapter.ResultCallAdapterFactory
 import com.moneymong.moneymong.network.api.login.AccessTokenApi
 import com.moneymong.moneymong.network.api.signup.UniversityApi
+import com.moneymong.moneymong.network.util.AuthInterceptor
 import com.moneymong.moneymong.network.util.MoneyMongTokenAuthenticator
 import dagger.Module
 import dagger.Provides
@@ -30,7 +31,8 @@ object NetworkModule {
     @Provides
     fun provideOkhttpClient(
         chuckerInterceptor: ChuckerInterceptor,
-        moneymongAuthenticator: MoneyMongTokenAuthenticator
+        moneymongAuthenticator: MoneyMongTokenAuthenticator,
+        authInterceptor: AuthInterceptor
     ): OkHttpClient {
         val okhttpLoggingClient = if (BuildConfig.DEBUG) {
             HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
@@ -39,9 +41,10 @@ object NetworkModule {
         }
 
         return OkHttpClient.Builder()
-//            .authenticator(moneymongAuthenticator)
+            .addInterceptor(authInterceptor)
             .addInterceptor(okhttpLoggingClient)
             .addInterceptor(chuckerInterceptor)
+            .authenticator(moneymongAuthenticator)
             .build()
     }
 
@@ -80,12 +83,12 @@ object NetworkModule {
     }.build()
 
     @Provides
-    fun provideUnivApi(retrofit: Retrofit) : UniversityApi {
+    fun provideUnivApi(retrofit: Retrofit): UniversityApi {
         return retrofit.create(UniversityApi::class.java)
     }
 
     @Provides
-    fun provideLoginApi(retrofit: Retrofit) : AccessTokenApi {
+    fun provideLoginApi(retrofit: Retrofit): AccessTokenApi {
         return retrofit.create(AccessTokenApi::class.java)
     }
 }
