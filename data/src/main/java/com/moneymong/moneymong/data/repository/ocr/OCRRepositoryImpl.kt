@@ -1,4 +1,4 @@
-package com.moneymong.moneymong.data.repository
+package com.moneymong.moneymong.data.repository.ocr
 
 import com.moneymong.moneymong.data.datasource.ocr.OCRRemoteDataSource
 import com.moneymong.moneymong.data.mapper.ocr.toEntity
