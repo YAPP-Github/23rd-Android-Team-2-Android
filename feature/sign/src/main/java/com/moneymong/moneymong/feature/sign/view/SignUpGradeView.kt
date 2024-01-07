@@ -28,13 +28,11 @@ import org.orbitmvi.orbit.compose.collectAsState
 fun SignUpGradeView(
     modifier: Modifier = Modifier,
     onClick: () -> Unit,
-    gradeInfor : (Int) -> Unit,
-    viewModel : SignUpViewModel = hiltViewModel()
+    gradeInfor: (Int) -> Unit,
+    viewModel: SignUpViewModel = hiltViewModel()
 ) {
 
     val state = viewModel.collectAsState().value
-
-    //var selectedGrade by remember { mutableStateOf<Grade?>(null) }
 
     Column(
         modifier = modifier
@@ -52,7 +50,7 @@ fun SignUpGradeView(
                 .fillMaxWidth()
                 .align(Alignment.CenterHorizontally)
                 .padding(top = 8.dp),
-            columns  = GridCells.Fixed(3),
+            columns = GridCells.Fixed(3),
             verticalArrangement = Arrangement.spacedBy(12.dp),
             horizontalArrangement = Arrangement.spacedBy(10.dp)
         ) {
@@ -63,7 +61,7 @@ fun SignUpGradeView(
                     text = grade.text,
                     isSelected = grade == state.selectedGrade,
                     onClick = {
-                        //viewModel.selectedGradeChange(grade)
+                        viewModel.selectedGradeChange(grade)
                         onClick()
                         gradeInfor(gradeNumber(grade.text))
                     },
