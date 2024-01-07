@@ -12,6 +12,8 @@ android {
     defaultConfig {
         buildConfigField("String", "CLOVA_OCR_DOCUMENT_SECRET", fetchClovaProperties("CLOVA_OCR_DOCUMENT_SECRET"))
         buildConfigField("String", "CLOVA_OCR_DOCUMENT_BASEURL", fetchClovaProperties("CLOVA_OCR_DOCUMENT_BASEURL"))
+
+        buildConfigField("String", "MONEYMONG_BASE_URL", "\"https://dev.moneymong.site:8080/\"")
     }
 
     buildFeatures {

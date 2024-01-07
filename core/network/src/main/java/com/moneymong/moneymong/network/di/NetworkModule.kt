@@ -30,6 +30,10 @@ object NetworkModule {
     @Retention
     annotation class ClovaRetrofit
 
+    @Qualifier
+    @Retention
+    annotation class MoneyMongRetrofit
+
     @Provides
     fun provideOkhttpClient(
         chuckerInterceptor: ChuckerInterceptor,
@@ -72,14 +76,15 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideRetrofitClient(
+    @MoneyMongRetrofit
+    fun provideMoneyMongClient(
         okHttpClient: OkHttpClient,
         gson: Gson
     ): Retrofit = Retrofit.Builder().apply {
+        client(okHttpClient)
+        baseUrl(BuildConfig.MONEYMONG_BASE_URL)
         addConverterFactory(GsonConverterFactory.create(gson))
         addCallAdapterFactory(ResultCallAdapterFactory.create())
-        client(okHttpClient)
-        baseUrl("")
     }.build()
 
     @Provides
