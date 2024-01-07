@@ -59,11 +59,6 @@ fun OCRCaptureView(
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
     val cameraController = remember { LifecycleCameraController(context) }
-    val imageFile = File(context.externalCacheDir, "temp_${System.currentTimeMillis()}.jpeg")
-    val outputFileOptions = ImageCapture.OutputFileOptions
-        .Builder(imageFile)
-        .build()
-    val mainExecutor = ContextCompat.getMainExecutor(context)
 
     Scaffold(modifier = modifier.fillMaxSize()) {
         Box(modifier = Modifier.fillMaxSize()) {
@@ -119,6 +114,11 @@ fun OCRCaptureView(
                             .padding(vertical = 24.dp)
                             .size(60.dp)
                             .bounceClick {
+                                val imageFile = File(context.externalCacheDir, "temp_${System.currentTimeMillis()}.jpeg")
+                                val outputFileOptions = ImageCapture.OutputFileOptions
+                                    .Builder(imageFile)
+                                    .build()
+                                val mainExecutor = ContextCompat.getMainExecutor(context)
                                 cameraController.takePicture(
                                     outputFileOptions,
                                     mainExecutor,

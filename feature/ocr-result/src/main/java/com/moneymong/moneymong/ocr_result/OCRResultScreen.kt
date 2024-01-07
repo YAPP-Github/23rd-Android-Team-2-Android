@@ -114,8 +114,8 @@ fun OCRResultScreen(
             OCRResultBottomView(
                 modifier = Modifier.align(Alignment.BottomCenter),
                 source = result?.storeInfo?.name?.text.orEmpty(),
-                amount = result?.totalPrice?.price?.text.orEmpty(),
-                date = result?.paymentInfo?.date?.text.orEmpty(),
+                amount = state.formattedPrice,
+                date = state.formattedDate,
                 time = result?.paymentInfo?.time?.text.orEmpty(),
                 btnEnabled = state.btnEnabled,
                 onClickRetryOCR = popBackStack,
