@@ -9,6 +9,7 @@ import com.google.gson.GsonBuilder
 import com.moneymong.moneymong.network.BuildConfig
 import com.moneymong.moneymong.network.adapter.ResultCallAdapterFactory
 import com.moneymong.moneymong.network.api.ClovaApi
+import com.moneymong.moneymong.network.api.MoneyMongApi
 import com.moneymong.moneymong.network.util.MoneyMongTokenAuthenticator
 import dagger.Module
 import dagger.Provides
@@ -19,6 +20,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.create
 import javax.inject.Qualifier
 import javax.inject.Singleton
 
@@ -97,6 +99,10 @@ object NetworkModule {
             addConverterFactory(GsonConverterFactory.create(gson))
             addCallAdapterFactory(ResultCallAdapterFactory.create())
         }.build()
+
+    @Provides
+    fun provideMoneyMongApi(@MoneyMongRetrofit retrofit: Retrofit): MoneyMongApi =
+        retrofit.create(MoneyMongApi::class.java)
 
     @Provides
     fun provideClovaApi(@ClovaRetrofit retrofit: Retrofit): ClovaApi =

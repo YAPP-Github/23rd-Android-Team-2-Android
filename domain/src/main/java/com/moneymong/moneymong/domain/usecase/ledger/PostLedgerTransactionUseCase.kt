@@ -6,7 +6,7 @@ import com.moneymong.moneymong.domain.param.ledger.LedgerTransactionParam
 import com.moneymong.moneymong.domain.repository.ledger.LedgerRepository
 import javax.inject.Inject
 
-class PostLedgerTransaction @Inject constructor(
+class PostLedgerTransactionUseCase @Inject constructor(
     private val ledgerRepository: LedgerRepository
 ): BaseUseCase<LedgerTransactionParam, Result<LedgerTransactionEntity>>() {
     override suspend fun invoke(data: LedgerTransactionParam): Result<LedgerTransactionEntity> =

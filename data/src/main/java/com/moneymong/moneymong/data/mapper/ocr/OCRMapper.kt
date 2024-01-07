@@ -1,5 +1,6 @@
 package com.moneymong.moneymong.data.mapper.ocr
 
+import com.moneymong.moneymong.common.ext.toMultipart
 import com.moneymong.moneymong.domain.entity.ocr.CardInfoEntity
 import com.moneymong.moneymong.domain.entity.ocr.DateFormattedEntity
 import com.moneymong.moneymong.domain.entity.ocr.DateInfoEntity
@@ -8,6 +9,7 @@ import com.moneymong.moneymong.domain.entity.ocr.DocumentImageEntity
 import com.moneymong.moneymong.domain.entity.ocr.DocumentMetaEntity
 import com.moneymong.moneymong.domain.entity.ocr.DocumentReceiptEntity
 import com.moneymong.moneymong.domain.entity.ocr.DocumentResultEntity
+import com.moneymong.moneymong.domain.entity.ocr.FileUploadEntity
 import com.moneymong.moneymong.domain.entity.ocr.PaymentInfoEntity
 import com.moneymong.moneymong.domain.entity.ocr.PointEntity
 import com.moneymong.moneymong.domain.entity.ocr.PriceInfoEntity
@@ -23,7 +25,9 @@ import com.moneymong.moneymong.domain.entity.ocr.TotalPriceEntity
 import com.moneymong.moneymong.domain.entity.ocr.ValidationResultEntity
 import com.moneymong.moneymong.domain.entity.ocr.VertexEntity
 import com.moneymong.moneymong.domain.param.ocr.DocumentParam
+import com.moneymong.moneymong.domain.param.ocr.FileUploadParam
 import com.moneymong.moneymong.network.request.ocr.DocumentRequest
+import com.moneymong.moneymong.network.request.ocr.FileUploadRequest
 import com.moneymong.moneymong.network.response.ocr.CardInfo
 import com.moneymong.moneymong.network.response.ocr.DateFormatted
 import com.moneymong.moneymong.network.response.ocr.DateInfo
@@ -32,6 +36,7 @@ import com.moneymong.moneymong.network.response.ocr.DocumentMeta
 import com.moneymong.moneymong.network.response.ocr.DocumentReceipt
 import com.moneymong.moneymong.network.response.ocr.DocumentResponse
 import com.moneymong.moneymong.network.response.ocr.DocumentResult
+import com.moneymong.moneymong.network.response.ocr.FileUploadResponse
 import com.moneymong.moneymong.network.response.ocr.PaymentInfo
 import com.moneymong.moneymong.network.response.ocr.Point
 import com.moneymong.moneymong.network.response.ocr.PriceInfo
@@ -213,4 +218,16 @@ fun Point.toEntity() =
 fun ValidationResult.toEntity() =
     ValidationResultEntity(
         result = this.result
+    )
+
+fun FileUploadParam.toRequest() =
+    FileUploadRequest(
+        file = this.file.toMultipart(),
+        dirName = this.dirName
+    )
+
+fun FileUploadResponse.toEntity() =
+    FileUploadEntity(
+        key = this.key,
+        path = this.path
     )
