@@ -16,4 +16,7 @@ dependencies {
 
     // 카카오 SDK 의존성
     implementation(libs.kakao.v2.user)
+    implementation(libs.datastore.preferences)
+    implementation(libs.datastore.preferences.core)
+
 }
