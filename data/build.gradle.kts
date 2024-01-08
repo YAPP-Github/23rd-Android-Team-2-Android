@@ -11,4 +11,6 @@ android {
 dependencies {
     implementation(projects.domain)
     implementation(projects.core.network)
+
+    implementation(libs.paging.runtime)
 }
