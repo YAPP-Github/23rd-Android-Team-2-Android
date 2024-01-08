@@ -6,6 +6,7 @@ import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
+import com.moneymong.moneymong.data.util.LoginType
 import com.moneymong.moneymong.network.api.login.AccessTokenApi
 import com.moneymong.moneymong.network.request.login.RefreshTokenRequest
 import com.moneymong.moneymong.network.request.login.TokenRequest
@@ -39,7 +40,7 @@ class LoginRemoteDataSourceImpl @Inject constructor(
                             "me: $user",
                 )
                 CoroutineScope(Dispatchers.IO).launch {
-                    sendToken(token.accessToken)
+                    sendToken(LoginType.KAKAO.type, token.accessToken)
                 }
             }
         }
@@ -70,8 +71,8 @@ class LoginRemoteDataSourceImpl @Inject constructor(
         UserApiClient.instance.loginWithKakaoAccount(context, callback = callback)
     }
 
-    private suspend fun sendToken(accessToken: String) {
-        accessTokenApi.accessTokenApi(TokenRequest(accessToken))
+    private suspend fun sendToken(type : String, accessToken: String) {
+        accessTokenApi.accessTokenApi(TokenRequest(type, accessToken))
             .onSuccess {
                 Log.d(
                     "success", "${it.accessToken}\n" +
