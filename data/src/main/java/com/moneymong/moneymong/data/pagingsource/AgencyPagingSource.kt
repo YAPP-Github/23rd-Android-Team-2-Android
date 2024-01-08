@@ -4,9 +4,8 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.moneymong.moneymong.data.datasource.AgencyRemoteDataSource
 import com.moneymong.moneymong.network.response.agency.AgencyGetResponse
-import javax.inject.Inject
 
-class AgencyPagingSource @Inject constructor(
+class AgencyPagingSource(
     private val dataSource: AgencyRemoteDataSource,
 ) : PagingSource<Int, AgencyGetResponse>() {
     override fun getRefreshKey(state: PagingState<Int, AgencyGetResponse>): Int? {
