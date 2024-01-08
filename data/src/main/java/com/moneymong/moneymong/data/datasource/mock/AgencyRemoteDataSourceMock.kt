@@ -350,15 +350,18 @@ class AgencyRemoteDataSourceMock @Inject constructor() : AgencyRemoteDataSource 
                     )
                 )
             ),
-            Result.success(
-                AgenciesGetResponse(
-                    emptyList()
-                )
+//            Result.success(
+//                AgenciesGetResponse(
+//                    emptyList()
+//                )
+//            )
+            Result.failure(
+                Throwable("Mock Failure Message")
             )
         )
 
         val agenciesMockOfFailure = Result.failure<AgenciesGetResponse>(
-            Throwable("네트워크 연결을 확인해주세요.")
+            Throwable("Mock Failure Message")
         )
     }
 }

@@ -8,11 +8,13 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -23,6 +25,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.paging.LoadState
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.paging.compose.itemKey
 import com.moneymong.moneymong.design_system.R
 import com.moneymong.moneymong.design_system.component.bottomSheet.MDSBottomSheet
 import com.moneymong.moneymong.design_system.component.button.MDSFloatingActionButton
@@ -48,10 +54,8 @@ fun AgencySearchScreen(
     viewModel: AgencySearchViewModel = hiltViewModel(),
     navigateToRegister: () -> Unit
 ) {
-    val agencies = emptyList<Agency>()
-//    val agencies = mockAgencies
-
     val state by viewModel.collectAsState()
+    val pagingItems = viewModel.agencies.collectAsLazyPagingItems()
 
     viewModel.collectSideEffect {
         when (it) {
@@ -67,7 +71,7 @@ fun AgencySearchScreen(
         ) {
             AgencySearchBottomSheetContent(
                 checkedType = state.registerType,
-                changeType = { type -> viewModel.changeRegisterType(type) },
+                changeType = viewModel::changeRegisterType,
                 onConfirm = viewModel::onBottomSheetConfirmButtonClicked
             )
         }
@@ -76,7 +80,7 @@ fun AgencySearchScreen(
     Box(
         modifier = modifier
             .fillMaxSize()
-            .background(color = if (agencies.isEmpty()) White else Gray01)
+            .background(color = if (pagingItems.itemCount == 0) White else Gray01)
             .padding(horizontal = MMHorizontalSpacing)
     ) {
         Column(
@@ -86,7 +90,7 @@ fun AgencySearchScreen(
             AgencySearchTopBar()
             AgencySearchContentView(
                 modifier = Modifier.weight(1f),
-                agencies = agencies
+                pagingItems = pagingItems
             )
         }
         Column(
@@ -95,7 +99,7 @@ fun AgencySearchScreen(
                 .padding(bottom = 20.dp),
             horizontalAlignment = Alignment.End
         ) {
-            if (agencies.isEmpty()) {
+            if (pagingItems.itemCount == 0) {
                 MDSToolTip(
                     text = "소속이 없다면 등록해보세요",
                     position = MDSToolTipPosition.Right
@@ -114,12 +118,15 @@ fun AgencySearchScreen(
 @Composable
 private fun AgencySearchContentView(
     modifier: Modifier = Modifier,
-    agencies: List<Agency>
+    pagingItems: LazyPagingItems<Agency>
 ) {
-    if (agencies.isEmpty()) {
-        ContentViewWithoutAgencies(modifier = modifier)
+    if (pagingItems.itemCount == 0) {
+        ContentViewWithoutAgencies(
+            modifier = modifier,
+            pagingItems = pagingItems
+        )
     } else {
-        ContentViewWithAgencies(modifier = modifier, agencies = agencies)
+        ContentViewWithAgencies(modifier = modifier, pagingItems = pagingItems)
     }
 }
 
@@ -127,41 +134,113 @@ private fun AgencySearchContentView(
 @Composable
 private fun ContentViewWithAgencies(
     modifier: Modifier = Modifier,
-    agencies: List<Agency>
+    pagingItems: LazyPagingItems<Agency>
 ) {
     LazyColumn(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(12.dp),
         contentPadding = PaddingValues(vertical = 12.dp)
     ) {
-        items(items = agencies) {
-            AgencyItem(agency = it)
+        items(
+            count = pagingItems.itemCount, key = pagingItems.itemKey { it.id }
+        ) {
+            pagingItems[it]?.let { agency ->
+                AgencyItem(agency = agency)
+            }
+        }
+
+        when (pagingItems.loadState.source.append) {
+            is LoadState.Loading -> {
+                // todo: loading item
+                item {
+                    Box(
+                        modifier = Modifier
+                            .height(80.dp)
+                            .fillMaxWidth(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        CircularProgressIndicator()
+                    }
+                }
+            }
+
+            is LoadState.Error -> {
+                val e = pagingItems.loadState.source.append as LoadState.Error
+                // todo: error item
+                item {
+                    Column(
+                        modifier = Modifier
+                            .height(80.dp)
+                            .fillMaxWidth(),
+                        verticalArrangement = Arrangement.spacedBy(8.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(text = "${e.error.message}")
+                        Button(onClick = pagingItems::retry) {
+                            Text(text = "retry")
+                        }
+                    }
+                }
+            }
+
+            else -> Unit
         }
     }
 }
 
 @Composable
 private fun ContentViewWithoutAgencies(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    pagingItems: LazyPagingItems<Agency>,
 ) {
-    Column(
-        modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(
-            space = 8.dp,
-            alignment = Alignment.CenterVertically
-        ),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Image(
-            modifier = Modifier.size(size = 80.dp),
-            painter = painterResource(id = R.drawable.img_agency),
-            contentDescription = "agency image",
-        )
-        Text(
-            text = "아직 등록된 소속이 없어요\n하단 버튼을 통해 등록해보세요",
-            textAlign = TextAlign.Center,
-            color = Gray08,
-            style = Body4
-        )
+
+    when (pagingItems.loadState.refresh) {
+        is LoadState.Loading -> {
+            // todo: loading screen
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator()
+            }
+        }
+
+        is LoadState.Error -> {
+            val e = pagingItems.loadState.refresh as LoadState.Error
+            // todo: error screen
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(text = "${e.error.message}")
+                Button(onClick = pagingItems::retry) {
+                    Text(text = "retry")
+                }
+            }
+        }
+
+        is LoadState.NotLoading -> {
+            Column(
+                modifier = modifier,
+                verticalArrangement = Arrangement.spacedBy(
+                    space = 8.dp,
+                    alignment = Alignment.CenterVertically
+                ),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Image(
+                    modifier = Modifier.size(size = 80.dp),
+                    painter = painterResource(id = R.drawable.img_agency),
+                    contentDescription = "agency image",
+                )
+                Text(
+                    text = "아직 등록된 소속이 없어요\n하단 버튼을 통해 등록해보세요",
+                    textAlign = TextAlign.Center,
+                    color = Gray08,
+                    style = Body4
+                )
+            }
+        }
     }
 }
