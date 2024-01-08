@@ -19,10 +19,13 @@ import com.moneymong.moneymong.feature.sign.viewmodel.LoginViewModel
 import kotlinx.coroutines.launch
 
 @Composable
-fun KakaoLoginView(modifier: Modifier = Modifier) {
+fun KakaoLoginView(
+    modifier: Modifier = Modifier,
+    viewModel : LoginViewModel = hiltViewModel()
+) {
 
-    val viewModel : LoginViewModel = hiltViewModel()
     val coroutineScope = rememberCoroutineScope()
+
     Column(
         modifier = modifier
     ) {
