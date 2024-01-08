@@ -46,7 +46,7 @@ class AgencyRegisterViewModel @Inject constructor(
 
     fun onRegisterButtonClicked() = intent {
         registerAgencyUseCase(
-            param = AgencyRegisterParam(
+            data = AgencyRegisterParam(
                 name = state.agencyName.text,
                 type = state.agencyType.toParam()
             )
