@@ -47,6 +47,8 @@ dependencies {
     implementation(libs.orbit.core)
     implementation(libs.orbit.viewModel)
 
+    implementation(libs.accompanist.systemuicontroller)
+
 
 
 }

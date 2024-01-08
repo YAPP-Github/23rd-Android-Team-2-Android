@@ -1,4 +1,5 @@
 [versions]
+accompanist = "0.32.0"
 androidGradlePlugin = "8.1.3"
 androidTools = "31.1.3"
 androidxActivity = "1.8.0"
@@ -42,6 +43,7 @@ constraintlayout = "2.1.4"
 navigation-fragment-ktx = "2.7.5"
 navigation-ui-ktx = "2.7.5"
 [libraries]
+accompanist-systemuicontroller = { group = "com.google.accompanist", name = "accompanist-systemuicontroller", version.ref = "accompanist" }
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "androidxActivity" }
 androidx-cameraX-core = { group = "androidx.camera", name = "camera-core", version.ref = "cameraX" }
 androidx-cameraX-camera2 = { group = "androidx.camera", name = "camera-camera2", version.ref = "cameraX" }
