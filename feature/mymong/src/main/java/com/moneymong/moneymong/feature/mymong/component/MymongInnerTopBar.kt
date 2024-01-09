@@ -22,8 +22,8 @@ import com.moneymong.moneymong.design_system.theme.Heading1
 @Composable
 internal fun MyMongInnerTopBar(
     modifier: Modifier = Modifier,
+    title: String,
     onBackClick: () -> Unit = {},    // todo
-    title: String
 ) {
     Row(
         modifier = modifier.fillMaxWidth(),
