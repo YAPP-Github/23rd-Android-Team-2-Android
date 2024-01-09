@@ -31,7 +31,7 @@ internal fun MyMongWithdrawalTopBar(
     ) {
         Icon(
             modifier = Modifier
-                .padding(vertical = 10.dp)
+                .padding(vertical = 18.dp)
                 .size(24.dp)
                 .clickable { onBackClick() },
             painter = painterResource(id = R.drawable.ic_chevron_left),
@@ -39,7 +39,7 @@ internal fun MyMongWithdrawalTopBar(
             tint = Gray07
         )
         Text(
-            modifier = Modifier.padding(vertical = 8.dp),
+            modifier = Modifier.padding(vertical = 16.dp),
             text = "회원탈퇴",
             color = Gray10,
             style = Heading1
