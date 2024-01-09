@@ -11,6 +11,7 @@ import com.moneymong.moneymong.network.api.login.AccessTokenApi
 import com.moneymong.moneymong.network.request.login.RefreshTokenRequest
 import com.moneymong.moneymong.network.request.login.TokenRequest
 import com.moneymong.moneymong.network.response.login.RefreshTokenResponse
+import com.moneymong.moneymong.network.response.login.TokenResponse
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -24,9 +25,10 @@ class LoginRemoteDataSourceImpl @Inject constructor(
     private val loginLocalDataSourceImpl: LoginLocalDataSourceImpl,
 ) : LoginRemoteDataSource {
 
-    private val callback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
+    private val callback: (OAuthToken?, Throwable?) -> String = { token, error ->
         if (error != null) {
             Log.d("this", "카카오계정으로 로그인 실패 : $error")
+            throw Exception("카카오 계정으로 로그인 실패")
         } else if (token != null) {
             //TODO: 최종적으로 카카오로그인 및 유저정보 가져온 결과
             UserApiClient.instance.me { user, error ->
@@ -39,15 +41,15 @@ class LoginRemoteDataSourceImpl @Inject constructor(
                             "refreshtokenExpireAt : ${token.refreshTokenExpiresAt} \n\n" +
                             "me: $user",
                 )
-                CoroutineScope(Dispatchers.IO).launch {
-                    sendToken(LoginType.KAKAO.type, token.accessToken)
-                }
+
+                return@me token.accessToken
             }
         }
+        return token?.accessToken
     }
 
     override suspend fun loginWithKakaoTalk(
-    ) {
+    ): Result<TokenResponse> {
         UserApiClient.instance.loginWithKakaoTalk(context) { token, error ->
             if (error != null) {
                 Log.d("this", "카카오톡으로 로그인 실패 : $error")
@@ -58,8 +60,15 @@ class LoginRemoteDataSourceImpl @Inject constructor(
                     return@loginWithKakaoTalk
                 }
 
-                // 카카오톡에 연결된 카카오계정이 없는 경우, 카카오계정으로 로그인 시도
-                UserApiClient.instance.loginWithKakaoAccount(context, callback = callback)
+                try{
+                    // 카카오톡에 연결된 카카오계정이 없는 경우, 카카오계정으로 로그인 시도
+                    UserApiClient.instance.loginWithKakaoAccount(context, callback = callback)
+                    sendToken(LoginType.KAKAO.type, )
+                }catch (
+
+                ){
+
+                }
             } else if (token != null) {
                 Log.d("this", "카카오톡으로 로그인 성공 ${token.accessToken}")
             }
@@ -67,11 +76,11 @@ class LoginRemoteDataSourceImpl @Inject constructor(
     }
 
     override suspend fun loginWithKakaoAccount(
-    ) {
+    ): Result<TokenResponse> {
         UserApiClient.instance.loginWithKakaoAccount(context, callback = callback)
     }
 
-    private suspend fun sendToken(type : String, accessToken: String) {
+    private suspend fun sendToken(type: String, accessToken: String) {
         accessTokenApi.accessTokenApi(TokenRequest(type, accessToken))
             .onSuccess {
                 Log.d(
@@ -91,9 +100,5 @@ class LoginRemoteDataSourceImpl @Inject constructor(
                 Log.d("failure", it.message.toString())
                 //TODO
             }
-
     }
-
-
-
 }
