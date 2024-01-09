@@ -1,4 +1,4 @@
-package com.moneymong.moneymong.feature.mymong.util
+package com.moneymong.moneymong.feature.mymong.main.util
 
 import android.graphics.BlurMaskFilter
 import androidx.compose.ui.Modifier

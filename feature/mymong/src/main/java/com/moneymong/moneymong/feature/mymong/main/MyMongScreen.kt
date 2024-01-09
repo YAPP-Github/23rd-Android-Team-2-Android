@@ -1,4 +1,4 @@
-package com.moneymong.moneymong.feature.mymong
+package com.moneymong.moneymong.feature.mymong.main
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -12,9 +12,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.moneymong.moneymong.design_system.theme.Gray01
 import com.moneymong.moneymong.design_system.theme.MMHorizontalSpacing
-import com.moneymong.moneymong.feature.mymong.component.MyMongTopBar
-import com.moneymong.moneymong.feature.mymong.view.MyMongInfoView
-import com.moneymong.moneymong.feature.mymong.view.MyMongSettingView
+import com.moneymong.moneymong.feature.mymong.main.component.MyMongTopBar
+import com.moneymong.moneymong.feature.mymong.main.view.MyMongInfoView
+import com.moneymong.moneymong.feature.mymong.main.view.MyMongSettingView
 
 @Composable
 fun MyMongScreen(

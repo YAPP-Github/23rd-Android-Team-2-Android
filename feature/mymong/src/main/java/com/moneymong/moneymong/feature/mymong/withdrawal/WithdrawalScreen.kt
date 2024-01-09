@@ -1,4 +1,4 @@
-package com.moneymong.moneymong.feature.mymong
+package com.moneymong.moneymong.feature.mymong.withdrawal
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -31,8 +31,8 @@ import com.moneymong.moneymong.design_system.theme.Heading1
 import com.moneymong.moneymong.design_system.theme.MMHorizontalSpacing
 import com.moneymong.moneymong.design_system.theme.Red03
 import com.moneymong.moneymong.design_system.theme.White
-import com.moneymong.moneymong.feature.mymong.component.MyMongCheckBox
-import com.moneymong.moneymong.feature.mymong.component.MyMongWithdrawalTopBar
+import com.moneymong.moneymong.feature.mymong.withdrawal.component.MyMongCheckBox
+import com.moneymong.moneymong.feature.mymong.withdrawal.component.MyMongWithdrawalTopBar
 
 @Composable
 fun MyMongWithdrawalScreen(
