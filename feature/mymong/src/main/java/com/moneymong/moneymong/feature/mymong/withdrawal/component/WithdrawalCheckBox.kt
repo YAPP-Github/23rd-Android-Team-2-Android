@@ -20,7 +20,7 @@ import com.moneymong.moneymong.design_system.theme.Gray03
 import com.moneymong.moneymong.design_system.theme.White
 
 @Composable
-fun MyMongCheckBox(
+fun WithdrawalCheckBox(
     modifier: Modifier = Modifier,
     checked: Boolean,
     onCheckedChange: (Boolean) -> Unit,

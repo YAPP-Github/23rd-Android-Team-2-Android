@@ -32,10 +32,10 @@ import com.moneymong.moneymong.design_system.theme.MMHorizontalSpacing
 import com.moneymong.moneymong.design_system.theme.Red03
 import com.moneymong.moneymong.design_system.theme.White
 import com.moneymong.moneymong.feature.mymong.component.MyMongInnerTopBar
-import com.moneymong.moneymong.feature.mymong.withdrawal.component.MyMongCheckBox
+import com.moneymong.moneymong.feature.mymong.withdrawal.component.WithdrawalCheckBox
 
 @Composable
-fun MyMongWithdrawalScreen(
+fun WithdrawalScreen(
     modifier: Modifier = Modifier
 ) {
     var isAgreed by remember { mutableStateOf(false) }
@@ -94,7 +94,7 @@ private fun ContentView(
             color = Gray02
         )
         Row(verticalAlignment = Alignment.CenterVertically) {
-            MyMongCheckBox(
+            WithdrawalCheckBox(
                 checked = isChecked,
                 onCheckedChange = onCheckedChange
             )
