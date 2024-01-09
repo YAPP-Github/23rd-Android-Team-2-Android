@@ -4,6 +4,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
+import com.moneymong.moneymong.feature.sign.navigation.loginRoute
+import com.moneymong.moneymong.feature.sign.navigation.loginScreen
 import com.moneymong.moneymong.home.HomeScreen
 import com.moneymong.moneymong.home.navigation.homeRoute
 import com.moneymong.moneymong.home.navigation.homeScreen
@@ -11,7 +13,7 @@ import com.moneymong.moneymong.home.navigation.homeScreen
 @Composable
 fun MoneyMongNavHost(
     modifier: Modifier = Modifier,
-    startDestination: String = homeRoute // TODO
+    startDestination: String = loginRoute // TODO
 ) {
     val navController = rememberNavController()
     NavHost(
@@ -19,6 +21,7 @@ fun MoneyMongNavHost(
         navController = navController,
         startDestination = startDestination
     ) {
+        loginScreen()
         homeScreen()
     }
 }
