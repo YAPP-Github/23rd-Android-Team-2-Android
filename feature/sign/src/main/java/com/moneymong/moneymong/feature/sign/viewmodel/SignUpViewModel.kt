@@ -1,15 +1,12 @@
 package com.moneymong.moneymong.feature.sign.viewmodel
 
 import android.util.Log
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.text.input.TextFieldValue
 import com.moneymong.moneymong.common.base.BaseViewModel
-import com.moneymong.moneymong.domain.entity.signup.UniversitiesEntity
-import com.moneymong.moneymong.domain.param.signup.SearchQueryParam
 import com.moneymong.moneymong.domain.param.signup.UnivParam
 import com.moneymong.moneymong.domain.usecase.signup.UnivUseCase
-import com.moneymong.moneymong.feature.sign.SignUpSideEffect
-import com.moneymong.moneymong.feature.sign.SignUpState
+import com.moneymong.moneymong.feature.sign.sideeffect.SignUpSideEffect
+import com.moneymong.moneymong.feature.sign.state.SignUpState
 import com.moneymong.moneymong.feature.sign.util.Grade
 import dagger.hilt.android.lifecycle.HiltViewModel
 import org.orbitmvi.orbit.syntax.simple.intent
