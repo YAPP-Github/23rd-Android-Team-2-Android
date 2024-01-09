@@ -1,4 +1,4 @@
-package com.moneymong.moneymong.feature.sign
+package com.moneymong.moneymong.feature.sign.state
 
 import androidx.compose.ui.text.input.TextFieldValue
 import com.moneymong.moneymong.common.base.State

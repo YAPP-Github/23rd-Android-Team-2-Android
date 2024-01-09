@@ -8,7 +8,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import dagger.hilt.android.AndroidEntryPoint
 import com.moneymong.moneymong.design_system.theme.MMTheme
+import com.moneymong.moneymong.feature.sign.LoginScreen
 import com.moneymong.moneymong.feature.sign.SignUpScreen
+import com.moneymong.moneymong.ui.MoneyMongApp
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -16,8 +18,9 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             MMTheme {
-                //MoneyMongApp()
-                SignUpScreen()
+                MoneyMongApp()
+                //SignUpScreen()
+                //LoginScreen()
             }
         }
     }
