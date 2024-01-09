@@ -31,8 +31,8 @@ import com.moneymong.moneymong.design_system.theme.Heading1
 import com.moneymong.moneymong.design_system.theme.MMHorizontalSpacing
 import com.moneymong.moneymong.design_system.theme.Red03
 import com.moneymong.moneymong.design_system.theme.White
+import com.moneymong.moneymong.feature.mymong.component.MyMongInnerTopBar
 import com.moneymong.moneymong.feature.mymong.withdrawal.component.MyMongCheckBox
-import com.moneymong.moneymong.feature.mymong.withdrawal.component.MyMongWithdrawalTopBar
 
 @Composable
 fun MyMongWithdrawalScreen(
@@ -46,7 +46,7 @@ fun MyMongWithdrawalScreen(
             .background(color = White)
             .padding(horizontal = MMHorizontalSpacing),
     ) {
-        MyMongWithdrawalTopBar()
+        MyMongInnerTopBar(title = "회원탈퇴")
         Spacer(modifier = Modifier.height(20.dp))
         ContentView(
             isChecked = isAgreed,

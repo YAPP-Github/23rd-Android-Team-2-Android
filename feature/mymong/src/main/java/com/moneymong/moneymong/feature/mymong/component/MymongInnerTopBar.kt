@@ -1,4 +1,4 @@
-package com.moneymong.moneymong.feature.mymong.withdrawal.component
+package com.moneymong.moneymong.feature.mymong.component
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -20,9 +20,10 @@ import com.moneymong.moneymong.design_system.theme.Gray10
 import com.moneymong.moneymong.design_system.theme.Heading1
 
 @Composable
-internal fun MyMongWithdrawalTopBar(
+internal fun MyMongInnerTopBar(
     modifier: Modifier = Modifier,
-    onBackClick: () -> Unit = {}    // todo
+    onBackClick: () -> Unit = {},    // todo
+    title: String
 ) {
     Row(
         modifier = modifier.fillMaxWidth(),
@@ -40,7 +41,7 @@ internal fun MyMongWithdrawalTopBar(
         )
         Text(
             modifier = Modifier.padding(vertical = 16.dp),
-            text = "회원탈퇴",
+            text = title,
             color = Gray10,
             style = Heading1
         )
