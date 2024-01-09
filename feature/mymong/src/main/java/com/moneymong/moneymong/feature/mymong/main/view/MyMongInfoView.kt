@@ -1,4 +1,4 @@
-package com.moneymong.moneymong.feature.mymong.view
+package com.moneymong.moneymong.feature.mymong.main.view
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -28,7 +28,7 @@ import com.moneymong.moneymong.design_system.theme.Gray08
 import com.moneymong.moneymong.design_system.theme.Gray10
 import com.moneymong.moneymong.design_system.theme.Heading1
 import com.moneymong.moneymong.design_system.theme.White
-import com.moneymong.moneymong.feature.mymong.util.myMongRoundRectShadow
+import com.moneymong.moneymong.feature.mymong.main.util.myMongRoundRectShadow
 
 @Composable
 internal fun MyMongInfoView(

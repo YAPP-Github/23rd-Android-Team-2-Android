@@ -1,4 +1,4 @@
-package com.moneymong.moneymong.feature.mymong.component
+package com.moneymong.moneymong.feature.mymong.withdrawal.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
