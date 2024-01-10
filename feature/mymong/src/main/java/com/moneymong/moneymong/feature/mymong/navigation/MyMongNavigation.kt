@@ -9,8 +9,16 @@ import com.moneymong.moneymong.feature.mymong.main.MyMongScreen
 
 const val mymongRoute = "mymong_route"
 
-fun NavGraphBuilder.mymongScreen(padding: PaddingValues) {
+fun NavGraphBuilder.mymongScreen(
+    padding: PaddingValues,
+    navigateToTermsOfUse: () -> Unit,
+    navigateToPrivacyPolicy: () -> Unit
+) {
     composable(route = mymongRoute) {
-        MyMongScreen(modifier = Modifier.padding(padding))
+        MyMongScreen(
+            modifier = Modifier.padding(padding),
+            navigateToTermsOfUse = navigateToTermsOfUse,
+            navigateToPrivacyPolicy = navigateToPrivacyPolicy
+        )
     }
 }

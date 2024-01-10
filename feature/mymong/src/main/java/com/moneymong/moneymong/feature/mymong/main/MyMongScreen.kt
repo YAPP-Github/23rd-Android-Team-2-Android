@@ -18,7 +18,9 @@ import com.moneymong.moneymong.feature.mymong.main.view.MyMongSettingView
 
 @Composable
 fun MyMongScreen(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    navigateToTermsOfUse: () -> Unit,
+    navigateToPrivacyPolicy: () -> Unit
 ) {
     Column(
         modifier = modifier
@@ -30,6 +32,9 @@ fun MyMongScreen(
         Spacer(modifier = Modifier.height(12.dp))
         MyMongInfoView()
         Spacer(modifier = Modifier.height(24.dp))
-        MyMongSettingView()
+        MyMongSettingView(
+            navigateToTermsOfUse = navigateToTermsOfUse,
+            navigateToPrivacyPolicy = navigateToPrivacyPolicy
+        )
     }
 }
