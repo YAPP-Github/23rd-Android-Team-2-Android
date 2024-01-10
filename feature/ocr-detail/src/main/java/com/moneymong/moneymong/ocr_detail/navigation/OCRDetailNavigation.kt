@@ -1,4 +1,4 @@
-package com.moneymong.moneymong.ocr_result.navigation
+package com.moneymong.moneymong.ocr_detail.navigation
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
@@ -6,33 +6,30 @@ import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import com.google.gson.Gson
 import com.moneymong.moneymong.domain.entity.ocr.DocumentEntity
-import com.moneymong.moneymong.ocr_result.OCRResultScreen
-import java.net.URLEncoder
+import com.moneymong.moneymong.ocr_detail.OCRDetailScreen
 
-const val ocrResultRoute = "ocrresult_route?document={document}"
+const val ocrDetailRoute = "ocrdetail_route?document={document}"
 
-fun NavController.navigateToOCRResult(
+fun NavController.navigateToOCRDetail(
     navOptions: NavOptions? = null,
     document: String
 ) {
-    this.navigate(ocrResultRoute.replace("{document}", document), navOptions)
+    this.navigate(ocrDetailRoute.replace("{document}", document), navOptions)
 }
 
-fun NavGraphBuilder.ocrResultScreen(
-    navigateToHome: () -> Unit,
+fun NavGraphBuilder.ocrDetailScreen(
+    navigateToHome: (NavOptions?) -> Unit,
     popBackStack: () -> Unit,
-    navigateToOCRDetail: (NavOptions?, String) -> Unit
 ) {
-    composable(route = ocrResultRoute) { backStackEntry ->
+    composable(route = ocrDetailRoute) { backStackEntry ->
         val match = "[^\uAC00-\uD7A3xfe0-9a-zA-Z~!@#$%^&*()_+|<>?:{}]"
         val documentJson = backStackEntry.arguments?.getString("document")
         val documentEntity =
             documentJson?.let { Gson().fromJson(it.replace(match, ""), DocumentEntity::class.java) }
 
-        OCRResultScreen(
+        OCRDetailScreen(
             document = documentEntity,
             navigateToHome = navigateToHome,
-            navigateToOCRDetail = navigateToOCRDetail,
             popBackStack = popBackStack
         )
     }

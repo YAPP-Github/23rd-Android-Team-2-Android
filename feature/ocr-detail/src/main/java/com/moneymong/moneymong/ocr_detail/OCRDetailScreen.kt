@@ -30,6 +30,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavOptions
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.moneymong.moneymong.common.ui.DottedShape
@@ -46,12 +47,16 @@ import com.moneymong.moneymong.design_system.theme.Gray03
 import com.moneymong.moneymong.design_system.theme.Gray06
 import com.moneymong.moneymong.design_system.theme.Gray10
 import com.moneymong.moneymong.design_system.theme.White
+import com.moneymong.moneymong.domain.entity.ocr.DocumentEntity
 import com.moneymong.moneymong.ocr_detail.view.OCRDetailTopbarView
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun OCRDetailScreen(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    document: DocumentEntity?,
+    navigateToHome: (NavOptions?) -> Unit,
+    popBackStack: () -> Unit
 ) {
     val lazyGridState = rememberLazyGridState()
     val verticalScrollState = rememberScrollState()
@@ -310,5 +315,7 @@ fun OCRDetailScreen(
 @Preview(showBackground = true)
 @Composable
 fun OCRDetailScreenPreview() {
-    OCRDetailScreen()
+    OCRDetailScreen(document = null, navigateToHome = {}) {
+
+    }
 }

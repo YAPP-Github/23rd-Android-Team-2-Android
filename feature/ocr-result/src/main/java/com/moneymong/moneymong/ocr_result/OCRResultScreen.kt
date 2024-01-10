@@ -30,6 +30,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavOptions
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.moneymong.moneymong.common.ext.base64ToFile
@@ -37,8 +38,6 @@ import com.moneymong.moneymong.design_system.component.snackbar.MDSSnackbarHost
 import com.moneymong.moneymong.design_system.theme.Black
 import com.moneymong.moneymong.design_system.theme.Blue01
 import com.moneymong.moneymong.design_system.theme.Blue04
-import com.moneymong.moneymong.design_system.theme.Mint03
-import com.moneymong.moneymong.design_system.theme.White
 import com.moneymong.moneymong.domain.entity.ocr.DocumentEntity
 import com.moneymong.moneymong.ocr_result.view.OCRResultBottomView
 import com.moneymong.moneymong.ocr_result.view.OCRResultImageGuideView
@@ -54,7 +53,8 @@ fun OCRResultScreen(
     viewModel: OCRResultViewModel = hiltViewModel(),
     document: DocumentEntity?,
     navigateToHome: () -> Unit,
-    popBackStack: () -> Unit
+    navigateToOCRDetail: (NavOptions?, String) -> Unit,
+    popBackStack: () -> Unit,
 ) {
     val context = LocalContext.current
     val state = viewModel.collectAsState().value
@@ -174,5 +174,5 @@ fun OCRResultScreen(
 @Preview(showBackground = true)
 @Composable
 fun OCRResultScreenPreview() {
-    OCRResultScreen(document = null, navigateToHome = {}, popBackStack = {})
+    OCRResultScreen(document = null, navigateToHome = {}, popBackStack = {}, navigateToOCRDetail = { navOptions, s ->  })
 }
