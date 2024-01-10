@@ -2,6 +2,7 @@ package com.moneymong.moneymong.data.datasource.login
 
 import android.content.Context
 import android.provider.SyncStateContract.Constants
+import android.util.Log
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
@@ -73,6 +74,7 @@ class LoginLocalDataSourceImpl @Inject constructor(
             preferences[loginSuccess] = success
             preferences[schoolInfoExist] = infoExist
         }
+        Log.d("확인", "schoolInfoExist를 등록했습니다.")
     }
 }
 

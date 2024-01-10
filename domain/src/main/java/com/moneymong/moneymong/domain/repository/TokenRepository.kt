@@ -1,6 +1,7 @@
 package com.moneymong.moneymong.domain.repository
 
-import com.moneymong.moneymong.domain.param.login.RefreshTokenEntity
+import com.moneymong.moneymong.domain.entity.login.RefreshTokenEntity
+import com.moneymong.moneymong.domain.param.login.RefreshTokenParam
 
 interface TokenRepository {
     suspend fun getRefreshToken(): String
@@ -8,4 +9,5 @@ interface TokenRepository {
     suspend fun getUpdateToken(refreshToken: String): Result<RefreshTokenEntity>
     suspend fun updateTokens(aToken: String, rToken: String)
     suspend fun updateAccessToken(aToken: String)
+    //suspend fun deleteRefreshToken(body: RefreshTokenParam)
 }

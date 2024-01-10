@@ -21,10 +21,8 @@ import kotlinx.coroutines.launch
 @Composable
 fun KakaoLoginView(
     modifier: Modifier = Modifier,
-    viewModel : LoginViewModel = hiltViewModel()
+    viewModel: LoginViewModel = hiltViewModel()
 ) {
-
-    val coroutineScope = rememberCoroutineScope()
 
     Column(
         modifier = modifier
@@ -33,9 +31,7 @@ fun KakaoLoginView(
             modifier = Modifier
                 .fillMaxWidth()
                 .clickable {
-                    coroutineScope.launch {
-                        viewModel.onLoginButtonClicked()
-                    }
+                    viewModel.onLoginButtonClicked()
                 },
             painter = painterResource(id = R.drawable.img_kakao_login),
             contentDescription = null,
@@ -49,6 +45,8 @@ fun KakaoLoginView(
 @Preview(showBackground = true)
 @Composable
 fun KakaoLoginViewPreview() {
-    KakaoLoginView(modifier = Modifier
-        .fillMaxWidth())
+    KakaoLoginView(
+        modifier = Modifier
+            .fillMaxWidth()
+    )
 }

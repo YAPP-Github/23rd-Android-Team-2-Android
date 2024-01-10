@@ -1,4 +1,4 @@
-package com.moneymong.moneymong.domain.param.login
+package com.moneymong.moneymong.domain.entity.login
 
 data class RefreshTokenEntity(
     val accessToken: String,
