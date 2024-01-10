@@ -79,4 +79,9 @@ class OCRResultViewModel @Inject constructor(
         val receiptImage = prefs.getString("receiptImage", "").orEmpty()
         reduce { state.copy(receiptImage = receiptImage) }
     }
+
+    // onClick
+    fun onClickOCREdit() = intent {
+        postSideEffect(OCRResultSideEffect.OCRResultNavigateToOCRDetail(state.document))
+    }
 }
