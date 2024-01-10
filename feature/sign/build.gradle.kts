@@ -42,6 +42,7 @@ dependencies {
 
     implementation(projects.core.common)
     implementation(projects.domain)
+    implementation(projects.feature.home)
 
     implementation(libs.orbit.compose)
     implementation(libs.orbit.core)

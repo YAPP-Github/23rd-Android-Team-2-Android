@@ -17,28 +17,48 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
 import com.moneymong.moneymong.design_system.R
 import com.moneymong.moneymong.design_system.theme.Blue04
+import com.moneymong.moneymong.feature.sign.navigation.loginRoute
+import com.moneymong.moneymong.feature.sign.navigation.splashRoute
 import com.moneymong.moneymong.feature.sign.viewmodel.SplashViewModel
+import com.moneymong.moneymong.home.navigation.homeRoute
 import kotlinx.coroutines.delay
 import org.orbitmvi.orbit.compose.collectAsState
 
 
 @Composable
-fun SplashScreen (
-    modifier : Modifier = Modifier,
-    viewModel : SplashViewModel = hiltViewModel()
-){
+fun SplashScreen(
+    modifier: Modifier = Modifier,
+    viewModel: SplashViewModel = hiltViewModel(),
+    navController: NavHostController
+) {
     val state = viewModel.collectAsState().value
 
+    LaunchedEffect(key1 = state.isTokenValid) {
+        state.isTokenValid?.let { isValid ->
+            if (isValid) {
+                navController.navigate(homeRoute) {
+                    popUpTo(splashRoute) { inclusive = true }
+                }
+            } else {
+                navController.navigate(loginRoute) {
+                    popUpTo(splashRoute) { inclusive = true }
+                }
+            }
+        }
+    }
     val scale = animateFloatAsState(
         targetValue = if (state.startAnimation) 1f else 0f,
         animationSpec = tween(durationMillis = 350), label = ""
     )
 
     LaunchedEffect(key1 = true) {
-        delay(1000)
-       viewModel.startAnimationChanged(true)
+        delay(1)
+        viewModel.startAnimationChanged(true)
+        delay(300)
+        viewModel.checkTokenValidity()
     }
 
     Column(
@@ -61,6 +81,6 @@ fun SplashScreen (
 
 @Preview
 @Composable
-fun SplashPreview(){
-    SplashScreen()
+fun SplashPreview() {
+    // SplashScreen()
 }

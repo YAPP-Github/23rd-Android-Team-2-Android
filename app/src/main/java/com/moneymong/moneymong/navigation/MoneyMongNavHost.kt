@@ -23,7 +23,7 @@ fun MoneyMongNavHost(
         navController = navController,
         startDestination = startDestination
     ) {
-        splashScreen()
+        splashScreen(navController)
         loginScreen()
         homeScreen()
 
