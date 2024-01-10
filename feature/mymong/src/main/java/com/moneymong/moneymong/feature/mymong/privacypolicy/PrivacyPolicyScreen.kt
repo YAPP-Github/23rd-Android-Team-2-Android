@@ -13,7 +13,7 @@ import com.moneymong.moneymong.feature.mymong.component.MyMongWebView
 @Composable
 fun PrivacyPolicyScreen(
     modifier: Modifier = Modifier,
-    onBack: () -> Unit = {}
+    navigateUp: () -> Unit
 ) {
     Scaffold(
         modifier = modifier,
@@ -23,7 +23,7 @@ fun PrivacyPolicyScreen(
                     .background(color = White)
                     .padding(horizontal = MMHorizontalSpacing),
                 title = "개인정보 처리 방침",
-                onBackClick = onBack
+                onBackClick = navigateUp
             )
         }
     ) {

@@ -13,7 +13,7 @@ import com.moneymong.moneymong.feature.mymong.component.MyMongWebView
 @Composable
 fun TermsOfUseScreen(
     modifier: Modifier = Modifier,
-    onBack: () -> Unit = {}
+    navigateUp: () -> Unit
 ) {
     Scaffold(
         modifier = modifier,
@@ -23,7 +23,7 @@ fun TermsOfUseScreen(
                     .background(color = White)
                     .padding(horizontal = MMHorizontalSpacing),
                 title = "서비스 이용약관",
-                onBackClick = onBack
+                onBackClick = navigateUp
             )
         }
     ) {
