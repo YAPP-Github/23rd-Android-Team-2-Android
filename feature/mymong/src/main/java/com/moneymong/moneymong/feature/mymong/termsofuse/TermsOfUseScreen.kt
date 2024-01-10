@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import com.moneymong.moneymong.design_system.theme.MMHorizontalSpacing
 import com.moneymong.moneymong.design_system.theme.White
 import com.moneymong.moneymong.feature.mymong.component.MyMongInnerTopBar
@@ -33,10 +32,4 @@ fun TermsOfUseScreen(
             url = "https://luck-walk-147.notion.site/8a382c0e511448838d2d350e16df3a95"
         )
     }
-}
-
-@Preview
-@Composable
-fun PreviewTermsOfUseScreen() {
-    TermsOfUseScreen()
 }
