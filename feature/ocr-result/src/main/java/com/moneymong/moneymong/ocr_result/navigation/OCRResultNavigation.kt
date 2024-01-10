@@ -19,14 +19,17 @@ fun NavController.navigateToOCRResult(
 }
 
 fun NavGraphBuilder.ocrResultScreen(
+    navigateToHome: () -> Unit,
     popBackStack: () -> Unit
 ) {
     composable(route = ocrResultRoute) { backStackEntry ->
+        val match = "[^\uAC00-\uD7A3xfe0-9a-zA-Z~!@#$%^&*()_+|<>?:{}]"
         val documentJson = backStackEntry.arguments?.getString("document")
-        val documentEntity = documentJson?.let { Gson().fromJson(it, DocumentEntity::class.java) }
+        val documentEntity = documentJson?.let { Gson().fromJson(it.replace(match, ""), DocumentEntity::class.java) }
 
         OCRResultScreen(
             document = documentEntity,
+            navigateToHome = navigateToHome,
             popBackStack = popBackStack
         )
     }
