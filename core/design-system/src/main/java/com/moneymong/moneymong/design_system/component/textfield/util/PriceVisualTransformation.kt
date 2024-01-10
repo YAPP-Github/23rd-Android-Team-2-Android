@@ -5,7 +5,7 @@ import androidx.compose.ui.text.input.OffsetMapping
 import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.text.input.VisualTransformation
 
-class PriceVisualTransformation(private val type: MDSNumberTextFieldType) : VisualTransformation {
+class PriceVisualTransformation(private val type: PriceType) : VisualTransformation {
     override fun filter(text: AnnotatedString): TransformedText {
         val amount = text.text
         var numberWithComma = ""
