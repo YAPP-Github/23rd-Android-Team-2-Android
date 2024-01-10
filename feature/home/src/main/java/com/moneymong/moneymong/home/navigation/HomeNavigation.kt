@@ -7,6 +7,7 @@ import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
+import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
@@ -15,6 +16,12 @@ import com.moneymong.moneymong.home.HomeBottomTabs
 import com.moneymong.moneymong.home.HomeScreen
 
 const val homeRoute = "home_route"
+
+fun NavController.navigateToHome(
+    navOptions: NavOptions? = null
+) {
+    this.navigate(homeRoute, navOptions)
+}
 
 fun NavGraphBuilder.homeScreen(
     navController: NavController

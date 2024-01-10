@@ -1,4 +1,4 @@
-package com.moneymong.moneymong.network.request.ocr
+package com.moneymong.moneymong.network.request.ledger
 
 data class LedgerTransactionRequest(
     val storeInfo: String,

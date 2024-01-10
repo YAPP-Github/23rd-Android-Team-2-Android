@@ -4,10 +4,19 @@ import com.moneymong.moneymong.common.base.State
 import com.moneymong.moneymong.common.ui.toWonFormat
 import com.moneymong.moneymong.domain.entity.ocr.DocumentEntity
 import com.moneymong.moneymong.domain.entity.ocr.DocumentResultEntity
+import java.io.File
+import java.time.LocalDateTime
+import java.time.OffsetDateTime
+import java.time.ZoneOffset
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 data class OCRResultState(
-    val receiptImage: String? = null,
-    val document: DocumentEntity? = null
+    val isLoading: Boolean = false,
+    val receiptImage: String = "",
+    val receiptFile: File? = null,
+    val document: DocumentEntity? = null,
+    val memo: String = "내용 없음"
 ) : State {
 
     val receipt: DocumentResultEntity?
@@ -47,6 +56,16 @@ data class OCRResultState(
     val formattedTime: String
         get() {
             val time = receipt?.paymentInfo?.time?.formatted
-            return "${time?.hour ?: "00"}:${time?.minute ?: "00"}:${time?.minute ?: "00"}"
+            return "${time?.hour ?: "00"}:${time?.minute ?: "00"}:${time?.second ?: "00"}"
+        }
+
+    val postPaymentDate: String
+        get() {
+            val inputDateString = "$formattedDate $formattedTime"
+            val formatter = DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 HH:mm:ss", Locale.KOREAN)
+            val inputDateTime = LocalDateTime.parse(inputDateString, formatter)
+            val offsetDateTime = OffsetDateTime.of(inputDateTime, ZoneOffset.ofHours(9)) // 9는 Asia/Seoul의 오프셋
+
+            return offsetDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSSXXX"))
         }
 }

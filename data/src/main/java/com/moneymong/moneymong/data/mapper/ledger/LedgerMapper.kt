@@ -4,10 +4,10 @@ import com.moneymong.moneymong.domain.entity.ledger.DocumentImageURLEntity
 import com.moneymong.moneymong.domain.entity.ledger.LedgerTransactionEntity
 import com.moneymong.moneymong.domain.entity.ledger.ReceiptImageURLEntity
 import com.moneymong.moneymong.domain.param.ledger.LedgerTransactionParam
-import com.moneymong.moneymong.network.request.ocr.LedgerTransactionRequest
-import com.moneymong.moneymong.network.response.ocr.DocumentImageURL
-import com.moneymong.moneymong.network.response.ocr.LedgerTransactionResponse
-import com.moneymong.moneymong.network.response.ocr.ReceiptImageURL
+import com.moneymong.moneymong.network.request.ledger.LedgerTransactionRequest
+import com.moneymong.moneymong.network.response.ledger.DocumentImageURL
+import com.moneymong.moneymong.network.response.ledger.LedgerTransactionResponse
+import com.moneymong.moneymong.network.response.ledger.ReceiptImageURL
 
 fun LedgerTransactionParam.toRequest() =
     LedgerTransactionRequest(
