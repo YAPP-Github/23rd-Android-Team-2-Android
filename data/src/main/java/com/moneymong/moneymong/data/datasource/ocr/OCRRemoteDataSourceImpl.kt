@@ -16,5 +16,5 @@ class OCRRemoteDataSourceImpl @Inject constructor(
         clovaApi.documentOCR(body = body)
 
     override suspend fun postFileUpload(body: FileUploadRequest): Result<FileUploadResponse> =
-        moneyMongApi.postFileUpload(body = body)
+        moneyMongApi.postFileUpload(file = body.file)
 }
