@@ -16,11 +16,12 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.moneymong.moneymong.design_system.component.button.MDSButton
-import com.moneymong.moneymong.design_system.component.textfield.util.MDSNumberTextFieldType
 import com.moneymong.moneymong.design_system.component.textfield.util.MDSTextFieldIcons
+import com.moneymong.moneymong.design_system.component.textfield.util.PriceType
 import com.moneymong.moneymong.design_system.component.textfield.util.PriceVisualTransformation
 
 
@@ -29,12 +30,12 @@ fun MDSNumberTextField(
     modifier: Modifier = Modifier,
     value: TextFieldValue,
     onValueChange: (TextFieldValue) -> Unit,
-    type: MDSNumberTextFieldType,
     title: String,
     placeholder: String,
     isFilled: Boolean,
     onIconClick: (() -> Unit),
     singleLine: Boolean = true,
+    visualTransformation: VisualTransformation = VisualTransformation.None,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
 ) {
 
@@ -53,7 +54,7 @@ fun MDSNumberTextField(
         singleLine = singleLine,
         icon = MDSTextFieldIcons.Clear,
         onIconClick = onIconClick,
-        visualTransformation = PriceVisualTransformation(type),
+        visualTransformation = visualTransformation,
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
         keyboardActions = keyboardActions,
     )
@@ -66,7 +67,7 @@ fun MDSNumberTextFieldPreview() {
 
     var userInput by remember { mutableStateOf(TextFieldValue()) }
     var isFilled by remember { mutableStateOf(false) }
-    var dealType by remember { mutableStateOf(MDSNumberTextFieldType.Income) }
+    var dealType by remember { mutableStateOf(PriceType.Income) }
 
     Column {
         MDSNumberTextField(
@@ -75,11 +76,11 @@ fun MDSNumberTextFieldPreview() {
                 .onFocusChanged { isFilled = !it.isFocused },
             value = userInput,
             onValueChange = { userInput = it },
-            type = dealType,
             title = "금액",
             placeholder = "거래 금액을 입력해주세요",
             isFilled = isFilled,
             onIconClick = { userInput = userInput.copy("") },
+            visualTransformation = PriceVisualTransformation(type = dealType),
             keyboardActions = KeyboardActions(onDone = {
                 focusManager.clearFocus()
             })
@@ -91,12 +92,12 @@ fun MDSNumberTextFieldPreview() {
         ) {
             MDSButton(
                 modifier = Modifier.weight(1f),
-                onClick = { dealType = MDSNumberTextFieldType.Income },
+                onClick = { dealType = PriceType.Income },
                 text = "수입"
             )
             MDSButton(
                 modifier = Modifier.weight(1f),
-                onClick = { dealType = MDSNumberTextFieldType.Expense },
+                onClick = { dealType = PriceType.Expense },
                 text = "지출"
             )
         }
