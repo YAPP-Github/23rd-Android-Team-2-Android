@@ -65,7 +65,7 @@ fun OCRDetailScreen(
     Scaffold(
         topBar = {
             OCRDetailTopbarView(
-                onClickPrev = { /*TODO*/ },
+                onClickPrev = popBackStack,
                 onClickRegister = { /*TODO*/ }
             )
         }

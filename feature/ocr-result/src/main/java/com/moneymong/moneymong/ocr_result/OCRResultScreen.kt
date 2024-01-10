@@ -33,6 +33,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavOptions
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
+import com.google.gson.Gson
 import com.moneymong.moneymong.common.ext.base64ToFile
 import com.moneymong.moneymong.design_system.component.snackbar.MDSSnackbarHost
 import com.moneymong.moneymong.design_system.theme.Black
@@ -88,9 +89,12 @@ fun OCRResultScreen(
                     )
                 }
             }
-
             is OCRResultSideEffect.OCRResultNavigateToHome -> {
                 navigateToHome()
+            }
+            is OCRResultSideEffect.OCRResultNavigateToOCRDetail -> {
+                val documentString = it.document?.let { Gson().toJson(it) }.orEmpty()
+                navigateToOCRDetail(null, documentString)
             }
 
             else -> {}
@@ -143,7 +147,7 @@ fun OCRResultScreen(
                 btnEnabled = state.btnEnabled,
                 onClickRetryOCR = popBackStack,
                 onClickRegister = viewModel::postReceiptImage,
-                onClickEdit = {}
+                onClickEdit = viewModel::onClickOCREdit
             )
             AnimatedVisibility(
                 modifier = Modifier.align(Alignment.Center),
