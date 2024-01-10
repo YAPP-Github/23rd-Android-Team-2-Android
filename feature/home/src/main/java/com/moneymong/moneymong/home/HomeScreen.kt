@@ -10,6 +10,8 @@ import androidx.navigation.compose.NavHost
 import com.moneymong.moneymong.feature.agency.navigation.agencyRoute
 import com.moneymong.moneymong.feature.agency.navigation.agencyScreen
 import com.moneymong.moneymong.feature.mymong.navigation.mymongScreen
+import com.moneymong.moneymong.feature.mymong.navigation.navigatePrivacyPolicy
+import com.moneymong.moneymong.feature.mymong.navigation.navigateTermsOfUse
 import com.moneymong.moneymong.feature.mymong.navigation.privacyPolicyScreen
 import com.moneymong.moneymong.feature.mymong.navigation.termsOfUseScreen
 import com.moneymong.moneymong.home.navigation.rememberHomeNavController
@@ -40,7 +42,11 @@ fun HomeScreen(
 
             ledgerScreen(padding = it)
 
-            mymongScreen(padding = it)
+            mymongScreen(
+                padding = it,
+                navigateToTermsOfUse = homeNavController.navHostController::navigateTermsOfUse,
+                navigateToPrivacyPolicy = homeNavController.navHostController::navigatePrivacyPolicy
+            )
             termsOfUseScreen(
                 padding = it,
                 navigateUp = homeNavController.navHostController::navigateUp

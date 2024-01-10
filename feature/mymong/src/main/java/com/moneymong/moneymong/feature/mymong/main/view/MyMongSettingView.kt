@@ -32,7 +32,9 @@ import com.moneymong.moneymong.feature.mymong.main.util.myMongRoundRectShadow
 
 @Composable
 internal fun MyMongSettingView(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    navigateToTermsOfUse: () -> Unit,
+    navigateToPrivacyPolicy: () -> Unit
 ) {
     Column(modifier = modifier.fillMaxWidth()) {
         Text(
@@ -51,13 +53,13 @@ internal fun MyMongSettingView(
             SettingItem(
                 iconRes = R.drawable.ic_paper,
                 title = "서비스 이용약관",
-                onNavigateClick = { /* todo */ }
+                onNavigateClick = navigateToTermsOfUse
             )
             SettingDivider()
             SettingItem(
                 iconRes = R.drawable.ic_paper,
                 title = "개인정보 처리 방침",
-                onNavigateClick = { /* todo */ }
+                onNavigateClick = navigateToPrivacyPolicy
             )
             SettingDivider()
             SettingItem(
