@@ -20,10 +20,10 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.moneymong.moneymong.design_system.component.button.MDSButton
-import com.moneymong.moneymong.design_system.component.textfield.date.DateVisualTransformation
-import com.moneymong.moneymong.design_system.component.textfield.price.PriceType
-import com.moneymong.moneymong.design_system.component.textfield.price.PriceVisualTransformation
-import com.moneymong.moneymong.design_system.component.textfield.time.TimeVisualTransformation
+import com.moneymong.moneymong.design_system.component.textfield.visualtransformation.DateVisualTransformation
+import com.moneymong.moneymong.design_system.component.textfield.util.PriceType
+import com.moneymong.moneymong.design_system.component.textfield.visualtransformation.PriceVisualTransformation
+import com.moneymong.moneymong.design_system.component.textfield.visualtransformation.TimeVisualTransformation
 import com.moneymong.moneymong.design_system.component.textfield.util.MDSTextFieldIcons
 
 
