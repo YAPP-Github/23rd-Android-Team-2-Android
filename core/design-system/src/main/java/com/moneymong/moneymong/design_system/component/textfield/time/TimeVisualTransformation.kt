@@ -38,6 +38,9 @@ class TimeVisualTransformation : VisualTransformation {
     }
 
     private fun String.formatTime(): String {
+        require(this.length <= 6) {
+            "시간은 6글자보다 길게 입력받을 수 없어요. 글자 수 제한이 필요합니다."
+        }
         val hour = this.take(2)
         val minute = this.take(4).drop(2)
         val second = this.drop(4)
