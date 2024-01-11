@@ -6,6 +6,7 @@ import com.moneymong.moneymong.domain.entity.ocr.DocumentEntity
 import com.moneymong.moneymong.domain.param.ledger.FundType
 
 data class OCRDetailState(
+    val isLoading: Boolean = false,
     val document: DocumentEntity? = null,
     val receiptImage: String = "",
     val storeNameValue: TextFieldValue = TextFieldValue(),
@@ -14,4 +15,6 @@ data class OCRDetailState(
     val paymentTimeValue: TextFieldValue = TextFieldValue(),
     val memoValue: TextFieldValue = TextFieldValue(text = "내용없음"),
     val fundType: FundType = FundType.EXPENSE,
+    val documentImageUrls: List<String> = emptyList(),
+    val documentImageUris: List<String> = listOf("")
 ): State

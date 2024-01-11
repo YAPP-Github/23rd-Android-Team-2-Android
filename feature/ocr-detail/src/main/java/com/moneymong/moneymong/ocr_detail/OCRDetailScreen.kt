@@ -1,6 +1,10 @@
 package com.moneymong.moneymong.ocr_detail
 
+import android.net.Uri
 import android.util.Base64
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -34,6 +38,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
@@ -46,6 +51,7 @@ import androidx.navigation.NavOptions
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.moneymong.moneymong.common.ui.DottedShape
+import com.moneymong.moneymong.common.ui.noRippleClickable
 import com.moneymong.moneymong.design_system.R
 import com.moneymong.moneymong.design_system.component.button.MDSButton
 import com.moneymong.moneymong.design_system.component.selection.MDSSelection
@@ -79,10 +85,26 @@ fun OCRDetailScreen(
     val lazyGridState = rememberLazyGridState()
     val verticalScrollState = rememberScrollState()
     val focusManager = LocalFocusManager.current
-    val test = listOf(1, 2, 3, 4)
+
+    val singlePhotoPickerLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.PickVisualMedia(),
+        onResult = { uri ->
+            uri?.let {
+                viewModel.addDocumentImage(it)
+            }
+        }
+    )
 
     viewModel.collectSideEffect {
         when (it) {
+            is OCRDetailSideEffect.OCRDetailOpenImagePicker -> {
+                singlePhotoPickerLauncher.launch(
+                    PickVisualMediaRequest(
+                        ActivityResultContracts.PickVisualMedia.ImageOnly
+                    )
+                )
+            }
+
             else -> {}
         }
     }
@@ -254,26 +276,53 @@ fun OCRDetailScreen(
                 LazyVerticalGrid(
                     modifier = modifier
                         .fillMaxSize()
-                        .heightIn(max = 324.dp)
+                        .heightIn(max = 504.dp)
                         .background(White),
                     state = lazyGridState,
                     columns = GridCells.Fixed(3),
                     verticalArrangement = Arrangement.spacedBy(8.dp),
                     horizontalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
-                    itemsIndexed(items = test) { index, item ->
-                        Box(
-                            modifier = Modifier
-                                .height(120.dp)
-                                .clip(RoundedCornerShape(8.dp))
-                                .background(Blue01),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Icon(
-                                painter = painterResource(id = R.drawable.ic_plus_outline),
-                                contentDescription = null,
-                                tint = Blue04
-                            )
+                    itemsIndexed(items = state.documentImageUris) { index, item ->
+                        if (item.isEmpty()) {
+                            Box(
+                                modifier = Modifier
+                                    .height(120.dp)
+                                    .clip(RoundedCornerShape(8.dp))
+                                    .background(Blue01)
+                                    .noRippleClickable {
+                                        viewModel.eventEmit(OCRDetailSideEffect.OCRDetailOpenImagePicker)
+                                    },
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Icon(
+                                    painter = painterResource(id = R.drawable.ic_plus_outline),
+                                    contentDescription = null,
+                                    tint = Blue04
+                                )
+                            }
+                        } else {
+                            Box(
+                                modifier = Modifier
+                                    .height(120.dp)
+                                    .clip(RoundedCornerShape(8.dp))
+                            ) {
+                                GlideImage(
+                                    modifier = Modifier.fillMaxSize(),
+                                    model = Uri.parse(item),
+                                    contentDescription = null,
+                                    contentScale = ContentScale.FillWidth
+                                )
+                                Icon(
+                                    modifier = Modifier
+                                        .align(Alignment.TopEnd)
+                                        .noRippleClickable { viewModel.removeDocumentImage(item) }
+                                        .padding(5.dp),
+                                    painter = painterResource(id = R.drawable.ic_close_filled),
+                                    contentDescription = null,
+                                    tint = Color.Unspecified
+                                )
+                            }
                         }
                     }
                 }

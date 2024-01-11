@@ -1,13 +1,13 @@
 package com.moneymong.moneymong.ocr_detail
 
 import android.content.SharedPreferences
+import android.net.Uri
 import androidx.compose.ui.text.input.TextFieldValue
 import com.moneymong.moneymong.common.base.BaseViewModel
 import com.moneymong.moneymong.domain.entity.ocr.DocumentEntity
 import dagger.hilt.android.lifecycle.HiltViewModel
 import org.orbitmvi.orbit.syntax.simple.blockingIntent
 import org.orbitmvi.orbit.syntax.simple.intent
-import org.orbitmvi.orbit.syntax.simple.postSideEffect
 import org.orbitmvi.orbit.syntax.simple.reduce
 import javax.inject.Inject
 
@@ -41,6 +41,22 @@ class OCRDetailViewModel @Inject constructor(
                 paymentTimeValue = state.paymentTimeValue.copy(text = paymentTimeString)
             )
         }
+    }
+
+    fun addDocumentImage(uri: Uri) = intent {
+        val newDocumentUris = state.documentImageUris.toMutableList()
+        if (state.documentImageUris.size == 12) {
+            newDocumentUris.removeFirst()
+        }
+        reduce { state.copy(documentImageUris = newDocumentUris + uri.toString()) }
+    }
+
+    fun removeDocumentImage(uriString: String) = intent {
+        val newDocumentUris = state.documentImageUris.toMutableList()
+        if (state.documentImageUris.size == 12 && state.documentImageUris.first().isNotEmpty()) {
+            newDocumentUris.add(0, "")
+        }
+        reduce { state.copy(documentImageUris = newDocumentUris - uriString) }
     }
 
     private fun fetchReceiptImage() = blockingIntent {
