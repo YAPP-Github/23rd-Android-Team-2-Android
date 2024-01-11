@@ -1,4 +1,4 @@
-package com.moneymong.moneymong.design_system.component.textfield.date
+package com.moneymong.moneymong.design_system.component.textfield.visualtransformation
 
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.input.OffsetMapping
