@@ -36,6 +36,9 @@ class DateVisualTransformation : VisualTransformation {
 
 
     private fun String.formatDate(): String {
+        require(this.length <= 8) {
+            "날짜는 8글자보다 길게 입력받을 수 없어요. 글자 수 제한이 필요합니다."
+        }
         val year = this.take(4)
         val month = this.take(6).drop(4)
         val day = this.drop(6)
