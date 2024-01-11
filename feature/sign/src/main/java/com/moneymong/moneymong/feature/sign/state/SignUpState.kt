@@ -20,6 +20,7 @@ data class SignUpState(
     val universityResponse: UniversitiesEntity = UniversitiesEntity(
         universities = emptyList()
     ),
+    val isUnivCreated : Boolean = false,
     //item
     val isItemSelected : Boolean = false,
     val selectedGrade : Grade? = null,

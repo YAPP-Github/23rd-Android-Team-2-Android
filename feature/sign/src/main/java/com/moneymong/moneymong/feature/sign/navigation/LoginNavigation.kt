@@ -13,9 +13,8 @@ import com.moneymong.moneymong.feature.sign.LoginScreen
 
 const val loginRoute = "login_route"
 
-
-fun NavGraphBuilder.loginScreen() {
+fun NavGraphBuilder.loginScreen(navController: NavHostController) {
     composable(route = loginRoute) {
-        LoginScreen()
+        LoginScreen(navController = navController)
     }
 }

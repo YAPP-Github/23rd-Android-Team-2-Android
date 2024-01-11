@@ -2,6 +2,7 @@ package com.moneymong.moneymong.data.datasource.login
 
 import android.content.Context
 import android.provider.SyncStateContract.Constants
+import android.util.Log
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
@@ -50,14 +51,12 @@ class LoginLocalDataSourceImpl @Inject constructor(
         }
     }
 
-    fun getToken(): Flow<String?> {
-        return context.dataStore.data.map { preferences ->
-            preferences[accessToken]
-            preferences[refreshToken]
-        }
+    override suspend fun getSchoolInfo(): Boolean {
+        val preferences = context.dataStore.data.first()
+        return preferences[schoolInfoExist] ?: false
     }
 
-    suspend fun deleteToken() {
+    override suspend fun deleteToken() {
         context.dataStore.edit { preferences ->
             preferences.remove(accessToken)
             preferences.remove(refreshToken)
