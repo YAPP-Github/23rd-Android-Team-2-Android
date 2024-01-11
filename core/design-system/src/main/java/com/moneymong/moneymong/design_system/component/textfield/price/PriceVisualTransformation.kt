@@ -1,4 +1,4 @@
-package com.moneymong.moneymong.design_system.component.textfield.util
+package com.moneymong.moneymong.design_system.component.textfield.price
 
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.input.OffsetMapping
