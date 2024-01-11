@@ -20,9 +20,9 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.moneymong.moneymong.design_system.component.button.MDSButton
+import com.moneymong.moneymong.design_system.component.textfield.price.PriceType
+import com.moneymong.moneymong.design_system.component.textfield.price.PriceVisualTransformation
 import com.moneymong.moneymong.design_system.component.textfield.util.MDSTextFieldIcons
-import com.moneymong.moneymong.design_system.component.textfield.util.PriceType
-import com.moneymong.moneymong.design_system.component.textfield.util.PriceVisualTransformation
 
 
 @Composable
@@ -43,10 +43,7 @@ fun MDSNumberTextField(
         modifier = modifier,
         value = value,
         onValueChange = { original ->
-            onValueChange(original.copy(text = original.text
-                .filter { char -> char.isDigit() }
-                .trimStart { char -> char == '0' })
-            )
+            onValueChange(original.copy(text = original.text.filter { char -> char.isDigit() }))
         },
         title = title,
         placeholder = placeholder,
@@ -62,7 +59,7 @@ fun MDSNumberTextField(
 
 @Preview
 @Composable
-fun MDSNumberTextFieldPreview() {
+fun MDSPriceTextFieldPreview() {
     val focusManager = LocalFocusManager.current
 
     var userInput by remember { mutableStateOf(TextFieldValue()) }
@@ -75,7 +72,9 @@ fun MDSNumberTextFieldPreview() {
                 .fillMaxWidth()
                 .onFocusChanged { isFilled = !it.isFocused },
             value = userInput,
-            onValueChange = { userInput = it },
+            onValueChange = {
+                userInput = it.copy(text = it.text.trimStart { char -> char == '0' })
+            },
             title = "금액",
             placeholder = "거래 금액을 입력해주세요",
             isFilled = isFilled,
