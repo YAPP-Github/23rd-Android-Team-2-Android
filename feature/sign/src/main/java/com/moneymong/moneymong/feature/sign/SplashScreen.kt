@@ -18,14 +18,17 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.moneymong.moneymong.design_system.R
 import com.moneymong.moneymong.design_system.theme.Blue04
 import com.moneymong.moneymong.feature.sign.navigation.loginRoute
 import com.moneymong.moneymong.feature.sign.navigation.splashRoute
+import com.moneymong.moneymong.feature.sign.sideeffect.SplashSideEffect
 import com.moneymong.moneymong.feature.sign.viewmodel.SplashViewModel
 import com.moneymong.moneymong.home.navigation.homeRoute
 import kotlinx.coroutines.delay
 import org.orbitmvi.orbit.compose.collectAsState
+import org.orbitmvi.orbit.compose.collectSideEffect
 
 
 @Composable
@@ -34,7 +37,20 @@ fun SplashScreen(
     viewModel: SplashViewModel = hiltViewModel(),
     navController: NavHostController
 ) {
+    val systemUiController = rememberSystemUiController()
     val state = viewModel.collectAsState().value
+
+
+    viewModel.collectSideEffect {
+        when (it) {
+            is SplashSideEffect.statusBar -> {
+                systemUiController.setSystemBarsColor(
+                    color = Blue04,
+                )
+            }
+        }
+    }
+    viewModel.eventEmit(SplashSideEffect.statusBar)
 
     LaunchedEffect(key1 = state.isTokenValid) {
         state.isTokenValid?.let { isValid ->

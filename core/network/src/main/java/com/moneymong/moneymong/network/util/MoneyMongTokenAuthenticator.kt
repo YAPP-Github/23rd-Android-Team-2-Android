@@ -1,7 +1,9 @@
 package com.moneymong.moneymong.network.util
 
+import com.moneymong.moneymong.domain.param.login.RefreshTokenParam
 import com.moneymong.moneymong.domain.repository.LoginRepository
 import com.moneymong.moneymong.domain.repository.TokenRepository
+import com.moneymong.moneymong.network.BuildConfig
 import kotlinx.coroutines.runBlocking
 import okhttp3.Authenticator
 import okhttp3.Request
@@ -10,10 +12,14 @@ import okhttp3.Route
 import javax.inject.Inject
 
 class MoneyMongTokenAuthenticator @Inject constructor(
-    private val tokenRepository: TokenRepository
+    private val tokenRepository: TokenRepository,
 ) : Authenticator {
     override fun authenticate(route: Route?, response: Response): Request? {
-        if (response.code == 401) {
+
+        val isPathRefresh =
+            response.request.url.toString() == BuildConfig.BASE_URL + "api/v1/tokens"
+
+        if (response.code == 401 && !isPathRefresh) {
             runBlocking {
                 val refreshToken = tokenRepository.getRefreshToken()
                 tokenRepository.getUpdateToken(refreshToken)
@@ -26,20 +32,23 @@ class MoneyMongTokenAuthenticator @Inject constructor(
                         if (it.refreshToken == "") {
                             tokenRepository.updateAccessToken(it.accessToken)
                         }
-                        //refreshToken이 만료된 경우
+                        //refreshToken의 만료일이 1주일 이내인 경우
                         else {
                             tokenRepository.updateTokens(it.accessToken, it.refreshToken)
                         }
                     }
                     .onFailure {
-                        //TODO
+                        //TODO 토큰 갱신 요청이 실패하거나 네트워크 문제 등으로 인해 갱신 되지 않았을 떄
+                        // 에러 화면
                     }
-
             }
         } else {
             // TODO Move To Login Screen Logic
             // RefreshToken도 만료되어 로그인이 다시 필요한 상황입니다.
-            // ex. 로그인 화면으로 이동
+            //로컬에 저장된 데이터 제거
+            runBlocking {
+                tokenRepository.deleteToken()
+            }
             null
         }
 

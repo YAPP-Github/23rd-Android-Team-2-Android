@@ -5,6 +5,7 @@ import com.moneymong.moneymong.network.request.login.TokenRequest
 import com.moneymong.moneymong.network.response.login.RefreshTokenResponse
 import com.moneymong.moneymong.network.response.login.TokenResponse
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.POST
 
 interface AccessTokenApi {
@@ -17,4 +18,9 @@ interface AccessTokenApi {
     suspend fun refreshTokenApi(
         @Body body : RefreshTokenRequest
     ) : Result<RefreshTokenResponse>
+
+    @DELETE("api/v1/tokens")
+    suspend fun deleteRefreshToken(
+        @Body body: RefreshTokenRequest
+    )
 }

@@ -1,5 +1,6 @@
 package com.moneymong.moneymong.feature.sign
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -11,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Alignment
 import com.moneymong.moneymong.design_system.R
@@ -18,20 +20,40 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.moneymong.moneymong.design_system.theme.Blue04
 import com.moneymong.moneymong.design_system.theme.MMHorizontalSpacing
+import com.moneymong.moneymong.feature.sign.navigation.loginRoute
+import com.moneymong.moneymong.feature.sign.navigation.signUpRoute
+import com.moneymong.moneymong.feature.sign.sideeffect.LoginSideEffect
 import com.moneymong.moneymong.feature.sign.view.KakaoLoginView
 import com.moneymong.moneymong.feature.sign.view.TitleView
+import com.moneymong.moneymong.feature.sign.viewmodel.LoginViewModel
+import com.moneymong.moneymong.home.navigation.homeRoute
+import org.orbitmvi.orbit.compose.collectAsState
+import org.orbitmvi.orbit.compose.collectSideEffect
 
 @Composable
-fun LoginScreen() {
-    val systemUiController = rememberSystemUiController()
+fun LoginScreen(
+    viewModel: LoginViewModel = hiltViewModel(),
+    navController: NavHostController
 
-    SideEffect {
-        systemUiController.setSystemBarsColor(
-            color = Blue04,
-        )
+) {
+    val state = viewModel.collectAsState().value
+
+    LaunchedEffect(key1 = state.isSchoolInfoExist) {
+        if (state.isSchoolInfoExist == true) {
+            navController.navigate(homeRoute) {
+                popUpTo(loginRoute) { inclusive = true }
+            }
+        } else if (state.isSchoolInfoExist == false) {
+            navController.navigate(signUpRoute) {
+                popUpTo(loginRoute) { inclusive = true }
+            }
+        }
     }
 
     Scaffold(
@@ -40,7 +62,6 @@ fun LoginScreen() {
         }
     )
 }
-
 
 
 @Composable
@@ -56,8 +77,7 @@ private fun LoginContent(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 236.dp)
-            ,
+                .padding(top = 236.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
@@ -79,13 +99,5 @@ private fun LoginContent(
         }
     }
 }
-
-
-@Preview
-@Composable
-fun pre(){
-    LoginScreen()
-}
-
 
 

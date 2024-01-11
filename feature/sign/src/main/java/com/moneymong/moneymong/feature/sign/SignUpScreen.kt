@@ -14,16 +14,20 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
 import com.moneymong.moneymong.design_system.R
 import com.moneymong.moneymong.design_system.theme.Gray07
 import com.moneymong.moneymong.design_system.theme.MMHorizontalSpacing
 import com.moneymong.moneymong.design_system.theme.White
+import com.moneymong.moneymong.feature.sign.navigation.loginRoute
+import com.moneymong.moneymong.feature.sign.navigation.signUpRoute
 import com.moneymong.moneymong.feature.sign.sideeffect.SignUpSideEffect
 import com.moneymong.moneymong.feature.sign.view.SearchUnivView
 import com.moneymong.moneymong.feature.sign.view.SignCompleteCheckedView
@@ -31,13 +35,16 @@ import com.moneymong.moneymong.feature.sign.view.SignUpButtonView
 import com.moneymong.moneymong.feature.sign.view.SignUpGradeView
 import com.moneymong.moneymong.feature.sign.view.SignUpTitleView
 import com.moneymong.moneymong.feature.sign.viewmodel.SignUpViewModel
+import com.moneymong.moneymong.home.navigation.homeRoute
 import org.orbitmvi.orbit.compose.collectAsState
 import org.orbitmvi.orbit.compose.collectSideEffect
 
 @Composable
 fun SignUpScreen(
     modifier: Modifier = Modifier,
-) {
+    navController: NavHostController,
+
+    ) {
     Scaffold(
         modifier = Modifier
             .fillMaxSize()
@@ -64,7 +71,10 @@ fun SignUpScreen(
             }
         },
         content = { innerPadding ->
-            SignUpContent(modifier = Modifier.padding(innerPadding))
+            SignUpContent(
+                modifier = Modifier.padding(innerPadding),
+                navController = navController
+            )
         }
     )
 }
@@ -73,9 +83,18 @@ fun SignUpScreen(
 @Composable
 fun SignUpContent(
     modifier: Modifier = Modifier,
-    viewModel: SignUpViewModel = hiltViewModel()
-) {
+    viewModel: SignUpViewModel = hiltViewModel(),
+    navController: NavHostController
+    ) {
     val state = viewModel.collectAsState().value
+
+    LaunchedEffect(key1 = state.isUnivCreated) {
+        if (state.isUnivCreated) {
+            navController.navigate(homeRoute) {
+                popUpTo(signUpRoute) { inclusive = true }
+            }
+        }
+    }
 
     viewModel.collectSideEffect {
         when (it) {
@@ -167,5 +186,5 @@ fun SignUpContent(
 @Preview
 @Composable
 fun Preview() {
-    SignUpScreen()
+    //SignUpScreen()
 }

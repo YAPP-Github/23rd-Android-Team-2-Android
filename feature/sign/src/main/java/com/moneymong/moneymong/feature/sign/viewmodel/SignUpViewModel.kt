@@ -38,9 +38,15 @@ class SignUpViewModel @Inject constructor(
         univUseCase.createUniv(body)
             .onSuccess {
                 Log.d("success", it.toString())
+                reduce {
+                    state.copy(
+                        isUnivCreated = true
+                    )
+                }
             }
             .onFailure {
                 Log.d("failure", it.message.toString())
+                //TODO 에러화면
                 reduce {
                     state.copy(
                         isError = true
@@ -51,8 +57,7 @@ class SignUpViewModel @Inject constructor(
     }
 
     fun searchUniv(searchQuery: String) = intent {
-        Log.d("searchQuery", searchQuery)
-        val result = univUseCase.searchUniv(searchQuery)
+        univUseCase.searchUniv(searchQuery)
             .onSuccess {
                 Log.d("Success", it.universities.toString())
                 reduce {
@@ -62,6 +67,7 @@ class SignUpViewModel @Inject constructor(
                 }
             }.onFailure {
                 Log.d("failure", it.message.toString())
+                //TODO 에러화면
                 reduce {
                     state.copy(
                         isError = true
@@ -111,7 +117,6 @@ class SignUpViewModel @Inject constructor(
     }
 
     fun gradeInforChanged(gradeInfor: Int) = intent {
-        Log.d("gradeInfor", gradeInfor.toString())
         reduce {
             state.copy(
                 gradeInfor = gradeInfor
@@ -144,8 +149,7 @@ class SignUpViewModel @Inject constructor(
         }
     }
 
-    fun selectedGradeChange(selectedGrade : Grade?) = intent{
-        Log.d("selectedGrade", selectedGrade!!.text)
+    fun selectedGradeChange(selectedGrade: Grade?) = intent {
         reduce {
             state.copy(
                 selectedGrade = selectedGrade
