@@ -23,6 +23,7 @@ import com.moneymong.moneymong.design_system.component.button.MDSButton
 import com.moneymong.moneymong.design_system.component.textfield.date.DateVisualTransformation
 import com.moneymong.moneymong.design_system.component.textfield.price.PriceType
 import com.moneymong.moneymong.design_system.component.textfield.price.PriceVisualTransformation
+import com.moneymong.moneymong.design_system.component.textfield.time.TimeVisualTransformation
 import com.moneymong.moneymong.design_system.component.textfield.util.MDSTextFieldIcons
 
 
@@ -123,6 +124,31 @@ fun MDSDateTextFieldPreview() {
         isFilled = isFilled,
         onIconClick = { userInput = userInput.copy("") },
         visualTransformation = DateVisualTransformation(),
+        keyboardActions = KeyboardActions(onDone = {
+            focusManager.clearFocus()
+        })
+    )
+}
+
+@Preview
+@Composable
+fun MDSTimeTextFieldPreview() {
+    val focusManager = LocalFocusManager.current
+
+    var userInput by remember { mutableStateOf(TextFieldValue()) }
+    var isFilled by remember { mutableStateOf(false) }
+
+    MDSNumberTextField(
+        modifier = Modifier
+            .fillMaxWidth()
+            .onFocusChanged { isFilled = !it.isFocused },
+        value = userInput,
+        onValueChange = { if (it.text.length <= 6) userInput = it.copy(text = it.text) },
+        title = "시간",
+        placeholder = "00:00:00 (24시 단위)",
+        isFilled = isFilled,
+        onIconClick = { userInput = userInput.copy("") },
+        visualTransformation = TimeVisualTransformation(),
         keyboardActions = KeyboardActions(onDone = {
             focusManager.clearFocus()
         })
