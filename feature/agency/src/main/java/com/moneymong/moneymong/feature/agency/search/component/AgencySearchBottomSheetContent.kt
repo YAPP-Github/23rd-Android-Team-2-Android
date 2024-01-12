@@ -46,7 +46,7 @@ internal fun AgencySearchBottomSheetContent(
 }
 
 
-internal enum class AgencyBottomSheetType(
+enum class AgencyBottomSheetType(
     @DrawableRes val imgRes: Int,
     val message: String
 ) {
