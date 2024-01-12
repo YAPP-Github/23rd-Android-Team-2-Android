@@ -2,6 +2,7 @@ package com.moneymong.moneymong.home
 
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -33,28 +34,22 @@ fun HomeScreen(
         }
     ) {
         NavHost(
+            modifier = Modifier.padding(it),
             navController = homeNavController.navHostController,
             startDestination = agencyRoute,
             enterTransition = { EnterTransition.None },
             exitTransition = { ExitTransition.None }
         ) {
-            agencyScreen(padding = it)
+            agencyScreen()
 
-            ledgerScreen(padding = it)
+            ledgerScreen()
 
             mymongScreen(
-                padding = it,
                 navigateToTermsOfUse = homeNavController.navHostController::navigateTermsOfUse,
                 navigateToPrivacyPolicy = homeNavController.navHostController::navigatePrivacyPolicy
             )
-            termsOfUseScreen(
-                padding = it,
-                navigateUp = homeNavController.navHostController::navigateUp
-            )
-            privacyPolicyScreen(
-                padding = it,
-                navigateUp = homeNavController.navHostController::navigateUp
-            )
+            termsOfUseScreen(navigateUp = homeNavController.navHostController::navigateUp)
+            privacyPolicyScreen(navigateUp = homeNavController.navHostController::navigateUp)
         }
     }
 }
