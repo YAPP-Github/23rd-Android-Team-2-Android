@@ -20,11 +20,11 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.moneymong.moneymong.design_system.component.button.MDSButton
-import com.moneymong.moneymong.design_system.component.textfield.visualtransformation.DateVisualTransformation
+import com.moneymong.moneymong.design_system.component.textfield.util.MDSTextFieldIcons
 import com.moneymong.moneymong.design_system.component.textfield.util.PriceType
+import com.moneymong.moneymong.design_system.component.textfield.visualtransformation.DateVisualTransformation
 import com.moneymong.moneymong.design_system.component.textfield.visualtransformation.PriceVisualTransformation
 import com.moneymong.moneymong.design_system.component.textfield.visualtransformation.TimeVisualTransformation
-import com.moneymong.moneymong.design_system.component.textfield.util.MDSTextFieldIcons
 
 
 @Composable
@@ -66,7 +66,7 @@ fun MDSPriceTextFieldPreview() {
 
     var userInput by remember { mutableStateOf(TextFieldValue()) }
     var isFilled by remember { mutableStateOf(false) }
-    var dealType by remember { mutableStateOf(PriceType.Income) }
+    var dealType by remember { mutableStateOf(PriceType.None) }
 
     Column {
         MDSNumberTextField(
