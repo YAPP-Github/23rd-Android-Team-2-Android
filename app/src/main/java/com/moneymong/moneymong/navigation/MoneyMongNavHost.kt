@@ -9,6 +9,7 @@ import com.moneymong.moneymong.home.navigation.navigateToHome
 import com.moneymong.moneymong.ocr.navigation.ocrRoute
 import com.moneymong.moneymong.ocr.navigation.ocrScreen
 import com.moneymong.moneymong.ocr_detail.navigation.navigateToOCRDetail
+import com.moneymong.moneymong.ocr_detail.navigation.ocrDetailRoute
 import com.moneymong.moneymong.ocr_detail.navigation.ocrDetailScreen
 import com.moneymong.moneymong.ocr_result.navigation.navigateToOCRResult
 import com.moneymong.moneymong.ocr_result.navigation.ocrResultScreen
@@ -16,7 +17,7 @@ import com.moneymong.moneymong.ocr_result.navigation.ocrResultScreen
 @Composable
 fun MoneyMongNavHost(
     modifier: Modifier = Modifier,
-    startDestination: String = ocrRoute // TODO
+    startDestination: String = ocrDetailRoute // TODO
 ) {
     val navController = rememberNavController()
     NavHost(

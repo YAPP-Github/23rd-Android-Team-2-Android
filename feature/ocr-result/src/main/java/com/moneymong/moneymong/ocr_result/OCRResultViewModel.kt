@@ -33,7 +33,7 @@ class OCRResultViewModel @Inject constructor(
             val ledgerTransactionParam = LedgerTransactionParam(
                 id = 1,
                 storeInfo = state.receipt?.storeInfo?.name?.text.orEmpty(),
-                fundType = FundType.INCOME,
+                fundType = FundType.EXPENSE,
                 amount = state.receipt?.totalPrice?.price?.formatted?.value.orEmpty().toInt(),
                 description = state.memo,
                 paymentDate = state.postPaymentDate,
