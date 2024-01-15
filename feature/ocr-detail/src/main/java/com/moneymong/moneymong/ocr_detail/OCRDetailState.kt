@@ -25,17 +25,22 @@ data class OCRDetailState(
     val fundType: FundType = FundType.EXPENSE,
     val receiptImageUrls: List<String> = emptyList(),
     val documentImageUrls: List<String> = listOf(""),
-): State {
+) : State {
 
     val receipt: DocumentResultEntity?
         get() = document?.images?.first()?.receipt?.result
 
     val postPaymentDate: String
         get() {
-            val inputDateString = "${paymentDateValue.text} ${paymentTimeValue.text}"
-            val formatter = DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 HH:mm:ss", Locale.KOREAN)
+            val inputDateString = "${
+                paymentDateValue.text.ifEmpty {
+                    LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd", Locale.KOREAN))
+                }
+            }${paymentTimeValue.text.ifEmpty { "000000" }}"
+            val formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss", Locale.KOREAN)
             val inputDateTime = LocalDateTime.parse(inputDateString, formatter)
-            val offsetDateTime = OffsetDateTime.of(inputDateTime, ZoneOffset.ofHours(9)) // 9는 Asia/Seoul의 오프셋
+            val offsetDateTime =
+                OffsetDateTime.of(inputDateTime, ZoneOffset.ofHours(9)) // 9는 Asia/Seoul의 오프셋
 
             return offsetDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSSXXX"))
         }

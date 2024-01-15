@@ -94,6 +94,7 @@ fun OCRDetailScreen(
     val lazyGridState = rememberLazyGridState()
     val verticalScrollState = rememberScrollState()
     val focusManager = LocalFocusManager.current
+    val receiptImage = remember { mutableStateOf(Base64.decode(state.receiptImage, Base64.DEFAULT)) }
 
     val singlePhotoPickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia(),
@@ -112,6 +113,9 @@ fun OCRDetailScreen(
                         ActivityResultContracts.PickVisualMedia.ImageOnly
                     )
                 )
+            }
+            is OCRDetailSideEffect.OCRDetailNavigateToHome -> {
+                navigateToHome(null)
             }
 
             else -> {}
@@ -143,7 +147,7 @@ fun OCRDetailScreen(
                     modifier = Modifier
                         .fillMaxSize()
                         .height(240.dp),
-                    model = Base64.decode(state.receiptImage, Base64.DEFAULT),
+                    model = receiptImage.value,
                     contentDescription = null,
                     contentScale = ContentScale.FillWidth
                 )
@@ -228,7 +232,7 @@ fun OCRDetailScreen(
                         value = state.paymentDateValue,
                         onValueChange = { viewModel.onChangePaymentDateValue(it) },
                         title = "날짜",
-                        placeholder = "",
+                        placeholder = "0000/00/00",
                         isFilled = isPaymentDateFilled,
                         isError = false,
                         helperText = "올바른 날짜를 입력해주세요",
