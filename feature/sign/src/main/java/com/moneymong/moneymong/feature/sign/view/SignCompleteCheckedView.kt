@@ -25,6 +25,7 @@ fun SignCompleteCheckedView(
     modifier: Modifier = Modifier ,
     text: String,
     onChanged : () -> Unit,
+    onSelectedGrade : () -> Unit,
     onItemSelectedChange : (Boolean) -> Unit,
 ) {
     Row(
@@ -48,7 +49,9 @@ fun SignCompleteCheckedView(
 
         IconButton(
             modifier = Modifier.size(24.dp),
-            onClick = { onChanged()
+            onClick = {
+                onChanged()
+                onSelectedGrade()
                 onItemSelectedChange(false)
             }
         ) {

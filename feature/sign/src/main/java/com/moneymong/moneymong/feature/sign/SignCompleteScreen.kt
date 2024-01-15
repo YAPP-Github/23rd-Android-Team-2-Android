@@ -12,21 +12,44 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.moneymong.moneymong.design_system.theme.Black
 import com.moneymong.moneymong.design_system.theme.Heading1
 import com.moneymong.moneymong.design_system.theme.MMHorizontalSpacing
 import com.moneymong.moneymong.design_system.theme.White
+import com.moneymong.moneymong.feature.sign.navigation.signCompleteRoute
+import com.moneymong.moneymong.feature.sign.navigation.signUpRoute
 import com.moneymong.moneymong.feature.sign.view.SignCompleteButtonView
 import com.moneymong.moneymong.feature.sign.view.SignCompleteView
+import com.moneymong.moneymong.feature.sign.viewmodel.SignCompleteViewModel
+import com.moneymong.moneymong.home.navigation.homeRoute
+import org.orbitmvi.orbit.compose.collectAsState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SignCompleteScreen(){
+fun SignCompleteScreen(
+    viewModel: SignCompleteViewModel = hiltViewModel(),
+    navController: NavHostController
+) {
+
+    val state = viewModel.collectAsState().value
+
+    LaunchedEffect(key1 = state.isCompleteBtnClicked) {
+        if (state.isCompleteBtnClicked) {
+            navController.navigate(homeRoute) {
+                popUpTo(signCompleteRoute) { inclusive = true }
+            }
+        }
+    }
+
     Scaffold(
         modifier = Modifier
             .fillMaxSize()
@@ -55,14 +78,20 @@ fun SignCompleteScreen(){
             )
         },
         content = { innerPadding ->
-            SignCompleteContent(modifier = Modifier.padding(innerPadding))
+            SignCompleteContent(
+                modifier = Modifier.padding(innerPadding),
+                viewModel = viewModel
+            )
         }
     )
 }
 
 
 @Composable
-fun SignCompleteContent (modifier : Modifier = Modifier ){
+fun SignCompleteContent(
+    modifier: Modifier = Modifier,
+    viewModel: SignCompleteViewModel
+) {
     Box(
         modifier = modifier
             .fillMaxSize()
@@ -72,13 +101,8 @@ fun SignCompleteContent (modifier : Modifier = Modifier ){
         SignCompleteButtonView(
             modifier = Modifier
                 .fillMaxWidth()
-                .align(Alignment.BottomCenter)
+                .align(Alignment.BottomCenter),
+            viewModel = viewModel
         )
     }
-}
-
-@Preview
-@Composable
-fun CompletePreview(){
-    SignCompleteScreen()
 }

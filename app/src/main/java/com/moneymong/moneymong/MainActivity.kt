@@ -19,8 +19,6 @@ class MainActivity : ComponentActivity() {
         setContent {
             MMTheme {
                 MoneyMongApp()
-                //SignUpScreen()
-                //LoginScreen()
             }
         }
     }

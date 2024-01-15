@@ -13,28 +13,24 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Alignment
 import com.moneymong.moneymong.design_system.R
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import androidx.navigation.compose.rememberNavController
 import com.moneymong.moneymong.design_system.theme.Blue04
 import com.moneymong.moneymong.design_system.theme.MMHorizontalSpacing
 import com.moneymong.moneymong.feature.sign.navigation.loginRoute
 import com.moneymong.moneymong.feature.sign.navigation.signUpRoute
-import com.moneymong.moneymong.feature.sign.sideeffect.LoginSideEffect
+import com.moneymong.moneymong.feature.sign.navigation.splashRoute
 import com.moneymong.moneymong.feature.sign.view.KakaoLoginView
 import com.moneymong.moneymong.feature.sign.view.TitleView
 import com.moneymong.moneymong.feature.sign.viewmodel.LoginViewModel
 import com.moneymong.moneymong.home.navigation.homeRoute
 import org.orbitmvi.orbit.compose.collectAsState
-import org.orbitmvi.orbit.compose.collectSideEffect
 
 @Composable
 fun LoginScreen(
@@ -45,6 +41,7 @@ fun LoginScreen(
     val state = viewModel.collectAsState().value
 
     LaunchedEffect(key1 = state.isSchoolInfoExist) {
+        Log.d("state3", state.isSchoolInfoExist.toString())
         if (state.isSchoolInfoExist == true) {
             navController.navigate(homeRoute) {
                 popUpTo(loginRoute) { inclusive = true }
@@ -53,6 +50,16 @@ fun LoginScreen(
             navController.navigate(signUpRoute) {
                 popUpTo(loginRoute) { inclusive = true }
             }
+        }
+    }
+
+    LaunchedEffect(key1 = state.isLoginRequired)
+    {
+        if (state.isLoginRequired == true) {
+            navController.navigate(loginRoute) {
+                popUpTo(splashRoute) { inclusive = true }
+            }
+            viewModel.isLoginRequiredChanged(false)
         }
     }
 
@@ -88,7 +95,6 @@ private fun LoginContent(
             )
             TitleView("교내 회계관리를 편리하게", "수기 기록은 이제 그만! 간단하게 기록해요.")
         }
-
         Box(
             modifier = Modifier
                 .fillMaxWidth()

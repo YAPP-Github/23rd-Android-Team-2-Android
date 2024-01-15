@@ -8,6 +8,7 @@ import com.moneymong.moneymong.domain.usecase.login.LoginUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import com.moneymong.moneymong.feature.sign.sideeffect.LoginSideEffect
 import com.moneymong.moneymong.feature.sign.state.LoginState
+import com.moneymong.moneymong.network.util.TokenCallback
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.syntax.simple.intent
@@ -17,25 +18,27 @@ import javax.inject.Inject
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val loginUseCase: LoginUseCase,
-) : BaseViewModel<LoginState, LoginSideEffect>(LoginState()) {
-
+) : BaseViewModel<LoginState, LoginSideEffect>(LoginState()), TokenCallback {
 
     fun onLoginButtonClicked() = intent {
         viewModelScope.launch {
             loginUseCase.kakaoLogin(object : LoginCallback {
                 override suspend fun onLoginSuccess() {
-                    if(loginUseCase.getSchoolInfo()){
+                    if (loginUseCase.getSchoolInfo()) {
                         reduce {
                             state.copy(
                                 isSchoolInfoExist = true
                             )
                         }
+                        Log.d("state1", state.isSchoolInfoExist.toString())
                     } else {
                         reduce {
                             state.copy(
                                 isSchoolInfoExist = false
                             )
                         }
+                        Log.d("state2", state.isSchoolInfoExist.toString())
+
                     }
 
                 }
@@ -46,6 +49,24 @@ class LoginViewModel @Inject constructor(
                     // 예: 상태 업데이트, 오류 메시지 표시 등
                 }
             })
+        }
+    }
+
+    override suspend fun onTokenFailure() {
+        intent {
+            reduce {
+                state.copy(
+                    isLoginRequired = true
+                )
+            }
+        }
+    }
+
+    fun isLoginRequiredChanged(boolean: Boolean) = intent {
+        reduce {
+            state.copy(
+                isLoginRequired = boolean
+            )
         }
     }
 }
