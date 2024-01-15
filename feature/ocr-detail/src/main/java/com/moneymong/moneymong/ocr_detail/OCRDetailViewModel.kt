@@ -53,6 +53,8 @@ class OCRDetailViewModel @Inject constructor(
     fun postLedgerTransaction() = intent {
         if (!state.isLoading) {
             reduce { state.copy(isLoading = true) }
+            // empty string을 제거하고 요청을 보내기 위함
+            val documentImageUrls = state.documentImageUrls - ""
             val ledgerTransactionParam = LedgerTransactionParam(
                 id = 1,
                 storeInfo = state.storeNameValue.text,
@@ -61,7 +63,9 @@ class OCRDetailViewModel @Inject constructor(
                 description = state.memoValue.text,
                 paymentDate = state.postPaymentDate,
                 receiptImageUrls = state.receiptImageUrls,
-                documentImageUrls = state.documentImageUrls
+                documentImageUrls = documentImageUrls.ifEmpty {
+                    emptyList()
+                }
             )
             postLedgerTransactionUseCase(ledgerTransactionParam)
                 .onSuccess {
@@ -81,6 +85,7 @@ class OCRDetailViewModel @Inject constructor(
                     .onSuccess {
                         if (isReceipt) {
                             reduce { state.copy(receiptImageUrls = listOf(it.path)) }
+                            postLedgerTransaction()
                         } else {
                             reduce { state.copy(documentImageUrls = state.documentImageUrls + it.path) }
                         }
@@ -93,7 +98,6 @@ class OCRDetailViewModel @Inject constructor(
 
     fun onClickPostLedger() = intent {
         postDocumentImage(imageFile = state.receiptFile, isReceipt = true)
-        postLedgerTransaction()
     }
 
     fun addDocumentImage(file: File?) = intent {

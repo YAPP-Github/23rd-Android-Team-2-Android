@@ -31,6 +31,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavOptions
+import androidx.navigation.navOptions
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.google.gson.Gson
@@ -94,7 +95,7 @@ fun OCRResultScreen(
             }
             is OCRResultSideEffect.OCRResultNavigateToOCRDetail -> {
                 val documentString = it.document?.let { Gson().toJson(it) }.orEmpty()
-                navigateToOCRDetail(null, documentString)
+                navigateToOCRDetail(navOptions { launchSingleTop = true }, documentString)
             }
 
             else -> {}
