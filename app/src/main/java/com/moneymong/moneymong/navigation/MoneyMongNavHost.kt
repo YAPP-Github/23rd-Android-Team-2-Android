@@ -15,7 +15,8 @@ import com.moneymong.moneymong.home.navigation.homeScreen
 @Composable
 fun MoneyMongNavHost(
     modifier: Modifier = Modifier,
-    startDestination: String = loginRoute
+    startDestination: String = splashRoute
+
 ) {
     val navController = rememberNavController()
     NavHost(
