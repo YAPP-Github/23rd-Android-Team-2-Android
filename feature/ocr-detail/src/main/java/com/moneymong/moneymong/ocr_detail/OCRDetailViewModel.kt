@@ -3,17 +3,28 @@ package com.moneymong.moneymong.ocr_detail
 import android.content.SharedPreferences
 import android.net.Uri
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.core.net.toFile
 import com.moneymong.moneymong.common.base.BaseViewModel
+import com.moneymong.moneymong.common.ext.base64ToFile
 import com.moneymong.moneymong.domain.entity.ocr.DocumentEntity
+import com.moneymong.moneymong.domain.param.ledger.FundType
+import com.moneymong.moneymong.domain.param.ledger.LedgerTransactionParam
+import com.moneymong.moneymong.domain.param.ocr.FileUploadParam
+import com.moneymong.moneymong.domain.usecase.ledger.PostLedgerTransactionUseCase
+import com.moneymong.moneymong.domain.usecase.ocr.PostFileUploadUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import org.orbitmvi.orbit.syntax.simple.blockingIntent
 import org.orbitmvi.orbit.syntax.simple.intent
+import org.orbitmvi.orbit.syntax.simple.postSideEffect
 import org.orbitmvi.orbit.syntax.simple.reduce
+import java.io.File
 import javax.inject.Inject
 
 @HiltViewModel
 class OCRDetailViewModel @Inject constructor(
-    private val prefs: SharedPreferences
+    private val prefs: SharedPreferences,
+    private val postLedgerTransactionUseCase: PostLedgerTransactionUseCase,
+    private val postFileUploadUseCase: PostFileUploadUseCase
 ) : BaseViewModel<OCRDetailState, OCRDetailSideEffect>(OCRDetailState()) {
 
     init {
@@ -23,14 +34,10 @@ class OCRDetailViewModel @Inject constructor(
     fun init(document: DocumentEntity?) = intent {
         val receipt = document?.images?.first()?.receipt?.result
         val paymentDateString = receipt?.paymentInfo?.date?.formatted.run {
-            var str = ""
-            this?.year?.let { str += "${it}년 " }
-            this?.month?.let { str += "${it}월 " }
-            this?.day?.let { str += "${it}일" }
-            str
+            "${this?.year ?: ""}${this?.month ?: ""}${this?.day ?: ""}"
         }
         val paymentTimeString = receipt?.paymentInfo?.time?.formatted.run {
-            "${this?.hour ?: "00"}:${this?.minute ?: "00"}:${this?.second ?: "00"}"
+            "${this?.hour ?: ""}${this?.minute ?: ""}${this?.second ?: ""}"
         }
         reduce {
             state.copy(
@@ -43,20 +50,71 @@ class OCRDetailViewModel @Inject constructor(
         }
     }
 
-    fun addDocumentImage(uri: Uri) = intent {
-        val newDocumentUris = state.documentImageUris.toMutableList()
-        if (state.documentImageUris.size == 12) {
-            newDocumentUris.removeFirst()
+    fun postLedgerTransaction() = intent {
+        if (!state.isLoading) {
+            reduce { state.copy(isLoading = true) }
+            val ledgerTransactionParam = LedgerTransactionParam(
+                id = 1,
+                storeInfo = state.storeNameValue.text,
+                fundType = FundType.EXPENSE,
+                amount = state.totalPriceValue.text.toInt(),
+                description = state.memoValue.text,
+                paymentDate = state.postPaymentDate,
+                receiptImageUrls = state.receiptImageUrls,
+                documentImageUrls = state.documentImageUrls
+            )
+            postLedgerTransactionUseCase(ledgerTransactionParam)
+                .onSuccess {
+                    postSideEffect(OCRDetailSideEffect.OCRDetailNavigateToHome)
+                }.onFailure {
+                    // TODO
+                }.also { reduce { state.copy(isLoading = false) } }
         }
-        reduce { state.copy(documentImageUris = newDocumentUris + uri.toString()) }
+    }
+
+    fun postDocumentImage(imageFile: File?, isReceipt: Boolean = false) = intent {
+        imageFile?.let {
+            if (!state.isLoading) {
+                reduce { state.copy(isLoading = true) }
+                val file = FileUploadParam(it, "ocr")
+                postFileUploadUseCase(file)
+                    .onSuccess {
+                        if (isReceipt) {
+                            reduce { state.copy(receiptImageUrls = listOf(it.path)) }
+                        } else {
+                            reduce { state.copy(documentImageUrls = state.documentImageUrls + it.path) }
+                        }
+                    }.onFailure {
+                        // TODO
+                    }.also { reduce { state.copy(isLoading = false) } }
+            }
+        }
+    }
+
+    fun onClickPostLedger() = intent {
+        postDocumentImage(imageFile = state.receiptFile, isReceipt = true)
+        postLedgerTransaction()
+    }
+
+    fun addDocumentImage(file: File?) = intent {
+        val newDocumentUris = state.documentImageUrls.toMutableList()
+        if (newDocumentUris.size == 12) {
+            newDocumentUris.removeFirst()
+            reduce { state.copy(documentImageUrls = newDocumentUris) }
+        }
+        postDocumentImage(file)
     }
 
     fun removeDocumentImage(uriString: String) = intent {
-        val newDocumentUris = state.documentImageUris.toMutableList()
-        if (state.documentImageUris.size == 12 && state.documentImageUris.first().isNotEmpty()) {
+        val newDocumentUris = state.documentImageUrls.toMutableList()
+        if (state.documentImageUrls.size == 12 && state.documentImageUrls.first().isNotEmpty()) {
             newDocumentUris.add(0, "")
         }
-        reduce { state.copy(documentImageUris = newDocumentUris - uriString) }
+        reduce { state.copy(documentImageUrls = newDocumentUris - uriString) }
+    }
+
+    fun reduceReceiptFile(file: File?) = intent {
+        reduce { state.copy(receiptFile = file) }
     }
 
     private fun fetchReceiptImage() = blockingIntent {
@@ -73,20 +131,26 @@ class OCRDetailViewModel @Inject constructor(
     }
 
     fun onChangeTotalPriceValue(value: TextFieldValue) = blockingIntent {
-        reduce {
-            state.copy(totalPriceValue = value)
+        if (value.text.length <= 9) {
+            reduce {
+                state.copy(totalPriceValue = value)
+            }
         }
     }
 
     fun onChangePaymentDateValue(value: TextFieldValue) = blockingIntent {
-        reduce {
-            state.copy(paymentDateValue = value)
+        if (value.text.length <= 8) {
+            reduce {
+                state.copy(paymentDateValue = value)
+            }
         }
     }
 
     fun onChangePaymentTimeValue(value: TextFieldValue) = blockingIntent {
-        reduce {
-            state.copy(paymentTimeValue = value)
+        if (value.text.length <= 6) {
+            reduce {
+                state.copy(paymentTimeValue = value)
+            }
         }
     }
 

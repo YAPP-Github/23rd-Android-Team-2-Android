@@ -40,6 +40,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
+import com.moneymong.moneymong.common.ext.encodingBase64
 import com.moneymong.moneymong.design_system.R
 import com.moneymong.moneymong.design_system.theme.Black
 import com.moneymong.moneymong.design_system.theme.Gray02
@@ -47,7 +48,6 @@ import com.moneymong.moneymong.design_system.theme.Gray05
 import com.moneymong.moneymong.design_system.theme.Gray10
 import com.moneymong.moneymong.design_system.theme.Mint03
 import com.moneymong.moneymong.ocr.util.bounceClick
-import com.moneymong.moneymong.ocr.util.encodingBase64
 import java.io.File
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
