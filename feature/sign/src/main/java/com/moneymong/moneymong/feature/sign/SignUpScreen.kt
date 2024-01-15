@@ -1,5 +1,7 @@
 package com.moneymong.moneymong.feature.sign
 
+import android.util.Log
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -22,11 +24,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.moneymong.moneymong.design_system.R
 import com.moneymong.moneymong.design_system.theme.Gray07
 import com.moneymong.moneymong.design_system.theme.MMHorizontalSpacing
 import com.moneymong.moneymong.design_system.theme.White
 import com.moneymong.moneymong.feature.sign.navigation.loginRoute
+import com.moneymong.moneymong.feature.sign.navigation.signCompleteRoute
 import com.moneymong.moneymong.feature.sign.navigation.signUpRoute
 import com.moneymong.moneymong.feature.sign.sideeffect.SignUpSideEffect
 import com.moneymong.moneymong.feature.sign.view.SearchUnivView
@@ -35,16 +39,19 @@ import com.moneymong.moneymong.feature.sign.view.SignUpButtonView
 import com.moneymong.moneymong.feature.sign.view.SignUpGradeView
 import com.moneymong.moneymong.feature.sign.view.SignUpTitleView
 import com.moneymong.moneymong.feature.sign.viewmodel.SignUpViewModel
-import com.moneymong.moneymong.home.navigation.homeRoute
 import org.orbitmvi.orbit.compose.collectAsState
 import org.orbitmvi.orbit.compose.collectSideEffect
 
 @Composable
 fun SignUpScreen(
     modifier: Modifier = Modifier,
-    navController: NavHostController,
+    navController: NavHostController
+) {
 
-    ) {
+    BackHandler {
+        navController.navigateUp()
+    }
+
     Scaffold(
         modifier = Modifier
             .fillMaxSize()
@@ -65,7 +72,9 @@ fun SignUpScreen(
                     modifier = Modifier
                         .size(24.dp)
                         .background(White)
-                        .clickable { },
+                        .clickable {
+                            navController.navigateUp()
+                        },
                     tint = Gray07
                 )
             }
@@ -85,12 +94,14 @@ fun SignUpContent(
     modifier: Modifier = Modifier,
     viewModel: SignUpViewModel = hiltViewModel(),
     navController: NavHostController
-    ) {
+) {
+
     val state = viewModel.collectAsState().value
 
     LaunchedEffect(key1 = state.isUnivCreated) {
+        Log.d("isUnivCreated", state.isUnivCreated.toString())
         if (state.isUnivCreated) {
-            navController.navigate(homeRoute) {
+            navController.navigate(signCompleteRoute) {
                 popUpTo(signUpRoute) { inclusive = true }
             }
         }
@@ -148,8 +159,8 @@ fun SignUpContent(
                             text = state.selectedUniv,
                             onChanged = {
                                 viewModel.isSelectedChanged(false)
-                                viewModel.isEnabledChanged(false)
                             },
+                            onSelectedGrade = { viewModel.selectedGradeChange(null) },
                             onItemSelectedChange = { viewModel.isItemSelectedChanged(it) },
                         )
                         SignUpGradeView(
@@ -183,8 +194,3 @@ fun SignUpContent(
     }
 }
 
-@Preview
-@Composable
-fun Preview() {
-    //SignUpScreen()
-}

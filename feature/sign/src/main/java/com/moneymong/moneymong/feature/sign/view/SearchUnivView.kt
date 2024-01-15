@@ -62,7 +62,7 @@ fun SearchUnivView(
                 onChange(it)
                 job?.cancel() // 이전에 실행된 Job 취소
                 job = scope.launch {
-                    delay(500) // 0.5초 대기
+                    delay(300)
                     onSearchIconClicked(it.text)
                 }
                 viewModel.isListVisibleChanged(it.text.isNotEmpty())

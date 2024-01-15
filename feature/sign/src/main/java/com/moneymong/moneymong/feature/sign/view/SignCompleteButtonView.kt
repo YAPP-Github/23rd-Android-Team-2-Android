@@ -15,9 +15,13 @@ import androidx.compose.ui.unit.dp
 import com.moneymong.moneymong.design_system.component.button.MDSButton
 import com.moneymong.moneymong.design_system.component.button.MDSButtonSize
 import com.moneymong.moneymong.design_system.component.button.MDSButtonType
+import com.moneymong.moneymong.feature.sign.viewmodel.SignCompleteViewModel
 
 @Composable
-fun SignCompleteButtonView (modifier: Modifier = Modifier){
+fun SignCompleteButtonView (
+    modifier: Modifier = Modifier,
+    viewModel : SignCompleteViewModel
+){
 
     Column(
         modifier = modifier
@@ -25,6 +29,7 @@ fun SignCompleteButtonView (modifier: Modifier = Modifier){
         MDSButton(
             modifier = Modifier.fillMaxWidth(),
             onClick = {
+                viewModel.isCompleteBtnClicked()
             },
             text = "홈으로 이동하기",
             type = MDSButtonType.PRIMARY,
@@ -36,8 +41,3 @@ fun SignCompleteButtonView (modifier: Modifier = Modifier){
     }
 }
 
-@Preview
-@Composable
-fun CompleteButtonPreview(){
-    SignCompleteButtonView(modifier = Modifier.fillMaxWidth())
-}

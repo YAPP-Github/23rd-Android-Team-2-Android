@@ -1,15 +1,10 @@
 package com.moneymong.moneymong.feature.sign.navigation
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
-import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navOptions
 import com.moneymong.moneymong.feature.sign.LoginScreen
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 
 const val loginRoute = "login_route"
 

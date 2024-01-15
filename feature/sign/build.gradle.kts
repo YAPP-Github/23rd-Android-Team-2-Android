@@ -41,6 +41,7 @@ dependencies {
     implementation(libs.kakao.v2.user)
 
     implementation(projects.core.common)
+    implementation(projects.core.network)
     implementation(projects.domain)
     implementation(projects.feature.home)
 

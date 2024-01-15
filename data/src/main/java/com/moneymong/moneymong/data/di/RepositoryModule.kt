@@ -1,9 +1,11 @@
 package com.moneymong.moneymong.data.di
 
 import com.moneymong.moneymong.data.datasource.login.LoginRemoteDataSource
+import com.moneymong.moneymong.data.repository.AgencyRepositoryImpl
 import com.moneymong.moneymong.data.repository.login.LoginRepositoryImpl
 import com.moneymong.moneymong.data.repository.login.TokenRepositoryImpl
 import com.moneymong.moneymong.data.repository.signup.UnivRepositoryImpl
+import com.moneymong.moneymong.domain.AgencyRepository
 import com.moneymong.moneymong.domain.repository.LoginRepository
 import com.moneymong.moneymong.domain.repository.TokenRepository
 import com.moneymong.moneymong.domain.repository.UnivRepository
@@ -30,4 +32,8 @@ interface RepositoryModule {
     fun bindTokenRepository(
         tokenRepositoryImpl: TokenRepositoryImpl
     ): TokenRepository
+    @Binds
+    fun bindAgencyRepository(
+        agencyRepositoryImpl: AgencyRepositoryImpl
+    ): AgencyRepository
 }

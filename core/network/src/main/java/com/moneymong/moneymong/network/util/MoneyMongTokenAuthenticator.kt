@@ -1,7 +1,5 @@
 package com.moneymong.moneymong.network.util
 
-import com.moneymong.moneymong.domain.param.login.RefreshTokenParam
-import com.moneymong.moneymong.domain.repository.LoginRepository
 import com.moneymong.moneymong.domain.repository.TokenRepository
 import com.moneymong.moneymong.network.BuildConfig
 import kotlinx.coroutines.runBlocking
@@ -13,6 +11,7 @@ import javax.inject.Inject
 
 class MoneyMongTokenAuthenticator @Inject constructor(
     private val tokenRepository: TokenRepository,
+    private val tokenCallback: TokenCallback
 ) : Authenticator {
     override fun authenticate(route: Route?, response: Response): Request? {
 
@@ -29,12 +28,12 @@ class MoneyMongTokenAuthenticator @Inject constructor(
                             addHeader("Authorization", "Bearer ${it.accessToken}")
                         }.build()
                         //refreshToken이 만료되지 않은 경우
-                        if (it.refreshToken == "") {
+                        if (it.refreshToken == null) {
                             tokenRepository.updateAccessToken(it.accessToken)
                         }
                         //refreshToken의 만료일이 1주일 이내인 경우
                         else {
-                            tokenRepository.updateTokens(it.accessToken, it.refreshToken)
+                            tokenRepository.updateTokens(it.accessToken, it.refreshToken!!)
                         }
                     }
                     .onFailure {
@@ -43,11 +42,11 @@ class MoneyMongTokenAuthenticator @Inject constructor(
                     }
             }
         } else {
-            // TODO Move To Login Screen Logic
-            // RefreshToken도 만료되어 로그인이 다시 필요한 상황입니다.
             //로컬에 저장된 데이터 제거
+            // RefreshToken도 만료되어 로그인화면으로 이동 .
             runBlocking {
                 tokenRepository.deleteToken()
+                tokenCallback.onTokenFailure()
             }
             null
         }

@@ -5,5 +5,5 @@ import com.moneymong.moneymong.common.base.State
 data class LoginState(
     val isClickable: Boolean = false,
     val isSchoolInfoExist: Boolean? = null,
-    val isLoginRequired: Boolean = true
+    val isLoginRequired: Boolean? = null,
 ) : State
