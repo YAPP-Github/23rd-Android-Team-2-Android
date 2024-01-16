@@ -18,7 +18,7 @@ import com.moneymong.moneymong.ocr_result.navigation.ocrResultScreen
 @Composable
 fun MoneyMongNavHost(
     modifier: Modifier = Modifier,
-    startDestination: String = ocrRoute // TODO
+    startDestination: String = homeRoute // TODO
 ) {
     val navController = rememberNavController()
     NavHost(

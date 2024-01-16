@@ -119,8 +119,8 @@ fun LedgerScreen(
                     HorizontalPager(state = pagerState) { index ->
                         if (tabs[index] == LedgerTab.Ledger) {
                             Box(modifier = modifier.fillMaxSize()) {
-                                if (false) { // TODO 장부가 없을 경우
-                                    if (true) { // TODO 멤버일 경우
+                                if (true) { // TODO 장부가 없을 경우
+                                    if (false) { // TODO 멤버일 경우
                                         LedgerMemberEmptyView()
                                     } else {
                                         LedgerStaffEmptyView()
