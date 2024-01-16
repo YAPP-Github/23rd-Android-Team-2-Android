@@ -1,4 +1,4 @@
-package com.moneymong.moneymong.feature.mymong.view
+package com.moneymong.moneymong.feature.mymong.main.view
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
@@ -28,11 +28,13 @@ import com.moneymong.moneymong.design_system.theme.Gray06
 import com.moneymong.moneymong.design_system.theme.Gray07
 import com.moneymong.moneymong.design_system.theme.Gray10
 import com.moneymong.moneymong.design_system.theme.White
-import com.moneymong.moneymong.feature.mymong.util.myMongRoundRectShadow
+import com.moneymong.moneymong.feature.mymong.main.util.myMongRoundRectShadow
 
 @Composable
 internal fun MyMongSettingView(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    navigateToTermsOfUse: () -> Unit,
+    navigateToPrivacyPolicy: () -> Unit
 ) {
     Column(modifier = modifier.fillMaxWidth()) {
         Text(
@@ -51,13 +53,13 @@ internal fun MyMongSettingView(
             SettingItem(
                 iconRes = R.drawable.ic_paper,
                 title = "서비스 이용약관",
-                onNavigateClick = { /* todo */ }
+                onNavigateClick = navigateToTermsOfUse
             )
             SettingDivider()
             SettingItem(
                 iconRes = R.drawable.ic_paper,
                 title = "개인정보 처리 방침",
-                onNavigateClick = { /* todo */ }
+                onNavigateClick = navigateToPrivacyPolicy
             )
             SettingDivider()
             SettingItem(

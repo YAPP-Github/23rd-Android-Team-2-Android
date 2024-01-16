@@ -2,17 +2,19 @@ package com.moneymong.moneymong.home
 
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
-import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.rememberNavController
 import com.moneymong.moneymong.feature.agency.navigation.agencyRoute
 import com.moneymong.moneymong.feature.agency.navigation.agencyScreen
 import com.moneymong.moneymong.feature.mymong.navigation.mymongScreen
+import com.moneymong.moneymong.feature.mymong.navigation.navigatePrivacyPolicy
+import com.moneymong.moneymong.feature.mymong.navigation.navigateTermsOfUse
+import com.moneymong.moneymong.feature.mymong.navigation.privacyPolicyScreen
+import com.moneymong.moneymong.feature.mymong.navigation.termsOfUseScreen
 import com.moneymong.moneymong.home.navigation.rememberHomeNavController
 import com.moneymong.moneymong.home.view.HomeBottomBarView
 import com.moneymong.moneymong.ledger.navigation.ledgerScreen
@@ -32,16 +34,22 @@ fun HomeScreen(
         }
     ) {
         NavHost(
+            modifier = Modifier.padding(it),
             navController = homeNavController.navHostController,
             startDestination = agencyRoute,
             enterTransition = { EnterTransition.None },
             exitTransition = { ExitTransition.None }
         ) {
-            agencyScreen(padding = it)
+            agencyScreen()
 
-            ledgerScreen(padding = it)
+            ledgerScreen()
 
-            mymongScreen(padding = it)
+            mymongScreen(
+                navigateToTermsOfUse = homeNavController.navHostController::navigateTermsOfUse,
+                navigateToPrivacyPolicy = homeNavController.navHostController::navigatePrivacyPolicy
+            )
+            termsOfUseScreen(navigateUp = homeNavController.navHostController::navigateUp)
+            privacyPolicyScreen(navigateUp = homeNavController.navHostController::navigateUp)
         }
     }
 }

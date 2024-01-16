@@ -1,4 +1,4 @@
-package com.moneymong.moneymong.feature.mymong.component
+package com.moneymong.moneymong.feature.mymong.withdrawal.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -20,7 +20,7 @@ import com.moneymong.moneymong.design_system.theme.Gray03
 import com.moneymong.moneymong.design_system.theme.White
 
 @Composable
-fun MyMongCheckBox(
+fun WithdrawalCheckBox(
     modifier: Modifier = Modifier,
     checked: Boolean,
     onCheckedChange: (Boolean) -> Unit,

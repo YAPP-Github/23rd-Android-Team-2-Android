@@ -1,4 +1,4 @@
-package com.moneymong.moneymong.feature.mymong
+package com.moneymong.moneymong.feature.mymong.withdrawal
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -31,11 +31,11 @@ import com.moneymong.moneymong.design_system.theme.Heading1
 import com.moneymong.moneymong.design_system.theme.MMHorizontalSpacing
 import com.moneymong.moneymong.design_system.theme.Red03
 import com.moneymong.moneymong.design_system.theme.White
-import com.moneymong.moneymong.feature.mymong.component.MyMongCheckBox
-import com.moneymong.moneymong.feature.mymong.component.MyMongWithdrawalTopBar
+import com.moneymong.moneymong.feature.mymong.component.MyMongInnerTopBar
+import com.moneymong.moneymong.feature.mymong.withdrawal.component.WithdrawalCheckBox
 
 @Composable
-fun MyMongWithdrawalScreen(
+fun WithdrawalScreen(
     modifier: Modifier = Modifier
 ) {
     var isAgreed by remember { mutableStateOf(false) }
@@ -46,7 +46,7 @@ fun MyMongWithdrawalScreen(
             .background(color = White)
             .padding(horizontal = MMHorizontalSpacing),
     ) {
-        MyMongWithdrawalTopBar()
+        MyMongInnerTopBar(title = "회원탈퇴")
         Spacer(modifier = Modifier.height(20.dp))
         ContentView(
             isChecked = isAgreed,
@@ -94,7 +94,7 @@ private fun ContentView(
             color = Gray02
         )
         Row(verticalAlignment = Alignment.CenterVertically) {
-            MyMongCheckBox(
+            WithdrawalCheckBox(
                 checked = isChecked,
                 onCheckedChange = onCheckedChange
             )
