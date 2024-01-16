@@ -1,0 +1,38 @@
+package com.moneymong.moneymong.ledger
+
+import com.moneymong.moneymong.common.base.BaseViewModel
+import com.moneymong.moneymong.domain.param.ledger.LedgerTransactionListParam
+import com.moneymong.moneymong.domain.usecase.ledger.FetchLedgerTransactionListUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
+import org.orbitmvi.orbit.syntax.simple.intent
+import org.orbitmvi.orbit.syntax.simple.reduce
+import javax.inject.Inject
+
+@HiltViewModel
+class LedgerViewModel @Inject constructor(
+    private val fetchLedgerTransactionListUseCase: FetchLedgerTransactionListUseCase
+): BaseViewModel<LedgerState, LedgerSideEffect>(LedgerState()) {
+
+    init {
+        fetchLedgerTransactionList()
+    }
+
+    fun fetchLedgerTransactionList() = intent {
+        if (!state.isLoading) {
+            reduce { state.copy(isLoading = true) }
+            val param = LedgerTransactionListParam(
+                id = 1,
+                year = 2024,
+                month = 1,
+                page = 0,
+                limit = 10
+            )
+            fetchLedgerTransactionListUseCase(param)
+                .onSuccess {
+                    reduce { state.copy(ledgerTransaction = it) }
+                }.onFailure {
+                    // TODO
+                }.also { reduce { state.copy(isLoading = false) } }
+        }
+    }
+}
