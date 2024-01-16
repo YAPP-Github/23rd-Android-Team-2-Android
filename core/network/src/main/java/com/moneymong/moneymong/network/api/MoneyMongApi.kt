@@ -1,17 +1,30 @@
 package com.moneymong.moneymong.network.api
 
 import com.moneymong.moneymong.network.request.ledger.LedgerTransactionRequest
+import com.moneymong.moneymong.network.response.ledger.LedgerTransactionListResponse
 import com.moneymong.moneymong.network.response.ledger.LedgerTransactionResponse
 import com.moneymong.moneymong.network.response.ocr.FileUploadResponse
 import okhttp3.MultipartBody
 import retrofit2.http.Body
+import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.Part
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface MoneyMongApi {
+
+    // GET
+    @GET("api/v1/ledger/{id}")
+    suspend fun fetchLedgerTransactionList(
+        @Path("id") id: Int,
+        @Query("year") year: Int,
+        @Query("month") month: Int,
+        @Query("page") page: Int,
+        @Query("limit") limit: Int
+    ): Result<LedgerTransactionListResponse>
 
     // POST
     @POST("api/v1/ledger/{id}")
