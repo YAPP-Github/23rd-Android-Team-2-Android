@@ -15,6 +15,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.moneymong.moneymong.common.ext.toDateFormat
+import com.moneymong.moneymong.common.ui.toWonFormat
 import com.moneymong.moneymong.design_system.R.*
 import com.moneymong.moneymong.design_system.theme.Blue01
 import com.moneymong.moneymong.design_system.theme.Blue04
@@ -26,10 +28,13 @@ import com.moneymong.moneymong.design_system.theme.Gray04
 import com.moneymong.moneymong.design_system.theme.Gray06
 import com.moneymong.moneymong.design_system.theme.Gray10
 import com.moneymong.moneymong.design_system.theme.Red03
+import com.moneymong.moneymong.domain.entity.ledger.LedgerDetailEntity
+import com.moneymong.moneymong.domain.param.ledger.FundType
 
 @Composable
 fun LedgerTransactionItem(
     modifier: Modifier = Modifier,
+    ledgerDetail: LedgerDetailEntity
 ) {
     Row(
         modifier = modifier.fillMaxWidth(),
@@ -43,7 +48,7 @@ fun LedgerTransactionItem(
                 tint = Blue01
             )
             Text(
-                text = "23", // TODO
+                text = ledgerDetail.id.toString(),
                 style = Body3,
                 color = Blue04
             )
@@ -51,27 +56,28 @@ fun LedgerTransactionItem(
         Spacer(modifier = Modifier.width(10.dp))
         Column(modifier = Modifier.weight(1f)) {
             Text(
-                text = "퍼스트유통", // TODO
+                text = ledgerDetail.storeInfo,
                 style = Body4,
                 color = Gray10
             )
             Spacer(modifier = Modifier.height(2.dp))
             Text(
-                text = "2023.11.16 15:36", // TODO
+                text = ledgerDetail.paymentDate.toDateFormat("yyyy.MM.dd HH.mm.ss"),
                 style = Body1,
                 color = Gray04
             )
         }
         Column(horizontalAlignment = Alignment.End) {
-            val amountColor = if (true) Gray10 else Red03 // TODO 지출 수입 체크
+            val amountColor = if (ledgerDetail.fundType == FundType.INCOME.name) Gray10 else Red03
+            val sign = if (ledgerDetail.fundType == FundType.INCOME.name) FundType.INCOME.sign else FundType.EXPENSE.sign
             Text(
-                text = "+1,600원", // TODO
+                text = "${sign}${ledgerDetail.amount.toString().toWonFormat()}원",
                 style = Body4,
                 color = amountColor
             )
             Spacer(modifier = Modifier.height(2.dp))
             Text(
-                text = "잔액 512,000원", // TODO
+                text = "잔액 ${ledgerDetail.balance.toString().toWonFormat()}원",
                 style = Body2,
                 color = Gray06
             )
