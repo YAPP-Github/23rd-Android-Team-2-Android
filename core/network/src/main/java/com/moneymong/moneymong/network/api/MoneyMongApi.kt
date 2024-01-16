@@ -19,6 +19,7 @@ interface MoneyMongApi {
     // GET
     @GET("api/v1/ledger/{id}")
     suspend fun fetchLedgerTransactionList(
+        @Header("Authorization") header: String = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiUk9MRV9VU0VSIiwidXNlcklkIjozLCJpYXQiOjE3MDQ3MTU0NTEsImV4cCI6MTczNjI3MzA1MX0.2yYEy71Gz4YIz0DYzlx0glYMgZA0JAZs05jsVRvvQx4",
         @Path("id") id: Int,
         @Query("year") year: Int,
         @Query("month") month: Int,

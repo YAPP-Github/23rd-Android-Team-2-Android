@@ -3,6 +3,7 @@ package com.moneymong.moneymong.ledger
 import com.moneymong.moneymong.common.base.BaseViewModel
 import com.moneymong.moneymong.domain.param.ledger.LedgerTransactionListParam
 import com.moneymong.moneymong.domain.usecase.ledger.FetchLedgerTransactionListUseCase
+import com.moneymong.moneymong.ledger.view.LedgerTransactionType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.reduce
@@ -34,5 +35,9 @@ class LedgerViewModel @Inject constructor(
                     // TODO
                 }.also { reduce { state.copy(isLoading = false) } }
         }
+    }
+
+    fun onChangeTransactionType(transactionType: LedgerTransactionType) = intent {
+        reduce { state.copy(transactionType = transactionType) }
     }
 }

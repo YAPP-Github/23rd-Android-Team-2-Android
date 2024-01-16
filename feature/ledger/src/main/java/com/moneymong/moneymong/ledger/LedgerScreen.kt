@@ -34,6 +34,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.member.MemberScreen
 import com.moneymong.moneymong.design_system.R
 import com.moneymong.moneymong.design_system.component.button.MDSFloatingActionButton
@@ -51,12 +52,15 @@ import com.moneymong.moneymong.ledger.view.LedgerTab
 import com.moneymong.moneymong.ledger.view.LedgerTabRowView
 import com.moneymong.moneymong.ledger.view.LedgerTopbarView
 import kotlinx.coroutines.launch
+import org.orbitmvi.orbit.compose.collectAsState
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
 @Composable
 fun LedgerScreen(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    viewModel: LedgerViewModel = hiltViewModel()
 ) {
+    val state = viewModel.collectAsState().value
     var expandableFab by remember { mutableStateOf(false) }
     val rotationAngle by animateFloatAsState(if (expandableFab) 45f else 0f, label = "")
     val tabs = listOf(LedgerTab.Ledger, LedgerTab.Member)
@@ -119,14 +123,20 @@ fun LedgerScreen(
                     HorizontalPager(state = pagerState) { index ->
                         if (tabs[index] == LedgerTab.Ledger) {
                             Box(modifier = modifier.fillMaxSize()) {
-                                if (true) { // TODO 장부가 없을 경우
+                                if (state.isLedgerEmpty) {
                                     if (false) { // TODO 멤버일 경우
                                         LedgerMemberEmptyView()
                                     } else {
                                         LedgerStaffEmptyView()
                                     }
                                 } else {
-                                    LedgerDefaultView()
+                                    LedgerDefaultView(
+                                        totalBalance = state.ledgerTransaction?.totalBalance ?: 0,
+                                        ledgerDetails = state.filterTransactionList,
+                                        transactionType = state.transactionType,
+                                        currentDate = state.currentDate,
+                                        onChangeTransactionType = viewModel::onChangeTransactionType
+                                    )
                                 }
                                 if (true) { // TODO 어드민일 경우
                                     Column(
