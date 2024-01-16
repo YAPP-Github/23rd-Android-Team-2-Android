@@ -5,6 +5,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
+import com.moneymong.moneymong.home.navigation.homeRoute
 import com.moneymong.moneymong.home.navigation.homeScreen
 import com.moneymong.moneymong.home.navigation.navigateToHome
 import com.moneymong.moneymong.ocr.navigation.ocrRoute
@@ -28,23 +29,23 @@ fun MoneyMongNavHost(
         homeScreen(navController = navController)
         ocrScreen(navigateToOCRResult = navController::navigateToOCRResult)
         ocrResultScreen(
-            navigateToHome = {
+            navigateToHome = { _, b ->
                 navController.navigateToHome(navOptions {
-                    popUpTo(navController.graph.id) {
-                        inclusive = true
-                    }
-                })
+                    popUpTo(
+                        navController.graph.id
+                    ) { inclusive = true }
+                }, b)
             },
             navigateToOCRDetail = navController::navigateToOCRDetail,
             popBackStack = navController::popBackStack
         )
         ocrDetailScreen(
-            navigateToHome = {
+            navigateToHome = { _, b ->
                 navController.navigateToHome(navOptions {
-                    popUpTo(navController.graph.id) {
-                        inclusive = true
-                    }
-                })
+                    popUpTo(
+                        navController.graph.id
+                    ) { inclusive = true }
+                }, b)
             },
             popBackStack = navController::popBackStack
         )

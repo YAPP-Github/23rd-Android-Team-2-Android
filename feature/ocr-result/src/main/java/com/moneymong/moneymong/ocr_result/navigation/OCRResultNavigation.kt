@@ -7,7 +7,6 @@ import androidx.navigation.compose.composable
 import com.google.gson.Gson
 import com.moneymong.moneymong.domain.entity.ocr.DocumentEntity
 import com.moneymong.moneymong.ocr_result.OCRResultScreen
-import java.net.URLEncoder
 
 const val ocrResultRoute = "ocrresult_route?document={document}"
 
@@ -19,7 +18,7 @@ fun NavController.navigateToOCRResult(
 }
 
 fun NavGraphBuilder.ocrResultScreen(
-    navigateToHome: () -> Unit,
+    navigateToHome: (NavOptions?, Boolean) -> Unit,
     popBackStack: () -> Unit,
     navigateToOCRDetail: (NavOptions?, String) -> Unit
 ) {

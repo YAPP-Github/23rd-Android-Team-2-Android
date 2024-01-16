@@ -8,26 +8,39 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.NavOptions
+import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import androidx.navigation.navOptions
 import com.moneymong.moneymong.home.HomeBottomTabs
 import com.moneymong.moneymong.home.HomeScreen
 
-const val homeRoute = "home_route"
+const val HOME_LEDGER_POST_SUCCESS = "homeLedgerPostSuccess"
+const val homeRoute = "home_route/{${HOME_LEDGER_POST_SUCCESS}}"
 
 fun NavController.navigateToHome(
-    navOptions: NavOptions? = null
+    navOptions: NavOptions? = null,
+    homeLedgerPostSuccess: Boolean = false
 ) {
-    this.navigate(homeRoute, navOptions)
+    this.navigate("home_route/${homeLedgerPostSuccess}", navOptions)
 }
 
 fun NavGraphBuilder.homeScreen(
     navController: NavController
 ) {
-    composable(route = homeRoute) {
-        HomeScreen(navController = navController)
+    composable(
+        route = homeRoute,
+        arguments = listOf(
+            navArgument(HOME_LEDGER_POST_SUCCESS) { type = NavType.BoolType },
+        )
+    ) { backStackEntry ->
+        val homeLedgerPostSuccess = backStackEntry.arguments?.getBoolean(HOME_LEDGER_POST_SUCCESS) ?: false
+        HomeScreen(
+            navController = navController,
+            homeLedgerPostSuccess = homeLedgerPostSuccess
+        )
     }
 }
 
