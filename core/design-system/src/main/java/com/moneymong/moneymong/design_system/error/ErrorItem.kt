@@ -25,7 +25,7 @@ fun ErrorItem(
     onRetry: () -> Unit
 ) {
     Column(
-        modifier = modifier.padding(vertical = 22.dp),
+        modifier = modifier.padding(vertical = 14.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
