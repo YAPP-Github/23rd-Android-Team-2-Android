@@ -31,7 +31,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavOptions
-import androidx.navigation.navOptions
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.google.gson.Gson
@@ -54,7 +53,7 @@ fun OCRResultScreen(
     modifier: Modifier = Modifier,
     viewModel: OCRResultViewModel = hiltViewModel(),
     document: DocumentEntity?,
-    navigateToHome: () -> Unit,
+    navigateToHome: (NavOptions?, Boolean) -> Unit,
     navigateToOCRDetail: (NavOptions?, String) -> Unit,
     popBackStack: () -> Unit,
 ) {
@@ -90,12 +89,14 @@ fun OCRResultScreen(
                     )
                 }
             }
+
             is OCRResultSideEffect.OCRResultNavigateToHome -> {
-                navigateToHome()
+                navigateToHome(null, true)
             }
+
             is OCRResultSideEffect.OCRResultNavigateToOCRDetail -> {
                 val documentString = it.document?.let { Gson().toJson(it) }.orEmpty()
-                navigateToOCRDetail(navOptions { launchSingleTop = true }, documentString)
+                navigateToOCRDetail(null, documentString)
             }
 
             else -> {}
@@ -179,5 +180,9 @@ fun OCRResultScreen(
 @Preview(showBackground = true)
 @Composable
 fun OCRResultScreenPreview() {
-    OCRResultScreen(document = null, navigateToHome = {}, popBackStack = {}, navigateToOCRDetail = { navOptions, s ->  })
+    OCRResultScreen(
+        document = null,
+        navigateToHome = { navOptions, b -> },
+        popBackStack = {},
+        navigateToOCRDetail = { navOptions, s -> })
 }
