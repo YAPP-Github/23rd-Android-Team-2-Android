@@ -1,7 +1,8 @@
-package com.moneymong.moneymong.feature.mymong.view
+package com.moneymong.moneymong.feature.mymong.main.view
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -28,7 +29,7 @@ import com.moneymong.moneymong.design_system.theme.Gray08
 import com.moneymong.moneymong.design_system.theme.Gray10
 import com.moneymong.moneymong.design_system.theme.Heading1
 import com.moneymong.moneymong.design_system.theme.White
-import com.moneymong.moneymong.feature.mymong.util.myMongRoundRectShadow
+import com.moneymong.moneymong.feature.mymong.main.util.myMongRoundRectShadow
 
 @Composable
 internal fun MyMongInfoView(
@@ -78,7 +79,7 @@ private fun Profile(
 
 @Composable
 fun InfoWithSchoolAndBirth() {
-    Column(
+    Box(
         modifier = Modifier
             .fillMaxWidth()
             .myMongRoundRectShadow()
@@ -86,8 +87,6 @@ fun InfoWithSchoolAndBirth() {
             .padding(vertical = 20.dp, horizontal = 16.dp)
     ) {
         InfoWithSchool()
-        Spacer(modifier = Modifier.height(16.dp))
-        InfoWithBirth()
     }
 }
 
@@ -109,31 +108,6 @@ fun InfoWithSchool() {
             Spacer(modifier = Modifier.width(8.dp))
             Text(
                 text = "머니몽학교 1학년",
-                color = Gray08,
-                style = Body4
-            )
-        }
-    }
-}
-
-@Composable
-fun InfoWithBirth() {
-    Column {
-        Text(
-            text = "생년월일",
-            color = Gray07,
-            style = Body3
-        )
-        Spacer(modifier = Modifier.height(6.dp))
-        Row {
-            Image(
-                modifier = Modifier.size(24.dp),
-                painter = painterResource(id = R.drawable.img_congrats),
-                contentDescription = "school icon"
-            )
-            Spacer(modifier = Modifier.width(8.dp))
-            Text(
-                text = "2023년 11월 18일",
                 color = Gray08,
                 style = Body4
             )
