@@ -28,7 +28,8 @@ import kotlinx.coroutines.launch
 fun HomeScreen(
     modifier: Modifier = Modifier,
     homeLedgerPostSuccess: Boolean,
-    navigateToOCR: (NavOptions?) -> Unit
+    navigateToOCR: (NavOptions?) -> Unit,
+    navigateToLedgerDetail: (NavOptions?, Int) -> Unit
 ) {
     val homeNavController = rememberHomeNavController()
     val coroutineScope = rememberCoroutineScope()
@@ -72,7 +73,8 @@ fun HomeScreen(
             ledgerScreen(
                 padding = it,
                 navigateToAgency = { homeNavController.navigate(agencyRoute) },
-                navigateToOCR = navigateToOCR
+                navigateToOCR = navigateToOCR,
+                navigateToLedgerDetail = navigateToLedgerDetail
             )
 
             mymongScreen(padding = it)
@@ -85,6 +87,7 @@ fun HomeScreen(
 fun HomeScreenPreview() {
     HomeScreen(
         homeLedgerPostSuccess = false,
-        navigateToOCR = {}
+        navigateToOCR = {},
+        navigateToLedgerDetail = { navOptions, i ->  }
     )
 }

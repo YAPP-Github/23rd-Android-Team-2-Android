@@ -8,6 +8,8 @@ import androidx.navigation.navOptions
 import com.moneymong.moneymong.home.navigation.homeRoute
 import com.moneymong.moneymong.home.navigation.homeScreen
 import com.moneymong.moneymong.home.navigation.navigateToHome
+import com.moneymong.moneymong.ledgerdetail.navigation.ledgerDetailScreen
+import com.moneymong.moneymong.ledgerdetail.navigation.navigateToLedgerDetail
 import com.moneymong.moneymong.ocr.navigation.navigateToOCR
 import com.moneymong.moneymong.ocr.navigation.ocrScreen
 import com.moneymong.moneymong.ocr_detail.navigation.navigateToOCRDetail
@@ -26,7 +28,10 @@ fun MoneyMongNavHost(
         navController = navController,
         startDestination = startDestination
     ) {
-        homeScreen(navigateToOCR = navController::navigateToOCR)
+        homeScreen(
+            navigateToOCR = navController::navigateToOCR,
+            navigateToLedgerDetail = navController::navigateToLedgerDetail
+        )
         ocrScreen(
             navigateToOCRResult = navController::navigateToOCRResult,
             popBackStack = navController::popBackStack
@@ -50,6 +55,9 @@ fun MoneyMongNavHost(
                     ) { inclusive = true }
                 }, b)
             },
+            popBackStack = navController::popBackStack
+        )
+        ledgerDetailScreen(
             popBackStack = navController::popBackStack
         )
     }

@@ -27,7 +27,8 @@ fun NavController.navigateToHome(
 }
 
 fun NavGraphBuilder.homeScreen(
-    navigateToOCR: (NavOptions?) -> Unit
+    navigateToOCR: (NavOptions?) -> Unit,
+    navigateToLedgerDetail: (NavOptions?, Int) -> Unit
 ) {
     composable(
         route = homeRoute,
@@ -38,7 +39,8 @@ fun NavGraphBuilder.homeScreen(
         val homeLedgerPostSuccess = backStackEntry.arguments?.getBoolean(HOME_LEDGER_POST_SUCCESS) ?: false
         HomeScreen(
             homeLedgerPostSuccess = homeLedgerPostSuccess,
-            navigateToOCR = navigateToOCR
+            navigateToOCR = navigateToOCR,
+            navigateToLedgerDetail = navigateToLedgerDetail
         )
     }
 }

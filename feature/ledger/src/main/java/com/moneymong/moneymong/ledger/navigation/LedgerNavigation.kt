@@ -13,13 +13,15 @@ const val ledgerRoute = "ledger_route"
 fun NavGraphBuilder.ledgerScreen(
     padding: PaddingValues,
     navigateToAgency: () -> Unit,
-    navigateToOCR: (NavOptions?) -> Unit
+    navigateToOCR: (NavOptions?) -> Unit,
+    navigateToLedgerDetail: (NavOptions?, Int) -> Unit
 ) {
     composable(route = ledgerRoute) {
         LedgerScreen(
             modifier = Modifier.padding(padding),
             navigateToAgency = navigateToAgency,
-            navigateToOCR = navigateToOCR
+            navigateToOCR = navigateToOCR,
+            navigateToLedgerDetail = navigateToLedgerDetail
         )
     }
 }
