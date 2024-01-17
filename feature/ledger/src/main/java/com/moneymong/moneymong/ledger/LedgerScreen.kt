@@ -139,22 +139,23 @@ fun LedgerScreen(
                     HorizontalPager(state = pagerState) { index ->
                         if (tabs[index] == LedgerTab.Ledger) {
                             Box(modifier = modifier.fillMaxSize()) {
-                                if (state.isLedgerEmpty) {
-                                    if (false) { // TODO 멤버일 경우
-                                        LedgerMemberEmptyView()
-                                    } else {
-                                        LedgerStaffEmptyView()
-                                    }
-                                } else {
+                                if (state.isExistLedger) { // 소속에 장부가 존재한다면
                                     LedgerDefaultView(
                                         totalBalance = state.ledgerTransaction?.totalBalance ?: 0,
                                         ledgerDetails = state.filterTransactionList,
                                         transactionType = state.transactionType,
                                         currentDate = state.currentDate,
+                                        hasTransaction = state.hasTransaction,
                                         onChangeTransactionType = viewModel::onChangeTransactionType,
                                         onAddMonthFromCurrentDate = viewModel::onAddMonthFromCurrentDate,
                                         onClickTransactionItem = { viewModel.eventEmit(LedgerSideEffect.LedgerNavigateToLedgerDetail(it)) }
                                     )
+                                } else {
+                                    if (false) { // TODO 멤버일 경우
+                                        LedgerMemberEmptyView()
+                                    } else {
+                                        LedgerStaffEmptyView()
+                                    }
                                 }
                                 if (true) { // TODO 어드민일 경우
                                     Column(
@@ -163,7 +164,7 @@ fun LedgerScreen(
                                             .padding(end = 20.dp, bottom = 20.dp),
                                         horizontalAlignment = Alignment.End
                                     ) {
-                                        if (true && !expandableFab) { //  TODO 최초 기록 전
+                                        if (!state.isExistLedger && !expandableFab) {
                                             MDSToolTip(
                                                 text = "해당 기능을 사용해보세요",
                                                 position = MDSToolTipPosition.Right

@@ -2,20 +2,33 @@ package com.moneymong.moneymong.ledger
 
 import com.moneymong.moneymong.common.base.BaseViewModel
 import com.moneymong.moneymong.domain.param.ledger.LedgerTransactionListParam
+import com.moneymong.moneymong.domain.usecase.ledger.FetchAgencyExistLedgerUseCase
 import com.moneymong.moneymong.domain.usecase.ledger.FetchLedgerTransactionListUseCase
 import com.moneymong.moneymong.ledger.view.LedgerTransactionType
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.joinAll
 import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.reduce
 import javax.inject.Inject
 
 @HiltViewModel
 class LedgerViewModel @Inject constructor(
-    private val fetchLedgerTransactionListUseCase: FetchLedgerTransactionListUseCase
-): BaseViewModel<LedgerState, LedgerSideEffect>(LedgerState()) {
+    private val fetchLedgerTransactionListUseCase: FetchLedgerTransactionListUseCase,
+    private val fetchAgencyExistLedgerUseCase: FetchAgencyExistLedgerUseCase
+) : BaseViewModel<LedgerState, LedgerSideEffect>(LedgerState()) {
 
     init {
+        fetchAgencyExistLedger()
         fetchLedgerTransactionList()
+    }
+
+    fun fetchAgencyExistLedger() = intent {
+        fetchAgencyExistLedgerUseCase(4) // TODO agencyId
+            .onSuccess {
+                reduce { state.copy(isExistLedger = it) }
+            }.onFailure {
+                // TODO
+            }
     }
 
     fun fetchLedgerTransactionList() = intent {
