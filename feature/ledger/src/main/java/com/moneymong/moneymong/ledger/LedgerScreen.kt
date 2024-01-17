@@ -24,6 +24,7 @@ import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -83,6 +84,10 @@ fun LedgerScreen(
         }
     }
 
+    LaunchedEffect(state.currentDate) {
+        viewModel.fetchLedgerTransactionList()
+    }
+
     Scaffold(
         topBar = {
             LedgerTopbarView(
@@ -135,7 +140,8 @@ fun LedgerScreen(
                                         ledgerDetails = state.filterTransactionList,
                                         transactionType = state.transactionType,
                                         currentDate = state.currentDate,
-                                        onChangeTransactionType = viewModel::onChangeTransactionType
+                                        onChangeTransactionType = viewModel::onChangeTransactionType,
+                                        onAddMonthFromCurrentDate = viewModel::onAddMonthFromCurrentDate
                                     )
                                 }
                                 if (true) { // TODO 어드민일 경우

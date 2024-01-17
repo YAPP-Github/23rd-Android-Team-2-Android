@@ -23,8 +23,8 @@ class LedgerViewModel @Inject constructor(
             reduce { state.copy(isLoading = true) }
             val param = LedgerTransactionListParam(
                 id = 1,
-                year = 2024,
-                month = 1,
+                year = state.currentDate.year,
+                month = state.currentDate.monthValue,
                 page = 0,
                 limit = 10
             )
@@ -39,5 +39,10 @@ class LedgerViewModel @Inject constructor(
 
     fun onChangeTransactionType(transactionType: LedgerTransactionType) = intent {
         reduce { state.copy(transactionType = transactionType) }
+    }
+
+    fun onAddMonthFromCurrentDate(addMonth: Long) = intent {
+        val nextDate = state.currentDate.plusMonths(addMonth)
+        reduce { state.copy(currentDate = nextDate) }
     }
 }
