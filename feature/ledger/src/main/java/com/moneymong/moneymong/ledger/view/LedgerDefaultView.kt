@@ -76,6 +76,7 @@ fun LedgerDefaultView(
     ledgerDetails: List<LedgerDetailEntity>,
     transactionType: LedgerTransactionType,
     currentDate: LocalDate,
+    hasTransaction: Boolean,
     onChangeTransactionType: (LedgerTransactionType) -> Unit,
     onAddMonthFromCurrentDate: (Long) -> Unit,
     onClickTransactionItem: (Int) -> Unit
@@ -151,7 +152,8 @@ fun LedgerDefaultView(
                         style = Body2,
                         color = Gray06
                     )
-                    val isLastMonth = currentDate.year == LocalDate.now().year && currentDate.monthValue == LocalDate.now().monthValue
+                    val isLastMonth =
+                        currentDate.year == LocalDate.now().year && currentDate.monthValue == LocalDate.now().monthValue
                     Icon(
                         modifier = Modifier
                             .size(16.dp)
@@ -178,22 +180,22 @@ fun LedgerDefaultView(
             )
             Spacer(modifier = Modifier.height(6.dp))
         }
-        if (ledgerDetails.isEmpty()) {
-            val descriptionDate =
-                if (transactionType == LedgerTransactionType.전체) "${currentDate.month}월에 " else ""
-            item {
-                Spacer(modifier = Modifier.height(121.dp))
-                LedgerTransactionEmptyView(
-                    text = descriptionDate + transactionType.description,
-                    image = transactionType.imgRes
-                )
-            }
-        } else {
+        if (hasTransaction) {
             itemsIndexed(ledgerDetails) { index, item ->
                 LedgerTransactionItem(
                     modifier = Modifier.padding(horizontal = 20.dp),
                     ledgerDetail = item,
                     onClickTransactionItem = onClickTransactionItem
+                )
+            }
+        } else {
+            val descriptionDate =
+                if (transactionType == LedgerTransactionType.전체) "${currentDate.monthValue}월에 " else ""
+            item {
+                Spacer(modifier = Modifier.height(121.dp))
+                LedgerTransactionEmptyView(
+                    text = descriptionDate + transactionType.description,
+                    image = transactionType.imgRes
                 )
             }
         }
@@ -208,6 +210,7 @@ fun LedgerDefaultPreview() {
         ledgerDetails = emptyList(),
         transactionType = LedgerTransactionType.전체,
         currentDate = LocalDate.now(),
+        hasTransaction = false,
         onChangeTransactionType = {},
         onAddMonthFromCurrentDate = {},
         onClickTransactionItem = {}
