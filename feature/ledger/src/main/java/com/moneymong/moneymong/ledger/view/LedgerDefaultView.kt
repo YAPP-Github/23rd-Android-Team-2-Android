@@ -77,7 +77,8 @@ fun LedgerDefaultView(
     transactionType: LedgerTransactionType,
     currentDate: LocalDate,
     onChangeTransactionType: (LedgerTransactionType) -> Unit,
-    onAddMonthFromCurrentDate: (Long) -> Unit
+    onAddMonthFromCurrentDate: (Long) -> Unit,
+    onClickTransactionItem: (Int) -> Unit
 ) {
     var selectedTabIndex by remember { mutableIntStateOf(0) }
     val lazyColumnState = rememberLazyListState()
@@ -175,7 +176,7 @@ fun LedgerDefaultView(
                     onChangeTransactionType(chips[it])
                 }
             )
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(6.dp))
         }
         if (ledgerDetails.isEmpty()) {
             val descriptionDate =
@@ -191,9 +192,9 @@ fun LedgerDefaultView(
             itemsIndexed(ledgerDetails) { index, item ->
                 LedgerTransactionItem(
                     modifier = Modifier.padding(horizontal = 20.dp),
-                    ledgerDetail = item
+                    ledgerDetail = item,
+                    onClickTransactionItem = onClickTransactionItem
                 )
-                Spacer(modifier = Modifier.height(20.dp))
             }
         }
     }
@@ -208,6 +209,7 @@ fun LedgerDefaultPreview() {
         transactionType = LedgerTransactionType.전체,
         currentDate = LocalDate.now(),
         onChangeTransactionType = {},
-        onAddMonthFromCurrentDate = {}
+        onAddMonthFromCurrentDate = {},
+        onClickTransactionItem = {}
     )
 }

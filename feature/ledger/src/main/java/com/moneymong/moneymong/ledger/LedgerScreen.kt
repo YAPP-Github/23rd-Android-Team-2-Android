@@ -55,6 +55,7 @@ import com.moneymong.moneymong.ledger.view.LedgerTabRowView
 import com.moneymong.moneymong.ledger.view.LedgerTopbarView
 import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.compose.collectAsState
+import org.orbitmvi.orbit.compose.collectSideEffect
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
 @Composable
@@ -62,7 +63,8 @@ fun LedgerScreen(
     modifier: Modifier = Modifier,
     viewModel: LedgerViewModel = hiltViewModel(),
     navigateToAgency: () -> Unit,
-    navigateToOCR: (NavOptions?) -> Unit
+    navigateToOCR: (NavOptions?) -> Unit,
+    navigateToLedgerDetail: (NavOptions?, Int) -> Unit
 ) {
     val state = viewModel.collectAsState().value
     var expandableFab by remember { mutableStateOf(false) }
@@ -89,6 +91,14 @@ fun LedgerScreen(
 
     LaunchedEffect(state.currentDate) {
         viewModel.fetchLedgerTransactionList()
+    }
+
+    viewModel.collectSideEffect {
+        when (it) {
+            is LedgerSideEffect.LedgerNavigateToLedgerDetail -> {
+                navigateToLedgerDetail(null, it.id)
+            }
+        }
     }
 
     Scaffold(
@@ -142,7 +152,8 @@ fun LedgerScreen(
                                         transactionType = state.transactionType,
                                         currentDate = state.currentDate,
                                         onChangeTransactionType = viewModel::onChangeTransactionType,
-                                        onAddMonthFromCurrentDate = viewModel::onAddMonthFromCurrentDate
+                                        onAddMonthFromCurrentDate = viewModel::onAddMonthFromCurrentDate,
+                                        onClickTransactionItem = { viewModel.eventEmit(LedgerSideEffect.LedgerNavigateToLedgerDetail(it)) }
                                     )
                                 }
                                 if (true) { // TODO 어드민일 경우
@@ -234,6 +245,7 @@ fun LedgerScreen(
 fun LedgerScreenPreview() {
     LedgerScreen(
         navigateToAgency = {},
-        navigateToOCR = {}
+        navigateToOCR = {},
+        navigateToLedgerDetail = { navOptions, i ->  }
     )
 }
