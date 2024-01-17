@@ -23,6 +23,9 @@ class LedgerRemoteDataSourceImpl @Inject constructor(
             limit = limit
         )
 
+    override suspend fun fetchAgencyExistLedger(agencyId: Int): Result<Boolean> =
+        moneyMongApi.fetchAgencyExistLedger(agencyId = agencyId)
+
     override suspend fun postLedgerTransaction(id: Int, body: LedgerTransactionRequest) =
         moneyMongApi.postLedgerTransaction(id = id, body = body)
 }
