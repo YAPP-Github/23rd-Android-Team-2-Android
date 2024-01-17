@@ -58,4 +58,8 @@ class LedgerViewModel @Inject constructor(
         val nextDate = state.currentDate.plusMonths(addMonth)
         reduce { state.copy(currentDate = nextDate) }
     }
+
+    fun onChangeSheetState(visible: Boolean) = intent {
+        reduce { state.copy(showBottomSheet = visible) }
+    }
 }
