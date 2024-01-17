@@ -1,7 +1,6 @@
 package com.moneymong.moneymong.home.navigation
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
@@ -28,7 +27,7 @@ fun NavController.navigateToHome(
 }
 
 fun NavGraphBuilder.homeScreen(
-    navController: NavController
+    navigateToOCR: (NavOptions?) -> Unit
 ) {
     composable(
         route = homeRoute,
@@ -38,8 +37,8 @@ fun NavGraphBuilder.homeScreen(
     ) { backStackEntry ->
         val homeLedgerPostSuccess = backStackEntry.arguments?.getBoolean(HOME_LEDGER_POST_SUCCESS) ?: false
         HomeScreen(
-            navController = navController,
-            homeLedgerPostSuccess = homeLedgerPostSuccess
+            homeLedgerPostSuccess = homeLedgerPostSuccess,
+            navigateToOCR = navigateToOCR
         )
     }
 }

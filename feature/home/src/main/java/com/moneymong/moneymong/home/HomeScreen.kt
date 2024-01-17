@@ -12,9 +12,8 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
+import androidx.navigation.NavOptions
 import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.rememberNavController
 import com.moneymong.moneymong.design_system.component.snackbar.MDSSnackbarHost
 import com.moneymong.moneymong.feature.agency.navigation.agencyRoute
 import com.moneymong.moneymong.feature.agency.navigation.agencyScreen
@@ -28,8 +27,8 @@ import kotlinx.coroutines.launch
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
-    navController: NavController,
-    homeLedgerPostSuccess: Boolean
+    homeLedgerPostSuccess: Boolean,
+    navigateToOCR: (NavOptions?) -> Unit
 ) {
     val homeNavController = rememberHomeNavController()
     val coroutineScope = rememberCoroutineScope()
@@ -72,7 +71,8 @@ fun HomeScreen(
 
             ledgerScreen(
                 padding = it,
-                navigateToAgency = { homeNavController.navigate(agencyRoute) }
+                navigateToAgency = { homeNavController.navigate(agencyRoute) },
+                navigateToOCR = navigateToOCR
             )
 
             mymongScreen(padding = it)
@@ -84,7 +84,7 @@ fun HomeScreen(
 @Composable
 fun HomeScreenPreview() {
     HomeScreen(
-        navController = rememberNavController(),
-        homeLedgerPostSuccess = false
+        homeLedgerPostSuccess = false,
+        navigateToOCR = {}
     )
 }
