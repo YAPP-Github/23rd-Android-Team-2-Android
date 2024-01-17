@@ -6,7 +6,6 @@ import com.moneymong.moneymong.domain.usecase.ledger.FetchAgencyExistLedgerUseCa
 import com.moneymong.moneymong.domain.usecase.ledger.FetchLedgerTransactionListUseCase
 import com.moneymong.moneymong.ledger.view.LedgerTransactionType
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.joinAll
 import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.reduce
 import javax.inject.Inject
