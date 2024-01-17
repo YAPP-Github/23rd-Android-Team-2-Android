@@ -27,7 +27,10 @@ fun MoneyMongNavHost(
         startDestination = startDestination
     ) {
         homeScreen(navigateToOCR = navController::navigateToOCR)
-        ocrScreen(navigateToOCRResult = navController::navigateToOCRResult)
+        ocrScreen(
+            navigateToOCRResult = navController::navigateToOCRResult,
+            popBackStack = navController::popBackStack
+        )
         ocrResultScreen(
             navigateToHome = { _, b ->
                 navController.navigateToHome(navOptions {
