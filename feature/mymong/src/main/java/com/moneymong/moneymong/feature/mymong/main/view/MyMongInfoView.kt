@@ -33,18 +33,30 @@ import com.moneymong.moneymong.feature.mymong.main.util.myMongRoundRectShadow
 
 @Composable
 internal fun MyMongInfoView(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    name: String,
+    email: String,
+    university: String,
+    grade: Int
 ) {
     Column(modifier = modifier) {
-        Profile()
+        Profile(
+            name = name,
+            email = email
+        )
         Spacer(modifier = Modifier.height(20.dp))
-        InfoWithSchoolAndBirth()
+        UniversityInfo(
+            university = university,
+            grade = grade
+        )
     }
 }
 
 @Composable
 private fun Profile(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    name: String,
+    email: String
 ) {
     Row(verticalAlignment = Alignment.CenterVertically) {
         Spacer(modifier = Modifier.width(6.dp))
@@ -63,12 +75,12 @@ private fun Profile(
         Spacer(modifier = Modifier.width(16.dp))
         Column {
             Text(
-                text = "김마이몽",
+                text = name,
                 color = Gray10,
                 style = Heading1
             )
             Text(
-                text = "mymong@moneymong.com",
+                text = email,
                 color = Gray08,
                 style = Body2
             )
@@ -78,7 +90,10 @@ private fun Profile(
 
 
 @Composable
-fun InfoWithSchoolAndBirth() {
+fun UniversityInfo(
+    university: String,
+    grade: Int
+) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -86,31 +101,26 @@ fun InfoWithSchoolAndBirth() {
             .background(color = White, shape = RoundedCornerShape(12.dp))
             .padding(vertical = 20.dp, horizontal = 16.dp)
     ) {
-        InfoWithSchool()
-    }
-}
-
-@Composable
-fun InfoWithSchool() {
-    Column {
-        Text(
-            text = "학교정보",
-            color = Gray07,
-            style = Body3
-        )
-        Spacer(modifier = Modifier.height(6.dp))
-        Row {
-            Image(
-                modifier = Modifier.size(24.dp),
-                painter = painterResource(id = R.drawable.img_university),
-                contentDescription = "school icon"
-            )
-            Spacer(modifier = Modifier.width(8.dp))
+        Column {
             Text(
-                text = "머니몽학교 1학년",
-                color = Gray08,
-                style = Body4
+                text = "학교정보",
+                color = Gray07,
+                style = Body3
             )
+            Spacer(modifier = Modifier.height(6.dp))
+            Row {
+                Image(
+                    modifier = Modifier.size(24.dp),
+                    painter = painterResource(id = R.drawable.img_university),
+                    contentDescription = "school icon"
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    text = "$university ${grade}학년",
+                    color = Gray08,
+                    style = Body4
+                )
+            }
         }
     }
 }
