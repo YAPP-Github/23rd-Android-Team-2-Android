@@ -36,6 +36,7 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavOptions
 import com.example.member.MemberScreen
 import com.moneymong.moneymong.design_system.R
 import com.moneymong.moneymong.design_system.component.button.MDSFloatingActionButton
@@ -59,7 +60,8 @@ import org.orbitmvi.orbit.compose.collectAsState
 @Composable
 fun LedgerScreen(
     modifier: Modifier = Modifier,
-    viewModel: LedgerViewModel = hiltViewModel()
+    viewModel: LedgerViewModel = hiltViewModel(),
+    navigateToAgency: () -> Unit
 ) {
     val state = viewModel.collectAsState().value
     var expandableFab by remember { mutableStateOf(false) }
@@ -114,9 +116,7 @@ fun LedgerScreen(
                     .padding(it)
             ) {
                 if (false) {// TODO 소속이 없을 경우
-                    LedgerAgencyEmptyView(
-                        onClickFindTeam = { /* TODO */ }
-                    )
+                    LedgerAgencyEmptyView(onClickFindAgency = navigateToAgency)
                 } else {
                     LedgerTabRowView(
                         tabs = tabs,
@@ -232,5 +232,7 @@ fun LedgerScreen(
 @Preview(showBackground = true)
 @Composable
 fun LedgerScreenPreview() {
-    LedgerScreen()
+    LedgerScreen(
+        navigateToAgency = {}
+    )
 }
