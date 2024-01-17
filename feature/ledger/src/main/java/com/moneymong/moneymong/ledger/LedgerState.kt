@@ -9,6 +9,7 @@ import java.time.LocalDate
 data class LedgerState(
     val isLoading: Boolean = false,
     val isExistLedger: Boolean = false,
+    val showBottomSheet: Boolean = false,
     val ledgerTransaction: LedgerTransactionListEntity? = null,
     val transactionType: LedgerTransactionType = LedgerTransactionType.전체,
     val currentDate: LocalDate = LocalDate.now()
