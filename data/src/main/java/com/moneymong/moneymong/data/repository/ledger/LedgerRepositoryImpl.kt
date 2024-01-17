@@ -22,6 +22,9 @@ class LedgerRepositoryImpl @Inject constructor(
             limit = param.limit
         ).map { it.toEntity() }
 
+    override suspend fun fetchAgencyExistLedger(agencyId: Int): Result<Boolean> =
+        ledgerRemoteDataSource.fetchAgencyExistLedger(agencyId = agencyId)
+
     override suspend fun postLedgerTransaction(param: LedgerTransactionParam): Result<LedgerTransactionEntity> =
         ledgerRemoteDataSource.postLedgerTransaction(id = param.id, body = param.toRequest())
             .map { it.toEntity() }

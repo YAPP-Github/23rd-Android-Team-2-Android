@@ -7,5 +7,6 @@ import com.moneymong.moneymong.domain.param.ledger.LedgerTransactionParam
 
 interface LedgerRepository {
     suspend fun fetchLedgerTransactionList(param: LedgerTransactionListParam): Result<LedgerTransactionListEntity>
+    suspend fun fetchAgencyExistLedger(agencyId: Int): Result<Boolean>
     suspend fun postLedgerTransaction(param: LedgerTransactionParam): Result<LedgerTransactionEntity>
 }
