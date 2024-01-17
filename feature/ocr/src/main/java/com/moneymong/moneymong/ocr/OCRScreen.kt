@@ -22,7 +22,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -35,6 +34,7 @@ import com.moneymong.moneymong.design_system.theme.Mint03
 import com.moneymong.moneymong.design_system.theme.White
 import com.moneymong.moneymong.common.ext.hasPermission
 import com.moneymong.moneymong.common.ui.noRippleClickable
+import com.moneymong.moneymong.common.util.DisposableEffectWithLifeCycle
 import com.moneymong.moneymong.design_system.theme.Black
 import com.moneymong.moneymong.ocr.view.OCRCameraPermissionDeniedView
 import com.moneymong.moneymong.ocr.view.OCRCaptureView
@@ -47,12 +47,16 @@ import org.orbitmvi.orbit.compose.collectSideEffect
 fun OCRScreen(
     modifier: Modifier = Modifier,
     viewModel: OCRViewModel = hiltViewModel(),
-    navigateToOCRResult: (NavOptions?, String) -> Unit
+    navigateToOCRResult: (NavOptions?, String) -> Unit,
+    popBackStack: () -> Unit
 ) {
     val state = viewModel.collectAsState().value
     val context = LocalContext.current
-    val lifecycleOwner = LocalLifecycleOwner.current // TODO
     var hasCameraPermission by remember { mutableStateOf(context.hasPermission(CAMERA)) }
+
+    DisposableEffectWithLifeCycle(
+        onResume = { hasCameraPermission = context.hasPermission(CAMERA) }
+    )
 
     LaunchedEffect(Unit) {
         viewModel.visiblePermissionDialog(hasCameraPermission)
@@ -103,9 +107,13 @@ fun OCRScreen(
             contentAlignment = Alignment.Center
         ) {
             if (!hasCameraPermission) {
-                OCRCameraPermissionDeniedView(onClickRequestPermission = { /* TODO */ })
+                OCRCameraPermissionDeniedView(onClickRequestPermission = { viewModel.eventEmit(OCRSideEffect.OCRMoveToPermissionSetting) })
             } else {
-                OCRCaptureView(onClickCapture = { viewModel.eventEmit(OCRSideEffect.OCRPostDocumentApi(it)) })
+                OCRCaptureView(
+                    onClickCapture = {
+                        viewModel.eventEmit(OCRSideEffect.OCRPostDocumentApi(it))
+                    }
+                )
                 if (!state.isLoading) {
                     Text(
                         modifier = Modifier.align(Alignment.Center),
@@ -119,14 +127,14 @@ fun OCRScreen(
             OCRTopbarView(
                 modifier = Modifier.align(Alignment.TopCenter),
                 onClickHelp = viewModel::onClickHelper,
-                onClickClose = { /* TODO */ }
+                onClickClose = popBackStack
             )
             if (state.isLoading) {
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
                         .background(Black.copy(alpha = 0.6f))
-                        .noRippleClickable {},
+                        .noRippleClickable { }, // 로딩 중 클릭 이벤트를 방지하기 위해 추가함
                     contentAlignment = Alignment.Center
                 ) {
                     CircularProgressIndicator(
@@ -137,7 +145,7 @@ fun OCRScreen(
                     )
                 }
             }
-            if (state.visibleHelper) {
+            if (state.visibleHelper && hasCameraPermission) {
                 OCRHelperView(onClickClose = viewModel::onClickHelper)
             }
         }
@@ -147,5 +155,5 @@ fun OCRScreen(
 @Preview(showBackground = true)
 @Composable
 fun OCRScreenPreview() {
-    OCRScreen(navigateToOCRResult = { navOptions, s->  })
+    OCRScreen(navigateToOCRResult = { navOptions, s -> }, popBackStack = {})
 }
