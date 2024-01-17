@@ -61,7 +61,8 @@ import org.orbitmvi.orbit.compose.collectAsState
 fun LedgerScreen(
     modifier: Modifier = Modifier,
     viewModel: LedgerViewModel = hiltViewModel(),
-    navigateToAgency: () -> Unit
+    navigateToAgency: () -> Unit,
+    navigateToOCR: (NavOptions?) -> Unit
 ) {
     val state = viewModel.collectAsState().value
     var expandableFab by remember { mutableStateOf(false) }
@@ -156,7 +157,6 @@ fun LedgerScreen(
                                                 text = "해당 기능을 사용해보세요",
                                                 position = MDSToolTipPosition.Right
                                             )
-
                                             Spacer(modifier = Modifier.height(8.dp))
                                         }
                                         AnimatedVisibility(
@@ -179,7 +179,7 @@ fun LedgerScreen(
                                             MDSFloatingActionButton(
                                                 iconResource = R.drawable.ic_scan,
                                                 containerColor = Mint03,
-                                                onClick = { /*TODO*/ }
+                                                onClick = { navigateToOCR(null) }
                                             )
                                         }
                                         if (expandableFab) Spacer(modifier = Modifier.height(10.dp))
@@ -233,6 +233,7 @@ fun LedgerScreen(
 @Composable
 fun LedgerScreenPreview() {
     LedgerScreen(
-        navigateToAgency = {}
+        navigateToAgency = {},
+        navigateToOCR = {}
     )
 }

@@ -87,8 +87,8 @@ fun OCRScreen(
             icon = state.modalType.icon,
             title = state.modalType.title,
             description = state.modalType.description,
-            negativeBtnText = "확인",
-            positiveBtnText = "이동",
+            negativeBtnText = "허용 안 함",
+            positiveBtnText = "허용",
             onClickNegative = viewModel::onClickDialogNegative,
             onClickPositive = viewModel::onClickDialogPositive
         )

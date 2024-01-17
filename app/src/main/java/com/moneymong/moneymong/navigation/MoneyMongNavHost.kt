@@ -8,7 +8,7 @@ import androidx.navigation.navOptions
 import com.moneymong.moneymong.home.navigation.homeRoute
 import com.moneymong.moneymong.home.navigation.homeScreen
 import com.moneymong.moneymong.home.navigation.navigateToHome
-import com.moneymong.moneymong.ocr.navigation.ocrRoute
+import com.moneymong.moneymong.ocr.navigation.navigateToOCR
 import com.moneymong.moneymong.ocr.navigation.ocrScreen
 import com.moneymong.moneymong.ocr_detail.navigation.navigateToOCRDetail
 import com.moneymong.moneymong.ocr_detail.navigation.ocrDetailScreen
@@ -26,7 +26,7 @@ fun MoneyMongNavHost(
         navController = navController,
         startDestination = startDestination
     ) {
-        homeScreen(navController = navController)
+        homeScreen(navigateToOCR = navController::navigateToOCR)
         ocrScreen(navigateToOCRResult = navController::navigateToOCRResult)
         ocrResultScreen(
             navigateToHome = { _, b ->
