@@ -16,6 +16,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.moneymong.moneymong.design_system.component.snackbar.MDSSnackbarHost
+import com.moneymong.moneymong.feature.agency.navigation.agencyRoute
 import com.moneymong.moneymong.feature.agency.navigation.agencyScreen
 import com.moneymong.moneymong.feature.mymong.navigation.mymongScreen
 import com.moneymong.moneymong.home.navigation.rememberHomeNavController
@@ -69,7 +70,10 @@ fun HomeScreen(
         ) {
             agencyScreen(padding = it)
 
-            ledgerScreen(padding = it)
+            ledgerScreen(
+                padding = it,
+                navigateToAgency = { homeNavController.navigate(agencyRoute) }
+            )
 
             mymongScreen(padding = it)
         }
