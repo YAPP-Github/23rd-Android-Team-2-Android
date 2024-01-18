@@ -9,6 +9,8 @@ import com.moneymong.moneymong.data.mapper.agency.toEntity
 import com.moneymong.moneymong.data.mapper.agency.toRequest
 import com.moneymong.moneymong.data.pagingsource.AgencyPagingSource
 import com.moneymong.moneymong.domain.entity.agency.AgencyGetEntity
+import com.moneymong.moneymong.domain.entity.agency.AgencyJoinEntity
+import com.moneymong.moneymong.domain.param.agency.AgencyJoinParam
 import com.moneymong.moneymong.domain.param.agency.AgencyRegisterParam
 import com.moneymong.moneymong.domain.repository.AgencyRepository
 import kotlinx.coroutines.flow.Flow
@@ -32,5 +34,13 @@ class AgencyRepositoryImpl @Inject constructor(
                 response.toEntity()
             }
         }
+    }
+
+    override suspend fun agencyCodeNumbers(
+        agencyId: Int,
+        codeNumbers: AgencyJoinParam
+    ): Result<AgencyJoinEntity> {
+        return agencyRemoteDataSource.agencyCodeNumbers(agencyId, codeNumbers.toRequest())
+            .map { it.toEntity() }
     }
 }

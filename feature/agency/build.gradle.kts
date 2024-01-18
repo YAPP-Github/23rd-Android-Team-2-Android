@@ -12,6 +12,7 @@ android {
 dependencies {
     implementation(projects.core.common)
     implementation(projects.domain)
+    //implementation(projects.feature.home)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.appcompat)
@@ -26,4 +27,5 @@ dependencies {
 
     implementation(libs.paging.runtime)
     implementation(libs.paging.compose)
+
 }
