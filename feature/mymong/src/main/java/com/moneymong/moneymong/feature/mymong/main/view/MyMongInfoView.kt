@@ -98,11 +98,21 @@ private fun Profile(
                 color = Gray10,
                 style = Heading1
             )
-            Text(
-                text = email,
-                color = Gray08,
-                style = Body2
-            )
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Image(
+                    modifier = Modifier.size(18.dp),
+                    painter = painterResource(id = R.drawable.img_kakao_logo),
+                    contentDescription = "Kakao Email"
+                )
+                Spacer(modifier = Modifier.width(4.dp))
+                Text(
+                    text = email,
+                    color = Gray08,
+                    style = Body2
+                )
+            }
         }
     }
 }
