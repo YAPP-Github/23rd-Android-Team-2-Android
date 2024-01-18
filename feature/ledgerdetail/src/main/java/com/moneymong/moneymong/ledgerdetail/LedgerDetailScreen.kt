@@ -28,6 +28,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.moneymong.moneymong.common.ui.DottedShape
 import com.moneymong.moneymong.design_system.R
 import com.moneymong.moneymong.design_system.component.button.MDSButton
@@ -47,13 +48,16 @@ import com.moneymong.moneymong.design_system.theme.Gray10
 import com.moneymong.moneymong.design_system.theme.MMHorizontalSpacing
 import com.moneymong.moneymong.design_system.theme.White
 import com.moneymong.moneymong.ledgerdetail.view.LedgerDetailTopbarView
+import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
 fun LedgerDetailScreen(
     modifier: Modifier = Modifier,
+    viewModel: LedgerDetailViewModel = hiltViewModel(),
     ledgerTransactionId: Int,
     popBackStack: () -> Unit
 ) {
+    val state = viewModel.collectAsState().value
     val verticalScrollState = rememberScrollState()
 
     if (false) { // TODO
