@@ -18,23 +18,30 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
 import com.moneymong.moneymong.design_system.theme.Black
 import com.moneymong.moneymong.design_system.theme.Heading1
 import com.moneymong.moneymong.design_system.theme.MMHorizontalSpacing
 import com.moneymong.moneymong.design_system.theme.White
 import com.moneymong.moneymong.feature.agency.join.component.AgencyCompleteButtonView
 import com.moneymong.moneymong.feature.agency.join.component.AgencyCompleteView
+import org.orbitmvi.orbit.compose.collectAsState
 
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AgencyCompleteScreen() {
+fun AgencyCompleteScreen(
+    navController: NavHostController,
+    viewModel: AgencyCompleteViewModel = hiltViewModel()
+) {
+    val state = viewModel.collectAsState().value
+
     Scaffold(
         modifier = Modifier
             .fillMaxSize()
@@ -67,14 +74,33 @@ fun AgencyCompleteScreen() {
             }
         },
         content = { innerPadding ->
-            SignCompleteContent(modifier = Modifier.padding(innerPadding))
+            SignCompleteContent(
+                modifier = Modifier.padding(innerPadding),
+                navController =  navController,
+                viewModel = viewModel,
+                state = state
+
+            )
         }
     )
 }
 
 
 @Composable
-fun SignCompleteContent(modifier: Modifier = Modifier) {
+fun SignCompleteContent(
+    modifier: Modifier = Modifier,
+    navController: NavHostController,
+    viewModel : AgencyCompleteViewModel,
+    state : AgencyCompleteState
+) {
+
+    LaunchedEffect(key1 = state.isBtnClicked){
+        if(state.isBtnClicked == true){
+//            navController.navigate(homeRoute){
+//                //TODO
+//            }
+        }
+    }
     Box(
         modifier = modifier
             .fillMaxSize()
@@ -84,13 +110,9 @@ fun SignCompleteContent(modifier: Modifier = Modifier) {
         AgencyCompleteButtonView(
             modifier = Modifier
                 .fillMaxWidth()
-                .align(Alignment.BottomCenter)
+                .align(Alignment.BottomCenter),
+            viewModel = viewModel,
         )
     }
 }
 
-@Preview
-@Composable
-fun CompletePreview() {
-    AgencyCompleteScreen()
-}
