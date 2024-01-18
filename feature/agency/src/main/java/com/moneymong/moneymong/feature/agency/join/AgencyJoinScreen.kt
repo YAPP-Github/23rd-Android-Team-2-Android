@@ -19,18 +19,14 @@ import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.BottomCenter
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
-import androidx.navigation.NavHostController
 import com.moneymong.moneymong.design_system.R
 import com.moneymong.moneymong.design_system.component.snackbar.MDSSnackbarHost
 import com.moneymong.moneymong.design_system.theme.Black
@@ -39,18 +35,20 @@ import com.moneymong.moneymong.design_system.theme.Heading3
 import com.moneymong.moneymong.design_system.theme.MMHorizontalSpacing
 import com.moneymong.moneymong.design_system.theme.White
 import com.moneymong.moneymong.feature.agency.join.component.AgencyInviteCodeView
-import com.moneymong.moneymong.feature.agency.join.navigation.agencyCompleteRoute
 import org.orbitmvi.orbit.compose.collectAsState
 
 
 @Composable
 fun AgencyJoinScreen(
+    modifier: Modifier = Modifier,
     viewModel: AgencyJoinViewModel = hiltViewModel(),
-    navController: NavHostController
+    navigateToComplete: () -> Unit,
+    navigateUp: () -> Unit,
+    agencyId: Long
 ) {
     val state = viewModel.collectAsState().value
     Scaffold(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .background(White)
             .padding(horizontal = MMHorizontalSpacing),
@@ -78,7 +76,7 @@ fun AgencyJoinScreen(
                 modifier = Modifier.padding(innerPadding),
                 state = state,
                 viewModel = viewModel,
-                navController = navController
+                navigateToComplete = navigateToComplete
             )
         }
     )
@@ -89,7 +87,7 @@ private fun JoinContent(
     modifier: Modifier = Modifier,
     state: AgencyJoinState,
     viewModel: AgencyJoinViewModel,
-    navController: NavHostController
+    navigateToComplete: () -> Unit
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
     val focusRequesters = remember { List(6) { FocusRequester() } }
@@ -112,9 +110,7 @@ private fun JoinContent(
 
     LaunchedEffect(key1 = state.codeAccess) {
         if (state.codeAccess) {
-            navController.navigate(agencyCompleteRoute) {
-                //TODO - popupto
-            }
+            navigateToComplete()
         }
     }
 

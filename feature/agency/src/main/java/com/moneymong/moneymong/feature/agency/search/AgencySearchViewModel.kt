@@ -53,4 +53,8 @@ class AgencySearchViewModel @Inject constructor(
         eventEmit(AgencySearchSideEffect.NavigateToRegister)
         onDismissBottomSheet()
     }
+
+    fun onAgencyItemClicked(agencyId: Long) {
+        eventEmit(AgencySearchSideEffect.NavigateToJoin(agencyId = agencyId))
+    }
 }

@@ -52,7 +52,8 @@ import org.orbitmvi.orbit.compose.collectSideEffect
 fun AgencySearchScreen(
     modifier: Modifier = Modifier,
     viewModel: AgencySearchViewModel = hiltViewModel(),
-    navigateToRegister: () -> Unit
+    navigateToRegister: () -> Unit,
+    navigateAgencyJoin: (agencyId: Long) -> Unit
 ) {
     val state by viewModel.collectAsState()
     val pagingItems = viewModel.agencies.collectAsLazyPagingItems()
@@ -61,6 +62,10 @@ fun AgencySearchScreen(
         when (it) {
             is AgencySearchSideEffect.NavigateToRegister -> {
                 navigateToRegister()
+            }
+
+            is AgencySearchSideEffect.NavigateToJoin -> {
+                navigateAgencyJoin(it.agencyId)
             }
         }
     }
@@ -90,7 +95,8 @@ fun AgencySearchScreen(
             AgencySearchTopBar()
             AgencySearchContentView(
                 modifier = Modifier.weight(1f),
-                pagingItems = pagingItems
+                pagingItems = pagingItems,
+                onClickItem = viewModel::onAgencyItemClicked
             )
         }
         Column(
@@ -118,7 +124,8 @@ fun AgencySearchScreen(
 @Composable
 private fun AgencySearchContentView(
     modifier: Modifier = Modifier,
-    pagingItems: LazyPagingItems<Agency>
+    pagingItems: LazyPagingItems<Agency>,
+    onClickItem: (agencyId: Long) -> Unit
 ) {
     if (pagingItems.itemCount == 0) {
         ContentViewWithoutAgencies(
@@ -126,7 +133,11 @@ private fun AgencySearchContentView(
             pagingItems = pagingItems
         )
     } else {
-        ContentViewWithAgencies(modifier = modifier, pagingItems = pagingItems)
+        ContentViewWithAgencies(
+            modifier = modifier,
+            pagingItems = pagingItems,
+            onClickItem = onClickItem
+        )
     }
 }
 
@@ -134,7 +145,8 @@ private fun AgencySearchContentView(
 @Composable
 private fun ContentViewWithAgencies(
     modifier: Modifier = Modifier,
-    pagingItems: LazyPagingItems<Agency>
+    pagingItems: LazyPagingItems<Agency>,
+    onClickItem: (agencyId: Long) -> Unit
 ) {
     LazyColumn(
         modifier = modifier,
@@ -145,7 +157,10 @@ private fun ContentViewWithAgencies(
             count = pagingItems.itemCount, key = pagingItems.itemKey { it.id }
         ) {
             pagingItems[it]?.let { agency ->
-                AgencyItem(agency = agency)
+                AgencyItem(
+                    agency = agency,
+                    onClick = { onClickItem(agency.id) }
+                )
             }
         }
 
