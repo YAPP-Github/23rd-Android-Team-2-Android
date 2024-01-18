@@ -3,7 +3,6 @@ package com.moneymong.moneymong.feature.agency.join
 import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.moneymong.moneymong.common.base.BaseViewModel
-import com.moneymong.moneymong.domain.entity.agency.AgencyJoinEntity
 import com.moneymong.moneymong.domain.usecase.AgencyJoinUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -21,7 +20,7 @@ class AgencyJoinViewModel @Inject constructor(
             useCase.agencyCodeNumbers(agencyId, codeNumbers)
                 .onSuccess {
                     Log.d("success", it.toString())
-                    if(it.certified){
+                    if (it.certified) {
                         reduce {
                             state.copy(
                                 isError = false,
@@ -29,7 +28,7 @@ class AgencyJoinViewModel @Inject constructor(
                             )
                         }
 
-                    }else{
+                    } else {
                         reduce {
                             state.copy(
                                 isError = true
@@ -39,7 +38,7 @@ class AgencyJoinViewModel @Inject constructor(
                 }
                 .onFailure {
                     Log.d("failure", it.message.toString())
-                 //TODO - 에러화면
+                    //TODO - 에러화면
                 }
         }
 
@@ -65,7 +64,7 @@ class AgencyJoinViewModel @Inject constructor(
         }
     }
 
-    fun onIsNumberChanged(index: Int, value: String) = intent {
+    fun onIsNumbersChanged(index: Int, value: String) = intent {
         Log.d("index" , index.toString())
         Log.d("value", value)
         val newNumbers = state.numbers.toMutableList().apply {
@@ -75,7 +74,6 @@ class AgencyJoinViewModel @Inject constructor(
         reduce {
             state.copy(
                 numbers = newNumbers
-
             )
         }
         Log.d("numbers", state.numbers.joinToString {","}.trim())
@@ -88,6 +86,4 @@ class AgencyJoinViewModel @Inject constructor(
             )
         }
     }
-
-
 }
