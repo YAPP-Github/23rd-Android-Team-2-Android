@@ -82,6 +82,9 @@ fun LedgerScreen(
             is LedgerSideEffect.LedgerNavigateToLedgerDetail -> {
                 navigateToLedgerDetail(null, it.id)
             }
+            is LedgerSideEffect.LedgerNavigateToOCR -> {
+                navigateToOCR(null)
+            }
             is LedgerSideEffect.LedgerOpenSheet -> {
                 viewModel.onChangeSheetState(true)
             }
@@ -186,7 +189,7 @@ fun LedgerScreen(
                                         MDSFloatingActionButton(
                                             iconResource = R.drawable.ic_scan,
                                             containerColor = Mint03,
-                                            onClick = { navigateToOCR(null) }
+                                            onClick = { viewModel.eventEmit(LedgerSideEffect.LedgerNavigateToOCR) }
                                         )
                                     }
                                     if (expandableFab) Spacer(modifier = Modifier.height(10.dp))
