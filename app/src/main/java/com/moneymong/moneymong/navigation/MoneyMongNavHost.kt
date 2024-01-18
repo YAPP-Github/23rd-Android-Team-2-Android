@@ -29,23 +29,23 @@ fun MoneyMongNavHost(
         homeScreen(navController = navController)
         ocrScreen(navigateToOCRResult = navController::navigateToOCRResult)
         ocrResultScreen(
-            navigateToHome = { _, b ->
+            navigateToHome = { _, successOCR ->
                 navController.navigateToHome(navOptions {
                     popUpTo(
                         navController.graph.id
                     ) { inclusive = true }
-                }, b)
+                }, successOCR)
             },
             navigateToOCRDetail = navController::navigateToOCRDetail,
             popBackStack = navController::popBackStack
         )
         ocrDetailScreen(
-            navigateToHome = { _, b ->
+            navigateToHome = { _, successOCR ->
                 navController.navigateToHome(navOptions {
                     popUpTo(
                         navController.graph.id
                     ) { inclusive = true }
-                }, b)
+                }, successOCR)
             },
             popBackStack = navController::popBackStack
         )

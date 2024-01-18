@@ -87,7 +87,7 @@ private fun rotateImageIfRequired(context: Context, bitmap: Bitmap, uri: Uri): B
     val exif = if (Build.VERSION.SDK_INT > 23) {
         ExifInterface(input)
     } else {
-        ExifInterface(uri.path!!)
+        ExifInterface(uri?.path ?: return null)
     }
 
     val orientation =
