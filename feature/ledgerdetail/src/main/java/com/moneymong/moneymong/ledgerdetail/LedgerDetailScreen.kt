@@ -30,6 +30,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.moneymong.moneymong.common.ui.DottedShape
 import com.moneymong.moneymong.design_system.R
+import com.moneymong.moneymong.design_system.component.button.MDSButton
+import com.moneymong.moneymong.design_system.component.button.MDSButtonSize
+import com.moneymong.moneymong.design_system.component.button.MDSButtonType
 import com.moneymong.moneymong.design_system.component.modal.MDSModal
 import com.moneymong.moneymong.design_system.component.selection.MDSSelection
 import com.moneymong.moneymong.design_system.theme.Blue01
@@ -94,21 +97,11 @@ fun LedgerDetailScreen(
                         .background(White)
                         .padding(vertical = 28.dp, horizontal = 16.dp)
                 ) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        Text(
-                            text = "수입·지출 출처",
-                            style = Body2,
-                            color = Gray06
-                        )
-                        Text(
-                            text = "수정",
-                            style = Body2,
-                            color = Blue04
-                        )
-                    }
+                    Text(
+                        text = "수입·지출 출처",
+                        style = Body2,
+                        color = Gray06
+                    )
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
                         text = "퍼스트 유통", // TODO
@@ -122,21 +115,11 @@ fun LedgerDetailScreen(
                             .height(1.dp)
                             .background(Gray03, shape = DottedShape(8.dp))
                     )
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        Text(
-                            text = "금액",
-                            style = Body2,
-                            color = Gray06
-                        )
-                        Text(
-                            text = "수정",
-                            style = Body2,
-                            color = Blue04
-                        )
-                    }
+                    Text(
+                        text = "지출 금액",
+                        style = Body2,
+                        color = Gray06
+                    )
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
                         text = "-1,600원", // TODO
@@ -151,50 +134,10 @@ fun LedgerDetailScreen(
                             .background(Gray03, shape = DottedShape(8.dp))
                     )
                     Text(
-                        text = "거래 유형",
+                        text = "날짜",
                         style = Body2,
                         color = Gray06
                     )
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(10.dp)
-                    ) {
-                        MDSSelection(
-                            modifier = Modifier.weight(1f),
-                            text = "지출",
-                            isSelected = true, // TODO
-                            onClick = { /*TODO*/ }
-                        )
-                        MDSSelection(
-                            modifier = Modifier.weight(1f),
-                            text = "수입",
-                            isSelected = false, // TODO
-                            onClick = { /*TODO*/ }
-                        )
-                    }
-                    Box(
-                        modifier = Modifier
-                            .padding(vertical = 20.dp)
-                            .fillMaxWidth()
-                            .height(1.dp)
-                            .background(Gray03, shape = DottedShape(8.dp))
-                    )
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        Text(
-                            text = "날짜",
-                            style = Body2,
-                            color = Gray06
-                        )
-                        Text(
-                            text = "수정",
-                            style = Body2,
-                            color = Blue04
-                        )
-                    }
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
                         text = "2023년 11월 16일", // TODO
@@ -208,21 +151,11 @@ fun LedgerDetailScreen(
                             .height(1.dp)
                             .background(Gray03, shape = DottedShape(8.dp))
                     )
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        Text(
-                            text = "시간",
-                            style = Body2,
-                            color = Gray06
-                        )
-                        Text(
-                            text = "수정",
-                            style = Body2,
-                            color = Blue04
-                        )
-                    }
+                    Text(
+                        text = "시간",
+                        style = Body2,
+                        color = Gray06
+                    )
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
                         text = "15:36", // TODO
@@ -236,21 +169,11 @@ fun LedgerDetailScreen(
                             .height(1.dp)
                             .background(Gray03, shape = DottedShape(8.dp))
                     )
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        Text(
-                            text = "메모",
-                            style = Body2,
-                            color = Gray06
-                        )
-                        Text(
-                            text = "수정",
-                            style = Body2,
-                            color = Blue04
-                        )
-                    }
+                    Text(
+                        text = "메모",
+                        style = Body2,
+                        color = Gray06
+                    )
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
                         text = "내용없음", // TODO
@@ -353,7 +276,15 @@ fun LedgerDetailScreen(
                     )
                 }
             }
-            Spacer(modifier = Modifier.height(40.dp))
+            MDSButton(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 24.dp, horizontal = 20.dp),
+                text = "수정하기",
+                size = MDSButtonSize.MEDIUM,
+                type = MDSButtonType.PRIMARY,
+                onClick = { /*TODO*/ }
+            )
         }
     }
 }
