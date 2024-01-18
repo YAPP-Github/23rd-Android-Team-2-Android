@@ -138,7 +138,7 @@ private fun JoinContent(
                 state = state,
                 focusRequesters = focusRequesters,
                 onIsErrorChanged = { isError -> viewModel.onIsErrorChanged(isError) },
-                onIsNumbersChanged = { index, value -> viewModel.onIsNumberChanged(index, value) },
+                onIsNumbersChanged = { index, value -> viewModel.onIsNumbersChanged(index, value) },
             )
 
         }
