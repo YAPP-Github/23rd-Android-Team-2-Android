@@ -12,10 +12,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -34,21 +36,38 @@ import com.moneymong.moneymong.feature.mymong.main.util.myMongRoundRectShadow
 @Composable
 internal fun MyMongInfoView(
     modifier: Modifier = Modifier,
+    isLoading: Boolean,
+    isError: Boolean,
+    errorMessage: String,
     name: String,
     email: String,
     university: String,
     grade: Int
 ) {
-    Column(modifier = modifier) {
-        Profile(
-            name = name,
-            email = email
-        )
-        Spacer(modifier = Modifier.height(20.dp))
-        UniversityInfo(
-            university = university,
-            grade = grade
-        )
+    Box(
+        modifier = modifier,
+        contentAlignment = Alignment.Center
+    ) {
+        if (isLoading) {
+            // todo change to LoadingItem
+            CircularProgressIndicator()
+        }
+        if (isError) {
+            // todo change to ErrorItem
+            Text(text = errorMessage)
+        }
+        val showContent = isLoading.not() && isError.not()
+        Column(modifier = if (showContent) Modifier else Modifier.alpha(alpha = 0f)) {
+            Profile(
+                name = name,
+                email = email
+            )
+            Spacer(modifier = Modifier.height(20.dp))
+            UniversityInfo(
+                university = university,
+                grade = grade
+            )
+        }
     }
 }
 
