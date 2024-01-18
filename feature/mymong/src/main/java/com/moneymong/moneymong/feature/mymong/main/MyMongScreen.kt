@@ -52,6 +52,9 @@ fun MyMongScreen(
         MyMongTopBar(modifier = Modifier.align(Alignment.CenterHorizontally))
         Spacer(modifier = Modifier.height(12.dp))
         MyMongInfoView(
+            isLoading = state.isInfoLoading,
+            isError = state.isInfoError,
+            errorMessage = state.infoErrorMessage,
             name = state.name,
             email = state.email,
             university = state.university,

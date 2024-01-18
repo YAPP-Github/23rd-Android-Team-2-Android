@@ -8,8 +8,9 @@ data class MyMongState(
     val university: String = "",
     val grade: Int = 0,
 
-    val isLoading: Boolean = true,
-    val isError: Boolean = false,
+    val isInfoLoading: Boolean = true,
+    val isInfoError: Boolean = false,
+    val infoErrorMessage: String = "",
 
     val visibleLogoutDialog: Boolean = false,
     val version: String = "1.0.0"

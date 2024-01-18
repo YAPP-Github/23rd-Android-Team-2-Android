@@ -1,6 +1,7 @@
 package com.moneymong.moneymong.feature.mymong.main
 
 import com.moneymong.moneymong.common.base.BaseViewModel
+import com.moneymong.moneymong.common.error.MoneyMongError
 import com.moneymong.moneymong.domain.usecase.GetMyInfoUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import org.orbitmvi.orbit.syntax.simple.intent
@@ -17,10 +18,10 @@ class MyMongViewModel @Inject constructor(
     }
 
     private fun getInfo() = intent {
-        getMyInfoUseCase()
+        getMyInfoUseCase(data = Unit)
             .also {
                 reduce {
-                    state.copy(isLoading = false)
+                    state.copy(isInfoLoading = false)
                 }
             }
             .onSuccess {
@@ -35,7 +36,8 @@ class MyMongViewModel @Inject constructor(
             }.onFailure {
                 reduce {
                     state.copy(
-                        isError = true
+                        isInfoError = true,
+                        infoErrorMessage = it.message ?: MoneyMongError.UnExpectedError.message
                     )
                 }
             }
