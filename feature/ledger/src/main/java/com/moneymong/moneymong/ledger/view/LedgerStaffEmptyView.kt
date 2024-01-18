@@ -16,6 +16,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.moneymong.moneymong.design_system.R.*
 import com.moneymong.moneymong.design_system.theme.Body4
 import com.moneymong.moneymong.design_system.theme.Gray07
 
@@ -31,7 +32,7 @@ fun LedgerStaffEmptyView(
         ) {
             Image(
                 modifier = Modifier.size(width = 220.dp, height = 128.dp),
-                painter = painterResource(id = com.moneymong.moneymong.design_system.R.drawable.img_empty_scan),
+                painter = painterResource(id = drawable.img_empty_scan),
                 contentDescription = null
             )
             Spacer(modifier = Modifier.height(8.dp))
