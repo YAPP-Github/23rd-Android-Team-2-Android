@@ -6,7 +6,7 @@ import com.moneymong.moneymong.feature.mymong.main.MyMongScreen
 
 const val mymongRoute = "mymong_route"
 
-fun NavGraphBuilder.mymongScreen(
+internal fun NavGraphBuilder.myMongScreen(
     navigateToTermsOfUse: () -> Unit,
     navigateToPrivacyPolicy: () -> Unit
 ) {
@@ -16,4 +16,18 @@ fun NavGraphBuilder.mymongScreen(
             navigateToPrivacyPolicy = navigateToPrivacyPolicy
         )
     }
+}
+
+fun NavGraphBuilder.myMongNavGraph(
+    navigateToTermsOfUse: () -> Unit,
+    navigateToPrivacyPolicy: () -> Unit,
+    navigateUp: () -> Unit
+) {
+    myMongScreen(
+        navigateToTermsOfUse = navigateToTermsOfUse,
+        navigateToPrivacyPolicy = navigateToPrivacyPolicy
+    )
+    privacyPolicyScreen(navigateUp = navigateUp)
+
+    termsOfUseScreen(navigateUp = navigateUp)
 }
