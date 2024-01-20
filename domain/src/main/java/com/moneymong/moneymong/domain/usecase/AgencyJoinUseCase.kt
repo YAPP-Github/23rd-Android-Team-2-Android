@@ -15,7 +15,7 @@ class AgencyJoinUseCase @Inject constructor(
 //
 //    }
 
-    suspend fun agencyCodeNumbers(agencyId : Int, codeNumbers : String) : Result<AgencyJoinEntity>{
+    suspend fun agencyCodeNumbers(agencyId : Long, codeNumbers : String) : Result<AgencyJoinEntity>{
         return agencyRepository.agencyCodeNumbers(agencyId, AgencyJoinParam(codeNumbers))
     }
 }

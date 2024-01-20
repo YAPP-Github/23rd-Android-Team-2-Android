@@ -74,6 +74,7 @@ fun AgencyJoinScreen(
         content = { innerPadding ->
             JoinContent(
                 modifier = Modifier.padding(innerPadding),
+                agencyId = agencyId,
                 state = state,
                 viewModel = viewModel,
                 navigateToComplete = navigateToComplete
@@ -85,6 +86,7 @@ fun AgencyJoinScreen(
 @Composable
 private fun JoinContent(
     modifier: Modifier = Modifier,
+    agencyId : Long,
     state: AgencyJoinState,
     viewModel: AgencyJoinViewModel,
     navigateToComplete: () -> Unit
@@ -134,13 +136,14 @@ private fun JoinContent(
             horizontalArrangement = Arrangement.Start
         ) {
             AgencyInviteCodeView(
-                viewModel = viewModel,
-                state = state,
+                agencyId = agencyId,
                 focusRequesters = focusRequesters,
+                isError = state.isError,
+                numbers = state.numbers,
+                agencyCodeNumbers = { agencyId, codeNumbers -> viewModel.agencyCodeNumbers(agencyId, codeNumbers)},
                 onIsErrorChanged = { isError -> viewModel.onIsErrorChanged(isError) },
                 onIsNumbersChanged = { index, value -> viewModel.onIsNumbersChanged(index, value) },
             )
-
         }
         Box(
             modifier = Modifier

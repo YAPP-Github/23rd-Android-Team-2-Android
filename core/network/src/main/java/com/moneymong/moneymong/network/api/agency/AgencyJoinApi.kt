@@ -12,7 +12,7 @@ interface AgencyJoinApi {
     @POST("/api/v1/agencies/{agencyId}/invitation-code")
     suspend fun agencyCodeNumbers(
         @Header("Authorization") authToken: String,
-        @Path("agencyId") agencyId: Int,
+        @Path("agencyId") agencyId: Long,
         @Body body: AgencyJoinRequest
     ): Result<AgencyJoinResponse>
 }
