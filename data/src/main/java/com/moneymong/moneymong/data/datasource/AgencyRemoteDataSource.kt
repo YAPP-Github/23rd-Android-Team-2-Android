@@ -13,6 +13,6 @@ interface AgencyRemoteDataSource {
 
     suspend fun getAgencies(page: Int, size: Int): Result<AgenciesGetResponse>
 
-    suspend fun agencyCodeNumbers(agencyId: Int, codeNumbers: AgencyJoinRequest) : Result<AgencyJoinResponse>
+    suspend fun agencyCodeNumbers(agencyId: Long, codeNumbers: AgencyJoinRequest) : Result<AgencyJoinResponse>
 
 }

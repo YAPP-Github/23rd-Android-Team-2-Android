@@ -15,7 +15,8 @@ class AgencyJoinViewModel @Inject constructor(
     private val useCase: AgencyJoinUseCase
 ) : BaseViewModel<AgencyJoinState, AgencyJoinSideEffect>(AgencyJoinState()) {
 
-    fun agencyCodeNumbers(agencyId: Int, codeNumbers: String) = intent {
+    fun agencyCodeNumbers(agencyId: Long, codeNumbers: String) = intent {
+        Log.d("codeNumbers", codeNumbers)
         viewModelScope.launch {
             useCase.agencyCodeNumbers(agencyId, codeNumbers)
                 .onSuccess {
@@ -65,8 +66,6 @@ class AgencyJoinViewModel @Inject constructor(
     }
 
     fun onIsNumbersChanged(index: Int, value: String) = intent {
-        Log.d("index" , index.toString())
-        Log.d("value", value)
         val newNumbers = state.numbers.toMutableList().apply {
             this[index] = value
         }
@@ -76,7 +75,7 @@ class AgencyJoinViewModel @Inject constructor(
                 numbers = newNumbers
             )
         }
-        Log.d("numbers", state.numbers.joinToString {","}.trim())
+        Log.d("numbers", state.numbers.joinToString(separator = ""))
     }
 
     fun resetNumbers() = intent {
