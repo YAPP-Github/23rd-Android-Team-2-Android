@@ -1,6 +1,5 @@
 package com.moneymong.moneymong.ledgerdetail
 
-import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -46,7 +45,6 @@ import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.moneymong.moneymong.common.ui.DottedShape
 import com.moneymong.moneymong.common.ui.noRippleClickable
-import com.moneymong.moneymong.common.ui.toWonFormat
 import com.moneymong.moneymong.design_system.R
 import com.moneymong.moneymong.design_system.component.button.MDSButton
 import com.moneymong.moneymong.design_system.component.button.MDSButtonSize
@@ -58,9 +56,7 @@ import com.moneymong.moneymong.design_system.component.textfield.util.PriceType
 import com.moneymong.moneymong.design_system.component.textfield.visualtransformation.DateVisualTransformation
 import com.moneymong.moneymong.design_system.component.textfield.visualtransformation.PriceVisualTransformation
 import com.moneymong.moneymong.design_system.component.textfield.visualtransformation.TimeVisualTransformation
-import com.moneymong.moneymong.design_system.theme.Blue01
 import com.moneymong.moneymong.design_system.theme.Blue03
-import com.moneymong.moneymong.design_system.theme.Blue04
 import com.moneymong.moneymong.design_system.theme.Body2
 import com.moneymong.moneymong.design_system.theme.Body3
 import com.moneymong.moneymong.design_system.theme.Gray01
@@ -94,6 +90,7 @@ fun LedgerDetailScreen(
 
             is LedgerDetailSideEffect.LedgerDetailEditDone -> {
                 viewModel.onChangeEditMode(false)
+                verticalScrollState.scrollTo(0)
                 // TODO
             }
 
