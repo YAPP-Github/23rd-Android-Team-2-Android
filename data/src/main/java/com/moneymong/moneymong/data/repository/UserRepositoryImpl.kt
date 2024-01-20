@@ -13,4 +13,8 @@ class UserRepositoryImpl @Inject constructor(
     override suspend fun getMyInfo(): Result<UserEntity> {
         return userRemoteDataSource.getMyInfo().map { it.toEntity() }
     }
+
+    override suspend fun withdrawal(): Result<Unit> {
+        return userRemoteDataSource.withdrawal()
+    }
 }
