@@ -2,6 +2,7 @@ package com.moneymong.moneymong.data.mapper.ledger
 
 import com.moneymong.moneymong.domain.entity.ledger.DocumentImageURLEntity
 import com.moneymong.moneymong.domain.entity.ledger.LedgerDetailEntity
+import com.moneymong.moneymong.domain.entity.ledger.LedgerTransactionDetailEntity
 import com.moneymong.moneymong.domain.entity.ledger.LedgerTransactionEntity
 import com.moneymong.moneymong.domain.entity.ledger.LedgerTransactionListEntity
 import com.moneymong.moneymong.domain.entity.ledger.ReceiptImageURLEntity
@@ -9,6 +10,7 @@ import com.moneymong.moneymong.domain.param.ledger.LedgerTransactionParam
 import com.moneymong.moneymong.network.request.ledger.LedgerTransactionRequest
 import com.moneymong.moneymong.network.response.ledger.DocumentImageURL
 import com.moneymong.moneymong.network.response.ledger.LedgerDetail
+import com.moneymong.moneymong.network.response.ledger.LedgerTransactionDetailResponse
 import com.moneymong.moneymong.network.response.ledger.LedgerTransactionListResponse
 import com.moneymong.moneymong.network.response.ledger.LedgerTransactionResponse
 import com.moneymong.moneymong.network.response.ledger.ReceiptImageURL
@@ -63,4 +65,17 @@ fun LedgerDetail.toEntity() =
         amount = this.amount,
         balance = this.balance,
         paymentDate = this.paymentDate
+    )
+
+fun LedgerTransactionDetailResponse.toEntity() =
+    LedgerTransactionDetailEntity(
+        id = this.id,
+        storeName = this.storeName,
+        amount = this.amount,
+        fundType = this.fundType,
+        description = this.description,
+        paymentDate = this.paymentDate,
+        receiptImageUrls = this.receiptImageUrls.map { it.toEntity() },
+        documentImageUrls = this.documentImageUrls.map { it.toEntity() },
+        authorName = this.authorName
     )
