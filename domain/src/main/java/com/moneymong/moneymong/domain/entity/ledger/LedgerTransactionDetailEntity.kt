@@ -2,7 +2,7 @@ package com.moneymong.moneymong.domain.entity.ledger
 
 data class LedgerTransactionDetailEntity(
     val id: Int,
-    val storeName: String,
+    val storeInfo: String,
     val amount: Int,
     val fundType: String,
     val description: String,

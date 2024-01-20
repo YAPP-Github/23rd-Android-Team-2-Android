@@ -2,6 +2,7 @@ package com.moneymong.moneymong.ledgerdetail
 
 import androidx.compose.ui.text.input.TextFieldValue
 import com.moneymong.moneymong.common.base.State
+import com.moneymong.moneymong.domain.entity.ledger.LedgerTransactionDetailEntity
 
 data class LedgerDetailState(
     val isLoading: Boolean = false,
@@ -16,5 +17,6 @@ data class LedgerDetailState(
     val isTotalPriceError: Boolean = false,
     val isPaymentDateError: Boolean = false,
     val isPaymentTimeError: Boolean = false,
-    val isMemoError: Boolean = false
+    val isMemoError: Boolean = false,
+    val ledgerTransactionDetail: LedgerTransactionDetailEntity? = null
 ): State

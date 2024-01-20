@@ -70,7 +70,7 @@ fun LedgerDetail.toEntity() =
 fun LedgerTransactionDetailResponse.toEntity() =
     LedgerTransactionDetailEntity(
         id = this.id,
-        storeName = this.storeName,
+        storeInfo = this.storeInfo,
         amount = this.amount,
         fundType = this.fundType,
         description = this.description,
