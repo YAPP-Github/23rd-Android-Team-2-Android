@@ -13,6 +13,7 @@ import com.moneymong.moneymong.feature.agency.navigation.agencyScreen
 import com.moneymong.moneymong.feature.mymong.navigation.myMongNavGraph
 import com.moneymong.moneymong.feature.mymong.navigation.navigatePrivacyPolicy
 import com.moneymong.moneymong.feature.mymong.navigation.navigateTermsOfUse
+import com.moneymong.moneymong.feature.mymong.navigation.navigateWithdrawal
 import com.moneymong.moneymong.home.navigation.rememberHomeNavigator
 import com.moneymong.moneymong.home.view.HomeBottomBarView
 import com.moneymong.moneymong.ledger.navigation.ledgerScreen
@@ -47,6 +48,8 @@ fun HomeScreen(
             myMongNavGraph(
                 navigateToTermsOfUse = homeNavController::navigateTermsOfUse,
                 navigateToPrivacyPolicy = homeNavController::navigatePrivacyPolicy,
+                navigateToWithdrawal = homeNavController::navigateWithdrawal,
+                navigateToLogin = { /* todo navigateToLogin */ },
                 navigateUp = homeNavController::navigateUp
             )
         }
