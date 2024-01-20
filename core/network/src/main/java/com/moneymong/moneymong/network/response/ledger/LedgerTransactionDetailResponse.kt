@@ -1,0 +1,13 @@
+package com.moneymong.moneymong.network.response.ledger
+
+data class LedgerTransactionDetailResponse(
+    val id: Int,
+    val storeName: String,
+    val amount: Int,
+    val fundType: String,
+    val description: String,
+    val paymentDate: String,
+    val receiptImageUrls: List<ReceiptImageURL>,
+    val documentImageUrls: List<DocumentImageURL>,
+    val authorName: String
+)
