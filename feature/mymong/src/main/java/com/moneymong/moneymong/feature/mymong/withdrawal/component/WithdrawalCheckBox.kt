@@ -2,7 +2,6 @@ package com.moneymong.moneymong.feature.mymong.withdrawal.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -23,31 +22,23 @@ import com.moneymong.moneymong.design_system.theme.White
 fun WithdrawalCheckBox(
     modifier: Modifier = Modifier,
     checked: Boolean,
-    onCheckedChange: (Boolean) -> Unit,
 ) {
     if (checked) {
-        CheckedCheckBox(
-            modifier = modifier,
-            onCheckedChange = onCheckedChange
-        )
+        CheckedCheckBox(modifier = modifier)
     } else {
-        UncheckedCheckBox(
-            modifier = modifier,
-            onCheckedChange = onCheckedChange
-        )
+        UncheckedCheckBox(modifier = modifier)
     }
 }
 
 @Composable
 private fun CheckedCheckBox(
     modifier: Modifier = Modifier,
-    onCheckedChange: (Boolean) -> Unit,
 ) {
-    Box(modifier = modifier
-        .size(18.dp)
-        .clip(shape = RoundedCornerShape(4.dp))
-        .background(color = Blue04)
-        .clickable { onCheckedChange(false) }
+    Box(
+        modifier = modifier
+            .size(18.dp)
+            .clip(shape = RoundedCornerShape(4.dp))
+            .background(color = Blue04)
     ) {
         Icon(
             modifier = Modifier.align(Alignment.Center),
@@ -61,13 +52,12 @@ private fun CheckedCheckBox(
 @Composable
 private fun UncheckedCheckBox(
     modifier: Modifier = Modifier,
-    onCheckedChange: (Boolean) -> Unit,
 ) {
-    Box(modifier = modifier
-        .size(18.dp)
-        .clip(shape = RoundedCornerShape(4.dp))
-        .background(color = Color.Transparent)
-        .border(width = 2.dp, color = Gray03, shape = RoundedCornerShape(4.dp))
-        .clickable { onCheckedChange(true) }
+    Box(
+        modifier = modifier
+            .size(18.dp)
+            .clip(shape = RoundedCornerShape(4.dp))
+            .background(color = Color.Transparent)
+            .border(width = 2.dp, color = Gray03, shape = RoundedCornerShape(4.dp))
     )
 }

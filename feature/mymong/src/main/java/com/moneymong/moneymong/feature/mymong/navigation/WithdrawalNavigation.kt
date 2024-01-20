@@ -12,8 +12,14 @@ fun NavController.navigateWithdrawal(navOptions: NavOptions? = null) {
     navigate(withdrawalRoute, navOptions)
 }
 
-internal fun NavGraphBuilder.withdrawalScreen() {
+internal fun NavGraphBuilder.withdrawalScreen(
+    navigateToLogin: () -> Unit,
+    navigateUp: () -> Unit
+) {
     composable(route = withdrawalRoute) {
-        WithdrawalScreen()
+        WithdrawalScreen(
+            navigateToLogin = navigateToLogin,
+            navigateUp = navigateUp
+        )
     }
 }
