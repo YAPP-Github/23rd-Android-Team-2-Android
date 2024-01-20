@@ -3,6 +3,7 @@ package com.moneymong.moneymong.ledgerdetail
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.core.text.isDigitsOnly
 import com.moneymong.moneymong.common.base.BaseViewModel
+import com.moneymong.moneymong.domain.usecase.ledger.FetchLedgerTransactionDetailUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import org.orbitmvi.orbit.syntax.simple.blockingIntent
 import org.orbitmvi.orbit.syntax.simple.intent
@@ -11,8 +12,20 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LedgerDetailViewModel @Inject constructor(
-
+    private val fetchLedgerTransactionDetailUseCase: FetchLedgerTransactionDetailUseCase
 ) : BaseViewModel<LedgerDetailState, LedgerDetailSideEffect>(LedgerDetailState()) {
+
+    fun fetchLedgerTransactionDetail(detailId: Int) = intent {
+        if (!state.isLoading) {
+            reduce { state.copy(isLoading = true) }
+            fetchLedgerTransactionDetailUseCase(detailId)
+                .onSuccess {
+                    reduce { state.copy(ledgerTransactionDetail = it) }
+                }.onFailure {
+                    // TODO
+                }.also { reduce { state.copy(isLoading = false) } }
+        }
+    }
 
     fun onChangeStoreNameValue(value: TextFieldValue) = blockingIntent {
         val validate = validateValue(targetValue = value, length = 20)

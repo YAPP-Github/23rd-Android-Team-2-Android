@@ -23,6 +23,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -82,11 +83,24 @@ fun LedgerDetailScreen(
                 viewModel.onChangeEditMode(true)
                 verticalScrollState.scrollTo(0)
             }
+
             is LedgerDetailSideEffect.LedgerDetailEditDone -> {
                 viewModel.onChangeEditMode(false)
                 // TODO
             }
+
+            is LedgerDetailSideEffect.LedgerDetailFetchTransactionDetail -> {
+                viewModel.fetchLedgerTransactionDetail(it.detailId)
+            }
         }
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.eventEmit(
+            LedgerDetailSideEffect.LedgerDetailFetchTransactionDetail(
+                ledgerTransactionId
+            )
+        )
     }
 
     if (false) { // TODO
