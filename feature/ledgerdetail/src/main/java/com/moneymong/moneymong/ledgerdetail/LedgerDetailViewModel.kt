@@ -3,6 +3,8 @@ package com.moneymong.moneymong.ledgerdetail
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.core.text.isDigitsOnly
 import com.moneymong.moneymong.common.base.BaseViewModel
+import com.moneymong.moneymong.common.ext.toDateFormat
+import com.moneymong.moneymong.domain.entity.ledger.LedgerTransactionDetailEntity
 import com.moneymong.moneymong.domain.usecase.ledger.FetchLedgerTransactionDetailUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import org.orbitmvi.orbit.syntax.simple.blockingIntent
@@ -21,9 +23,22 @@ class LedgerDetailViewModel @Inject constructor(
             fetchLedgerTransactionDetailUseCase(detailId)
                 .onSuccess {
                     reduce { state.copy(ledgerTransactionDetail = it) }
+                    initTextValue(it)
                 }.onFailure {
                     // TODO
                 }.also { reduce { state.copy(isLoading = false) } }
+        }
+    }
+
+    private fun initTextValue(ledgerTransactionDetail: LedgerTransactionDetailEntity) = intent {
+        reduce {
+            state.copy(
+                storeNameValue = state.storeNameValue.copy(text = ledgerTransactionDetail.storeInfo),
+                totalPriceValue = state.totalPriceValue.copy(text = ledgerTransactionDetail.amount.toString()),
+                paymentDateValue = state.paymentDateValue.copy(text = ledgerTransactionDetail.paymentDate.toDateFormat("yyyyMMdd")),
+                paymentTimeValue = state.paymentDateValue.copy(text = ledgerTransactionDetail.paymentDate.toDateFormat("HHmmss")),
+                memoValue = state.memoValue.copy(text = ledgerTransactionDetail.description)
+            )
         }
     }
 

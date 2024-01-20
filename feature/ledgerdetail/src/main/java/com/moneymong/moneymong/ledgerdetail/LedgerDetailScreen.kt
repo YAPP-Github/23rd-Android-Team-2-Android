@@ -1,5 +1,6 @@
 package com.moneymong.moneymong.ledgerdetail
 
+import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -32,6 +33,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
@@ -39,7 +42,11 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
+import com.bumptech.glide.integration.compose.GlideImage
 import com.moneymong.moneymong.common.ui.DottedShape
+import com.moneymong.moneymong.common.ui.noRippleClickable
+import com.moneymong.moneymong.common.ui.toWonFormat
 import com.moneymong.moneymong.design_system.R
 import com.moneymong.moneymong.design_system.component.button.MDSButton
 import com.moneymong.moneymong.design_system.component.button.MDSButtonSize
@@ -66,6 +73,7 @@ import com.moneymong.moneymong.ledgerdetail.view.LedgerDetailTopbarView
 import org.orbitmvi.orbit.compose.collectAsState
 import org.orbitmvi.orbit.compose.collectSideEffect
 
+@OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun LedgerDetailScreen(
     modifier: Modifier = Modifier,
@@ -173,7 +181,7 @@ fun LedgerDetailScreen(
                         )
                         Spacer(modifier = Modifier.height(8.dp))
                         Text(
-                            text = "퍼스트 유통", // TODO
+                            text = state.ledgerTransactionDetail?.storeInfo.orEmpty(),
                             style = Body3,
                             color = Gray10
                         )
@@ -213,7 +221,7 @@ fun LedgerDetailScreen(
                         )
                         Spacer(modifier = Modifier.height(8.dp))
                         Text(
-                            text = "-1,600원", // TODO
+                            text = "${state.totalPrice}원",
                             style = Body3,
                             color = Gray10
                         )
@@ -253,7 +261,7 @@ fun LedgerDetailScreen(
                         )
                         Spacer(modifier = Modifier.height(8.dp))
                         Text(
-                            text = "2023년 11월 16일", // TODO
+                            text = state.formattedDate,
                             style = Body3,
                             color = Gray10
                         )
@@ -293,7 +301,7 @@ fun LedgerDetailScreen(
                         )
                         Spacer(modifier = Modifier.height(8.dp))
                         Text(
-                            text = "15:36", // TODO
+                            text = state.formattedTime,
                             style = Body3,
                             color = Gray10
                         )
@@ -332,7 +340,7 @@ fun LedgerDetailScreen(
                         )
                         Spacer(modifier = Modifier.height(8.dp))
                         Text(
-                            text = "내용없음", // TODO
+                            text = state.ledgerTransactionDetail?.description.orEmpty(),
                             style = Body3,
                             color = Gray10
                         )
@@ -359,19 +367,30 @@ fun LedgerDetailScreen(
                         verticalArrangement = Arrangement.spacedBy(8.dp),
                         horizontalArrangement = Arrangement.spacedBy(10.dp)
                     ) {
-                        itemsIndexed(items = listOf(1, 2, 3)) { index, item -> // TODO
+                        val receiptImages = state.ledgerTransactionDetail?.receiptImageUrls.orEmpty()
+                        itemsIndexed(items = receiptImages) { index, item ->
                             Box(
                                 modifier = Modifier
                                     .height(120.dp)
                                     .clip(RoundedCornerShape(8.dp))
-                                    .background(Blue01),
-                                contentAlignment = Alignment.Center
                             ) {
-                                Icon(
-                                    painter = painterResource(id = R.drawable.ic_plus_outline),
+                                GlideImage(
+                                    modifier = Modifier.fillMaxSize(),
+                                    model = item.receiptImageUrl,
                                     contentDescription = null,
-                                    tint = Blue04
+                                    contentScale = ContentScale.FillWidth
                                 )
+                                if (state.useEditMode) {
+                                    Icon(
+                                        modifier = Modifier
+                                            .align(Alignment.TopEnd)
+                                            .noRippleClickable {  }
+                                            .padding(5.dp),
+                                        painter = painterResource(id = R.drawable.ic_close_filled),
+                                        contentDescription = null,
+                                        tint = Color.Unspecified
+                                    )
+                                }
                             }
                         }
                     }
@@ -397,19 +416,30 @@ fun LedgerDetailScreen(
                         verticalArrangement = Arrangement.spacedBy(8.dp),
                         horizontalArrangement = Arrangement.spacedBy(10.dp)
                     ) {
-                        itemsIndexed(items = listOf(1, 2, 3)) { index, item -> // TODO
+                        val documentImages = state.ledgerTransactionDetail?.documentImageUrls.orEmpty()
+                        itemsIndexed(items = documentImages) { index, item ->
                             Box(
                                 modifier = Modifier
                                     .height(120.dp)
                                     .clip(RoundedCornerShape(8.dp))
-                                    .background(Blue01),
-                                contentAlignment = Alignment.Center
                             ) {
-                                Icon(
-                                    painter = painterResource(id = R.drawable.ic_plus_outline),
+                                GlideImage(
+                                    modifier = Modifier.fillMaxSize(),
+                                    model = item.documentImageUrl,
                                     contentDescription = null,
-                                    tint = Blue04
+                                    contentScale = ContentScale.FillWidth
                                 )
+                                if (state.useEditMode) {
+                                    Icon(
+                                        modifier = Modifier
+                                            .align(Alignment.TopEnd)
+                                            .noRippleClickable {  }
+                                            .padding(5.dp),
+                                        painter = painterResource(id = R.drawable.ic_close_filled),
+                                        contentDescription = null,
+                                        tint = Color.Unspecified
+                                    )
+                                }
                             }
                         }
                     }
@@ -427,7 +457,7 @@ fun LedgerDetailScreen(
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
-                        text = "머니몽", // TODO
+                        text = state.ledgerTransactionDetail?.authorName.orEmpty(),
                         style = Body3,
                         color = Gray10
                     )
