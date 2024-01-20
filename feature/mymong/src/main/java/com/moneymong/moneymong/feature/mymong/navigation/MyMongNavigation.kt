@@ -36,5 +36,8 @@ fun NavGraphBuilder.myMongNavGraph(
 
     termsOfUseScreen(navigateUp = navigateUp)
 
-    withdrawalScreen()
+    withdrawalScreen(
+        navigateToLogin = navigateToLogin,
+        navigateUp = navigateUp
+    )
 }
