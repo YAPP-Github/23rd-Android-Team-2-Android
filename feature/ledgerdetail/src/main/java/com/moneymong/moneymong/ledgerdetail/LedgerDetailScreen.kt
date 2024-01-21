@@ -398,6 +398,7 @@ fun LedgerDetailScreen(
                                         .clip(RoundedCornerShape(8.dp))
                                         .background(Blue01)
                                         .noRippleClickable {
+                                            viewModel.onChangeImageType(isReceipt = true)
                                         },
                                     contentAlignment = Alignment.Center
                                 ) {
@@ -409,8 +410,7 @@ fun LedgerDetailScreen(
                                 }
                             }
                         }
-                        val receiptImages = state.receiptList
-                        itemsIndexed(items = receiptImages) { index, item ->
+                        itemsIndexed(items = state.receiptList) { index, item ->
                             Box(
                                 modifier = Modifier
                                     .height(120.dp)
@@ -426,7 +426,9 @@ fun LedgerDetailScreen(
                                     Icon(
                                         modifier = Modifier
                                             .align(Alignment.TopEnd)
-                                            .noRippleClickable {  }
+                                            .noRippleClickable {
+                                                viewModel.onClickRemoveReceipt(index)
+                                            }
                                             .padding(5.dp),
                                         painter = painterResource(id = R.drawable.ic_close_filled),
                                         contentDescription = null,
@@ -466,6 +468,7 @@ fun LedgerDetailScreen(
                                         .clip(RoundedCornerShape(8.dp))
                                         .background(Blue01)
                                         .noRippleClickable {
+                                            viewModel.onChangeImageType(isReceipt = false)
                                         },
                                     contentAlignment = Alignment.Center
                                 ) {
@@ -477,8 +480,7 @@ fun LedgerDetailScreen(
                                 }
                             }
                         }
-                        val documentImages = state.ledgerTransactionDetail?.documentImageUrls.orEmpty()
-                        itemsIndexed(items = documentImages) { index, item ->
+                        itemsIndexed(items = state.documentList) { index, item ->
                             Box(
                                 modifier = Modifier
                                     .height(120.dp)
@@ -486,7 +488,7 @@ fun LedgerDetailScreen(
                             ) {
                                 GlideImage(
                                     modifier = Modifier.fillMaxSize(),
-                                    model = item.documentImageUrl,
+                                    model = item,
                                     contentDescription = null,
                                     contentScale = ContentScale.FillWidth
                                 )
@@ -494,7 +496,9 @@ fun LedgerDetailScreen(
                                     Icon(
                                         modifier = Modifier
                                             .align(Alignment.TopEnd)
-                                            .noRippleClickable {  }
+                                            .noRippleClickable {
+                                                viewModel.onClickRemoveDocument(index)
+                                            }
                                             .padding(5.dp),
                                         painter = painterResource(id = R.drawable.ic_close_filled),
                                         contentDescription = null,
