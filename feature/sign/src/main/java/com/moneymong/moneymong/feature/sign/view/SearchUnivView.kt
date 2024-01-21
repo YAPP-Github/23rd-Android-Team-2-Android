@@ -94,7 +94,7 @@ fun SearchUnivView(
         )
 
         if (state.isListVisible) {
-            if (state.universityResponse.universities.isNotEmpty()) {
+            if (state.universityResponse?.universities?.isNotEmpty() == true) {
                 UnivList(univs = state.universityResponse.universities, onClick)
             } else {
                 Column(

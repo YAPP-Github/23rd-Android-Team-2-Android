@@ -11,10 +11,6 @@ import retrofit2.http.Query
 
 interface UniversityApi {
 
-    @GET("api/v1/user-university")
-    suspend fun userUniv(
-    ): Result<UnivResponse>
-
     @POST("api/v1/user-university")
     suspend fun createUniv(
         @Body body: UnivRequest

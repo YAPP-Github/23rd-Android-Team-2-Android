@@ -17,22 +17,6 @@ import javax.inject.Inject
 class SignUpViewModel @Inject constructor(
     private val univUseCase: UnivUseCase
 ) : BaseViewModel<SignUpState, SignUpSideEffect>(SignUpState()) {
-
-    fun userUniv() = intent {
-        univUseCase.userUniv()
-            .onSuccess {
-                Log.d("University success", it.toString())
-            }
-            .onFailure {
-                Log.d("University failure", it.message.toString())
-                reduce {
-                    state.copy(
-                        isError = true
-                    )
-                }
-            }
-    }
-
     fun createUniv(universityName: String, grade: Int) = intent {
         val body = UnivParam(universityName, grade)
         univUseCase.createUniv(body)

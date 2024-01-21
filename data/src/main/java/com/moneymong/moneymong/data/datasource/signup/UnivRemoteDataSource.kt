@@ -6,8 +6,6 @@ import com.moneymong.moneymong.network.response.signup.UnivResponse
 import com.moneymong.moneymong.network.response.signup.UniversitiesReponse
 
 interface UnivRemoteDataSource {
-    suspend fun userUniv() : Result<UnivResponse>
-
     suspend fun createUniv(body: UnivRequest) : Result<Unit>
 
     suspend fun searchUniv(searchQuery : SearchQueryRequest) : Result<UniversitiesReponse>
