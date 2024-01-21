@@ -1,11 +1,12 @@
-package com.moneymong.moneymong.design_system.component.textfield.util
+package com.moneymong.moneymong.design_system.component.textfield.visualtransformation
 
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.input.OffsetMapping
 import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.text.input.VisualTransformation
+import com.moneymong.moneymong.design_system.component.textfield.util.PriceType
 
-class PriceVisualTransformation(private val type: MDSNumberTextFieldType) : VisualTransformation {
+class PriceVisualTransformation(private val type: PriceType) : VisualTransformation {
     override fun filter(text: AnnotatedString): TransformedText {
         val amount = text.text
         var numberWithComma = ""
