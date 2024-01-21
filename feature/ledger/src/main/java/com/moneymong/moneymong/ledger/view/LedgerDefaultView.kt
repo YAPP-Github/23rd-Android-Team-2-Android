@@ -3,6 +3,7 @@ package com.moneymong.moneymong.ledger.view
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -29,6 +30,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.moneymong.moneymong.common.ui.noRippleClickable
+import com.moneymong.moneymong.common.ui.toWonFormat
 import com.moneymong.moneymong.design_system.R.*
 import com.moneymong.moneymong.design_system.component.chip.MDSChip
 import com.moneymong.moneymong.design_system.theme.Body2
@@ -40,21 +43,27 @@ import com.moneymong.moneymong.design_system.theme.Gray07
 import com.moneymong.moneymong.design_system.theme.Gray10
 import com.moneymong.moneymong.design_system.theme.Heading5
 import com.moneymong.moneymong.design_system.theme.White
+import com.moneymong.moneymong.domain.entity.ledger.LedgerDetailEntity
 import com.moneymong.moneymong.ledger.view.item.LedgerTransactionItem
+import java.time.LocalDate
 
 enum class LedgerTransactionType(
+    val type: String,
     val description: String,
     val imgRes: Int
 ) {
     전체(
+        type = "ALL",
         description = "기록된 장부가 없습니다",
         imgRes = drawable.img_transaction_empty
     ),
     지출(
+        type = "EXPENSE",
         description = "지출기록이 없습니다",
         imgRes = drawable.img_expenditure_empty
     ),
     수입(
+        type = "INCOME",
         description = "수입기록이 없습니다",
         imgRes = drawable.img_expenditure_empty
     )
@@ -62,7 +71,15 @@ enum class LedgerTransactionType(
 
 @Composable
 fun LedgerDefaultView(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    totalBalance: Int,
+    ledgerDetails: List<LedgerDetailEntity>,
+    transactionType: LedgerTransactionType,
+    currentDate: LocalDate,
+    hasTransaction: Boolean,
+    onChangeTransactionType: (LedgerTransactionType) -> Unit,
+    onAddMonthFromCurrentDate: (Long) -> Unit,
+    onClickTransactionItem: (Int) -> Unit
 ) {
     var selectedTabIndex by remember { mutableIntStateOf(0) }
     val lazyColumnState = rememberLazyListState()
@@ -71,7 +88,6 @@ fun LedgerDefaultView(
         LedgerTransactionType.지출,
         LedgerTransactionType.수입
     )
-    val testList = listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15) // TODO
 
     LazyColumn(
         modifier = modifier
@@ -80,12 +96,12 @@ fun LedgerDefaultView(
         state = lazyColumnState
     ) {
         item {
-            Spacer(modifier = Modifier.height(24.dp))
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 20.dp),
-                horizontalArrangement = Arrangement.SpaceBetween
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 Column {
                     Text(
@@ -95,7 +111,7 @@ fun LedgerDefaultView(
                     )
                     Spacer(modifier = Modifier.height(6.dp))
                     Text(
-                        text = "512,000원", // TODO
+                        text = totalBalance.toString().toWonFormat(true),
                         style = Heading5,
                         color = Gray10
                     )
@@ -106,59 +122,81 @@ fun LedgerDefaultView(
                     contentDescription = null
                 )
             }
-            Row(
+            Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 20.dp)
                     .clip(RoundedCornerShape(8.dp))
                     .background(Gray01),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center
+                contentAlignment = Alignment.Center
             ) {
-                Icon(
-                    modifier = Modifier.size(16.dp),
-                    painter = painterResource(id = drawable.ic_chevron_left),
-                    contentDescription = null,
-                    tint = Gray06
-                )
-                Spacer(modifier = Modifier.width(16.dp))
-                Text(
-                    modifier = Modifier.padding(vertical = 10.dp),
-                    text = "2023년 11월", // TODO
-                    style = Body2,
-                    color = Gray06
-                )
-                Spacer(modifier = Modifier.width(16.dp))
-                Icon(
-                    modifier = Modifier.size(16.dp),
-                    painter = painterResource(id = drawable.ic_chevron_right),
-                    contentDescription = null,
-                    tint = Gray03 // TODO 이번 달일 경우 우측 아이콘 비활성화
-                )
+                Row(
+                    modifier = Modifier.width(127.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+
+                ) {
+                    Icon(
+                        modifier = Modifier
+                            .size(16.dp)
+                            .noRippleClickable {
+                                onAddMonthFromCurrentDate(-1)
+                            },
+                        painter = painterResource(id = drawable.ic_chevron_left),
+                        contentDescription = null,
+                        tint = Gray06
+                    )
+                    Text(
+                        modifier = Modifier.padding(vertical = 10.dp),
+                        text = "${currentDate.year}년 ${currentDate.month.value}월",
+                        style = Body2,
+                        color = Gray06
+                    )
+                    val isLastMonth =
+                        currentDate.year == LocalDate.now().year && currentDate.monthValue == LocalDate.now().monthValue
+                    Icon(
+                        modifier = Modifier
+                            .size(16.dp)
+                            .noRippleClickable {
+                                if (!isLastMonth) {
+                                    onAddMonthFromCurrentDate(1)
+                                }
+                            },
+                        painter = painterResource(id = drawable.ic_chevron_right),
+                        contentDescription = null,
+                        tint = if (isLastMonth) Gray03 else Gray06
+                    )
+                }
             }
             Spacer(modifier = Modifier.height(20.dp))
             MDSChip(
                 modifier = Modifier.padding(start = 20.dp),
                 tabs = chips.map { it.name },
                 selectedTabIndex = selectedTabIndex,
-                onChangeSelectedTabIndex = { selectedTabIndex = it }
+                onChangeSelectedTabIndex = {
+                    selectedTabIndex = it
+                    onChangeTransactionType(chips[it])
+                }
             )
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(6.dp))
         }
-        if (testList.isEmpty()) { // TODO
-            val descriptionDate =
-                if (chips[selectedTabIndex] == LedgerTransactionType.전체) "11월에 " else "" // TODO
-            item {
-                Spacer(modifier = Modifier.height(121.dp))
-                LedgerTransactionEmptyView(
-                    text = descriptionDate + chips[selectedTabIndex].description,
-                    image = chips[selectedTabIndex].imgRes
+        if (hasTransaction) {
+            itemsIndexed(ledgerDetails) { index, item ->
+                LedgerTransactionItem(
+                    modifier = Modifier.padding(horizontal = 20.dp),
+                    ledgerDetail = item,
+                    onClickTransactionItem = onClickTransactionItem
                 )
             }
         } else {
-            itemsIndexed(testList) { index, item -> // TODO
-                LedgerTransactionItem(modifier = Modifier.padding(horizontal = 20.dp))
-                Spacer(modifier = Modifier.height(20.dp))
+            val descriptionDate =
+                if (transactionType == LedgerTransactionType.전체) "${currentDate.monthValue}월에 " else ""
+            item {
+                Spacer(modifier = Modifier.height(121.dp))
+                LedgerTransactionEmptyView(
+                    text = descriptionDate + transactionType.description,
+                    image = transactionType.imgRes
+                )
             }
         }
     }
@@ -167,5 +205,14 @@ fun LedgerDefaultView(
 @Preview(showBackground = true)
 @Composable
 fun LedgerDefaultPreview() {
-    LedgerDefaultView()
+    LedgerDefaultView(
+        totalBalance = 123123,
+        ledgerDetails = emptyList(),
+        transactionType = LedgerTransactionType.전체,
+        currentDate = LocalDate.now(),
+        hasTransaction = false,
+        onChangeTransactionType = {},
+        onAddMonthFromCurrentDate = {},
+        onClickTransactionItem = {}
+    )
 }

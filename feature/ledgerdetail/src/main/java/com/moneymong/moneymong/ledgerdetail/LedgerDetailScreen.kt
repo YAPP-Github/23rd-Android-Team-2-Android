@@ -47,7 +47,9 @@ import com.moneymong.moneymong.ledgerdetail.view.LedgerDetailTopbarView
 
 @Composable
 fun LedgerDetailScreen(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    ledgerTransactionId: Int,
+    popBackStack: () -> Unit
 ) {
     val verticalScrollState = rememberScrollState()
 
@@ -65,7 +67,7 @@ fun LedgerDetailScreen(
     Scaffold(
         topBar = {
             LedgerDetailTopbarView(
-                onClickPrev = { /*TODO*/ },
+                onClickPrev = popBackStack,
                 onClickDelete = { /*TODO*/ }
             )
         }
@@ -359,5 +361,8 @@ fun LedgerDetailScreen(
 @Preview(showBackground = true)
 @Composable
 fun LedgerDetailScreenPreview() {
-    LedgerDetailScreen()
+    LedgerDetailScreen(
+        ledgerTransactionId = 0,
+        popBackStack = {}
+    )
 }
