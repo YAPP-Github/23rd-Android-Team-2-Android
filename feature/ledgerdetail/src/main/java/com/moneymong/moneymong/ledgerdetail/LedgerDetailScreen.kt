@@ -1,5 +1,8 @@
 package com.moneymong.moneymong.ledgerdetail
 
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -34,6 +37,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
@@ -43,6 +47,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
+import com.moneymong.moneymong.common.ext.base64ToFile
+import com.moneymong.moneymong.common.ext.encodingBase64
 import com.moneymong.moneymong.common.ui.DottedShape
 import com.moneymong.moneymong.common.ui.noRippleClickable
 import com.moneymong.moneymong.design_system.R
@@ -56,7 +62,9 @@ import com.moneymong.moneymong.design_system.component.textfield.util.PriceType
 import com.moneymong.moneymong.design_system.component.textfield.visualtransformation.DateVisualTransformation
 import com.moneymong.moneymong.design_system.component.textfield.visualtransformation.PriceVisualTransformation
 import com.moneymong.moneymong.design_system.component.textfield.visualtransformation.TimeVisualTransformation
+import com.moneymong.moneymong.design_system.theme.Blue01
 import com.moneymong.moneymong.design_system.theme.Blue03
+import com.moneymong.moneymong.design_system.theme.Blue04
 import com.moneymong.moneymong.design_system.theme.Body2
 import com.moneymong.moneymong.design_system.theme.Body3
 import com.moneymong.moneymong.design_system.theme.Gray01
@@ -77,9 +85,19 @@ fun LedgerDetailScreen(
     ledgerTransactionId: Int,
     popBackStack: () -> Unit
 ) {
+    val context = LocalContext.current
     val state = viewModel.collectAsState().value
     val verticalScrollState = rememberScrollState()
     val focusManager = LocalFocusManager.current
+
+    val singlePhotoPickerLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.PickVisualMedia(),
+        onResult = { uri ->
+            uri?.let {
+                viewModel.postS3URLImage(it.encodingBase64(context).base64ToFile(context))
+            }
+        }
+    )
 
     viewModel.collectSideEffect {
         when (it) {
@@ -96,6 +114,14 @@ fun LedgerDetailScreen(
 
             is LedgerDetailSideEffect.LedgerDetailFetchTransactionDetail -> {
                 viewModel.fetchLedgerTransactionDetail(it.detailId)
+            }
+
+            is LedgerDetailSideEffect.LedgerDetailOpenImagePicker -> {
+                singlePhotoPickerLauncher.launch(
+                    PickVisualMediaRequest(
+                        ActivityResultContracts.PickVisualMedia.ImageOnly
+                    )
+                )
             }
         }
     }
@@ -364,7 +390,26 @@ fun LedgerDetailScreen(
                         verticalArrangement = Arrangement.spacedBy(8.dp),
                         horizontalArrangement = Arrangement.spacedBy(10.dp)
                     ) {
-                        val receiptImages = state.ledgerTransactionDetail?.receiptImageUrls.orEmpty()
+                        if (state.useEditMode) {
+                            item {
+                                Box(
+                                    modifier = Modifier
+                                        .height(120.dp)
+                                        .clip(RoundedCornerShape(8.dp))
+                                        .background(Blue01)
+                                        .noRippleClickable {
+                                        },
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Icon(
+                                        painter = painterResource(id = R.drawable.ic_plus_outline),
+                                        contentDescription = null,
+                                        tint = Blue04
+                                    )
+                                }
+                            }
+                        }
+                        val receiptImages = state.receiptList
                         itemsIndexed(items = receiptImages) { index, item ->
                             Box(
                                 modifier = Modifier
@@ -373,7 +418,7 @@ fun LedgerDetailScreen(
                             ) {
                                 GlideImage(
                                     modifier = Modifier.fillMaxSize(),
-                                    model = item.receiptImageUrl,
+                                    model = item,
                                     contentDescription = null,
                                     contentScale = ContentScale.FillWidth
                                 )
@@ -413,6 +458,25 @@ fun LedgerDetailScreen(
                         verticalArrangement = Arrangement.spacedBy(8.dp),
                         horizontalArrangement = Arrangement.spacedBy(10.dp)
                     ) {
+                        if (state.useEditMode) {
+                            item {
+                                Box(
+                                    modifier = Modifier
+                                        .height(120.dp)
+                                        .clip(RoundedCornerShape(8.dp))
+                                        .background(Blue01)
+                                        .noRippleClickable {
+                                        },
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Icon(
+                                        painter = painterResource(id = R.drawable.ic_plus_outline),
+                                        contentDescription = null,
+                                        tint = Blue04
+                                    )
+                                }
+                            }
+                        }
                         val documentImages = state.ledgerTransactionDetail?.documentImageUrls.orEmpty()
                         itemsIndexed(items = documentImages) { index, item ->
                             Box(
