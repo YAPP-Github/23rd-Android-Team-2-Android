@@ -48,7 +48,7 @@ fun AgencyInviteCodeView(
     focusRequesters: List<FocusRequester>,
     isError : Boolean,
     numbers : List<String>,
-    agencyCodeNumbers : (Long, String) -> Unit,
+    agencyCodeNumbers : (Long) -> Unit,
     onIsErrorChanged: (Boolean) -> Unit,
     onIsNumbersChanged: (Int, String) -> Unit,
 ) {
@@ -97,13 +97,13 @@ fun AgencyInviteCodeView(
                         value = value,
                         onValueChange = { newValue ->
                             if (newValue.length == 1 ) {
-                                CoroutineScope(Dispatchers.IO).launch {
+                                //CoroutineScope(Dispatchers.IO).launch {
                                     onIsNumbersChanged(index, newValue)
-                                }
+                                //}
                                 if (index == numbers.lastIndex) {
                                     keyboardController?.hide()
                                     focusManager.clearFocus()
-                                    agencyCodeNumbers(agencyId, numbers.joinToString(separator = ""))
+                                    agencyCodeNumbers(agencyId)
                                 }
                             }
                         },

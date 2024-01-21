@@ -40,7 +40,6 @@ class AgencyRepositoryImpl @Inject constructor(
         agencyId: Long,
         codeNumbers: AgencyJoinParam
     ): Result<AgencyJoinEntity> {
-        return agencyRemoteDataSource.agencyCodeNumbers(agencyId, codeNumbers.toRequest())
-            .map { it.toEntity() }
+        return agencyRemoteDataSource.agencyCodeNumbers(agencyId, codeNumbers.toRequest()).map { it.toEntity() }
     }
 }

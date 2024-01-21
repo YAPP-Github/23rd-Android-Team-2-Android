@@ -15,12 +15,11 @@ class AgencyJoinViewModel @Inject constructor(
     private val useCase: AgencyJoinUseCase
 ) : BaseViewModel<AgencyJoinState, AgencyJoinSideEffect>(AgencyJoinState()) {
 
-    fun agencyCodeNumbers(agencyId: Long, codeNumbers: String) = intent {
-        Log.d("codeNumbers", codeNumbers)
+    fun agencyCodeNumbers(agencyId: Long) = intent {
+        val codeNumbers =  state.numbers.joinToString(separator = "")
         viewModelScope.launch {
             useCase.agencyCodeNumbers(agencyId, codeNumbers)
                 .onSuccess {
-                    Log.d("success", it.toString())
                     if (it.certified) {
                         reduce {
                             state.copy(
@@ -38,24 +37,13 @@ class AgencyJoinViewModel @Inject constructor(
                     }
                 }
                 .onFailure {
-                    Log.d("failure", it.message.toString())
                     //TODO - 에러화면
+
                 }
         }
 
     }
 
-    fun compareError() = intent {
-        //TODO 초대코드 인증
-        val allNumbersEntered = state.numbers.none { it.isEmpty() }
-        if (allNumbersEntered && state.numbers.joinToString { "," } != "000000") {
-            reduce {
-                state.copy(
-
-                )
-            }
-        }
-    }
 
     fun onIsErrorChanged(newIsError: Boolean) = intent {
         reduce {
