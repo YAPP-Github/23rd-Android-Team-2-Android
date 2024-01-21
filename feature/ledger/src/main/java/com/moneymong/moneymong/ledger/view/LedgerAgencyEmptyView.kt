@@ -25,7 +25,7 @@ import com.moneymong.moneymong.ledger.R
 @Composable
 fun LedgerAgencyEmptyView(
     modifier: Modifier = Modifier,
-    onClickFindTeam: () -> Unit
+    onClickFindAgency: () -> Unit
 ) {
     Column(
         modifier = modifier.fillMaxSize(),
@@ -49,7 +49,7 @@ fun LedgerAgencyEmptyView(
             text = "내 소속 찾으러가기",
             type = MDSButtonType.PRIMARY,
             size = MDSButtonSize.MEDIUM,
-            onClick = { /*TODO*/ }
+            onClick = onClickFindAgency
         )
     }
 }

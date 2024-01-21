@@ -17,6 +17,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.moneymong.moneymong.common.ui.noRippleClickable
 import com.moneymong.moneymong.design_system.R.*
 import com.moneymong.moneymong.design_system.theme.Body3
 import com.moneymong.moneymong.design_system.theme.Gray03
@@ -56,6 +57,7 @@ fun OCRCameraPermissionDeniedView(
         )
         Spacer(modifier = Modifier.height(40.dp))
         Text(
+            modifier = Modifier.noRippleClickable { onClickRequestPermission() },
             text = "설정 열기",
             style = Body3,
             color = Mint03
