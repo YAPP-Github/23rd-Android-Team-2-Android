@@ -16,11 +16,11 @@ class TokenRepositoryImpl @Inject constructor(
     private val tokenRemoteDataSource: TokenRemoteDataSource
 ) : TokenRepository {
 
-    override suspend fun getRefreshToken(): String {
+    override suspend fun getRefreshToken(): Result<String> {
         return localDataSource.getRefreshToken()
     }
 
-    override suspend fun getAccessToken(): String {
+    override suspend fun getAccessToken(): Result<String> {
         return localDataSource.getAccessToken()
     }
 
@@ -44,7 +44,7 @@ class TokenRepositoryImpl @Inject constructor(
         tokenRemoteDataSource.deleteRefreshToken(body.toRequest())
     }
 
-    override suspend fun getSchoolInfo(): Boolean {
+    override suspend fun getSchoolInfo(): Result<Boolean> {
         return localDataSource.getSchoolInfo()
     }
 

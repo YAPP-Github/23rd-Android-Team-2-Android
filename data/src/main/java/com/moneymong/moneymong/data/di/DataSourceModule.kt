@@ -11,32 +11,30 @@ import com.moneymong.moneymong.data.datasource.signup.UnivRemoteDataSourceImpl
 import com.moneymong.moneymong.network.di.NetworkModule
 import dagger.Binds
 import dagger.Module
-import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 
-
 @Module(includes = [NetworkModule::class])
 @InstallIn(SingletonComponent::class)
-class DataSourceModule {
+abstract class DataSourceModule {
 
-    @Provides
-    fun bindLoginDataSource(
+    @Binds
+    abstract fun bindLoginDataSource(
         loginRemoteDataSourceImpl: LoginRemoteDataSourceImpl
-    ): LoginRemoteDataSource = loginRemoteDataSourceImpl
+    ): LoginRemoteDataSource
 
-    @Provides
-    fun bindUnivDataSource(
+    @Binds
+    abstract fun bindUnivDataSource(
         univRemoteDataSourceImpl: UnivRemoteDataSourceImpl
-    ): UnivRemoteDataSource = univRemoteDataSourceImpl
+    ): UnivRemoteDataSource
 
-    @Provides
-    fun bindLoginLocalDataSource(
+    @Binds
+    abstract fun bindLoginLocalDataSource(
         loginLocalDataSourceImpl: LoginLocalDataSourceImpl
-    ): LoginLocalDataSource = loginLocalDataSourceImpl
+    ): LoginLocalDataSource
 
-    @Provides
-    fun bindTokenRemoteDataSource(
+    @Binds
+    abstract fun bindTokenRemoteDataSource(
         tokenRemoteDataSourceImpl: TokenRemoteDataSourceImpl
-    ) : TokenRemoteDataSource = tokenRemoteDataSourceImpl
+    ): TokenRemoteDataSource
 }

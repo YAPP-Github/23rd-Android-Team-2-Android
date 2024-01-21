@@ -17,9 +17,7 @@ data class SignUpState(
     //view
     val isListVisible: Boolean = false,
     val isFilled: Boolean = false,
-    val universityResponse: UniversitiesEntity = UniversitiesEntity(
-        universities = emptyList()
-    ),
+    val universityResponse: UniversitiesEntity? = null,
     val isUnivCreated : Boolean = false,
     //item
     val isItemSelected : Boolean = false,

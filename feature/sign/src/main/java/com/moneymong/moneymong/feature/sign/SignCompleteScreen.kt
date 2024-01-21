@@ -13,6 +13,8 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
@@ -36,18 +38,21 @@ import org.orbitmvi.orbit.compose.collectAsState
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SignCompleteScreen(
-    viewModel: SignCompleteViewModel = hiltViewModel(),
     navController: NavHostController
 ) {
 
-    val state = viewModel.collectAsState().value
+    val isCompleteBtnClicked = remember { mutableStateOf(false) }
 
-    LaunchedEffect(key1 = state.isCompleteBtnClicked) {
-        if (state.isCompleteBtnClicked) {
+    LaunchedEffect(key1 = isCompleteBtnClicked.value) {
+        if (isCompleteBtnClicked.value) {
             navController.navigate(homeRoute) {
                 popUpTo(signCompleteRoute) { inclusive = true }
             }
         }
+    }
+
+    fun onChangeCompleteBtn() {
+        isCompleteBtnClicked.value = true
     }
 
     Scaffold(
@@ -80,7 +85,7 @@ fun SignCompleteScreen(
         content = { innerPadding ->
             SignCompleteContent(
                 modifier = Modifier.padding(innerPadding),
-                viewModel = viewModel
+                onChangeCompleteBtn = { onChangeCompleteBtn() }
             )
         }
     )
@@ -90,7 +95,7 @@ fun SignCompleteScreen(
 @Composable
 fun SignCompleteContent(
     modifier: Modifier = Modifier,
-    viewModel: SignCompleteViewModel
+    onChangeCompleteBtn : () -> Unit
 ) {
     Box(
         modifier = modifier
@@ -102,7 +107,7 @@ fun SignCompleteContent(
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.BottomCenter),
-            viewModel = viewModel
+            onChangeCompleteBtn = onChangeCompleteBtn
         )
     }
 }

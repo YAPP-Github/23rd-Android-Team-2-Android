@@ -20,7 +20,7 @@ import com.moneymong.moneymong.feature.sign.viewmodel.SignCompleteViewModel
 @Composable
 fun SignCompleteButtonView (
     modifier: Modifier = Modifier,
-    viewModel : SignCompleteViewModel
+    onChangeCompleteBtn : () -> Unit
 ){
 
     Column(
@@ -29,7 +29,7 @@ fun SignCompleteButtonView (
         MDSButton(
             modifier = Modifier.fillMaxWidth(),
             onClick = {
-                viewModel.isCompleteBtnClicked()
+                onChangeCompleteBtn()
             },
             text = "홈으로 이동하기",
             type = MDSButtonType.PRIMARY,

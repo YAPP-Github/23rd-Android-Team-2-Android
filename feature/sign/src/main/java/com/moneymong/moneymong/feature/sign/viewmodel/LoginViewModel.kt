@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.moneymong.moneymong.common.base.BaseViewModel
 import com.moneymong.moneymong.domain.LoginCallback
 import com.moneymong.moneymong.domain.usecase.login.LoginUseCase
+import com.moneymong.moneymong.domain.usecase.login.TokenUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import com.moneymong.moneymong.feature.sign.sideeffect.LoginSideEffect
 import com.moneymong.moneymong.feature.sign.state.LoginState
@@ -18,29 +19,27 @@ import javax.inject.Inject
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val loginUseCase: LoginUseCase,
+    private val tokenUseCase: TokenUseCase
 ) : BaseViewModel<LoginState, LoginSideEffect>(LoginState()), TokenCallback {
 
     fun onLoginButtonClicked() = intent {
         viewModelScope.launch {
-            loginUseCase.kakaoLogin(object : LoginCallback {
+            loginUseCase.invoke(object : LoginCallback {
                 override suspend fun onLoginSuccess() {
-                    if (loginUseCase.getSchoolInfo()) {
-                        reduce {
-                            state.copy(
-                                isSchoolInfoExist = true
-                            )
+                    tokenUseCase.getSchoolInfo()
+                        .onSuccess {
+                            reduce {
+                                state.copy(
+                                    isSchoolInfoExist = true
+                                )
+                            }
+                        }.onFailure {
+                            reduce {
+                                state.copy(
+                                    isSchoolInfoExist = false
+                                )
+                            }
                         }
-                        Log.d("state1", state.isSchoolInfoExist.toString())
-                    } else {
-                        reduce {
-                            state.copy(
-                                isSchoolInfoExist = false
-                            )
-                        }
-                        Log.d("state2", state.isSchoolInfoExist.toString())
-
-                    }
-
                 }
 
                 override suspend fun onLoginFailure(exception: Exception) {

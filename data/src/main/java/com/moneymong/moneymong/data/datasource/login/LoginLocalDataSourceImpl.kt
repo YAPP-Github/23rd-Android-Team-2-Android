@@ -28,14 +28,14 @@ class LoginLocalDataSourceImpl @Inject constructor(
     private val loginSuccess = booleanPreferencesKey("LOGIN_SUCCESS")
     private val schoolInfoExist = booleanPreferencesKey("SCHOOL_INFO_EXIST")
 
-    override suspend fun getRefreshToken(): String {
+    override suspend fun getRefreshToken(): Result<String> {
         val preferences = context.dataStore.data.first()
-        return preferences[refreshToken] ?: ""
+        return Result.success(preferences[refreshToken] ?: "")
     }
 
-    override suspend fun getAccessToken(): String {
+    override suspend fun getAccessToken(): Result<String> {
         val preferences = context.dataStore.data.first()
-        return preferences[accessToken] ?: ""
+        return Result.success(preferences[accessToken] ?: "")
     }
 
     override suspend fun updateTokens(aToken: String, rToken: String) {
@@ -51,9 +51,9 @@ class LoginLocalDataSourceImpl @Inject constructor(
         }
     }
 
-    override suspend fun getSchoolInfo(): Boolean {
+    override suspend fun getSchoolInfo(): Result<Boolean> {
         val preferences = context.dataStore.data.first()
-        return preferences[schoolInfoExist] ?: false
+        return Result.success(preferences[schoolInfoExist] ?: false)
     }
 
     override suspend fun deleteToken() {

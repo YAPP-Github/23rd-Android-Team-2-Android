@@ -10,10 +10,6 @@ import javax.inject.Inject
 class UnivUseCase @Inject constructor(
     private val univRepository: UnivRepository
 ){
-    suspend fun userUniv(): Result<UnivEntity> {
-        return univRepository.userUniv()
-    }
-
     suspend fun createUniv(body : UnivParam) : Result<Unit>{
         return univRepository.createUniv(body)
     }

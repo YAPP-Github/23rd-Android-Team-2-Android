@@ -13,10 +13,6 @@ import javax.inject.Inject
 class UnivRepositoryImpl @Inject constructor(
     private val univRemoteDataSource: UnivRemoteDataSource
 ) : UnivRepository {
-    override suspend fun userUniv(): Result<UnivEntity> {
-        return univRemoteDataSource.userUniv().map { it.toEntity() }
-    }
-
     override suspend fun createUniv(body: UnivParam): Result<Unit> {
         return univRemoteDataSource.createUniv(body.toRequest())
     }
