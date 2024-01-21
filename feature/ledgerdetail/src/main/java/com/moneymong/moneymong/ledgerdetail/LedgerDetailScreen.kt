@@ -102,14 +102,14 @@ fun LedgerDetailScreen(
     viewModel.collectSideEffect {
         when (it) {
             is LedgerDetailSideEffect.LedgerDetailEdit -> {
-                viewModel.onChangeEditMode(true)
                 verticalScrollState.scrollTo(0)
+                viewModel.onChangeEditMode(true)
             }
 
             is LedgerDetailSideEffect.LedgerDetailEditDone -> {
-                viewModel.onChangeEditMode(false)
                 verticalScrollState.scrollTo(0)
-                // TODO
+                viewModel.onChangeEditMode(false)
+                viewModel.ledgerTransactionEdit(detailId = ledgerTransactionId)
             }
 
             is LedgerDetailSideEffect.LedgerDetailFetchTransactionDetail -> {
@@ -384,13 +384,14 @@ fun LedgerDetailScreen(
                     LazyVerticalGrid(
                         modifier = modifier
                             .fillMaxSize()
-                            .heightIn(max = 324.dp)
+                            .heightIn(max = 504.dp)
                             .background(White),
                         columns = GridCells.Fixed(3),
                         verticalArrangement = Arrangement.spacedBy(8.dp),
                         horizontalArrangement = Arrangement.spacedBy(10.dp)
                     ) {
-                        if (state.useEditMode) {
+                        val showAddReceipt = state.useEditMode && state.receiptList.size < 12
+                        if (showAddReceipt) {
                             item {
                                 Box(
                                     modifier = Modifier
@@ -427,7 +428,7 @@ fun LedgerDetailScreen(
                                         modifier = Modifier
                                             .align(Alignment.TopEnd)
                                             .noRippleClickable {
-                                                viewModel.onClickRemoveReceipt(index)
+                                                viewModel.onClickRemoveReceipt(item)
                                             }
                                             .padding(5.dp),
                                         painter = painterResource(id = R.drawable.ic_close_filled),
@@ -454,13 +455,14 @@ fun LedgerDetailScreen(
                     LazyVerticalGrid(
                         modifier = modifier
                             .fillMaxSize()
-                            .heightIn(max = 324.dp)
+                            .heightIn(max = 504.dp)
                             .background(White),
                         columns = GridCells.Fixed(3),
                         verticalArrangement = Arrangement.spacedBy(8.dp),
                         horizontalArrangement = Arrangement.spacedBy(10.dp)
                     ) {
-                        if (state.useEditMode) {
+                        val showAddDocument = state.useEditMode && state.documentList.size < 12
+                        if (showAddDocument) {
                             item {
                                 Box(
                                     modifier = Modifier
@@ -497,7 +499,7 @@ fun LedgerDetailScreen(
                                         modifier = Modifier
                                             .align(Alignment.TopEnd)
                                             .noRippleClickable {
-                                                viewModel.onClickRemoveDocument(index)
+                                                viewModel.onClickRemoveDocument(item)
                                             }
                                             .padding(5.dp),
                                         painter = painterResource(id = R.drawable.ic_close_filled),

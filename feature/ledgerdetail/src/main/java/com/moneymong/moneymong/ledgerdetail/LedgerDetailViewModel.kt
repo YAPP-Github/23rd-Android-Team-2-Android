@@ -19,6 +19,7 @@ import com.moneymong.moneymong.domain.usecase.ledgerdetail.PostLedgerReceiptTran
 import com.moneymong.moneymong.domain.usecase.ledgerdetail.UpdateLedgerTransactionDetailUseCase
 import com.moneymong.moneymong.domain.usecase.ocr.PostFileUploadUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import org.orbitmvi.orbit.syntax.simple.blockingIntent
 import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.postSideEffect
@@ -37,82 +38,90 @@ class LedgerDetailViewModel @Inject constructor(
     private val postFileUploadUseCase: PostFileUploadUseCase
 ) : BaseViewModel<LedgerDetailState, LedgerDetailSideEffect>(LedgerDetailState()) {
 
-    fun fetchLedgerTransactionDetail(detailId: Int) = intent {
+    fun ledgerTransactionEdit(detailId: Int) = intent {
         if (!state.isLoading) {
             reduce { state.copy(isLoading = true) }
-            fetchLedgerTransactionDetailUseCase(detailId)
-                .onSuccess {
-                    reduce { state.copy(ledgerTransactionDetail = it) }
-                    initTextValue(it)
-                }.onFailure {
-                    // TODO
-                }.also { reduce { state.copy(isLoading = false) } }
+            postLedgerReceiptTransaction(detailId)
+            deleteLedgerReceiptTransaction(detailId)
+            postLedgerDocumentTransaction(detailId)
+            deleteLedgerDocumentTransaction(detailId)
+            updateLedgerTransactionDetail(detailId)
         }
+
+        reduce { state.copy(isLoading = false) }
+    }
+
+    fun fetchLedgerTransactionDetail(detailId: Int) = intent {
+        fetchLedgerTransactionDetailUseCase(detailId)
+            .onSuccess {
+                reduce { state.copy(ledgerTransactionDetail = it) }
+                initTextValue(it)
+            }.onFailure {
+                // TODO
+            }
     }
 
     fun updateLedgerTransactionDetail(detailId: Int) = intent {
-        if (!state.isLoading) {
-            reduce { state.copy(isLoading = true) }
-            val param = LedgerTransactionDetailParam(
-                detailId = detailId,
-                storeInfo = state.storeNameValue.text,
-                amount = state.totalPriceValue.text.toInt(),
-                description = state.memoValue.text,
-                paymentDate = state.formattedPaymentDate
-            )
-            updateLedgerTransactionDetailUseCase(param)
-                .onSuccess {
-                    reduce { state.copy(ledgerTransactionDetail = it) }
-                    initTextValue(it)
-                }.onFailure {
-                    // TODO
-                }.also { reduce { state.copy(isLoading = false) } }
-        }
+        delay(1000) // 사진 수정 내용이 DB 반영되기 까지 걸리는 시간을 대응하기 위해 delay 설정
+        val param = LedgerTransactionDetailParam(
+            detailId = detailId,
+            storeInfo = state.storeNameValue.text,
+            amount = state.totalPriceValue.text.toInt(),
+            description = state.memoValue.text,
+            paymentDate = state.formattedPaymentDate
+        )
+        updateLedgerTransactionDetailUseCase(param)
+            .onSuccess {
+                reduce { state.copy(ledgerTransactionDetail = it) }
+                initTextValue(it)
+            }.onFailure {
+                // TODO
+            }
     }
 
     fun postLedgerReceiptTransaction(detailId: Int) = intent {
-        if (!state.isLoading) {
-            reduce { state.copy(isLoading = true) }
-            val param =
-                LedgerReceiptParam(detailId = detailId, receiptImageUrls = state.receiptList)
+        if (state.receiptList.isNotEmpty()) {
+            val mapToOriginalUrl = state.ledgerTransactionDetail?.receiptImageUrls?.map { it.receiptImageUrl }.orEmpty()
+            val param = LedgerReceiptParam(detailId = detailId, receiptImageUrls = state.receiptList - mapToOriginalUrl.toSet())
             postLedgerReceiptTransactionUseCase(param)
                 .onFailure {
                     // TODO
-                }.also { reduce { state.copy(isLoading = false) } }
+                }
         }
     }
 
     fun postLedgerDocumentTransaction(detailId: Int) = intent {
-        if (!state.isLoading) {
-            reduce { state.copy(isLoading = true) }
-            val param =
-                LedgerDocumentParam(detailId = detailId, documentImageUrls = state.documentList)
+        if (state.documentList.isNotEmpty()) {
+            val mapToOriginalUrl = state.ledgerTransactionDetail?.documentImageUrls?.map { it.documentImageUrl }.orEmpty()
+            val param = LedgerDocumentParam(detailId = detailId, documentImageUrls = state.documentList - mapToOriginalUrl.toSet())
             postLedgerDocumentTransactionUseCase(param)
                 .onFailure {
                     // TODO
-                }.also { reduce { state.copy(isLoading = false) } }
+                }
         }
     }
 
-    fun deleteLedgerReceiptTransaction(detailId: Int, receiptId: Int) = intent {
-        if (!state.isLoading) {
-            reduce { state.copy(isLoading = true) }
-            val param = DeleteLedgerReceiptParam(detailId = detailId, receiptId = receiptId)
-            deleteLedgerReceiptTransactionUseCase(param)
-                .onFailure {
-                    // TODO
-                }.also { reduce { state.copy(isLoading = false) } }
+    fun deleteLedgerReceiptTransaction(detailId: Int) = intent {
+        if (state.receiptIdList.isNotEmpty()) {
+            state.receiptIdList.forEach { receiptId ->
+                val param = DeleteLedgerReceiptParam(detailId = detailId, receiptId = receiptId)
+                deleteLedgerReceiptTransactionUseCase(param)
+                    .onFailure {
+                        // TODO
+                    }
+            }
         }
     }
 
-    fun deleteLedgerDocumentTransaction(detailId: Int, documentId: Int) = intent {
-        if (!state.isLoading) {
-            reduce { state.copy(isLoading = true) }
-            val param = DeleteLedgerDocumentParam(detailId = detailId, documentId = documentId)
-            deleteLedgerDocumentTransactionUseCase(param)
-                .onFailure {
-                    // TODO
-                }.also { reduce { state.copy(isLoading = false) } }
+    fun deleteLedgerDocumentTransaction(detailId: Int) = intent {
+        if (state.documentIdList.isNotEmpty()) {
+            state.documentIdList.forEach { documentId ->
+                val param = DeleteLedgerDocumentParam(detailId = detailId, documentId = documentId)
+                deleteLedgerDocumentTransactionUseCase(param)
+                    .onFailure {
+                        // TODO
+                    }
+            }
         }
     }
 
@@ -144,15 +153,16 @@ class LedgerDetailViewModel @Inject constructor(
         }
     }
 
-    fun onClickRemoveReceipt(index: Int) = intent {
+    fun onClickRemoveReceipt(receiptImage: String) = intent {
         state.ledgerTransactionDetail?.let {
-            val receiptImage = state.receiptList[index]
-            val isOriginalReceipt = it.receiptImageUrls.map { it.receiptImageUrl }.contains(state.receiptList[index])
+            val receiptId = it.receiptImageUrls.find { it.receiptImageUrl == receiptImage }?.id ?: 0
+            val isOriginalReceipt =
+                it.receiptImageUrls.map { it.receiptImageUrl }.contains(receiptImage)
             if (isOriginalReceipt) {
                 reduce {
                     state.copy(
                         receiptList = state.receiptList - receiptImage,
-                        receiptIdList = state.receiptIdList + it.receiptImageUrls[index].id
+                        receiptIdList = state.receiptIdList + receiptId
                     )
                 }
             } else {
@@ -165,15 +175,16 @@ class LedgerDetailViewModel @Inject constructor(
         }
     }
 
-    fun onClickRemoveDocument(index: Int) = intent {
+    fun onClickRemoveDocument(documentImage: String) = intent {
         state.ledgerTransactionDetail?.let {
-            val documentImage = state.documentList[index]
-            val isOriginalDocument = it.documentImageUrls.map { it.documentImageUrl }.contains(documentImage)
+            val documentId = it.documentImageUrls.find { it.documentImageUrl == documentImage }?.id ?: 0
+            val isOriginalDocument =
+                it.documentImageUrls.map { it.documentImageUrl }.contains(documentImage)
             if (isOriginalDocument) {
                 reduce {
                     state.copy(
                         documentList = state.documentList - documentImage,
-                        documentIdList = state.documentIdList + it.documentImageUrls[index].id
+                        documentIdList = state.documentIdList + documentId
                     )
                 }
             } else {
@@ -203,7 +214,9 @@ class LedgerDetailViewModel @Inject constructor(
                 ),
                 memoValue = state.memoValue.copy(text = ledgerTransactionDetail.description),
                 receiptList = ledgerTransactionDetail.receiptImageUrls.map { it.receiptImageUrl },
-                documentList = ledgerTransactionDetail.documentImageUrls.map { it.documentImageUrl }
+                documentList = ledgerTransactionDetail.documentImageUrls.map { it.documentImageUrl },
+                receiptIdList = emptyList(),
+                documentIdList = emptyList()
             )
         }
     }
