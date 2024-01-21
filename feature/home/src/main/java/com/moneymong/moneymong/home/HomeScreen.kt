@@ -53,10 +53,31 @@ fun HomeScreen(
                 }
             )
             agencyJoinScreen(
+                padding = it,
                 navigateToComplete = { homeNavController.navHostController.navigateAgencyJoinComplete() },
                 navigateUp = { homeNavController.navHostController.navigateUp() }
             )
-            agencyCompleteScreen(homeNavController.navHostController)
+            agencyCompleteScreen(
+                padding = it,
+                navController = homeNavController.navHostController,
+                navigateToLedger = {
+                    homeNavController.navHostController.navigate(
+                        route = ledgerRoute,
+                        navOptions = navOptions {
+                            launchSingleTop = true
+                            popUpTo(agencyRoute) { inclusive = true }
+                        }
+                    )
+                },
+                navigateToJoin = {
+                    homeNavController.navHostController.navigateAgency(
+                        navOptions = navOptions {
+                            popUpTo(agencyRoute) { inclusive = true }
+                        }
+                    )
+                },
+                navigateUp = { homeNavController.navHostController.navigateUp() }
+            )
             agencyRegisterScreen(
                 padding = it,
                 navigateToComplete = { homeNavController.navHostController.navigateAgencyRegisterComplete() },

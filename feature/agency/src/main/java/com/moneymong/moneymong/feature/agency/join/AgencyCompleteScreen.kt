@@ -37,13 +37,17 @@ import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
 fun AgencyCompleteScreen(
+    modifier : Modifier = Modifier,
     navController: NavHostController,
+    navigateToLedger : () -> Unit,
+    navigateToJoin : () -> Unit,
+    navigateUp: () -> Unit,
     viewModel: AgencyCompleteViewModel = hiltViewModel()
 ) {
     val state = viewModel.collectAsState().value
 
     Scaffold(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .background(White)
             .padding(horizontal = MMHorizontalSpacing),
@@ -68,7 +72,9 @@ fun AgencyCompleteScreen(
                 Icon(
                     painterResource(id = R.drawable.ic_close_default),
                     modifier = Modifier
-                        .clickable { },
+                        .clickable {
+                            navigateToJoin()
+                        },
                     contentDescription = null
                 )
             }
@@ -76,7 +82,7 @@ fun AgencyCompleteScreen(
         content = { innerPadding ->
             SignCompleteContent(
                 modifier = Modifier.padding(innerPadding),
-                navController =  navController,
+                navigateToLedger = navigateToLedger,
                 viewModel = viewModel,
                 state = state
 
@@ -89,16 +95,14 @@ fun AgencyCompleteScreen(
 @Composable
 fun SignCompleteContent(
     modifier: Modifier = Modifier,
-    navController: NavHostController,
+    navigateToLedger: () -> Unit,
     viewModel : AgencyCompleteViewModel,
     state : AgencyCompleteState
 ) {
 
     LaunchedEffect(key1 = state.isBtnClicked){
         if(state.isBtnClicked == true){
-//            navController.navigate(homeRoute){
-//                //TODO
-//            }
+            navigateToLedger()
         }
     }
     Box(
@@ -115,4 +119,5 @@ fun SignCompleteContent(
         )
     }
 }
+
 

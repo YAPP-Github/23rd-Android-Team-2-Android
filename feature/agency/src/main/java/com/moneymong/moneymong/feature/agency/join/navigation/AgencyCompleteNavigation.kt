@@ -1,5 +1,8 @@
 package com.moneymong.moneymong.feature.agency.join.navigation
 
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.padding
+import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
@@ -13,8 +16,20 @@ fun NavController.navigateAgencyJoinComplete(navOptions: NavOptions? = null) {
     navigate(agencyCompleteRoute, navOptions)
 }
 
-fun NavGraphBuilder.agencyCompleteScreen(navController: NavHostController) {
+fun NavGraphBuilder.agencyCompleteScreen(
+    padding: PaddingValues,
+    navController: NavHostController,
+    navigateToLedger : () -> Unit,
+    navigateToJoin : () -> Unit,
+    navigateUp : () -> Unit
+) {
     composable(route = agencyCompleteRoute) {
-        AgencyCompleteScreen(navController = navController)
+        AgencyCompleteScreen(
+            modifier = Modifier.padding(padding),
+            navController = navController,
+            navigateToLedger = navigateToLedger,
+            navigateToJoin = navigateToJoin,
+            navigateUp = navigateUp
+            )
     }
 }

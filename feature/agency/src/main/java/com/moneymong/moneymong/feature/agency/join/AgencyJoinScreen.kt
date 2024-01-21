@@ -64,7 +64,9 @@ fun AgencyJoinScreen(
                 Icon(
                     modifier = Modifier
                         .size(24.dp)
-                        .clickable { },
+                        .clickable {
+                            navigateUp()
+                        },
                     painter = painterResource(id = R.drawable.ic_close_default),
                     contentDescription = null,
                     tint = Black
@@ -86,7 +88,7 @@ fun AgencyJoinScreen(
 @Composable
 private fun JoinContent(
     modifier: Modifier = Modifier,
-    agencyId : Long,
+    agencyId: Long,
     state: AgencyJoinState,
     viewModel: AgencyJoinViewModel,
     navigateToComplete: () -> Unit
@@ -140,7 +142,7 @@ private fun JoinContent(
                 focusRequesters = focusRequesters,
                 isError = state.isError,
                 numbers = state.numbers,
-                agencyCodeNumbers = { agencyId, codeNumbers -> viewModel.agencyCodeNumbers(agencyId, codeNumbers)},
+                agencyCodeNumbers = { agencyId -> viewModel.agencyCodeNumbers(agencyId) },
                 onIsErrorChanged = { isError -> viewModel.onIsErrorChanged(isError) },
                 onIsNumbersChanged = { index, value -> viewModel.onIsNumbersChanged(index, value) },
             )
@@ -152,7 +154,9 @@ private fun JoinContent(
         ) {
             MDSSnackbarHost(
                 hostState = snackbarHostState,
-                modifier = Modifier.align(BottomCenter)
+                modifier = Modifier
+                    .align(BottomCenter)
+                    .padding(bottom = 20.dp)
             )
         }
 
