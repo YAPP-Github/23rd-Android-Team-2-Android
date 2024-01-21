@@ -11,6 +11,7 @@ android {
 
 dependencies {
     implementation(projects.core.common)
+    implementation(projects.domain)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.appcompat)
@@ -26,6 +27,7 @@ dependencies {
     implementation(libs.orbit.compose)
     implementation(libs.orbit.viewModel)
     implementation(libs.okhttp)
+    implementation(libs.retrofit.gson.converter)
 
     testImplementation(libs.junit4)
     androidTestImplementation(libs.androidx.junit)

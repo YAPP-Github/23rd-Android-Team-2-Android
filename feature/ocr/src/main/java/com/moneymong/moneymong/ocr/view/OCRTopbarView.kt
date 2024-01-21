@@ -21,6 +21,7 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.moneymong.moneymong.common.ui.noRippleClickable
 import com.moneymong.moneymong.design_system.R.*
 import com.moneymong.moneymong.design_system.theme.Mint03
 
@@ -41,13 +42,17 @@ fun OCRTopbarView(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Icon(
-                modifier = Modifier.padding(vertical = 10.dp, horizontal = 20.dp),
+                modifier = Modifier
+                    .padding(vertical = 10.dp, horizontal = 20.dp)
+                    .noRippleClickable { onClickHelp() },
                 painter = painterResource(id = drawable.ic_warning_outline),
                 contentDescription = null,
                 tint = Color.White
             )
             Icon(
-                modifier = Modifier.padding(vertical = 10.dp, horizontal = 20.dp),
+                modifier = Modifier
+                    .padding(vertical = 10.dp, horizontal = 20.dp)
+                    .noRippleClickable { onClickClose() },
                 painter = painterResource(id = drawable.ic_close_default),
                 contentDescription = null,
                 tint = Color.White

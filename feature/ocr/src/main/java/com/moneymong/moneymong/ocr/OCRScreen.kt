@@ -27,54 +27,60 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavOptions
+import com.google.gson.Gson
 import com.moneymong.moneymong.design_system.component.modal.MDSModal
 import com.moneymong.moneymong.design_system.theme.Heading1
 import com.moneymong.moneymong.design_system.theme.Mint03
 import com.moneymong.moneymong.design_system.theme.White
 import com.moneymong.moneymong.common.ext.hasPermission
+import com.moneymong.moneymong.common.ui.noRippleClickable
+import com.moneymong.moneymong.design_system.theme.Black
 import com.moneymong.moneymong.ocr.view.OCRCameraPermissionDeniedView
 import com.moneymong.moneymong.ocr.view.OCRCaptureView
 import com.moneymong.moneymong.ocr.view.OCRHelperView
-import com.moneymong.moneymong.ocr.view.OCRInteractionView
 import com.moneymong.moneymong.ocr.view.OCRTopbarView
-import kotlinx.coroutines.flow.collect
 import org.orbitmvi.orbit.compose.collectAsState
+import org.orbitmvi.orbit.compose.collectSideEffect
 
 @Composable
 fun OCRScreen(
     modifier: Modifier = Modifier,
-    viewModel: OCRViewModel = hiltViewModel()
+    viewModel: OCRViewModel = hiltViewModel(),
+    navigateToOCRResult: (NavOptions?, String) -> Unit
 ) {
     val state = viewModel.collectAsState().value
-    val sideEffect = viewModel.container.sideEffectFlow
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current // TODO
     var hasCameraPermission by remember { mutableStateOf(context.hasPermission(CAMERA)) }
-    var visibleHelper by remember { mutableStateOf(true) }
 
     LaunchedEffect(Unit) {
         viewModel.visiblePermissionDialog(hasCameraPermission)
     }
 
-    LaunchedEffect(viewModel) {
-        sideEffect.collect {
-            when (it) {
-                OCRSideEffect.OCRMoveToPermissionSetting -> {
-                    context.startActivity(
-                        Intent(
-                            Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
-                            Uri.fromParts("package", context.packageName, null)
-                        )
+    viewModel.collectSideEffect {
+        when (it) {
+            is OCRSideEffect.OCRMoveToPermissionSetting -> {
+                context.startActivity(
+                    Intent(
+                        Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                        Uri.fromParts("package", context.packageName, null)
                     )
-                }
-                else -> {}
+                )
             }
+
+            is OCRSideEffect.OCRPostDocumentApi -> {
+                viewModel.postDocumentOCR(it.base64)
+            }
+
+            is OCRSideEffect.OCRNavigateToOCRResult -> {
+                val documentString = it.document?.let { Gson().toJson(it) }.orEmpty()
+                navigateToOCRResult(null, documentString)
+            }
+
+            else -> {}
         }
     }
-
-
-
-
 
     if (state.showPermissionDialog) {
         MDSModal(
@@ -99,33 +105,40 @@ fun OCRScreen(
             if (!hasCameraPermission) {
                 OCRCameraPermissionDeniedView(onClickRequestPermission = { /* TODO */ })
             } else {
-                OCRCaptureView()
-                Text(
-                    modifier = Modifier.align(Alignment.Center),
-                    text = "영수증의 처음과 끝이\n모두 포함되게 촬영해주세요",
-                    style = Heading1,
-                    color = Color.White,
-                    textAlign = TextAlign.Center
-                )
-                if (visibleHelper) { // TODO 최초 진입 시, 혹은 도움말 아이콘 클릭 시
-                    OCRHelperView(onClickClose = { visibleHelper = !visibleHelper })
+                OCRCaptureView(onClickCapture = { viewModel.eventEmit(OCRSideEffect.OCRPostDocumentApi(it)) })
+                if (!state.isLoading) {
+                    Text(
+                        modifier = Modifier.align(Alignment.Center),
+                        text = "영수증의 처음과 끝이\n모두 포함되게 촬영해주세요",
+                        style = Heading1,
+                        color = Color.White,
+                        textAlign = TextAlign.Center
+                    )
                 }
             }
             OCRTopbarView(
                 modifier = Modifier.align(Alignment.TopCenter),
-                onClickHelp = { /*TODO*/ },
+                onClickHelp = viewModel::onClickHelper,
                 onClickClose = { /* TODO */ }
             )
-            OCRInteractionView(
-                modifier = Modifier.align(Alignment.BottomCenter),
-            )
-            if (false) { // TODO ocr loading
-                CircularProgressIndicator(
-                    modifier = Modifier.size(74.dp),
-                    color = Mint03,
-                    trackColor = White,
-                    strokeWidth = 7.dp
-                )
+            if (state.isLoading) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(Black.copy(alpha = 0.6f))
+                        .noRippleClickable {},
+                    contentAlignment = Alignment.Center
+                ) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.size(74.dp),
+                        color = Mint03,
+                        trackColor = White,
+                        strokeWidth = 7.dp
+                    )
+                }
+            }
+            if (state.visibleHelper) {
+                OCRHelperView(onClickClose = viewModel::onClickHelper)
             }
         }
     }
@@ -134,5 +147,5 @@ fun OCRScreen(
 @Preview(showBackground = true)
 @Composable
 fun OCRScreenPreview() {
-    OCRScreen()
+    OCRScreen(navigateToOCRResult = { navOptions, s->  })
 }
