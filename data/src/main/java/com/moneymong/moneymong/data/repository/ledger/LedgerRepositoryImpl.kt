@@ -41,10 +41,10 @@ class LedgerRepositoryImpl @Inject constructor(
             .map { it.toEntity() }
 
     override suspend fun postLedgerReceiptTransaction(body: LedgerReceiptParam): Result<Unit> =
-        ledgerRemoteDataSource.postLedgerReceiptTransaction(body = body.toRequest())
+        ledgerRemoteDataSource.postLedgerReceiptTransaction(detailId = body.detailId, body = body.toRequest())
 
     override suspend fun postLedgerDocumentTransaction(body: LedgerDocumentParam): Result<Unit> =
-        ledgerRemoteDataSource.postLedgerDocumentTransaction(body = body.toRequest())
+        ledgerRemoteDataSource.postLedgerDocumentTransaction(detailId = body.detailId, body = body.toRequest())
 
     override suspend fun updateLedgerTransactionDetail(body: LedgerTransactionDetailParam): Result<LedgerTransactionDetailEntity> =
         ledgerRemoteDataSource.updateLedgerTransactionDetail(

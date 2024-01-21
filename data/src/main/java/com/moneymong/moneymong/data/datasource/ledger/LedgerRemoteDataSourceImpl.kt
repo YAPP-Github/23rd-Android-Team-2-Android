@@ -33,11 +33,11 @@ class LedgerRemoteDataSourceImpl @Inject constructor(
     override suspend fun fetchLedgerTransactionDetail(detailId: Int): Result<LedgerTransactionDetailResponse> =
         moneyMongApi.fetchLedgerTransactionDetail(detailId = detailId)
 
-    override suspend fun postLedgerReceiptTransaction(body: LedgerReceiptRequest): Result<Unit> =
-        moneyMongApi.postLedgerReceiptTransaction(body = body)
+    override suspend fun postLedgerReceiptTransaction(detailId: Int, body: LedgerReceiptRequest): Result<Unit> =
+        moneyMongApi.postLedgerReceiptTransaction(detailId = detailId, body = body)
 
-    override suspend fun postLedgerDocumentTransaction(body: LedgerDocumentRequest): Result<Unit> =
-        moneyMongApi.postLedgerDocumentTransaction(body = body)
+    override suspend fun postLedgerDocumentTransaction(detailId: Int, body: LedgerDocumentRequest): Result<Unit> =
+        moneyMongApi.postLedgerDocumentTransaction(detailId = detailId, body = body)
 
     override suspend fun updateLedgerTransactionDetail(
         detailId: Int,

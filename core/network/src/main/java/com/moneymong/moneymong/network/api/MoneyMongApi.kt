@@ -63,12 +63,14 @@ interface MoneyMongApi {
     @POST("api/v1/ledger-detail/{detailId}/ledger-receipt")
     suspend fun postLedgerReceiptTransaction(
         @Header("Authorization") header: String = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiUk9MRV9VU0VSIiwidXNlcklkIjozLCJpYXQiOjE3MDQ3MTU0NTEsImV4cCI6MTczNjI3MzA1MX0.2yYEy71Gz4YIz0DYzlx0glYMgZA0JAZs05jsVRvvQx4",
+        @Path("detailId") detailId: Int,
         @Body body: LedgerReceiptRequest
     ): Result<Unit>
 
     @POST("api/v1/ledger-detail/{detailId}/ledger-document")
     suspend fun postLedgerDocumentTransaction(
         @Header("Authorization") header: String = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiUk9MRV9VU0VSIiwidXNlcklkIjozLCJpYXQiOjE3MDQ3MTU0NTEsImV4cCI6MTczNjI3MzA1MX0.2yYEy71Gz4YIz0DYzlx0glYMgZA0JAZs05jsVRvvQx4",
+        @Path("detailId") detailId: Int,
         @Body body: LedgerDocumentRequest
     ): Result<Unit>
 
