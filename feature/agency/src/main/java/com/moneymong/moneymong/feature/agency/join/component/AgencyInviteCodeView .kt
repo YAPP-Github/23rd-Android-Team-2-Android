@@ -97,9 +97,7 @@ fun AgencyInviteCodeView(
                         value = value,
                         onValueChange = { newValue ->
                             if (newValue.length == 1 ) {
-                                //CoroutineScope(Dispatchers.IO).launch {
-                                    onIsNumbersChanged(index, newValue)
-                                //}
+                                onIsNumbersChanged(index, newValue)
                                 if (index == numbers.lastIndex) {
                                     keyboardController?.hide()
                                     focusManager.clearFocus()

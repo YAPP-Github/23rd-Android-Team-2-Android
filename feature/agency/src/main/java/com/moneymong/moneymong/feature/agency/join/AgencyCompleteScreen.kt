@@ -1,5 +1,6 @@
 package com.moneymong.moneymong.feature.agency.join
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -46,6 +47,10 @@ fun AgencyCompleteScreen(
 ) {
     val state = viewModel.collectAsState().value
 
+    // 뒤로 가기 버튼 핸들러
+    BackHandler(enabled = true) {
+        navigateToJoin()
+    }
     Scaffold(
         modifier = modifier
             .fillMaxSize()
