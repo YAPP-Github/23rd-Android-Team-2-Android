@@ -1,6 +1,7 @@
 package com.moneymong.moneymong.network.api
 
 import com.moneymong.moneymong.network.request.ledger.LedgerTransactionRequest
+import com.moneymong.moneymong.network.response.ledger.LedgerTransactionDetailResponse
 import com.moneymong.moneymong.network.response.ledger.LedgerTransactionListResponse
 import com.moneymong.moneymong.network.response.ledger.LedgerTransactionResponse
 import com.moneymong.moneymong.network.response.ocr.FileUploadResponse
@@ -32,6 +33,12 @@ interface MoneyMongApi {
         @Header("Authorization") header: String = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiUk9MRV9VU0VSIiwidXNlcklkIjozLCJpYXQiOjE3MDQ3MTU0NTEsImV4cCI6MTczNjI3MzA1MX0.2yYEy71Gz4YIz0DYzlx0glYMgZA0JAZs05jsVRvvQx4",
         @Path("agencyId") agencyId: Int
     ): Result<Boolean>
+
+    @GET("api/v1/ledger-detail/{detailId}")
+    suspend fun fetchLedgerTransactionDetail(
+        @Header("Authorization") header: String = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiUk9MRV9VU0VSIiwidXNlcklkIjozLCJpYXQiOjE3MDQ3MTU0NTEsImV4cCI6MTczNjI3MzA1MX0.2yYEy71Gz4YIz0DYzlx0glYMgZA0JAZs05jsVRvvQx4",
+        @Path("detailId") detailId: Int
+    ): Result<LedgerTransactionDetailResponse>
 
     // POST
     @POST("api/v1/ledger/{id}")

@@ -1,5 +1,6 @@
 package com.moneymong.moneymong.domain.repository.ledger
 
+import com.moneymong.moneymong.domain.entity.ledger.LedgerTransactionDetailEntity
 import com.moneymong.moneymong.domain.entity.ledger.LedgerTransactionEntity
 import com.moneymong.moneymong.domain.entity.ledger.LedgerTransactionListEntity
 import com.moneymong.moneymong.domain.param.ledger.LedgerTransactionListParam
@@ -9,4 +10,5 @@ interface LedgerRepository {
     suspend fun fetchLedgerTransactionList(param: LedgerTransactionListParam): Result<LedgerTransactionListEntity>
     suspend fun fetchAgencyExistLedger(agencyId: Int): Result<Boolean>
     suspend fun postLedgerTransaction(param: LedgerTransactionParam): Result<LedgerTransactionEntity>
+    suspend fun fetchLedgerTransactionDetail(detailId: Int): Result<LedgerTransactionDetailEntity>
 }
