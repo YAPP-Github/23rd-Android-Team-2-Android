@@ -1,6 +1,6 @@
 package com.moneymong.moneymong.domain.repository.ledgerdetail
 
-import com.moneymong.moneymong.domain.entity.ledger.LedgerTransactionDetailEntity
+import com.moneymong.moneymong.domain.entity.ledgerdetail.LedgerTransactionDetailEntity
 import com.moneymong.moneymong.domain.param.ledgerdetail.DeleteLedgerDocumentParam
 import com.moneymong.moneymong.domain.param.ledgerdetail.DeleteLedgerReceiptParam
 import com.moneymong.moneymong.domain.param.ledgerdetail.LedgerDocumentParam

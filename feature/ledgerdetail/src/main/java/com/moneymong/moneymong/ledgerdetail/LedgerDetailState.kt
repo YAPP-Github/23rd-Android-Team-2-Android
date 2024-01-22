@@ -4,7 +4,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import com.moneymong.moneymong.common.base.State
 import com.moneymong.moneymong.common.ext.toDateFormat
 import com.moneymong.moneymong.common.ui.toWonFormat
-import com.moneymong.moneymong.domain.entity.ledger.LedgerTransactionDetailEntity
+import com.moneymong.moneymong.domain.entity.ledgerdetail.LedgerTransactionDetailEntity
 import java.time.LocalDateTime
 import java.time.OffsetDateTime
 import java.time.ZoneOffset
@@ -29,7 +29,8 @@ data class LedgerDetailState(
     val documentList: List<String> = emptyList(),
     val isReceipt: Boolean? = null,
     val receiptIdList: List<Int> = emptyList(),
-    val documentIdList: List<Int> = emptyList()
+    val documentIdList: List<Int> = emptyList(),
+    val showConfirmModal: Boolean = false,
 ) : State {
 
     val totalPrice: String
