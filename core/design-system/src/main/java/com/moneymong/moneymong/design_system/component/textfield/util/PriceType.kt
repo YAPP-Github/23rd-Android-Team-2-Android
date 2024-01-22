@@ -1,5 +1,5 @@
 package com.moneymong.moneymong.design_system.component.textfield.util
 
 enum class PriceType(val symbol: String) {
-    Income("+"), Expense("-")
+    None(symbol = ""), Income(symbol = "+"), Expense(symbol = "-")
 }
