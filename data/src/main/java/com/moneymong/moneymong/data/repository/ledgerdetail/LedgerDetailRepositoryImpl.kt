@@ -1,9 +1,9 @@
 package com.moneymong.moneymong.data.repository.ledgerdetail
 
 import com.moneymong.moneymong.data.datasource.ledgerdetail.LedgerDetailRemoteDataSource
-import com.moneymong.moneymong.data.mapper.ledger.toEntity
+import com.moneymong.moneymong.data.mapper.ledgerdetail.toEntity
 import com.moneymong.moneymong.data.mapper.ledgerdetail.toRequest
-import com.moneymong.moneymong.domain.entity.ledger.LedgerTransactionDetailEntity
+import com.moneymong.moneymong.domain.entity.ledgerdetail.LedgerTransactionDetailEntity
 import com.moneymong.moneymong.domain.param.ledgerdetail.DeleteLedgerDocumentParam
 import com.moneymong.moneymong.domain.param.ledgerdetail.DeleteLedgerReceiptParam
 import com.moneymong.moneymong.domain.param.ledgerdetail.LedgerDocumentParam

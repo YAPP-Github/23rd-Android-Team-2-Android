@@ -123,6 +123,19 @@ fun LedgerDetailScreen(
                     )
                 )
             }
+
+            is LedgerDetailSideEffect.LedgerDetailNavigateToLedger -> {
+                popBackStack()
+            }
+
+            is LedgerDetailSideEffect.LedgerDetailConfirmModalNegative -> {
+                viewModel.onChangeVisibleConfirmModal(false)
+            }
+
+            is LedgerDetailSideEffect.LedgerDetailConfirmModalPositive -> {
+                viewModel.onChangeVisibleConfirmModal(false)
+                viewModel.deleteLedgerDetail(detailId = ledgerTransactionId)
+            }
         }
     }
 
@@ -134,15 +147,15 @@ fun LedgerDetailScreen(
         )
     }
 
-    if (false) { // TODO
+    if (state.showConfirmModal) {
         MDSModal(
-            icon = R.drawable.ic_warning_filled, // TODO
-            title = "사진을 삭제하시겠습니까?", // TODO
-            description = "삭제된 사진은 되돌릴 수 없습니다", // TODO
+            icon = R.drawable.ic_warning_filled,
+            title = "장부 내역을 삭제하시겠습니까?",
+            description = "삭제된 내역은 되돌릴 수 없습니다",
             negativeBtnText = "취소",
             positiveBtnText = "확인",
-            onClickNegative = { /*TODO*/ },
-            onClickPositive = { /*TODO*/ })
+            onClickNegative = { viewModel.eventEmit(LedgerDetailSideEffect.LedgerDetailConfirmModalNegative) },
+            onClickPositive = { viewModel.eventEmit(LedgerDetailSideEffect.LedgerDetailConfirmModalPositive) })
     }
 
     Scaffold(
@@ -151,7 +164,7 @@ fun LedgerDetailScreen(
                 useEditMode = state.useEditMode,
                 enabledDone = state.enabledEdit,
                 onClickPrev = popBackStack,
-                onClickDelete = { /*TODO*/ },
+                onClickDelete = { viewModel.onChangeVisibleConfirmModal(true) },
                 onClickDone = { viewModel.eventEmit(LedgerDetailSideEffect.LedgerDetailEditDone) }
             )
         }
