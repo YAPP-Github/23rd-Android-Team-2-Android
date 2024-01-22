@@ -161,6 +161,7 @@ fun LedgerDetailScreen(
     Scaffold(
         topBar = {
             LedgerDetailTopbarView(
+                title = "${state.fundTypeText} 상세내역",
                 useEditMode = state.useEditMode,
                 enabledDone = state.enabledEdit,
                 onClickPrev = popBackStack,
@@ -237,7 +238,7 @@ fun LedgerDetailScreen(
                                 .onFocusChanged { isTotalPriceFilled = !it.isFocused },
                             value = state.totalPriceValue,
                             onValueChange = viewModel::onChangeTotalPriceValue,
-                            title = "지출 금액",
+                            title = "${state.fundTypeText} 금액",
                             placeholder = "",
                             isFilled = isTotalPriceFilled,
                             isError = state.isTotalPriceError,
@@ -245,19 +246,19 @@ fun LedgerDetailScreen(
                             onIconClick = { viewModel.onChangeTotalPriceValue(TextFieldValue()) },
                             singleLine = true,
                             icon = MDSTextFieldIcons.Clear,
-                            visualTransformation = PriceVisualTransformation(type = PriceType.None),
+                            visualTransformation = PriceVisualTransformation(type = state.priceType),
                             keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
                         )
                     } else {
                         Text(
-                            text = "지출 금액",
+                            text = "${state.fundTypeText} 금액",
                             style = Body2,
                             color = Gray06
                         )
                         Spacer(modifier = Modifier.height(8.dp))
                         Text(
-                            text = "${state.totalPrice}원",
+                            text = "${state.priceType.symbol}${state.totalPrice}원",
                             style = Body3,
                             color = Gray10
                         )
