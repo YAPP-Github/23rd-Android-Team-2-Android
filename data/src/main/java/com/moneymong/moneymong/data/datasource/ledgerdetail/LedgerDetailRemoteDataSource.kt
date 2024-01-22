@@ -12,4 +12,5 @@ interface LedgerDetailRemoteDataSource {
     suspend fun updateLedgerTransactionDetail(detailId: Int, body: LedgerTransactionDetailRequest): Result<LedgerTransactionDetailResponse>
     suspend fun deleteLedgerReceiptTransaction(detailId: Int, receiptId: Int): Result<Unit>
     suspend fun deleteLedgerDocumentTransaction(detailId: Int, documentId: Int): Result<Unit>
+    suspend fun deleteLedgerDetail(detailId: Int): Result<Unit>
 }

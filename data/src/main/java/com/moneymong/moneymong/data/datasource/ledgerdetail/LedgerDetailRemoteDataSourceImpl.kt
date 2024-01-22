@@ -36,4 +36,7 @@ class LedgerDetailRemoteDataSourceImpl @Inject constructor(
         documentId: Int
     ): Result<Unit> =
         moneyMongApi.deleteLedgerDocumentTransaction(detailId = detailId, documentId = documentId)
+
+    override suspend fun deleteLedgerDetail(detailId: Int): Result<Unit> =
+        moneyMongApi.deleteLedgerDetail(detailId = detailId)
 }
