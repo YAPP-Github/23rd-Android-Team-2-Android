@@ -14,4 +14,5 @@ interface LedgerDetailRepository {
     suspend fun updateLedgerTransactionDetail(body: LedgerTransactionDetailParam): Result<LedgerTransactionDetailEntity>
     suspend fun deleteLedgerReceiptTransaction(deleteLedgerReceiptParam: DeleteLedgerReceiptParam): Result<Unit>
     suspend fun deleteLedgerDocumentTransaction(deleteLedgerDocumentParam: DeleteLedgerDocumentParam): Result<Unit>
+    suspend fun deleteLedgerDetail(detailId: Int): Result<Unit>
 }
