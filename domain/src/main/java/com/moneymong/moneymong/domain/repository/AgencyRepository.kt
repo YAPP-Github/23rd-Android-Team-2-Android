@@ -13,5 +13,5 @@ interface AgencyRepository {
 
     fun getAgencies(): Flow<PagingData<AgencyGetEntity>>
 
-    suspend fun agencyCodeNumbers(agencyId: Long, codeNumbers: AgencyJoinParam) : Result<AgencyJoinEntity>
+    suspend fun agencyCodeNumbers(data: AgencyJoinParam) : Result<AgencyJoinEntity>
 }

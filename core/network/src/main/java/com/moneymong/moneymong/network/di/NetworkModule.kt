@@ -8,7 +8,7 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.moneymong.moneymong.network.BuildConfig
 import com.moneymong.moneymong.network.adapter.ResultCallAdapterFactory
-import com.moneymong.moneymong.network.api.agency.AgencyJoinApi
+import com.moneymong.moneymong.network.api.MoneyMongApi
 import com.moneymong.moneymong.network.util.MoneyMongTokenAuthenticator
 import dagger.Module
 import dagger.Provides
@@ -79,7 +79,7 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideAgencyJoinApi(retrofit: Retrofit): AgencyJoinApi {
-        return retrofit.create(AgencyJoinApi::class.java)
+    fun provideAgencyJoinApi(retrofit: Retrofit): MoneyMongApi {
+        return retrofit.create(MoneyMongApi::class.java)
     }
 }

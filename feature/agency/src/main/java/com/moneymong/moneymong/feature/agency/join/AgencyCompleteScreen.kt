@@ -39,7 +39,6 @@ import org.orbitmvi.orbit.compose.collectAsState
 @Composable
 fun AgencyCompleteScreen(
     modifier : Modifier = Modifier,
-    navController: NavHostController,
     navigateToLedger : () -> Unit,
     navigateToJoin : () -> Unit,
     navigateUp: () -> Unit,
