@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.moneymong.moneymong.design_system.theme.Blue04
 import com.moneymong.moneymong.design_system.theme.MMHorizontalSpacing
+import com.moneymong.moneymong.feature.sign.state.LoginState
 import com.moneymong.moneymong.feature.sign.view.KakaoLoginView
 import com.moneymong.moneymong.feature.sign.view.TitleView
 import com.moneymong.moneymong.feature.sign.viewmodel.LoginViewModel
@@ -28,12 +29,12 @@ import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
 fun LoginScreen(
-    navigateToSignup : () -> Unit,
+    navigateToSignup: () -> Unit,
     navigateToHome: () -> Unit,
-    navigateToLogin : () -> Unit,
+    navigateToLogin: () -> Unit,
     viewModel: LoginViewModel = hiltViewModel(),
 
-) {
+    ) {
     val state = viewModel.collectAsState().value
 
     LaunchedEffect(key1 = state.isSchoolInfoExist) {
@@ -55,7 +56,10 @@ fun LoginScreen(
 
     Scaffold(
         content = { innerPadding ->
-            LoginContent(modifier = Modifier.padding(innerPadding))
+            LoginContent(
+                modifier = Modifier.padding(innerPadding),
+                onLoginButtonClicked = { viewModel.onLoginButtonClicked() },
+            )
         }
     )
 }
@@ -64,6 +68,7 @@ fun LoginScreen(
 @Composable
 private fun LoginContent(
     modifier: Modifier = Modifier,
+    onLoginButtonClicked: () -> Unit,
 ) {
     Box(
         modifier = modifier
@@ -91,7 +96,10 @@ private fun LoginContent(
                 .align(Alignment.BottomCenter)
 
         ) {
-            KakaoLoginView(modifier = Modifier.fillMaxWidth())
+            KakaoLoginView(
+                modifier = Modifier.fillMaxWidth(),
+                onLoginButtonClicked = onLoginButtonClicked
+            )
         }
     }
 }

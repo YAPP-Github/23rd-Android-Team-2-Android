@@ -28,19 +28,19 @@ import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
 fun UnivItem(
+    isItemSelected: Boolean,
+    isItemSelectedChanged: (Boolean) -> Unit,
     univs: University,
     onClick: (String) -> Unit,
-    viewModel: SignUpViewModel = hiltViewModel()
 ) {
 
-    val state = viewModel.collectAsState().value
 
     Row(
         modifier = Modifier
             .background(White)
             .fillMaxWidth()
             .clickable {
-                viewModel.isItemSelectedChanged(!state.isItemSelected)
+                isItemSelectedChanged(!isItemSelected)
                 onClick(univs.schoolName)
             }
             .padding(bottom = 20.dp)
@@ -53,7 +53,7 @@ fun UnivItem(
         )
         Text(
             text = univs.schoolName,
-            color = if (state.isItemSelected) Blue04 else Black,
+            color = if (isItemSelected) Blue04 else Black,
             style = Body4,
             modifier = Modifier
                 .weight(1f)
@@ -65,7 +65,7 @@ fun UnivItem(
             painter = painterResource(id = R.drawable.ic_check),
             contentDescription = null,
             modifier = Modifier.size(24.dp),
-            tint = if (state.isItemSelected) Blue04 else Gray03
+            tint = if (isItemSelected) Blue04 else Gray03
         )
     }
 }

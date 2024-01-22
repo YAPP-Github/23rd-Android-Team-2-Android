@@ -3,8 +3,7 @@ package com.moneymong.moneymong.data.datasource.signup
 import com.moneymong.moneymong.network.api.signup.UniversityApi
 import com.moneymong.moneymong.network.request.signup.SearchQueryRequest
 import com.moneymong.moneymong.network.request.signup.UnivRequest
-import com.moneymong.moneymong.network.response.signup.UnivResponse
-import com.moneymong.moneymong.network.response.signup.UniversitiesReponse
+import com.moneymong.moneymong.network.response.signup.UniversitiesResponse
 import javax.inject.Inject
 
 class UnivRemoteDataSourceImpl @Inject constructor(private val universityApi: UniversityApi) : UnivRemoteDataSource {
@@ -12,7 +11,7 @@ class UnivRemoteDataSourceImpl @Inject constructor(private val universityApi: Un
         return universityApi.createUniv(body = body)
     }
 
-    override suspend fun searchUniv(searchQuery: SearchQueryRequest): Result<UniversitiesReponse> {
+    override suspend fun searchUniv(searchQuery: SearchQueryRequest): Result<UniversitiesResponse> {
         return universityApi.searchUniv(searchQuery.searchQuery)
     }
 }

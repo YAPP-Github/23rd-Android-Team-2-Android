@@ -8,7 +8,7 @@ enum class Grade(val text: String) {
     FIFTH_OR_ABOVE("5학년 이상")
 }
 
-fun gradeNumber(grade : String) : Int{
+fun getGradeNumber(grade : String) : Int{
     return when(grade){
         "1학년" -> 1
         "2학년" -> 2

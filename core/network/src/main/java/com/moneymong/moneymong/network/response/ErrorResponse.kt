@@ -4,7 +4,6 @@ import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
 
 data class ErrorResponse(
-    @SerializedName("code")
     val status: Int,
     val message: String
 )

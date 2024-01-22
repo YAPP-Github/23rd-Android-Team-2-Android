@@ -20,19 +20,14 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.moneymong.moneymong.design_system.R
 import com.moneymong.moneymong.design_system.theme.Gray07
 import com.moneymong.moneymong.design_system.theme.MMHorizontalSpacing
 import com.moneymong.moneymong.design_system.theme.White
-import com.moneymong.moneymong.feature.sign.navigation.loginRoute
-import com.moneymong.moneymong.feature.sign.navigation.signCompleteRoute
-import com.moneymong.moneymong.feature.sign.navigation.signUpRoute
 import com.moneymong.moneymong.feature.sign.sideeffect.SignUpSideEffect
+import com.moneymong.moneymong.feature.sign.state.SignUpState
 import com.moneymong.moneymong.feature.sign.view.SearchUnivView
 import com.moneymong.moneymong.feature.sign.view.SignCompleteCheckedView
 import com.moneymong.moneymong.feature.sign.view.SignUpButtonView
@@ -45,8 +40,10 @@ import org.orbitmvi.orbit.compose.collectSideEffect
 @Composable
 fun SignUpScreen(
     navigateToSignComplete: () -> Unit,
-    navigateUp: () -> Unit
+    navigateUp: () -> Unit,
+    viewModel: SignUpViewModel = hiltViewModel()
 ) {
+    val state = viewModel.collectAsState().value
 
     BackHandler {
         navigateUp()
@@ -82,7 +79,9 @@ fun SignUpScreen(
         content = { innerPadding ->
             SignUpContent(
                 modifier = Modifier.padding(innerPadding),
-                navigateToSignComplete = navigateToSignComplete
+                navigateToSignComplete = navigateToSignComplete,
+                viewModel = viewModel,
+                state = state
             )
         }
     )
@@ -93,10 +92,9 @@ fun SignUpScreen(
 fun SignUpContent(
     modifier: Modifier = Modifier,
     navigateToSignComplete: () -> Unit,
-    viewModel: SignUpViewModel = hiltViewModel(),
+    viewModel: SignUpViewModel,
+    state : SignUpState
 ) {
-
-    val state = viewModel.collectAsState().value
 
     LaunchedEffect(key1 = state.isUnivCreated) {
         Log.d("isUnivCreated", state.isUnivCreated.toString())
@@ -140,6 +138,22 @@ fun SignUpContent(
             ) {
                 if (!state.isSelected) {
                     SearchUnivView(
+                        isFilled = state.isFilled,
+                        isFilledChanged = { isFilled -> viewModel.isFilledChanged(isFilled) },
+                        isListVisible = state.isListVisible,
+                        isListVisibleChanged = { isListVisible ->
+                            viewModel.isListVisibleChanged(
+                                isListVisible
+                            )
+                        },
+                        isItemSelectedChanged = { isItemSelected ->
+                            viewModel.isItemSelectedChanged(
+                                isItemSelected
+                            )
+                        },
+                        isItemSelected = state.isItemSelected,
+                        textValue = state.textValue,
+                        universityResponse = state.universityResponse,
                         onClick = {
                             viewModel.isSelectedChanged(true)
                             viewModel.selectedUnivChanged(it)
@@ -164,7 +178,7 @@ fun SignUpContent(
                         SignUpGradeView(
                             modifier = Modifier.fillMaxWidth(),
                             onClick = { viewModel.isEnabledChanged(true) },
-                            gradeInfor = { viewModel.gradeInforChanged(it) }
+                            changeGradeInfor = { viewModel.gradeInforChanged(it) }
                         )
                     }
                 }

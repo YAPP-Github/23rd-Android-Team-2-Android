@@ -47,7 +47,7 @@ fun SplashScreen(
         animationSpec = tween(durationMillis = 350), label = ""
     )
 
-    LaunchedEffect(key1 = true) {
+    LaunchedEffect(key1 = Unit) {
         delay(1)
         viewModel.startAnimationChanged(true)
         delay(300)
