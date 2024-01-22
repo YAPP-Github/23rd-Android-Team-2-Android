@@ -48,4 +48,7 @@ class LedgerDetailRepositoryImpl @Inject constructor(
             detailId = deleteLedgerDocumentParam.detailId,
             documentId = deleteLedgerDocumentParam.documentId
         )
+
+    override suspend fun deleteLedgerDetail(detailId: Int): Result<Unit> =
+        ledgerDetailRemoteDataSource.deleteLedgerDetail(detailId = detailId)
 }
