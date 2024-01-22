@@ -7,8 +7,14 @@ import com.moneymong.moneymong.feature.sign.SignUpScreen
 
 const val signUpRoute = "signup_route"
 
-fun NavGraphBuilder.signUpScreen(navController: NavHostController) {
+fun NavGraphBuilder.signUpScreen(
+    navigateToSignComplete : () -> Unit,
+    navigateUp : () -> Unit
+) {
     composable(route = signUpRoute) {
-        SignUpScreen(navController = navController)
+        SignUpScreen(
+            navigateToSignComplete = navigateToSignComplete,
+            navigateUp = navigateUp
+            )
     }
 }

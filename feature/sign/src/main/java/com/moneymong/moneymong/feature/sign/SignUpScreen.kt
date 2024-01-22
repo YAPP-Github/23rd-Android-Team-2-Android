@@ -44,12 +44,12 @@ import org.orbitmvi.orbit.compose.collectSideEffect
 
 @Composable
 fun SignUpScreen(
-    modifier: Modifier = Modifier,
-    navController: NavHostController
+    navigateToSignComplete: () -> Unit,
+    navigateUp: () -> Unit
 ) {
 
     BackHandler {
-        navController.navigateUp()
+        navigateUp()
     }
 
     Scaffold(
@@ -73,7 +73,7 @@ fun SignUpScreen(
                         .size(24.dp)
                         .background(White)
                         .clickable {
-                            navController.navigateUp()
+                            navigateUp()
                         },
                     tint = Gray07
                 )
@@ -82,7 +82,7 @@ fun SignUpScreen(
         content = { innerPadding ->
             SignUpContent(
                 modifier = Modifier.padding(innerPadding),
-                navController = navController
+                navigateToSignComplete = navigateToSignComplete
             )
         }
     )
@@ -92,8 +92,8 @@ fun SignUpScreen(
 @Composable
 fun SignUpContent(
     modifier: Modifier = Modifier,
+    navigateToSignComplete: () -> Unit,
     viewModel: SignUpViewModel = hiltViewModel(),
-    navController: NavHostController
 ) {
 
     val state = viewModel.collectAsState().value
@@ -101,9 +101,7 @@ fun SignUpContent(
     LaunchedEffect(key1 = state.isUnivCreated) {
         Log.d("isUnivCreated", state.isUnivCreated.toString())
         if (state.isUnivCreated) {
-            navController.navigate(signCompleteRoute) {
-                popUpTo(signUpRoute) { inclusive = true }
-            }
+            navigateToSignComplete()
         }
     }
 

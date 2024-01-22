@@ -27,7 +27,7 @@ import com.moneymong.moneymong.design_system.component.textfield.util.MDSTextFie
 import com.moneymong.moneymong.design_system.theme.Body4
 import com.moneymong.moneymong.design_system.theme.Gray05
 import com.moneymong.moneymong.design_system.theme.White
-import com.moneymong.moneymong.domain.entity.signup.UniversityX
+import com.moneymong.moneymong.domain.entity.signup.University
 import com.moneymong.moneymong.feature.sign.item.UnivItem
 import com.moneymong.moneymong.feature.sign.viewmodel.SignUpViewModel
 import kotlinx.coroutines.Job
@@ -115,7 +115,7 @@ fun SearchUnivView(
 
 
 @Composable
-fun UnivList(univs: List<UniversityX>, onClick: (String) -> Unit) {
+fun UnivList(univs: List<University>, onClick: (String) -> Unit) {
     LazyColumn {
         items(univs) { univ ->
             UnivItem(

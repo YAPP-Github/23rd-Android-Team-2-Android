@@ -8,8 +8,12 @@ import com.moneymong.moneymong.feature.sign.SignCompleteScreen
 
 const val signCompleteRoute = "signComplete_Route"
 
-fun NavGraphBuilder.signCompleteScreen(navController : NavHostController) {
+fun NavGraphBuilder.signCompleteScreen(
+    navigateToHome: () -> Unit
+) {
     composable(route = signCompleteRoute) {
-        SignCompleteScreen(navController = navController)
+        SignCompleteScreen(
+            navigateToHome = navigateToHome
+        )
     }
 }

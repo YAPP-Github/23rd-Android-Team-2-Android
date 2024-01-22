@@ -21,14 +21,14 @@ import com.moneymong.moneymong.design_system.theme.Blue04
 import com.moneymong.moneymong.design_system.theme.Body4
 import com.moneymong.moneymong.design_system.theme.Gray03
 import com.moneymong.moneymong.design_system.theme.White
-import com.moneymong.moneymong.domain.entity.signup.UniversityX
+import com.moneymong.moneymong.domain.entity.signup.University
 import com.moneymong.moneymong.feature.sign.viewmodel.SignUpViewModel
 import org.orbitmvi.orbit.compose.collectAsState
 
 
 @Composable
 fun UnivItem(
-    univs: UniversityX,
+    univs: University,
     onClick: (String) -> Unit,
     viewModel: SignUpViewModel = hiltViewModel()
 ) {
