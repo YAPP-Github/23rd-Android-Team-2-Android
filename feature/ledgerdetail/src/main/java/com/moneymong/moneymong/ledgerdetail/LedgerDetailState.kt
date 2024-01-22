@@ -14,7 +14,6 @@ import java.util.Locale
 data class LedgerDetailState(
     val isLoading: Boolean = false,
     val useEditMode: Boolean = false,
-    val enabled: Boolean = true,
     val storeNameValue: TextFieldValue = TextFieldValue(),
     val totalPriceValue: TextFieldValue = TextFieldValue(),
     val paymentDateValue: TextFieldValue = TextFieldValue(),
@@ -31,13 +30,14 @@ data class LedgerDetailState(
     val isReceipt: Boolean? = null,
     val receiptIdList: List<Int> = emptyList(),
     val documentIdList: List<Int> = emptyList()
-): State {
+) : State {
 
     val totalPrice: String
         get() = ledgerTransactionDetail?.amount?.let { it.toString().toWonFormat() } ?: "0"
 
     val formattedDate: String
-        get() = ledgerTransactionDetail?.paymentDate?.let { it.toDateFormat("yyyy년 MM월 dd일") }.orEmpty()
+        get() = ledgerTransactionDetail?.paymentDate?.let { it.toDateFormat("yyyy년 MM월 dd일") }
+            .orEmpty()
 
     val formattedTime: String
         get() = ledgerTransactionDetail?.paymentDate?.let { it.toDateFormat("HH:mm:ss") }.orEmpty()
@@ -52,4 +52,7 @@ data class LedgerDetailState(
 
             return offsetDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSSXXX"))
         }
+
+    val enabledEdit: Boolean
+        get() = !isStoreNameError && !isTotalPriceError && !isPaymentDateError && !isPaymentTimeError && !isMemoError
 }
