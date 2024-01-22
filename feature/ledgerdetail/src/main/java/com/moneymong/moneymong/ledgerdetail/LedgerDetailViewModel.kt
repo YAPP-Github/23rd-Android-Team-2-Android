@@ -274,7 +274,13 @@ class LedgerDetailViewModel @Inject constructor(
     fun onChangePaymentTimeValue(value: TextFieldValue) = blockingIntent {
         val validate = validateValue(targetValue = value, length = 6, isDigit = true)
         if (validate) {
-            reduce { state.copy(paymentTimeValue = value) }
+            val isPaymentTimeError = !isValidPaymentTime(value.text)
+            reduce {
+                state.copy(
+                    paymentTimeValue = value,
+                    isPaymentTimeError = isPaymentTimeError
+                )
+            }
         }
     }
 
@@ -312,6 +318,17 @@ class LedgerDetailViewModel @Inject constructor(
         formatted.isLenient = false
         try {
             formatted.parse(date)
+        } catch (e: ParseException) {
+            return false
+        }
+        return true
+    }
+
+    private fun isValidPaymentTime(time: String): Boolean {
+        val formatted = SimpleDateFormat("HHmmss")
+        formatted.isLenient = false
+        try {
+            formatted.parse(time)
         } catch (e: ParseException) {
             return false
         }
