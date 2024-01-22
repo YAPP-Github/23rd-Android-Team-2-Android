@@ -1,10 +1,10 @@
 package com.moneymong.moneymong.network.api
 
-import com.moneymong.moneymong.network.request.ledger.LedgerDocumentRequest
-import com.moneymong.moneymong.network.request.ledger.LedgerReceiptRequest
-import com.moneymong.moneymong.network.request.ledger.LedgerTransactionDetailRequest
+import com.moneymong.moneymong.network.request.ledgerdetail.LedgerDocumentRequest
+import com.moneymong.moneymong.network.request.ledgerdetail.LedgerReceiptRequest
+import com.moneymong.moneymong.network.request.ledgerdetail.LedgerTransactionDetailRequest
 import com.moneymong.moneymong.network.request.ledger.LedgerTransactionRequest
-import com.moneymong.moneymong.network.response.ledger.LedgerTransactionDetailResponse
+import com.moneymong.moneymong.network.response.ledgerdetail.LedgerTransactionDetailResponse
 import com.moneymong.moneymong.network.response.ledger.LedgerTransactionListResponse
 import com.moneymong.moneymong.network.response.ledger.LedgerTransactionResponse
 import com.moneymong.moneymong.network.response.ocr.FileUploadResponse

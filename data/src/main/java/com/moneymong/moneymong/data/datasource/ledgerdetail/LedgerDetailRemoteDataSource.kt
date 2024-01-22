@@ -1,9 +1,9 @@
 package com.moneymong.moneymong.data.datasource.ledgerdetail
 
-import com.moneymong.moneymong.network.request.ledger.LedgerDocumentRequest
-import com.moneymong.moneymong.network.request.ledger.LedgerReceiptRequest
-import com.moneymong.moneymong.network.request.ledger.LedgerTransactionDetailRequest
-import com.moneymong.moneymong.network.response.ledger.LedgerTransactionDetailResponse
+import com.moneymong.moneymong.network.request.ledgerdetail.LedgerDocumentRequest
+import com.moneymong.moneymong.network.request.ledgerdetail.LedgerReceiptRequest
+import com.moneymong.moneymong.network.request.ledgerdetail.LedgerTransactionDetailRequest
+import com.moneymong.moneymong.network.response.ledgerdetail.LedgerTransactionDetailResponse
 
 interface LedgerDetailRemoteDataSource {
     suspend fun fetchLedgerTransactionDetail(detailId: Int): Result<LedgerTransactionDetailResponse>

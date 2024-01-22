@@ -10,7 +10,7 @@ import com.moneymong.moneymong.domain.param.ledger.LedgerTransactionParam
 import com.moneymong.moneymong.network.request.ledger.LedgerTransactionRequest
 import com.moneymong.moneymong.network.response.ledger.DocumentImageURL
 import com.moneymong.moneymong.network.response.ledger.LedgerDetail
-import com.moneymong.moneymong.network.response.ledger.LedgerTransactionDetailResponse
+import com.moneymong.moneymong.network.response.ledgerdetail.LedgerTransactionDetailResponse
 import com.moneymong.moneymong.network.response.ledger.LedgerTransactionListResponse
 import com.moneymong.moneymong.network.response.ledger.LedgerTransactionResponse
 import com.moneymong.moneymong.network.response.ledger.ReceiptImageURL
