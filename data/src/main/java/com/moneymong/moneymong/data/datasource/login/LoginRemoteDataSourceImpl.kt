@@ -22,9 +22,7 @@ class LoginRemoteDataSourceImpl @Inject constructor(
     private val loginLocalDataSourceImpl: LoginLocalDataSourceImpl,
 ) : LoginRemoteDataSource {
 
-    override suspend fun loginWithKakaoTalk(
-        callback: LoginCallback
-    ) {
+    override suspend fun loginWithKakaoTalk(callback: LoginCallback) {
         UserApiClient.instance.loginWithKakaoTalk(context) { token, error ->
             if (error != null) {
                 Log.d("this", "카카오톡으로 로그인 실패 : $error")
@@ -53,9 +51,7 @@ class LoginRemoteDataSourceImpl @Inject constructor(
     }
 
 
-    override suspend fun loginWithKakaoAccount(
-        callback: LoginCallback
-    ) {
+    override suspend fun loginWithKakaoAccount(callback: LoginCallback) {
         UserApiClient.instance.loginWithKakaoAccount(context) { token, error ->
             if (error != null) {
                 Log.d("this", "카카오계정으로 로그인 실패 : $error")

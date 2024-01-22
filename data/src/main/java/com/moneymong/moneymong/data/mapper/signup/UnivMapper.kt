@@ -8,7 +8,7 @@ import com.moneymong.moneymong.domain.param.signup.UnivParam
 import com.moneymong.moneymong.network.request.signup.SearchQueryRequest
 import com.moneymong.moneymong.network.request.signup.UnivRequest
 import com.moneymong.moneymong.network.response.signup.UnivResponse
-import com.moneymong.moneymong.network.response.signup.UniversitiesReponse
+import com.moneymong.moneymong.network.response.signup.UniversitiesResponse
 
 fun UnivParam.toRequest() =
     UnivRequest(
@@ -27,7 +27,7 @@ fun SearchQueryParam.toRequest() =
         searchQuery = this.searchQuery
     )
 
-fun UniversitiesReponse.toEntity() =
+fun UniversitiesResponse.toEntity() =
     UniversitiesEntity(
         universities = this.universities.map { univ ->
             University(

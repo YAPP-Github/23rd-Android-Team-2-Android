@@ -9,6 +9,8 @@ import com.moneymong.moneymong.feature.sign.sideeffect.SignUpSideEffect
 import com.moneymong.moneymong.feature.sign.state.SignUpState
 import com.moneymong.moneymong.feature.sign.util.Grade
 import dagger.hilt.android.lifecycle.HiltViewModel
+import org.orbitmvi.orbit.annotation.OrbitExperimental
+import org.orbitmvi.orbit.syntax.simple.blockingIntent
 import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.reduce
 import javax.inject.Inject
@@ -76,7 +78,8 @@ class SignUpViewModel @Inject constructor(
         }
     }
 
-    fun textValueChanged(textValue: TextFieldValue) = intent {
+    @OptIn(OrbitExperimental::class)
+    fun textValueChanged(textValue: TextFieldValue) = blockingIntent {
         reduce {
             state.copy(
                 textValue = textValue

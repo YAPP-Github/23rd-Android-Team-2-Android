@@ -27,6 +27,7 @@ import com.moneymong.moneymong.design_system.component.textfield.util.MDSTextFie
 import com.moneymong.moneymong.design_system.theme.Body4
 import com.moneymong.moneymong.design_system.theme.Gray05
 import com.moneymong.moneymong.design_system.theme.White
+import com.moneymong.moneymong.domain.entity.signup.UniversitiesEntity
 import com.moneymong.moneymong.domain.entity.signup.University
 import com.moneymong.moneymong.feature.sign.item.UnivItem
 import com.moneymong.moneymong.feature.sign.viewmodel.SignUpViewModel
@@ -39,13 +40,19 @@ import org.orbitmvi.orbit.compose.collectAsState
 @Composable
 fun SearchUnivView(
     modifier: Modifier = Modifier,
-    viewModel: SignUpViewModel = hiltViewModel(),
+    isFilled: Boolean,
+    isFilledChanged: (Boolean) -> Unit,
+    isListVisible: Boolean,
+    isListVisibleChanged: (Boolean) -> Unit,
+    isItemSelectedChanged: (Boolean) -> Unit,
     onClick: (String) -> Unit,
     onChange: (TextFieldValue) -> Unit,
     onSearchIconClicked: (String) -> Unit,
+    isItemSelected: Boolean,
+    textValue: TextFieldValue,
+    universityResponse: UniversitiesEntity?,
     value: TextFieldValue
 ) {
-    val state = viewModel.collectAsState().value
 
     val scope = rememberCoroutineScope()
     var job by remember { mutableStateOf<Job?>(null) }
@@ -65,37 +72,42 @@ fun SearchUnivView(
                     delay(300)
                     onSearchIconClicked(it.text)
                 }
-                viewModel.isListVisibleChanged(it.text.isNotEmpty())
-                viewModel.isFilledChanged(false)
+                isListVisibleChanged(it.text.isNotEmpty())
+                isFilledChanged(false)
             },
             title = "대학교",
             placeholder = "ex) 머니대학교",
-            isFilled = state.isFilled,
+            isFilled = isFilled,
             isError = false,
             maxCount = null,
             singleLine = true,
             icon = MDSTextFieldIcons.Search,
             onIconClick = {
                 if (value.text.isEmpty()) {
-                    viewModel.isListVisibleChanged(false)
+                    isListVisibleChanged(false)
                 } else {
-                    onSearchIconClicked(state.textValue.toString())
-                    viewModel.isFilledChanged(true)
-                    viewModel.isListVisibleChanged(true)
+                    onSearchIconClicked(textValue.toString())
+                    isFilledChanged(true)
+                    isListVisibleChanged(true)
                 }
             },
             keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Text),
             keyboardActions = KeyboardActions(
                 onDone = {
-                    viewModel.isFilledChanged(true)
+                    isFilledChanged(true)
                     keyboardController?.hide()
                 }
             )
         )
 
-        if (state.isListVisible) {
-            if (state.universityResponse?.universities?.isNotEmpty() == true) {
-                UnivList(univs = state.universityResponse.universities, onClick)
+        if (isListVisible) {
+            if (universityResponse?.universities?.isNotEmpty() == true) {
+                UnivList(
+                    isItemSelected = isItemSelected,
+                    isItemSelectedChanged = isItemSelectedChanged ,
+                    univs = universityResponse.universities,
+                    onClick = onClick
+                )
             } else {
                 Column(
                     modifier = Modifier
@@ -115,10 +127,17 @@ fun SearchUnivView(
 
 
 @Composable
-fun UnivList(univs: List<University>, onClick: (String) -> Unit) {
+fun UnivList(
+    isItemSelected: Boolean,
+    isItemSelectedChanged: (Boolean) -> Unit,
+    univs: List<University>,
+    onClick: (String) -> Unit
+) {
     LazyColumn {
         items(univs) { univ ->
             UnivItem(
+                isItemSelected = isItemSelected,
+                isItemSelectedChanged = isItemSelectedChanged,
                 univs = univ,
                 onClick = onClick
             )

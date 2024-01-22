@@ -19,7 +19,7 @@ import com.moneymong.moneymong.design_system.theme.Body2
 import com.moneymong.moneymong.design_system.theme.Gray06
 import com.moneymong.moneymong.design_system.theme.White
 import com.moneymong.moneymong.feature.sign.util.Grade
-import com.moneymong.moneymong.feature.sign.util.gradeNumber
+import com.moneymong.moneymong.feature.sign.util.getGradeNumber
 import com.moneymong.moneymong.feature.sign.viewmodel.SignUpViewModel
 import org.orbitmvi.orbit.compose.collectAsState
 
@@ -28,7 +28,7 @@ import org.orbitmvi.orbit.compose.collectAsState
 fun SignUpGradeView(
     modifier: Modifier = Modifier,
     onClick: () -> Unit,
-    gradeInfor: (Int) -> Unit,
+    changeGradeInfor: (Int) -> Unit,
     viewModel: SignUpViewModel = hiltViewModel()
 ) {
 
@@ -63,7 +63,7 @@ fun SignUpGradeView(
                     onClick = {
                         viewModel.selectedGradeChange(grade)
                         onClick()
-                        gradeInfor(gradeNumber(grade.text))
+                        changeGradeInfor(getGradeNumber(grade.text))
                     },
                 )
             }
