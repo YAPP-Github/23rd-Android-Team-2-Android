@@ -1,5 +1,7 @@
 package com.moneymong.moneymong.feature.mymong.main.view
 
+import android.content.pm.PackageManager
+import android.os.Build
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -18,6 +20,7 @@ import androidx.compose.material3.Divider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.moneymong.moneymong.design_system.R
@@ -37,6 +40,15 @@ internal fun MyMongSettingView(
     navigateToPrivacyPolicy: () -> Unit,
     navigateToWithdrawal: () -> Unit
 ) {
+    val context = LocalContext.current
+    val versionName = with(context) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            packageManager.getPackageInfo(packageName, PackageManager.PackageInfoFlags.of(0))
+        } else {
+            packageManager.getPackageInfo(packageName, 0)
+        }
+    }.versionName
+
     Column(modifier = modifier.fillMaxWidth()) {
         Text(
             text = "내 설정",
@@ -93,7 +105,7 @@ internal fun MyMongSettingView(
                     style = Body4
                 )
                 Text(
-                    text = "1.0.0",
+                    text = versionName,
                     color = Blue04,
                     style = Body4
                 )

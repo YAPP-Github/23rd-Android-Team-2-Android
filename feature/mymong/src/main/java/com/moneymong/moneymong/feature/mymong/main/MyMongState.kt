@@ -7,11 +7,8 @@ data class MyMongState(
     val email: String = "",
     val university: String = "",
     val grade: Int = 0,
-
+    val infoErrorMessage: String = "",
     val isInfoLoading: Boolean = true,
     val isInfoError: Boolean = false,
-    val infoErrorMessage: String = "",
-
     val visibleLogoutDialog: Boolean = false,
-    val version: String = "1.0.0"
 ) : State
