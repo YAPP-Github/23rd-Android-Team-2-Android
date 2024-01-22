@@ -1,17 +1,17 @@
 package com.moneymong.moneymong.data.datasource.mock
 
 import com.moneymong.moneymong.data.datasource.AgencyRemoteDataSource
-import com.moneymong.moneymong.network.api.agency.AgencyJoinApi
+import com.moneymong.moneymong.network.api.MoneyMongApi
 import com.moneymong.moneymong.network.request.agency.AgencyJoinRequest
 import com.moneymong.moneymong.network.request.agency.AgencyRegisterRequest
-import com.moneymong.moneymong.network.response.AgencyJoinResponse
+import com.moneymong.moneymong.network.response.agency.AgencyJoinResponse
 import com.moneymong.moneymong.network.response.agency.AgenciesGetResponse
 import com.moneymong.moneymong.network.response.agency.AgencyGetResponse
 import kotlinx.coroutines.delay
 import javax.inject.Inject
 
 class AgencyRemoteDataSourceMock @Inject constructor(
-    private val agencyJoinApi: AgencyJoinApi
+    private val moneyMongApi: MoneyMongApi
 ) : AgencyRemoteDataSource {
 
     override suspend fun registerAgency(request: AgencyRegisterRequest): Result<Unit> {
@@ -24,10 +24,9 @@ class AgencyRemoteDataSourceMock @Inject constructor(
     }
 
     override suspend fun agencyCodeNumbers(
-        agencyId: Long,
-        codeNumbers: AgencyJoinRequest
+       data: AgencyJoinRequest
     ): Result<AgencyJoinResponse> {
-        return agencyJoinApi.agencyCodeNumbers("Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiUk9MRV9VU0VSIiwidXNlcklkIjozLCJpYXQiOjE3MDQ3MTU0NTEsImV4cCI6MTczNjI3MzA1MX0.2yYEy71Gz4YIz0DYzlx0glYMgZA0JAZs05jsVRvvQx4", agencyId, codeNumbers)
+        return moneyMongApi.agencyCodeNumbers("Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiUk9MRV9VU0VSIiwidXNlcklkIjozLCJpYXQiOjE3MDQ3MTU0NTEsImV4cCI6MTczNjI3MzA1MX0.2yYEy71Gz4YIz0DYzlx0glYMgZA0JAZs05jsVRvvQx4", data.agencyId, data.invitationCode)
     }
 
     private companion object {

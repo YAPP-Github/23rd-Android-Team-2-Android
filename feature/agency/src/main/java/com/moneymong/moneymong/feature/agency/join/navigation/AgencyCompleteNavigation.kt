@@ -26,7 +26,6 @@ fun NavGraphBuilder.agencyCompleteScreen(
     composable(route = agencyCompleteRoute) {
         AgencyCompleteScreen(
             modifier = Modifier.padding(padding),
-            navController = navController,
             navigateToLedger = navigateToLedger,
             navigateToJoin = navigateToJoin,
             navigateUp = navigateUp

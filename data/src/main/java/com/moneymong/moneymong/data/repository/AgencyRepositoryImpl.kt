@@ -37,9 +37,8 @@ class AgencyRepositoryImpl @Inject constructor(
     }
 
     override suspend fun agencyCodeNumbers(
-        agencyId: Long,
-        codeNumbers: AgencyJoinParam
+        data: AgencyJoinParam
     ): Result<AgencyJoinEntity> {
-        return agencyRemoteDataSource.agencyCodeNumbers(agencyId, codeNumbers.toRequest()).map { it.toEntity() }
+        return agencyRemoteDataSource.agencyCodeNumbers(data.toRequest()).map { it.toEntity() }
     }
 }

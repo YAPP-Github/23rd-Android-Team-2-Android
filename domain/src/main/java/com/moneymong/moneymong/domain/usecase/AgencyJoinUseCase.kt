@@ -8,14 +8,11 @@ import javax.inject.Inject
 
 class AgencyJoinUseCase @Inject constructor(
     private val agencyRepository : AgencyRepository
-)
-//    : BaseUseCase<AgencyJoinParam, Result<AgencyJoinEntity>>()
+) : BaseUseCase<AgencyJoinParam, Result<AgencyJoinEntity>>()
     {
-//    override suspend fun invoke(data: AgencyJoinParam): Result<AgencyJoinEntity> {
-//
-//    }
 
-    suspend fun agencyCodeNumbers(agencyId : Long, codeNumbers : String) : Result<AgencyJoinEntity>{
-        return agencyRepository.agencyCodeNumbers(agencyId, AgencyJoinParam(codeNumbers))
+        override suspend fun invoke(data: AgencyJoinParam): Result<AgencyJoinEntity> {
+            return agencyRepository.agencyCodeNumbers(data)
     }
+
 }
