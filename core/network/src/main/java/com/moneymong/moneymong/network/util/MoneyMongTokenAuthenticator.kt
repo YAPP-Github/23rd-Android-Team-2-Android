@@ -20,25 +20,34 @@ class MoneyMongTokenAuthenticator @Inject constructor(
 
         if (response.code == 401 && !isPathRefresh) {
             runBlocking {
-                val refreshToken = tokenRepository.getRefreshToken()
-                tokenRepository.getUpdateToken(refreshToken)
-                    .onSuccess {
-                        response.request.newBuilder().apply {
-                            removeHeader("Authorization")
-                            addHeader("Authorization", "Bearer ${it.accessToken}")
-                        }.build()
-                        //refreshToken이 만료되지 않은 경우
-                        if (it.refreshToken == null) {
-                            tokenRepository.updateAccessToken(it.accessToken)
+                //로컬에서 리프레쉬 토큰 가져오기
+                tokenRepository.getRefreshToken().onSuccess {
+                    //액세스 토큰 갱신 요청
+                    tokenRepository.getUpdateToken(it)
+                        .onSuccess { token ->
+                            response.request.newBuilder().apply {
+                                removeHeader("Authorization")
+                                addHeader("Authorization", "Bearer ${token.accessToken}")
+                            }.build()
+                            //refreshToken이 만료되지 않은 경우
+                            if (token.refreshToken == null) {
+                                tokenRepository.updateAccessToken(token.accessToken)
+                            }
+                            //refreshToken의 만료일이 1주일 이내인 경우
+                            else {
+                                tokenRepository.updateTokens(
+                                    token.accessToken,
+                                    token.refreshToken!!
+                                )
+                            }
                         }
-                        //refreshToken의 만료일이 1주일 이내인 경우
-                        else {
-                            tokenRepository.updateTokens(it.accessToken, it.refreshToken!!)
+                        .onFailure {
+                            //TODO 토큰 갱신 요청이 실패하거나 네트워크 문제 등으로 인해 갱신 되지 않았을 떄
+                            // 에러 화면
                         }
-                    }
+                }
                     .onFailure {
-                        //TODO 토큰 갱신 요청이 실패하거나 네트워크 문제 등으로 인해 갱신 되지 않았을 떄
-                        // 에러 화면
+                        //로컬에서 리프레쉬 토큰을 가져오지 못한 경우
                     }
             }
         } else {

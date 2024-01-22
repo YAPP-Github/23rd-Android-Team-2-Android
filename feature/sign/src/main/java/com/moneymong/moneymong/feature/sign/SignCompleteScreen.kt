@@ -18,36 +18,25 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.moneymong.moneymong.design_system.theme.Black
 import com.moneymong.moneymong.design_system.theme.Heading1
 import com.moneymong.moneymong.design_system.theme.MMHorizontalSpacing
 import com.moneymong.moneymong.design_system.theme.White
-import com.moneymong.moneymong.feature.sign.navigation.signCompleteRoute
-import com.moneymong.moneymong.feature.sign.navigation.signUpRoute
 import com.moneymong.moneymong.feature.sign.view.SignCompleteButtonView
 import com.moneymong.moneymong.feature.sign.view.SignCompleteView
-import com.moneymong.moneymong.feature.sign.viewmodel.SignCompleteViewModel
-import com.moneymong.moneymong.home.navigation.homeRoute
-import org.orbitmvi.orbit.compose.collectAsState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SignCompleteScreen(
-    navController: NavHostController
+    navigateToHome : () -> Unit
 ) {
 
     val isCompleteBtnClicked = remember { mutableStateOf(false) }
 
     LaunchedEffect(key1 = isCompleteBtnClicked.value) {
         if (isCompleteBtnClicked.value) {
-            navController.navigate(homeRoute) {
-                popUpTo(signCompleteRoute) { inclusive = true }
-            }
+            navigateToHome()
         }
     }
 

@@ -12,6 +12,7 @@ android {
 dependencies {
 
     implementation(projects.core.designSystem)
+    implementation(projects.feature.sign)
     implementation(projects.feature.agency)
     implementation(projects.feature.ledger)
     implementation(projects.feature.mymong)

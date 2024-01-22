@@ -3,7 +3,6 @@ package com.moneymong.moneymong.feature.sign.state
 import androidx.compose.ui.text.input.TextFieldValue
 import com.moneymong.moneymong.common.base.State
 import com.moneymong.moneymong.domain.entity.signup.UniversitiesEntity
-import com.moneymong.moneymong.domain.entity.signup.UniversityX
 import com.moneymong.moneymong.feature.sign.util.Grade
 
 data class SignUpState(

@@ -3,7 +3,6 @@ package com.moneymong.moneymong.data.mapper.signup
 import com.moneymong.moneymong.domain.entity.signup.UnivEntity
 import com.moneymong.moneymong.domain.entity.signup.UniversitiesEntity
 import com.moneymong.moneymong.domain.entity.signup.University
-import com.moneymong.moneymong.domain.entity.signup.UniversityX
 import com.moneymong.moneymong.domain.param.signup.SearchQueryParam
 import com.moneymong.moneymong.domain.param.signup.UnivParam
 import com.moneymong.moneymong.network.request.signup.SearchQueryRequest
@@ -31,7 +30,7 @@ fun SearchQueryParam.toRequest() =
 fun UniversitiesReponse.toEntity() =
     UniversitiesEntity(
         universities = this.universities.map { univ ->
-            UniversityX(
+            University(
                 id = univ.id,
                 schoolName = univ.schoolName
             )
