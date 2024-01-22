@@ -149,7 +149,7 @@ fun LedgerDetailScreen(
         topBar = {
             LedgerDetailTopbarView(
                 useEditMode = state.useEditMode,
-                enabledDone = state.enabled,
+                enabledDone = state.enabledEdit,
                 onClickPrev = popBackStack,
                 onClickDelete = { /*TODO*/ },
                 onClickDone = { viewModel.eventEmit(LedgerDetailSideEffect.LedgerDetailEditDone) }
@@ -536,7 +536,7 @@ fun LedgerDetailScreen(
                         .fillMaxWidth()
                         .padding(vertical = 24.dp, horizontal = 20.dp),
                     text = "완료하기",
-                    enabled = state.enabled,
+                    enabled = state.enabledEdit,
                     size = MDSButtonSize.MEDIUM,
                     type = MDSButtonType.PRIMARY,
                     onClick = { viewModel.eventEmit(LedgerDetailSideEffect.LedgerDetailEditDone) }

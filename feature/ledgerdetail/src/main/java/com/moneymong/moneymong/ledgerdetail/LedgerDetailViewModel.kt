@@ -25,6 +25,8 @@ import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.postSideEffect
 import org.orbitmvi.orbit.syntax.simple.reduce
 import java.io.File
+import java.text.ParseException
+import java.text.SimpleDateFormat
 import javax.inject.Inject
 
 @HiltViewModel
@@ -81,8 +83,13 @@ class LedgerDetailViewModel @Inject constructor(
 
     fun postLedgerReceiptTransaction(detailId: Int) = intent {
         if (state.receiptList.isNotEmpty()) {
-            val mapToOriginalUrl = state.ledgerTransactionDetail?.receiptImageUrls?.map { it.receiptImageUrl }.orEmpty()
-            val param = LedgerReceiptParam(detailId = detailId, receiptImageUrls = state.receiptList - mapToOriginalUrl.toSet())
+            val mapToOriginalUrl =
+                state.ledgerTransactionDetail?.receiptImageUrls?.map { it.receiptImageUrl }
+                    .orEmpty()
+            val param = LedgerReceiptParam(
+                detailId = detailId,
+                receiptImageUrls = state.receiptList - mapToOriginalUrl.toSet()
+            )
             postLedgerReceiptTransactionUseCase(param)
                 .onFailure {
                     // TODO
@@ -92,8 +99,13 @@ class LedgerDetailViewModel @Inject constructor(
 
     fun postLedgerDocumentTransaction(detailId: Int) = intent {
         if (state.documentList.isNotEmpty()) {
-            val mapToOriginalUrl = state.ledgerTransactionDetail?.documentImageUrls?.map { it.documentImageUrl }.orEmpty()
-            val param = LedgerDocumentParam(detailId = detailId, documentImageUrls = state.documentList - mapToOriginalUrl.toSet())
+            val mapToOriginalUrl =
+                state.ledgerTransactionDetail?.documentImageUrls?.map { it.documentImageUrl }
+                    .orEmpty()
+            val param = LedgerDocumentParam(
+                detailId = detailId,
+                documentImageUrls = state.documentList - mapToOriginalUrl.toSet()
+            )
             postLedgerDocumentTransactionUseCase(param)
                 .onFailure {
                     // TODO
@@ -177,7 +189,8 @@ class LedgerDetailViewModel @Inject constructor(
 
     fun onClickRemoveDocument(documentImage: String) = intent {
         state.ledgerTransactionDetail?.let {
-            val documentId = it.documentImageUrls.find { it.documentImageUrl == documentImage }?.id ?: 0
+            val documentId =
+                it.documentImageUrls.find { it.documentImageUrl == documentImage }?.id ?: 0
             val isOriginalDocument =
                 it.documentImageUrls.map { it.documentImageUrl }.contains(documentImage)
             if (isOriginalDocument) {
@@ -248,7 +261,13 @@ class LedgerDetailViewModel @Inject constructor(
     fun onChangePaymentDateValue(value: TextFieldValue) = blockingIntent {
         val validate = validateValue(targetValue = value, length = 8, isDigit = true)
         if (validate) {
-            reduce { state.copy(paymentDateValue = value) }
+            val isPaymentDateError = !isValidPaymentDate(value.text)
+            reduce {
+                state.copy(
+                    paymentDateValue = value,
+                    isPaymentDateError = isPaymentDateError
+                )
+            }
         }
     }
 
@@ -286,6 +305,17 @@ class LedgerDetailViewModel @Inject constructor(
         targetValue.text.isDigitsOnly() && targetValue.text.length <= length
     } else {
         targetValue.text.length <= length
+    }
+
+    private fun isValidPaymentDate(date: String): Boolean {
+        val formatted = SimpleDateFormat("yyyyMMdd")
+        formatted.isLenient = false
+        try {
+            formatted.parse(date)
+        } catch (e: ParseException) {
+            return false
+        }
+        return true
     }
 
     companion object {
