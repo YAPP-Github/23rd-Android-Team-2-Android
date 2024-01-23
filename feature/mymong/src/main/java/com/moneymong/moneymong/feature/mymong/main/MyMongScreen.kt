@@ -12,11 +12,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.moneymong.moneymong.design_system.R
+import com.moneymong.moneymong.design_system.component.modal.MDSModal
 import com.moneymong.moneymong.design_system.theme.Gray01
 import com.moneymong.moneymong.design_system.theme.MMHorizontalSpacing
 import com.moneymong.moneymong.feature.mymong.main.component.MyMongTopBar
 import com.moneymong.moneymong.feature.mymong.main.view.MyMongInfoView
 import com.moneymong.moneymong.feature.mymong.main.view.MyMongSettingView
+import com.moneymong.moneymong.feature.mymong.withdrawal.component.WithdrawalErrorDialog
 import org.orbitmvi.orbit.compose.collectAsState
 import org.orbitmvi.orbit.compose.collectSideEffect
 
@@ -26,7 +29,8 @@ fun MyMongScreen(
     viewModel: MyMongViewModel = hiltViewModel(),
     navigateToTermsOfUse: () -> Unit,
     navigateToPrivacyPolicy: () -> Unit,
-    navigateToWithdrawal: () -> Unit
+    navigateToWithdrawal: () -> Unit,
+    navigateToLogin: () -> Unit,
 ) {
     val state by viewModel.collectAsState()
 
@@ -43,7 +47,30 @@ fun MyMongScreen(
             is MyMongSideEffect.NavigateToTermsOfUse -> {
                 navigateToTermsOfUse()
             }
+
+            is MyMongSideEffect.NavigateToLogin -> {
+                navigateToLogin()
+            }
         }
+    }
+
+    if (state.visibleLogoutDialog) {
+        MDSModal(
+            icon = R.drawable.ic_warning_filled,
+            title = "정말 로그아웃 하시겠습니까?",
+            description = "로그인한 계정이 로그아웃됩니다",
+            negativeBtnText = "취소",
+            positiveBtnText = "확인",
+            onClickNegative = { viewModel.changeLogoutDialogVisibility(false) },
+            onClickPositive = viewModel::logout
+        )
+    }
+
+    if (state.visibleErrorDialog) {
+        WithdrawalErrorDialog(
+            message = state.logoutErrorMessage,
+            onConfirm = { viewModel.changeErrorDialogVisibility(false) }
+        )
     }
 
     Column(
@@ -65,9 +92,10 @@ fun MyMongScreen(
         )
         Spacer(modifier = Modifier.height(24.dp))
         MyMongSettingView(
-            navigateToTermsOfUse = viewModel::onClickTermsOfUse,
-            navigateToPrivacyPolicy = viewModel::onClickPriPolicyButton,
-            navigateToWithdrawal = viewModel::onClickWithdrawal
+            navigateToTermsOfUse = viewModel::navigateToTermsOfUse,
+            navigateToPrivacyPolicy = viewModel::navigateToPriPolicyButton,
+            navigateToWithdrawal = viewModel::navigateToWithdrawal,
+            showLogoutDialog = { viewModel.changeLogoutDialogVisibility(true) }
         )
     }
 }

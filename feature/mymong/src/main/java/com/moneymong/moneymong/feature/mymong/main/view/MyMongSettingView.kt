@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.moneymong.moneymong.common.ui.noRippleClickable
 import com.moneymong.moneymong.design_system.R
 import com.moneymong.moneymong.design_system.theme.Blue04
 import com.moneymong.moneymong.design_system.theme.Body4
@@ -38,7 +39,8 @@ internal fun MyMongSettingView(
     modifier: Modifier = Modifier,
     navigateToTermsOfUse: () -> Unit,
     navigateToPrivacyPolicy: () -> Unit,
-    navigateToWithdrawal: () -> Unit
+    navigateToWithdrawal: () -> Unit,
+    showLogoutDialog: () -> Unit,
 ) {
     val context = LocalContext.current
     val versionName = with(context) {
@@ -77,15 +79,30 @@ internal fun MyMongSettingView(
             SettingDivider()
             SettingItem(
                 iconRes = R.drawable.ic_logout,
-                title = "로그아웃",
-                onNavigateClick = { /* todo */ }
-            )
-            SettingDivider()
-            SettingItem(
-                iconRes = R.drawable.ic_delete,
                 title = "회원탈퇴",
                 onNavigateClick = navigateToWithdrawal
             )
+            SettingDivider()
+            Row(
+                modifier = modifier
+                    .fillMaxWidth()
+                    .noRippleClickable { showLogoutDialog() },
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    modifier = Modifier.size(20.dp),
+                    painter = painterResource(id = R.drawable.ic_delete),
+                    tint = Gray07,
+                    contentDescription = null
+                )
+                Spacer(modifier = Modifier.width(12.dp))
+                Text(
+                    modifier = Modifier.weight(1f),
+                    text = "로그아웃",
+                    color = Gray06,
+                    style = Body4
+                )
+            }
             SettingDivider()
             Row(
                 modifier = Modifier.fillMaxWidth(),

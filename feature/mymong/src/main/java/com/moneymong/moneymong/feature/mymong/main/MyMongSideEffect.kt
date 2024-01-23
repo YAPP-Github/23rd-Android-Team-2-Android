@@ -6,4 +6,5 @@ sealed interface MyMongSideEffect : SideEffect {
     data object NavigateToWithdrawal : MyMongSideEffect
     data object NavigateToPrivacyPolicy : MyMongSideEffect
     data object NavigateToTermsOfUse : MyMongSideEffect
+    data object NavigateToLogin : MyMongSideEffect
 }
