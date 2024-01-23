@@ -13,7 +13,7 @@ fun NavController.navigatePrivacyPolicy(navOptions: NavOptions? = null) {
     navigate(privacyPolicyRoute, navOptions)
 }
 
-fun NavGraphBuilder.privacyPolicyScreen(navigateUp: () -> Unit) {
+internal fun NavGraphBuilder.privacyPolicyScreen(navigateUp: () -> Unit) {
     composable(route = privacyPolicyRoute) {
         PrivacyPolicyScreen(navigateUp = navigateUp)
     }

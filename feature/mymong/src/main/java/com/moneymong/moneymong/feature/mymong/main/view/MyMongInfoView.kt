@@ -12,10 +12,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -33,18 +35,47 @@ import com.moneymong.moneymong.feature.mymong.main.util.myMongRoundRectShadow
 
 @Composable
 internal fun MyMongInfoView(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    isLoading: Boolean,
+    isError: Boolean,
+    errorMessage: String,
+    name: String,
+    email: String,
+    university: String,
+    grade: Int
 ) {
-    Column(modifier = modifier) {
-        Profile()
-        Spacer(modifier = Modifier.height(20.dp))
-        InfoWithSchoolAndBirth()
+    Box(
+        modifier = modifier,
+        contentAlignment = Alignment.Center
+    ) {
+        if (isLoading) {
+            // todo change to LoadingItem
+            CircularProgressIndicator()
+        }
+        if (isError) {
+            // todo change to ErrorItem
+            Text(text = errorMessage)
+        }
+        val showContent = isLoading.not() && isError.not()
+        Column(modifier = if (showContent) Modifier else Modifier.alpha(alpha = 0f)) {
+            Profile(
+                name = name,
+                email = email
+            )
+            Spacer(modifier = Modifier.height(20.dp))
+            UniversityInfo(
+                university = university,
+                grade = grade
+            )
+        }
     }
 }
 
 @Composable
 private fun Profile(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    name: String,
+    email: String
 ) {
     Row(verticalAlignment = Alignment.CenterVertically) {
         Spacer(modifier = Modifier.width(6.dp))
@@ -63,22 +94,35 @@ private fun Profile(
         Spacer(modifier = Modifier.width(16.dp))
         Column {
             Text(
-                text = "김마이몽",
+                text = name,
                 color = Gray10,
                 style = Heading1
             )
-            Text(
-                text = "mymong@moneymong.com",
-                color = Gray08,
-                style = Body2
-            )
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Image(
+                    modifier = Modifier.size(18.dp),
+                    painter = painterResource(id = R.drawable.img_kakao_logo),
+                    contentDescription = "Kakao Email"
+                )
+                Spacer(modifier = Modifier.width(4.dp))
+                Text(
+                    text = email,
+                    color = Gray08,
+                    style = Body2
+                )
+            }
         }
     }
 }
 
 
 @Composable
-fun InfoWithSchoolAndBirth() {
+fun UniversityInfo(
+    university: String,
+    grade: Int
+) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -86,31 +130,26 @@ fun InfoWithSchoolAndBirth() {
             .background(color = White, shape = RoundedCornerShape(12.dp))
             .padding(vertical = 20.dp, horizontal = 16.dp)
     ) {
-        InfoWithSchool()
-    }
-}
-
-@Composable
-fun InfoWithSchool() {
-    Column {
-        Text(
-            text = "학교정보",
-            color = Gray07,
-            style = Body3
-        )
-        Spacer(modifier = Modifier.height(6.dp))
-        Row {
-            Image(
-                modifier = Modifier.size(24.dp),
-                painter = painterResource(id = R.drawable.img_university),
-                contentDescription = "school icon"
-            )
-            Spacer(modifier = Modifier.width(8.dp))
+        Column {
             Text(
-                text = "머니몽학교 1학년",
-                color = Gray08,
-                style = Body4
+                text = "학교정보",
+                color = Gray07,
+                style = Body3
             )
+            Spacer(modifier = Modifier.height(6.dp))
+            Row {
+                Image(
+                    modifier = Modifier.size(24.dp),
+                    painter = painterResource(id = R.drawable.img_university),
+                    contentDescription = "school icon"
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    text = "$university ${grade}학년",
+                    color = Gray08,
+                    style = Body4
+                )
+            }
         }
     }
 }

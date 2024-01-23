@@ -12,7 +12,7 @@ fun NavController.navigateTermsOfUse(navOptions: NavOptions? = null) {
     navigate(termsOfUseRoute, navOptions)
 }
 
-fun NavGraphBuilder.termsOfUseScreen(navigateUp: () -> Unit) {
+internal fun NavGraphBuilder.termsOfUseScreen(navigateUp: () -> Unit) {
     composable(route = termsOfUseRoute) {
         TermsOfUseScreen(navigateUp = navigateUp)
     }
