@@ -10,6 +10,8 @@ import com.moneymong.moneymong.home.navigation.homeScreen
 import com.moneymong.moneymong.home.navigation.navigateToHome
 import com.moneymong.moneymong.ledgerdetail.navigation.ledgerDetailScreen
 import com.moneymong.moneymong.ledgerdetail.navigation.navigateToLedgerDetail
+import com.moneymong.moneymong.ledgermanual.navigation.ledgerManualRoute
+import com.moneymong.moneymong.ledgermanual.navigation.ledgerManualScreen
 import com.moneymong.moneymong.ocr.navigation.navigateToOCR
 import com.moneymong.moneymong.ocr.navigation.ocrScreen
 import com.moneymong.moneymong.ocr_detail.navigation.navigateToOCRDetail
@@ -20,7 +22,7 @@ import com.moneymong.moneymong.ocr_result.navigation.ocrResultScreen
 @Composable
 fun MoneyMongNavHost(
     modifier: Modifier = Modifier,
-    startDestination: String = homeRoute // TODO
+    startDestination: String = ledgerManualRoute // TODO
 ) {
     val navController = rememberNavController()
     NavHost(
@@ -58,6 +60,9 @@ fun MoneyMongNavHost(
             popBackStack = navController::popBackStack
         )
         ledgerDetailScreen(
+            popBackStack = navController::popBackStack
+        )
+        ledgerManualScreen(
             popBackStack = navController::popBackStack
         )
     }
