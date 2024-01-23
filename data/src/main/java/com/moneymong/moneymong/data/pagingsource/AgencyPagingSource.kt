@@ -8,6 +8,7 @@ import com.moneymong.moneymong.network.response.agency.AgencyGetResponse
 class AgencyPagingSource(
     private val dataSource: AgencyRemoteDataSource,
 ) : PagingSource<Int, AgencyGetResponse>() {
+
     override fun getRefreshKey(state: PagingState<Int, AgencyGetResponse>): Int? {
         return state.anchorPosition?.let { anchorPosition ->
             val anchorPage = state.closestPageToPosition(anchorPosition)
@@ -18,7 +19,7 @@ class AgencyPagingSource(
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, AgencyGetResponse> {
         val page = params.key ?: START_PAGE
         val size = params.loadSize
-        return dataSource.getAgencies(page, size).fold(
+        return dataSource.getAgencies(page = page, size = size).fold(
             onSuccess = {
                 LoadResult.Page(
                     data = it.agencies,
