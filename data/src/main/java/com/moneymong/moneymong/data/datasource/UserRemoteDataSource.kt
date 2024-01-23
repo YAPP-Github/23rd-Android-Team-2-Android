@@ -7,4 +7,6 @@ interface UserRemoteDataSource {
     suspend fun getMyInfo(): Result<UserResponse>
 
     suspend fun withdrawal(): Result<Unit>
+
+    suspend fun logout(): Result<Unit>
 }
