@@ -34,7 +34,8 @@ import com.moneymong.moneymong.feature.mymong.main.util.myMongRoundRectShadow
 internal fun MyMongSettingView(
     modifier: Modifier = Modifier,
     navigateToTermsOfUse: () -> Unit,
-    navigateToPrivacyPolicy: () -> Unit
+    navigateToPrivacyPolicy: () -> Unit,
+    navigateToWithdrawal: () -> Unit
 ) {
     Column(modifier = modifier.fillMaxWidth()) {
         Text(
@@ -71,7 +72,7 @@ internal fun MyMongSettingView(
             SettingItem(
                 iconRes = R.drawable.ic_delete,
                 title = "회원탈퇴",
-                onNavigateClick = { /* todo */ }
+                onNavigateClick = navigateToWithdrawal
             )
             SettingDivider()
             Row(

@@ -1,7 +1,6 @@
 package com.moneymong.moneymong.home.navigation
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavGraphBuilder
@@ -22,10 +21,10 @@ fun NavGraphBuilder.homeScreen() {
 }
 
 @Composable
-internal fun rememberHomeNavController(navHostController: NavHostController = rememberNavController()) =
-    remember { HomeNavHostController(navHostController = navHostController) }
+internal fun rememberHomeNavigator(navHostController: NavHostController = rememberNavController()) =
+    remember { HomeNavigator(navHostController = navHostController) }
 
-internal class HomeNavHostController(
+internal class HomeNavigator(
     val navHostController: NavHostController
 ) {
     private val navBackStackEntry: NavBackStackEntry?

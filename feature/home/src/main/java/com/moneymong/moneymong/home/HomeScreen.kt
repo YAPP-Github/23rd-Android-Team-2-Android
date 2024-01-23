@@ -10,12 +10,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import com.moneymong.moneymong.feature.agency.navigation.agencyRoute
 import com.moneymong.moneymong.feature.agency.navigation.agencyScreen
-import com.moneymong.moneymong.feature.mymong.navigation.mymongScreen
+import com.moneymong.moneymong.feature.mymong.navigation.myMongNavGraph
 import com.moneymong.moneymong.feature.mymong.navigation.navigatePrivacyPolicy
 import com.moneymong.moneymong.feature.mymong.navigation.navigateTermsOfUse
-import com.moneymong.moneymong.feature.mymong.navigation.privacyPolicyScreen
-import com.moneymong.moneymong.feature.mymong.navigation.termsOfUseScreen
-import com.moneymong.moneymong.home.navigation.rememberHomeNavController
+import com.moneymong.moneymong.home.navigation.rememberHomeNavigator
 import com.moneymong.moneymong.home.view.HomeBottomBarView
 import com.moneymong.moneymong.ledger.navigation.ledgerScreen
 
@@ -23,19 +21,21 @@ import com.moneymong.moneymong.ledger.navigation.ledgerScreen
 fun HomeScreen(
     modifier: Modifier = Modifier,
 ) {
-    val homeNavController = rememberHomeNavController()
+    val homeNavigator = rememberHomeNavigator()
+    val homeNavController = homeNavigator.navHostController
+
     Scaffold(
         modifier = modifier,
         bottomBar = {
             HomeBottomBarView(
-                homeNavHostController = homeNavController,
+                homeNavigator = homeNavigator,
                 tabs = HomeBottomTabs.entries.toList()
             )
         }
     ) {
         NavHost(
             modifier = Modifier.padding(it),
-            navController = homeNavController.navHostController,
+            navController = homeNavController,
             startDestination = agencyRoute,
             enterTransition = { EnterTransition.None },
             exitTransition = { ExitTransition.None }
@@ -44,12 +44,11 @@ fun HomeScreen(
 
             ledgerScreen()
 
-            mymongScreen(
-                navigateToTermsOfUse = homeNavController.navHostController::navigateTermsOfUse,
-                navigateToPrivacyPolicy = homeNavController.navHostController::navigatePrivacyPolicy
+            myMongNavGraph(
+                navigateToTermsOfUse = homeNavController::navigateTermsOfUse,
+                navigateToPrivacyPolicy = homeNavController::navigatePrivacyPolicy,
+                navigateUp = homeNavController::navigateUp
             )
-            termsOfUseScreen(navigateUp = homeNavController.navHostController::navigateUp)
-            privacyPolicyScreen(navigateUp = homeNavController.navHostController::navigateUp)
         }
     }
 }
