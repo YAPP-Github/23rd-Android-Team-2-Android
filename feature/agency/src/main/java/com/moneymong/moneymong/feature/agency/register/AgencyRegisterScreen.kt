@@ -51,9 +51,9 @@ fun AgencyRegisterScreen(
 
     if (state.visibleOutDialog) {
         AgencyOutDialog(
-            onDismissRequest = { viewModel.changeVisibleDialog(false) },
-            onPositive = { viewModel.onDialogPositiveButtonClicked() },
-            onNegative = { viewModel.changeVisibleDialog(false) }
+            onDismissRequest = { viewModel.changeOutDialogVisibility(false) },
+            onPositive = viewModel::navigateUp,
+            onNegative = { viewModel.changeOutDialogVisibility(false) }
         )
     }
 
@@ -68,7 +68,7 @@ fun AgencyRegisterScreen(
                 .align(Alignment.End)
                 .padding(vertical = 10.dp)
                 .size(24.dp)
-                .noRippleClickable(onClick = { viewModel.changeVisibleDialog(true) }),
+                .noRippleClickable(onClick = { viewModel.changeOutDialogVisibility(true) }),
             painter = painterResource(id = R.drawable.ic_close_default),
             tint = Gray07,
             contentDescription = null
@@ -77,9 +77,9 @@ fun AgencyRegisterScreen(
         AgencyResisterContentView(
             modifier = Modifier.weight(1f),
             agencyType = state.agencyType,
-            onAgencyTypeChange = viewModel::onAgencyTypeChanged,
+            onAgencyTypeChange = viewModel::changeAgencyType,
             agencyName = state.agencyName,
-            onAgencyNameChange = viewModel::onAgencyNameChanged,
+            onAgencyNameChange = viewModel::changeAgencyName,
             changeNameTextFieldIsError = viewModel::changeNameTextFieldIsError,
         )
         val canRegister = state.agencyName.text.isNotEmpty() && state.nameTextFieldIsError.not()
@@ -87,7 +87,7 @@ fun AgencyRegisterScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 28.dp),
-            onClick = viewModel::onRegisterButtonClicked,
+            onClick = viewModel::registerAgency,
             text = "등록하기",
             enabled = canRegister
         )
