@@ -1,7 +1,6 @@
 package com.moneymong.moneymong.data.datasource.login
 
 import com.moneymong.moneymong.domain.LoginCallback
-import com.moneymong.moneymong.network.response.login.RefreshTokenResponse
 
 
 interface LoginRemoteDataSource {

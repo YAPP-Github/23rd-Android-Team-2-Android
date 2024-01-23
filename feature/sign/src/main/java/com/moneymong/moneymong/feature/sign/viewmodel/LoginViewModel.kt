@@ -1,6 +1,5 @@
 package com.moneymong.moneymong.feature.sign.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.moneymong.moneymong.common.base.BaseViewModel
 import com.moneymong.moneymong.domain.LoginCallback
@@ -10,7 +9,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import com.moneymong.moneymong.feature.sign.sideeffect.LoginSideEffect
 import com.moneymong.moneymong.feature.sign.state.LoginState
 import com.moneymong.moneymong.network.util.TokenCallback
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.reduce

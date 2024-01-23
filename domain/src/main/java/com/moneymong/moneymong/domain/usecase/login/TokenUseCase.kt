@@ -1,6 +1,5 @@
 package com.moneymong.moneymong.domain.usecase.login
 
-import com.moneymong.moneymong.domain.base.BaseUseCase
 import com.moneymong.moneymong.domain.repository.TokenRepository
 import javax.inject.Inject
 
@@ -14,4 +13,5 @@ class TokenUseCase @Inject constructor(
     suspend fun getSchoolInfo(): Result<Boolean> {
         return tokenRepository.getSchoolInfo()
     }
+
 }

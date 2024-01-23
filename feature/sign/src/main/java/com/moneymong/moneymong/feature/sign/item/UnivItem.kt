@@ -14,7 +14,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.moneymong.moneymong.design_system.R
 import com.moneymong.moneymong.design_system.theme.Black
 import com.moneymong.moneymong.design_system.theme.Blue04
@@ -22,8 +21,6 @@ import com.moneymong.moneymong.design_system.theme.Body4
 import com.moneymong.moneymong.design_system.theme.Gray03
 import com.moneymong.moneymong.design_system.theme.White
 import com.moneymong.moneymong.domain.entity.signup.University
-import com.moneymong.moneymong.feature.sign.viewmodel.SignUpViewModel
-import org.orbitmvi.orbit.compose.collectAsState
 
 
 @Composable

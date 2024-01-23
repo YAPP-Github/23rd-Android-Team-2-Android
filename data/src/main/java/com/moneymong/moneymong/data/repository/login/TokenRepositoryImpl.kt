@@ -7,8 +7,6 @@ import com.moneymong.moneymong.data.mapper.login.toRequest
 import com.moneymong.moneymong.domain.entity.login.RefreshTokenEntity
 import com.moneymong.moneymong.domain.param.login.RefreshTokenParam
 import com.moneymong.moneymong.domain.repository.TokenRepository
-import com.moneymong.moneymong.network.request.login.RefreshTokenRequest
-import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class TokenRepositoryImpl @Inject constructor(
