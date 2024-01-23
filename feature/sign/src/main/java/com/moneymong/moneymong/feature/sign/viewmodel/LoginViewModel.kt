@@ -28,17 +28,22 @@ class LoginViewModel @Inject constructor(
                 override suspend fun onLoginSuccess() {
                     tokenUseCase.getSchoolInfo()
                         .onSuccess {
-                            reduce {
-                                state.copy(
-                                    isSchoolInfoExist = true
-                                )
+                            if(it) {
+                                reduce {
+                                    state.copy(
+                                        isSchoolInfoExist = true
+                                    )
+                                }
+                            }
+                            else{
+                                reduce {
+                                    state.copy(
+                                        isSchoolInfoExist = false
+                                    )
+                                }
                             }
                         }.onFailure {
-                            reduce {
-                                state.copy(
-                                    isSchoolInfoExist = false
-                                )
-                            }
+                            //TODO - 에러처리
                         }
                 }
 

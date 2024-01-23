@@ -78,7 +78,6 @@ class LoginRemoteDataSourceImpl @Inject constructor(
 
 
     private suspend fun sendToken(type: String, accessToken: String) {
-        Log.d("확인", "토큰을 보냈습니다.")
         accessTokenApi.accessTokenApi(TokenRequest(type, accessToken))
             .onSuccess {
                 Log.d(

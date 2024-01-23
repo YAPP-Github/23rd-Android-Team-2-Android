@@ -30,7 +30,7 @@ class MoneyMongTokenAuthenticator @Inject constructor(
                                 addHeader("Authorization", "Bearer ${token.accessToken}")
                             }.build()
                             //refreshToken이 만료되지 않은 경우
-                            if (token.refreshToken == null) {
+                            if (token.refreshToken == it) {
                                 tokenRepository.updateAccessToken(token.accessToken)
                             }
                             //refreshToken의 만료일이 1주일 이내인 경우
