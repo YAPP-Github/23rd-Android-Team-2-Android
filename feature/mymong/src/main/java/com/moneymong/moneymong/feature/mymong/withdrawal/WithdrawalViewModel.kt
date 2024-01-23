@@ -29,27 +29,21 @@ class WithdrawalViewModel @Inject constructor(
             }
     }
 
-    fun onClickAgree() = intent {
+    fun toggleIsAgreed() = intent {
         reduce {
             state.copy(isAgreed = state.isAgreed.not())
         }
     }
 
-    fun onClickWithdrawalButton() = intent {
+    fun changeWithdrawalDialogVisibility(visible: Boolean) = intent {
         reduce {
-            state.copy(visibleWithdrawalDialog = true)
+            state.copy(visibleWithdrawalDialog = visible)
         }
     }
 
-    fun onNegativeClickWithdrawalDialog() = intent {
+    fun changeErrorDialogVisibility(visible: Boolean) = intent {
         reduce {
-            state.copy(visibleWithdrawalDialog = false)
-        }
-    }
-
-    fun onConfirmErrorDialog() = intent {
-        reduce {
-            state.copy(visibleErrorDialog = false)
+            state.copy(visibleErrorDialog = visible)
         }
     }
 }
