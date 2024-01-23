@@ -9,7 +9,7 @@ import retrofit2.http.POST
 import retrofit2.http.Query
 
 
-interface AgencyApi {
+interface MoneyMongApi {
 
     @GET("api/v1/agencies")
     suspend fun getAgencies(
