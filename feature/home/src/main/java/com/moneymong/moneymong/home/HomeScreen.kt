@@ -59,7 +59,6 @@ fun HomeScreen(
             )
             agencyCompleteScreen(
                 padding = it,
-                navController = homeNavController.navHostController,
                 navigateToLedger = {
                     homeNavController.navHostController.navigate(
                         route = ledgerRoute,
@@ -76,7 +75,6 @@ fun HomeScreen(
                         }
                     )
                 },
-                navigateUp = { homeNavController.navHostController.navigateUp() }
             )
             agencyRegisterScreen(
                 padding = it,

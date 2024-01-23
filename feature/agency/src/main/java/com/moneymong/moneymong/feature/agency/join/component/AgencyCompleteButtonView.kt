@@ -17,7 +17,7 @@ import com.moneymong.moneymong.feature.agency.join.AgencyCompleteViewModel
 @Composable
 fun AgencyCompleteButtonView (
     modifier: Modifier = Modifier,
-    viewModel : AgencyCompleteViewModel,
+    isBtnClickChanged : (Boolean) -> Unit
 ){
 
     Column(
@@ -26,7 +26,7 @@ fun AgencyCompleteButtonView (
         MDSButton(
             modifier = Modifier.fillMaxWidth(),
             onClick = {
-                viewModel.isBtnClickChanged(true)
+                isBtnClickChanged(true)
             },
             text = "확인하러 가기",
             type = MDSButtonType.PRIMARY,
