@@ -10,6 +10,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -31,12 +32,16 @@ import com.moneymong.moneymong.domain.entity.signup.UniversitiesEntity
 import com.moneymong.moneymong.domain.entity.signup.University
 import com.moneymong.moneymong.feature.sign.item.UnivItem
 import com.moneymong.moneymong.feature.sign.viewmodel.SignUpViewModel
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.compose.collectAsState
 
-@OptIn(ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalComposeUiApi::class, FlowPreview::class)
 @Composable
 fun SearchUnivView(
     modifier: Modifier = Modifier,
@@ -54,10 +59,23 @@ fun SearchUnivView(
     value: TextFieldValue
 ) {
 
-    val scope = rememberCoroutineScope()
-    var job by remember { mutableStateOf<Job?>(null) }
-
     val keyboardController = LocalSoftwareKeyboardController.current
+    val scope = rememberCoroutineScope()
+
+    val debouncePeriod = 300L
+    val queryState = remember { MutableStateFlow("") }
+
+
+    LaunchedEffect(Unit) {
+        queryState
+            .debounce(debouncePeriod)
+            .collect { query ->
+                onSearchIconClicked(query)
+                isListVisibleChanged(query.isNotEmpty())
+                isFilledChanged(false)
+            }
+    }
+
 
     Column(
         modifier = modifier.background(White)
@@ -67,13 +85,7 @@ fun SearchUnivView(
             value = value,
             onValueChange = {
                 onChange(it)
-                job?.cancel() // 이전에 실행된 Job 취소
-                job = scope.launch {
-                    delay(300)
-                    onSearchIconClicked(it.text)
-                }
-                isListVisibleChanged(it.text.isNotEmpty())
-                isFilledChanged(false)
+                queryState.value = it.text
             },
             title = "대학교",
             placeholder = "ex) 머니대학교",
@@ -104,7 +116,7 @@ fun SearchUnivView(
             if (universityResponse?.universities?.isNotEmpty() == true) {
                 UnivList(
                     isItemSelected = isItemSelected,
-                    isItemSelectedChanged = isItemSelectedChanged ,
+                    isItemSelectedChanged = isItemSelectedChanged,
                     univs = universityResponse.universities,
                     onClick = onClick
                 )
