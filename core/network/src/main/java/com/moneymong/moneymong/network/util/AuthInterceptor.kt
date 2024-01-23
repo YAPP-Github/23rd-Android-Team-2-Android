@@ -22,12 +22,12 @@ class AuthInterceptor @Inject constructor(
             return chain.proceed(originalRequest)
         }
 
-        val accessToken = runBlocking {
+        val accessToken= runBlocking {
             tokenRepository.getAccessToken()
         }
 
         val newRequest = originalRequest.newBuilder()
-            .addHeader("Authorization", "Bearer $accessToken")
+            .addHeader("Authorization", "Bearer ${accessToken.getOrNull()}")
             .build()
 
         return chain.proceed(newRequest)

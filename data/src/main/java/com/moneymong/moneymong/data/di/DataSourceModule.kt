@@ -14,7 +14,7 @@ import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 
-@Module(includes = [NetworkModule::class])
+@Module
 @InstallIn(SingletonComponent::class)
 abstract class DataSourceModule {
 
