@@ -35,8 +35,7 @@ class MyMongViewModel @Inject constructor(
                 reduce {
                     state.copy(isInfoLoading = false)
                 }
-            }
-            .onSuccess {
+            }.onSuccess {
                 reduce {
                     state.copy(
                         name = it.name,
@@ -59,8 +58,7 @@ class MyMongViewModel @Inject constructor(
         logoutUseCase(data = Unit)
             .onSuccess {
                 postSideEffect(sideEffect = MyMongSideEffect.NavigateToLogin)
-            }
-            .onFailure {
+            }.onFailure {
                 reduce {
                     state.copy(
                         visibleErrorDialog = true,
