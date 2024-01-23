@@ -18,17 +18,14 @@ fun NavController.navigateAgencyJoinComplete(navOptions: NavOptions? = null) {
 
 fun NavGraphBuilder.agencyCompleteScreen(
     padding: PaddingValues,
-    navController: NavHostController,
-    navigateToLedger : () -> Unit,
-    navigateToJoin : () -> Unit,
-    navigateUp : () -> Unit
+    navigateToLedger: () -> Unit,
+    navigateToJoin: () -> Unit,
 ) {
     composable(route = agencyCompleteRoute) {
         AgencyCompleteScreen(
             modifier = Modifier.padding(padding),
             navigateToLedger = navigateToLedger,
             navigateToJoin = navigateToJoin,
-            navigateUp = navigateUp
-            )
+        )
     }
 }

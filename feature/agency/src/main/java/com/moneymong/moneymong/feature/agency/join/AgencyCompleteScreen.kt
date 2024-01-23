@@ -41,7 +41,6 @@ fun AgencyCompleteScreen(
     modifier : Modifier = Modifier,
     navigateToLedger : () -> Unit,
     navigateToJoin : () -> Unit,
-    navigateUp: () -> Unit,
     viewModel: AgencyCompleteViewModel = hiltViewModel()
 ) {
     val state = viewModel.collectAsState().value
@@ -87,8 +86,8 @@ fun AgencyCompleteScreen(
             SignCompleteContent(
                 modifier = Modifier.padding(innerPadding),
                 navigateToLedger = navigateToLedger,
-                viewModel = viewModel,
-                state = state
+                isBtnClicked = state.isBtnClicked,
+                isBtnClickChanged = { isBtnClicked ->  viewModel.isBtnClickChanged(isBtnClicked) }
 
             )
         }
@@ -100,12 +99,12 @@ fun AgencyCompleteScreen(
 fun SignCompleteContent(
     modifier: Modifier = Modifier,
     navigateToLedger: () -> Unit,
-    viewModel : AgencyCompleteViewModel,
-    state : AgencyCompleteState
+    isBtnClicked : Boolean,
+    isBtnClickChanged : (Boolean) -> Unit,
 ) {
 
-    LaunchedEffect(key1 = state.isBtnClicked){
-        if(state.isBtnClicked == true){
+    LaunchedEffect(key1 = isBtnClicked){
+        if(isBtnClicked){
             navigateToLedger()
         }
     }
@@ -119,7 +118,8 @@ fun SignCompleteContent(
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.BottomCenter),
-            viewModel = viewModel,
+            isBtnClickChanged = isBtnClickChanged
+
         )
     }
 }
