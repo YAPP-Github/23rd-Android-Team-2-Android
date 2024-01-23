@@ -36,6 +36,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.moneymong.moneymong.design_system.R.*
 import com.moneymong.moneymong.design_system.component.modal.MDSModal
 import com.moneymong.moneymong.design_system.component.selection.MDSSelection
@@ -46,14 +47,17 @@ import com.moneymong.moneymong.design_system.theme.Gray06
 import com.moneymong.moneymong.design_system.theme.MMHorizontalSpacing
 import com.moneymong.moneymong.design_system.theme.White
 import com.moneymong.moneymong.ledgermanual.view.LedgerManualTopbarView
+import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
 fun LedgerManualScreen(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    viewModel: LedgerManualViewModel = hiltViewModel()
 ) {
     fun validate(text: String, maxCount: Int): Boolean {
         return text.length > maxCount
     }
+    val state = viewModel.collectAsState().value
     val verticalScrollState = rememberScrollState()
     var userInput by remember { mutableStateOf(TextFieldValue()) }
     var isFilled by remember { mutableStateOf(false) }
