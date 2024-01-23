@@ -147,7 +147,7 @@ class LedgerDetailViewModel @Inject constructor(
                     postSideEffect(LedgerDetailSideEffect.LedgerDetailNavigateToLedger)
                 }.onFailure {
                     // TODO
-                }
+                }.also { reduce { state.copy(isLoading = false) } }
         }
     }
 
