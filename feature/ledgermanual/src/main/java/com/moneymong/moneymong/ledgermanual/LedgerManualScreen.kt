@@ -17,6 +17,8 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
@@ -32,7 +34,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -41,27 +45,29 @@ import com.moneymong.moneymong.design_system.R.*
 import com.moneymong.moneymong.design_system.component.modal.MDSModal
 import com.moneymong.moneymong.design_system.component.selection.MDSSelection
 import com.moneymong.moneymong.design_system.component.textfield.MDSTextField
+import com.moneymong.moneymong.design_system.component.textfield.util.MDSTextFieldIcons
+import com.moneymong.moneymong.design_system.component.textfield.util.PriceType
+import com.moneymong.moneymong.design_system.component.textfield.visualtransformation.DateVisualTransformation
+import com.moneymong.moneymong.design_system.component.textfield.visualtransformation.PriceVisualTransformation
+import com.moneymong.moneymong.design_system.component.textfield.visualtransformation.TimeVisualTransformation
 import com.moneymong.moneymong.design_system.theme.Blue03
 import com.moneymong.moneymong.design_system.theme.Body2
 import com.moneymong.moneymong.design_system.theme.Gray06
 import com.moneymong.moneymong.design_system.theme.MMHorizontalSpacing
 import com.moneymong.moneymong.design_system.theme.White
+import com.moneymong.moneymong.domain.param.ledger.FundType
 import com.moneymong.moneymong.ledgermanual.view.LedgerManualTopbarView
 import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
 fun LedgerManualScreen(
     modifier: Modifier = Modifier,
-    viewModel: LedgerManualViewModel = hiltViewModel()
+    viewModel: LedgerManualViewModel = hiltViewModel(),
+    popBackStack: () -> Unit
 ) {
-    fun validate(text: String, maxCount: Int): Boolean {
-        return text.length > maxCount
-    }
     val state = viewModel.collectAsState().value
     val verticalScrollState = rememberScrollState()
-    var userInput by remember { mutableStateOf(TextFieldValue()) }
-    var isFilled by remember { mutableStateOf(false) }
-    val isError by remember { derivedStateOf { validate(userInput.text, 20) } }
+    val focusManager = LocalFocusManager.current
 
     if (false) { // TODO
         MDSModal(
@@ -95,32 +101,42 @@ fun LedgerManualScreen(
                     .fillMaxSize()
                     .padding(horizontal = MMHorizontalSpacing)
             ) {
-                MDSTextField( // TODO
+                var isStoreNameFilled by remember { mutableStateOf(false) }
+                MDSTextField(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .onFocusChanged {
-                            isFilled = !it.isFocused
-                        },
-                    value = userInput,
-                    onValueChange = { userInput = it },
+                        .onFocusChanged { isStoreNameFilled = !it.isFocused },
+                    value = state.storeNameValue,
+                    onValueChange = viewModel::onChangeStoreNameValue,
                     title = "수입·지출 출처",
                     placeholder = "점포명을 입력해주세요",
                     helperText = "20자 이하로 입력해주세요",
                     maxCount = 20,
-                    isFilled = isFilled,
-                    isError = isError,
-                    singleLine = true
+                    isFilled = isStoreNameFilled,
+                    isError = state.isStoreNameError,
+                    singleLine = true,
+                    icon = MDSTextFieldIcons.Clear,
+                    onIconClick = { viewModel.onChangeStoreNameValue(TextFieldValue()) }
                 )
                 Spacer(modifier = Modifier.height(24.dp))
-                MDSTextField( // TODO
-                    modifier = Modifier.fillMaxWidth(),
-                    value = TextFieldValue(),
-                    onValueChange = {},
+                var isTotalPriceFilled by remember { mutableStateOf(false) }
+                MDSTextField(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .onFocusChanged { isTotalPriceFilled = !it.isFocused },
+                    value = state.totalPriceValue,
+                    onValueChange = viewModel::onChangeTotalPriceValue,
                     title = "금액",
                     placeholder = "거래 금액을 입력해주세요",
-                    helperText = "99,999,999,999원 이하로 입력해주세요",
-                    isFilled = false,
-                    singleLine = true
+                    helperText = "999,999,999,999원 이하로 입력해주세요",
+                    isFilled = isTotalPriceFilled,
+                    isError = state.isTotalPriceError,
+                    singleLine = true,
+                    icon = MDSTextFieldIcons.Clear,
+                    onIconClick = { viewModel.onChangeTotalPriceValue(TextFieldValue()) },
+                    visualTransformation = PriceVisualTransformation(type = state.priceType),
+                    keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
                 )
                 Spacer(modifier = Modifier.height(24.dp))
                 Text(
@@ -136,37 +152,55 @@ fun LedgerManualScreen(
                     MDSSelection(
                         modifier = Modifier.weight(1f),
                         text = "지출",
-                        isSelected = false, // TODO
+                        isSelected = state.fundType == FundType.INCOME,
                         onClick = { /*TODO*/ }
                     )
                     MDSSelection(
                         modifier = Modifier.weight(1f),
                         text = "수입",
-                        isSelected = false, // TODO
+                        isSelected = state.fundType == FundType.EXPENSE,
                         onClick = { /*TODO*/ }
                     )
                 }
                 Spacer(modifier = Modifier.height(24.dp))
-                MDSTextField( // TODO
-                    modifier = Modifier.fillMaxWidth(),
-                    value = TextFieldValue(),
-                    onValueChange = {},
+                var isPaymentDateFilled by remember { mutableStateOf(false) }
+                MDSTextField(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .onFocusChanged { isPaymentDateFilled = !it.isFocused },
+                    value = state.paymentDateValue,
+                    onValueChange = viewModel::onChangePaymentDateValue,
                     title = "날짜",
                     placeholder = "YYYY/MM/DD",
                     helperText = "올바른 날짜를 입력해주세요",
-                    isFilled = false,
-                    singleLine = true
+                    isFilled = isPaymentDateFilled,
+                    isError = state.isPaymentDateError,
+                    singleLine = true,
+                    onIconClick = { viewModel.onChangePaymentDateValue(TextFieldValue()) },
+                    icon = MDSTextFieldIcons.Clear,
+                    visualTransformation = DateVisualTransformation(),
+                    keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
                 )
                 Spacer(modifier = Modifier.height(24.dp))
-                MDSTextField( // TODO
-                    modifier = Modifier.fillMaxWidth(),
-                    value = TextFieldValue(),
-                    onValueChange = {},
+                var isPaymentTimeFilled by remember { mutableStateOf(false) }
+                MDSTextField(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .onFocusChanged { isPaymentTimeFilled = !it.isFocused },
+                    value = state.paymentTimeValue,
+                    onValueChange = viewModel::onChangePaymentTimeValue,
                     title = "시간",
-                    placeholder = "00:00 (24시 단위)",
+                    placeholder = "00:00:00 (24시 단위)",
                     helperText = "올바른 시간을 입력해주세요",
-                    isFilled = false,
-                    singleLine = true
+                    isFilled = isPaymentTimeFilled,
+                    isError = state.isPaymentTimeError,
+                    singleLine = true,
+                    onIconClick = { viewModel.onChangePaymentTimeValue(TextFieldValue()) },
+                    icon = MDSTextFieldIcons.Clear,
+                    visualTransformation = TimeVisualTransformation(),
+                    keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
                 )
                 Text(
                     text = "영수증 (최대 12장)",
@@ -242,16 +276,23 @@ fun LedgerManualScreen(
                     }
                 }
                 Spacer(modifier = Modifier.height(24.dp))
-                MDSTextField( // TODO
-                    modifier = Modifier.fillMaxWidth(),
-                    value = TextFieldValue(),
-                    onValueChange = {},
+                var isMemoFilled by remember { mutableStateOf(false) }
+                MDSTextField(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .onFocusChanged { isMemoFilled = !it.isFocused },
+                    value = state.memoValue,
+                    onValueChange = viewModel::onChangeMemoValue,
                     title = "메모 (선택)",
                     placeholder = "메모할 내용을 입력하세요",
                     helperText = "300자 이하로 입력해주세요",
                     maxCount = 300,
                     singleLine = false,
-                    isFilled = false
+                    isFilled = isMemoFilled,
+                    isError = state.isMemoError,
+                    onIconClick = { viewModel.onChangeMemoValue(TextFieldValue()) },
+                    icon = MDSTextFieldIcons.Clear,
+                    keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() })
                 )
             }
             Spacer(modifier = Modifier.height(28.dp))
@@ -262,5 +303,7 @@ fun LedgerManualScreen(
 @Preview(showBackground = true)
 @Composable
 fun LedgerManualScreenPreview() {
-    LedgerManualScreen()
+    LedgerManualScreen(
+        popBackStack = {}
+    )
 }
