@@ -21,7 +21,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.moneymong.moneymong.design_system.theme.Blue04
 import com.moneymong.moneymong.design_system.theme.MMHorizontalSpacing
-import com.moneymong.moneymong.feature.sign.state.LoginState
 import com.moneymong.moneymong.feature.sign.view.KakaoLoginView
 import com.moneymong.moneymong.feature.sign.view.TitleView
 import com.moneymong.moneymong.feature.sign.viewmodel.LoginViewModel

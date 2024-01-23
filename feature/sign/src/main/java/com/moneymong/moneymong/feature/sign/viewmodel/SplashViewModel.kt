@@ -1,9 +1,6 @@
 package com.moneymong.moneymong.feature.sign.viewmodel
 
-import android.util.Base64
-import android.util.Log
 import com.moneymong.moneymong.common.base.BaseViewModel
-import com.moneymong.moneymong.domain.usecase.login.LoginUseCase
 import com.moneymong.moneymong.domain.usecase.login.TokenUseCase
 import com.moneymong.moneymong.feature.sign.sideeffect.SplashSideEffect
 import com.moneymong.moneymong.feature.sign.state.SplashState
@@ -11,11 +8,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.json.JSONObject
 import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.reduce
-import java.nio.charset.StandardCharsets
-import java.util.Date
 import javax.inject.Inject
 
 @HiltViewModel
@@ -54,6 +48,5 @@ class SplashViewModel @Inject constructor(
                 //TODO - 에러 화면
             }
     }
-
 
 }

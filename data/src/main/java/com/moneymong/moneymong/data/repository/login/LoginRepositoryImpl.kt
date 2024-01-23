@@ -2,7 +2,6 @@ package com.moneymong.moneymong.data.repository.login
 
 import android.content.Context
 import com.kakao.sdk.user.UserApiClient
-import com.moneymong.moneymong.data.datasource.login.LoginLocalDataSource
 import com.moneymong.moneymong.data.datasource.login.LoginRemoteDataSource
 import com.moneymong.moneymong.domain.LoginCallback
 import com.moneymong.moneymong.domain.repository.LoginRepository

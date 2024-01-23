@@ -1,21 +1,12 @@
 package com.moneymong.moneymong.data.datasource.login
 
 import android.content.Context
-import android.provider.SyncStateContract.Constants
-import android.util.Log
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
-import com.moneymong.moneymong.network.api.login.AccessTokenApi
-import com.moneymong.moneymong.network.request.login.RefreshTokenRequest
-import com.moneymong.moneymong.network.response.login.RefreshTokenResponse
 import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 val Context.dataStore by preferencesDataStore(name = "jwt")

@@ -8,7 +8,6 @@ import com.moneymong.moneymong.data.datasource.login.TokenRemoteDataSource
 import com.moneymong.moneymong.data.datasource.login.TokenRemoteDataSourceImpl
 import com.moneymong.moneymong.data.datasource.signup.UnivRemoteDataSource
 import com.moneymong.moneymong.data.datasource.signup.UnivRemoteDataSourceImpl
-import com.moneymong.moneymong.network.di.NetworkModule
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

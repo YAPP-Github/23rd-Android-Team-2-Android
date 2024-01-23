@@ -1,6 +1,5 @@
 package com.moneymong.moneymong.domain.repository
 
-import com.moneymong.moneymong.domain.entity.signup.UnivEntity
 import com.moneymong.moneymong.domain.entity.signup.UniversitiesEntity
 import com.moneymong.moneymong.domain.param.signup.SearchQueryParam
 import com.moneymong.moneymong.domain.param.signup.UnivParam
