@@ -1,8 +1,10 @@
 package com.moneymong.moneymong.data.di
 
 import com.moneymong.moneymong.data.repository.ledger.LedgerRepositoryImpl
+import com.moneymong.moneymong.data.repository.member.MemberRepositoryImpl
 import com.moneymong.moneymong.data.repository.ocr.OCRRepositoryImpl
 import com.moneymong.moneymong.domain.repository.ledger.LedgerRepository
+import com.moneymong.moneymong.domain.repository.member.MemberRepository
 import com.moneymong.moneymong.domain.repository.ocr.OCRRepository
 import dagger.Binds
 import dagger.Module
@@ -22,4 +24,9 @@ interface RepositoryModule {
     fun provideLedgerRepository(
         ledgerRepositoryImpl: LedgerRepositoryImpl
     ): LedgerRepository
+
+    @Binds
+    fun provideMemberRepository(
+        memberRepositoryImpl: MemberRepositoryImpl
+    ): MemberRepository
 }

@@ -4,6 +4,7 @@ import com.moneymong.moneymong.network.request.ledger.LedgerTransactionRequest
 import com.moneymong.moneymong.network.response.ledger.LedgerTransactionDetailResponse
 import com.moneymong.moneymong.network.response.ledger.LedgerTransactionListResponse
 import com.moneymong.moneymong.network.response.ledger.LedgerTransactionResponse
+import com.moneymong.moneymong.network.response.member.InvitationCodeResponse
 import com.moneymong.moneymong.network.response.ocr.FileUploadResponse
 import okhttp3.MultipartBody
 import retrofit2.http.Body
@@ -54,4 +55,11 @@ interface MoneyMongApi {
         @Header("Authorization") header: String = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiUk9MRV9VU0VSIiwidXNlcklkIjozLCJpYXQiOjE3MDQ3MTU0NTEsImV4cCI6MTczNjI3MzA1MX0.2yYEy71Gz4YIz0DYzlx0glYMgZA0JAZs05jsVRvvQx4",
         @Part file: MultipartBody.Part
     ): Result<FileUploadResponse>
+
+    //멤버 초대코드 조회
+    @GET("api/v1/agencies/{agencyId}/invitation-code")
+    suspend fun getInvitationCode(
+        @Path("agencyId") agencyId: Long,
+        @Header("Authorization") header: String = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiUk9MRV9VU0VSIiwidXNlcklkIjozLCJpYXQiOjE3MDQ3MTU0NTEsImV4cCI6MTczNjI3MzA1MX0.2yYEy71Gz4YIz0DYzlx0glYMgZA0JAZs05jsVRvvQx4"
+    ) : Result<InvitationCodeResponse>
 }
