@@ -53,7 +53,7 @@ fun OCRResultScreen(
     modifier: Modifier = Modifier,
     viewModel: OCRResultViewModel = hiltViewModel(),
     document: DocumentEntity?,
-    navigateToHome: (NavOptions?, Boolean) -> Unit,
+    navigateToHome: (Boolean) -> Unit,
     navigateToOCRDetail: (NavOptions?, String) -> Unit,
     popBackStack: () -> Unit,
 ) {
@@ -91,7 +91,7 @@ fun OCRResultScreen(
             }
 
             is OCRResultSideEffect.OCRResultNavigateToHome -> {
-                navigateToHome(null, true)
+                navigateToHome(true)
             }
 
             is OCRResultSideEffect.OCRResultNavigateToOCRDetail -> {
@@ -182,7 +182,7 @@ fun OCRResultScreen(
 fun OCRResultScreenPreview() {
     OCRResultScreen(
         document = null,
-        navigateToHome = { navOptions, b -> },
+        navigateToHome = {},
         popBackStack = {},
         navigateToOCRDetail = { navOptions, s -> })
 }

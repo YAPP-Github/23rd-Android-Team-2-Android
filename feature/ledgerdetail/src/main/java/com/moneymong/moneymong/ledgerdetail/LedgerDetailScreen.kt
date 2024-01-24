@@ -1,5 +1,6 @@
 package com.moneymong.moneymong.ledgerdetail
 
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -45,6 +46,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavOptions
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.moneymong.moneymong.common.ext.base64ToFile
@@ -83,6 +85,7 @@ fun LedgerDetailScreen(
     modifier: Modifier = Modifier,
     viewModel: LedgerDetailViewModel = hiltViewModel(),
     ledgerTransactionId: Int,
+    navigateToHome: (Boolean) -> Unit,
     popBackStack: () -> Unit
 ) {
     val context = LocalContext.current
@@ -139,6 +142,8 @@ fun LedgerDetailScreen(
         }
     }
 
+    BackHandler(onBack = { navigateToHome(false) })
+
     LaunchedEffect(Unit) {
         viewModel.eventEmit(
             LedgerDetailSideEffect.LedgerDetailFetchTransactionDetail(
@@ -164,7 +169,7 @@ fun LedgerDetailScreen(
                 title = "${state.fundTypeText} 상세내역",
                 useEditMode = state.useEditMode,
                 enabledDone = state.enabledEdit,
-                onClickPrev = popBackStack,
+                onClickPrev = { navigateToHome(false) },
                 onClickDelete = { viewModel.onChangeVisibleConfirmModal(true) },
                 onClickDone = { viewModel.eventEmit(LedgerDetailSideEffect.LedgerDetailEditDone) }
             )
@@ -575,6 +580,7 @@ fun LedgerDetailScreen(
 fun LedgerDetailScreenPreview() {
     LedgerDetailScreen(
         ledgerTransactionId = 0,
+        navigateToHome = {},
         popBackStack = {}
     )
 }

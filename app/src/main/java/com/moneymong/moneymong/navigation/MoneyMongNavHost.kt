@@ -8,9 +8,9 @@ import androidx.navigation.navOptions
 import com.moneymong.moneymong.home.navigation.homeRoute
 import com.moneymong.moneymong.home.navigation.homeScreen
 import com.moneymong.moneymong.home.navigation.navigateToHome
+import com.moneymong.moneymong.home.navigation.topLevelNavigateToHome
 import com.moneymong.moneymong.ledgerdetail.navigation.ledgerDetailScreen
 import com.moneymong.moneymong.ledgerdetail.navigation.navigateToLedgerDetail
-import com.moneymong.moneymong.ledgermanual.navigation.ledgerManualRoute
 import com.moneymong.moneymong.ledgermanual.navigation.ledgerManualScreen
 import com.moneymong.moneymong.ledgermanual.navigation.navigateToLedgerManual
 import com.moneymong.moneymong.ocr.navigation.navigateToOCR
@@ -38,41 +38,25 @@ fun MoneyMongNavHost(
         )
         ocrScreen(
             navigateToOCRResult = navController::navigateToOCRResult,
+            navigateToHome = navController::topLevelNavigateToHome,
             popBackStack = navController::popBackStack
         )
         ocrResultScreen(
-            navigateToHome = { _, b ->
-                navController.navigateToHome(navOptions {
-                    popUpTo(
-                        navController.graph.id
-                    ) { inclusive = true }
-                }, b)
-            },
+            navigateToHome = navController::topLevelNavigateToHome,
             navigateToOCRDetail = navController::navigateToOCRDetail,
             popBackStack = navController::popBackStack
         )
         ocrDetailScreen(
-            navigateToHome = { _, b ->
-                navController.navigateToHome(navOptions {
-                    popUpTo(
-                        navController.graph.id
-                    ) { inclusive = true }
-                }, b)
-            },
+            navigateToHome = navController::topLevelNavigateToHome,
             popBackStack = navController::popBackStack
         )
         ledgerDetailScreen(
+            navigateToHome = navController::topLevelNavigateToHome,
             popBackStack = navController::popBackStack
         )
         ledgerManualScreen(
             popBackStack = navController::popBackStack,
-            navigateToHome = { _, success ->
-                navController.navigateToHome(navOptions {
-                    popUpTo(
-                        navController.graph.id
-                    ) { inclusive = true }
-                }, success)
-            }
+            navigateToHome = navController::topLevelNavigateToHome
         )
     }
 }

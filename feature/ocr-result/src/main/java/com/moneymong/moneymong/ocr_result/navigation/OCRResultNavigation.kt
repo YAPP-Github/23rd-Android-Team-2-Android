@@ -18,7 +18,7 @@ fun NavController.navigateToOCRResult(
 }
 
 fun NavGraphBuilder.ocrResultScreen(
-    navigateToHome: (NavOptions?, Boolean) -> Unit,
+    navigateToHome: (Boolean) -> Unit,
     popBackStack: () -> Unit,
     navigateToOCRDetail: (NavOptions?, String) -> Unit
 ) {
