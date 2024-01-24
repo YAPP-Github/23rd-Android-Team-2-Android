@@ -1,11 +1,11 @@
 package com.moneymong.moneymong.ledgerdetail
 
 import androidx.compose.ui.text.input.TextFieldValue
-import androidx.core.text.isDigitsOnly
 import com.moneymong.moneymong.common.base.BaseViewModel
 import com.moneymong.moneymong.common.ext.toDateFormat
 import com.moneymong.moneymong.common.ui.isValidPaymentDate
 import com.moneymong.moneymong.common.ui.isValidPaymentTime
+import com.moneymong.moneymong.common.ui.validateValue
 import com.moneymong.moneymong.domain.entity.ledgerdetail.LedgerTransactionDetailEntity
 import com.moneymong.moneymong.domain.param.ledgerdetail.DeleteLedgerDocumentParam
 import com.moneymong.moneymong.domain.param.ledgerdetail.DeleteLedgerReceiptParam
@@ -249,7 +249,7 @@ class LedgerDetailViewModel @Inject constructor(
     }
 
     fun onChangeStoreNameValue(value: TextFieldValue) = blockingIntent {
-        val validate = validateValue(targetValue = value, length = 20)
+        val validate = value.text.validateValue(length = 20)
         if (!validate) {
             reduce { state.copy(isStoreNameError = true) }
         } else {
@@ -259,7 +259,7 @@ class LedgerDetailViewModel @Inject constructor(
     }
 
     fun onChangeTotalPriceValue(value: TextFieldValue) = blockingIntent {
-        val validate = validateValue(targetValue = value, length = 12, isDigit = true)
+        val validate = value.text.validateValue(length = 12, isDigit = true)
         if (validate) {
             val elvisValue = value.text.ifEmpty { "0" }
             if (elvisValue.toLong() > MAX_TOTAL_PRICE) {
@@ -273,7 +273,7 @@ class LedgerDetailViewModel @Inject constructor(
     }
 
     fun onChangePaymentDateValue(value: TextFieldValue) = blockingIntent {
-        val validate = validateValue(targetValue = value, length = 8, isDigit = true)
+        val validate = value.text.validateValue(length = 8, isDigit = true)
         if (validate) {
             val isPaymentDateError = !value.text.isValidPaymentDate()
             reduce {
@@ -286,7 +286,7 @@ class LedgerDetailViewModel @Inject constructor(
     }
 
     fun onChangePaymentTimeValue(value: TextFieldValue) = blockingIntent {
-        val validate = validateValue(targetValue = value, length = 6, isDigit = true)
+        val validate = value.text.validateValue(length = 6, isDigit = true)
         if (validate) {
             val isPaymentTimeError = !value.text.isValidPaymentTime()
             reduce {
@@ -299,13 +299,13 @@ class LedgerDetailViewModel @Inject constructor(
     }
 
     fun onChangeMemoValue(value: TextFieldValue) = blockingIntent {
-        val validate = validateValue(targetValue = value, length = 300)
-        if (!validate) {
-            reduce { state.copy(isMemoError = true) }
-        } else {
-            reduce { state.copy(isMemoError = false) }
+        val validate = value.text.validateValue(length = 300)
+        reduce {
+            state.copy(
+                memoValue = value,
+                isMemoError = !validate
+            )
         }
-        reduce { state.copy(memoValue = value) }
     }
 
     fun onChangeEditMode(useEditMode: Boolean) = intent {
@@ -319,16 +319,6 @@ class LedgerDetailViewModel @Inject constructor(
 
     fun onChangeVisibleConfirmModal(visible: Boolean) = intent {
         reduce { state.copy(showConfirmModal = visible) }
-    }
-
-    private fun validateValue(
-        targetValue: TextFieldValue,
-        length: Int,
-        isDigit: Boolean = false
-    ) = if (isDigit) {
-        targetValue.text.isDigitsOnly() && targetValue.text.length <= length
-    } else {
-        targetValue.text.length <= length
     }
 
     companion object {
