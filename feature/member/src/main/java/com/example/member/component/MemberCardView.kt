@@ -1,5 +1,8 @@
 package com.example.member.component
 
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -16,6 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.member.User
@@ -40,6 +44,13 @@ fun MemberCardView(
     isUserAuthor: String,
 ) {
     val user = User("김세현", UserType.ADMINISTRATOR)
+    val context = LocalContext.current
+
+    fun copyToClipboard(text: String) {
+        val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        val clip = ClipData.newPlainText("invitation_code", text)
+        clipboard.setPrimaryClip(clip)
+    }
 
     Column(
         modifier = modifier
@@ -103,6 +114,7 @@ fun MemberCardView(
                             .padding(start = 63.dp)
                             .clickable {
                                 onCopyChange(true)
+                                copyToClipboard(invitationCode)
                             },
                     ) {
                         Text(
