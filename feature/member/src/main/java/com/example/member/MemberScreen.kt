@@ -74,11 +74,12 @@ fun MemberScreen(
     val snackbarHostState = remember { SnackbarHostState() }
 
 
-    viewModel.collectSideEffect{
-        when(it) {
+    viewModel.collectSideEffect {
+        when (it) {
             is MemberSideEffect.getInvitationCode -> {
                 viewModel.getInvitationCode(it.agencyId)
             }
+
             is MemberSideEffect.getReInvitationCode -> {
                 Log.d("실행", "실행")
                 viewModel.getReInvitationCode(it.agencyId)
@@ -86,7 +87,7 @@ fun MemberScreen(
         }
     }
 
-    LaunchedEffect(key1 = Unit){
+    LaunchedEffect(key1 = Unit) {
         viewModel.eventEmit(MemberSideEffect.getInvitationCode(4)) //TODO
     }
 
@@ -297,7 +298,7 @@ fun MemberScreen(
             .padding(horizontal = MMHorizontalSpacing)
     ) {
         Text(
-            modifier = Modifier.padding(top= 24.dp, bottom = 8.dp),
+            modifier = Modifier.padding(top = 24.dp, bottom = 8.dp),
             text = "나",
             style = Body3,
             color = Gray07
@@ -322,7 +323,9 @@ fun MemberScreen(
         ) {
             MDSSnackbarHost(
                 hostState = snackbarHostState,
-                modifier = Modifier.align(Center)
+                modifier = Modifier
+                    .align(Center)
+                    .padding(bottom = 12.dp)
             )
         }
     }
