@@ -5,6 +5,7 @@ import com.moneymong.moneymong.common.base.State
 import com.moneymong.moneymong.common.ext.toZonedDateTime
 import com.moneymong.moneymong.design_system.component.textfield.util.PriceType
 import com.moneymong.moneymong.domain.param.ledger.FundType
+import java.text.SimpleDateFormat
 
 data class LedgerManualState(
     val isLoading: Boolean = false,
@@ -44,5 +45,11 @@ data class LedgerManualState(
         }
 
     val postPaymentDate: String
-        get() = "${paymentDateValue.text} ${paymentTimeValue.text}".toZonedDateTime("yyyyMMdd HHmmss")
+        get() {
+            val dateFormat = SimpleDateFormat("yyyyMMdd")
+            val timeFormat = SimpleDateFormat("HHmmss")
+            val formattedDate = dateFormat.format(dateFormat.parse(paymentDateValue.text))
+            val formattedTime = timeFormat.format(timeFormat.parse(paymentTimeValue.text))
+            return "$formattedDate $formattedTime".toZonedDateTime("yyyyMMdd HHmmss")
+        }
 }
