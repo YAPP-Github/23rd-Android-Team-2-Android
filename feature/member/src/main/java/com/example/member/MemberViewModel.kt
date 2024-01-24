@@ -2,12 +2,11 @@ package com.example.member
 
 import android.util.Log
 import com.moneymong.moneymong.common.base.BaseViewModel
-import com.moneymong.moneymong.domain.entity.member.AgencyCodeEntity
-import com.moneymong.moneymong.domain.usecase.member.MemberUseCase
+import com.moneymong.moneymong.domain.usecase.member.MemberInvitationCodeUseCase
+import com.moneymong.moneymong.domain.usecase.member.MemberReInvitationCodeUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.reduce
@@ -15,7 +14,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MemberViewModel @Inject constructor(
-    private val memberUseCase: MemberUseCase
+    private val memberInvitationCodeUseCase: MemberInvitationCodeUseCase,
+    private val memberReInvitationCodeUseCase: MemberReInvitationCodeUseCase
 ) : BaseViewModel<MemberState, MemberSideEffect>(MemberState()) {
 
     fun onVertClickChanged(vertClick: Boolean) = intent {
@@ -76,12 +76,30 @@ class MemberViewModel @Inject constructor(
 
     fun getInvitationCode(agencyId: Long) = intent {
         CoroutineScope(Dispatchers.IO).launch {
-            memberUseCase.invoke(agencyId)
+            memberInvitationCodeUseCase.invoke(agencyId)
                 .onSuccess {
                     Log.d("isInvitationCode", it.code)
                     reduce {
                         state.copy(
                             isInvitationCode = it.code
+                        )
+                    }
+                }
+                .onFailure {
+                    //TODO - 에러화면
+                }
+        }
+    }
+
+    fun getReInvitationCode(agencyId: Long) = intent{
+        CoroutineScope(Dispatchers.IO).launch {
+            memberReInvitationCodeUseCase.invoke(agencyId)
+                .onSuccess {
+                    Log.d("isReInvitationCode", it.code)
+                    reduce {
+                        state.copy(
+                            isInvitationCode = it.code,
+                            onReissueChange = true
                         )
                     }
                 }

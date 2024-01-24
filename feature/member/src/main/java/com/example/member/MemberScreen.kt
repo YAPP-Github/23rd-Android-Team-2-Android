@@ -1,5 +1,6 @@
 package com.example.member
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -27,6 +28,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment.Companion.BottomCenter
+import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -77,10 +79,62 @@ fun MemberScreen(
             is MemberSideEffect.getInvitationCode -> {
                 viewModel.getInvitationCode(it.agencyId)
             }
+            is MemberSideEffect.getReInvitationCode -> {
+                Log.d("실행", "실행")
+                viewModel.getReInvitationCode(it.agencyId)
+            }
         }
     }
 
-    viewModel.eventEmit(MemberSideEffect.getInvitationCode(4)) //TODO
+    LaunchedEffect(key1 = Unit){
+        viewModel.eventEmit(MemberSideEffect.getInvitationCode(4)) //TODO
+    }
+
+
+    // vertClick 상태가 변경될 때 바텀 시트의 상태를 제어
+    LaunchedEffect(key1 = state.vertClick) {
+        if (state.vertClick) {
+            coroutineScope.launch {
+                sheetState.show()
+            }
+        }
+    }
+
+    LaunchedEffect(key1 = state.onCopyClick) {
+        if (state.onCopyClick) {
+            val result = snackbarHostState.showSnackbar(
+                message = "초대코드 ${state.isInvitationCode}이 복사되었습니다",
+                withDismissAction = true
+            )
+            // 스낵바가 닫히면 onClick 상태를 false로 변경
+            if (result == SnackbarResult.Dismissed) {
+                viewModel.onCopyClickChanged(false)
+            }
+        }
+    }
+
+    LaunchedEffect(key1 = state.onReissueChange) {
+        if (state.onReissueChange) {
+            val result = snackbarHostState.showSnackbar(
+                message = "초대코드가 재발급 되었습니다",
+                withDismissAction = true
+            )
+            // 스낵바가 닫히면 onClick 상태를 false로 변경
+            if (result == SnackbarResult.Dismissed) {
+                viewModel.onReissueChanged(false)
+            }
+        }
+    }
+
+    LaunchedEffect(state.roleChanged) {
+        if (state.roleChanged) {
+            snackbarHostState.showSnackbar(
+                message = "역할이 성공적으로 변경됐습니다.",
+                withDismissAction = true
+            )
+
+        }
+    }
 
     if (state.showDialog) {
         MemberDialogView(
@@ -171,7 +225,6 @@ fun MemberScreen(
                             .fillMaxWidth()
                             .clickable {
                                 viewModel.isStaffCheckedChanged(!state.isStaffChecked)
-                                //isStaffChecked.value = !isStaffChecked.value
                                 viewModel.isMemberCheckedChanged(false)
                             }
                     ) {
@@ -196,7 +249,6 @@ fun MemberScreen(
                             .fillMaxWidth()
                             .clickable {
                                 viewModel.isMemberCheckedChanged(!state.isMemberChecked)
-                                //isMemberChecked.value = !isMemberChecked.value
                                 viewModel.isStaffCheckedChanged(false)
                             },
                     ) {
@@ -224,7 +276,6 @@ fun MemberScreen(
                                 sheetState.hide()
                             }
                             val boolean = state.isStaffChecked || state.isMemberChecked
-                            //roleChanged.value = isStaffChecked.value || isMemberChecked.value
                             viewModel.isRoleChanged(boolean)
                             bottomSheetType.value = BottomSheetType.ROLE_ASSIGNMENT_EXPORT
                             viewModel.onVertClickChanged(false)
@@ -239,51 +290,6 @@ fun MemberScreen(
         }
     }
 
-    // vertClick 상태가 변경될 때 바텀 시트의 상태를 제어
-    LaunchedEffect(key1 = state.vertClick) {
-        if (state.vertClick) {
-            coroutineScope.launch {
-                sheetState.show()
-            }
-        }
-    }
-
-    LaunchedEffect(key1 = state.onCopyClick) {
-        if (state.onCopyClick) {
-            val result = snackbarHostState.showSnackbar(
-                message = "초대코드 123456이 복사되었습니다",
-                withDismissAction = true
-            )
-            // 스낵바가 닫히면 onClick 상태를 false로 변경
-            if (result == SnackbarResult.Dismissed) {
-                viewModel.onCopyClickChanged(false)
-            }
-        }
-    }
-
-    LaunchedEffect(key1 = state.onReissueChange) {
-        if (state.onReissueChange) {
-            val result = snackbarHostState.showSnackbar(
-                message = "초대코드가 재발급 되었습니다",
-                withDismissAction = true
-            )
-            // 스낵바가 닫히면 onClick 상태를 false로 변경
-            if (result == SnackbarResult.Dismissed) {
-                viewModel.onReissueChanged(false)
-            }
-        }
-    }
-
-    LaunchedEffect(state.roleChanged) {
-        if (state.roleChanged) {
-            snackbarHostState.showSnackbar(
-                message = "역할이 성공적으로 변경됐습니다.",
-                withDismissAction = true
-            )
-
-        }
-    }
-
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -291,7 +297,7 @@ fun MemberScreen(
             .padding(horizontal = MMHorizontalSpacing)
     ) {
         Text(
-            modifier = Modifier.padding(vertical = 8.dp),
+            modifier = Modifier.padding(top= 24.dp, bottom = 8.dp),
             text = "나",
             style = Body3,
             color = Gray07
@@ -299,8 +305,9 @@ fun MemberScreen(
         MemberCardView(
             modifier = Modifier,
             invitationCode = state.isInvitationCode,
+            isReInvitationCode = { viewModel.eventEmit(MemberSideEffect.getReInvitationCode(it)) }, //TODO
             onCopyChange = { onCopyClick -> viewModel.onCopyClickChanged(onCopyClick) },
-            onReissueChange = { onReissueChange -> viewModel.onReissueChanged(onReissueChange) }
+            isUserAuthor = state.isUserAuthor
         )
 
         MemberListView(
@@ -315,14 +322,8 @@ fun MemberScreen(
         ) {
             MDSSnackbarHost(
                 hostState = snackbarHostState,
-                modifier = Modifier.align(BottomCenter)
+                modifier = Modifier.align(Center)
             )
         }
     }
-}
-
-@Preview
-@Composable
-fun Preview() {
-    MemberScreen()
 }
