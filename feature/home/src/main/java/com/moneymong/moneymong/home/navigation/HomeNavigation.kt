@@ -28,7 +28,8 @@ fun NavController.navigateToHome(
 
 fun NavGraphBuilder.homeScreen(
     navigateToOCR: (NavOptions?) -> Unit,
-    navigateToLedgerDetail: (NavOptions?, Int) -> Unit
+    navigateToLedgerDetail: (NavOptions?, Int) -> Unit,
+    navigateToLedgerManual: (NavOptions?) -> Unit
 ) {
     composable(
         route = homeRoute,
@@ -40,7 +41,8 @@ fun NavGraphBuilder.homeScreen(
         HomeScreen(
             homeLedgerPostSuccess = homeLedgerPostSuccess,
             navigateToOCR = navigateToOCR,
-            navigateToLedgerDetail = navigateToLedgerDetail
+            navigateToLedgerDetail = navigateToLedgerDetail,
+            navigateToLedgerManual = navigateToLedgerManual
         )
     }
 }
