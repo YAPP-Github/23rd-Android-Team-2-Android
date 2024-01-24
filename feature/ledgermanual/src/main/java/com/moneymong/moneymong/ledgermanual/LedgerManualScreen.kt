@@ -1,6 +1,7 @@
 package com.moneymong.moneymong.ledgermanual
 
 import android.net.Uri
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -15,6 +16,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -49,6 +51,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavOptions
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.moneymong.moneymong.common.ext.base64ToFile
@@ -63,7 +66,6 @@ import com.moneymong.moneymong.design_system.component.modal.MDSModal
 import com.moneymong.moneymong.design_system.component.selection.MDSSelection
 import com.moneymong.moneymong.design_system.component.textfield.MDSTextField
 import com.moneymong.moneymong.design_system.component.textfield.util.MDSTextFieldIcons
-import com.moneymong.moneymong.design_system.component.textfield.util.PriceType
 import com.moneymong.moneymong.design_system.component.textfield.visualtransformation.DateVisualTransformation
 import com.moneymong.moneymong.design_system.component.textfield.visualtransformation.PriceVisualTransformation
 import com.moneymong.moneymong.design_system.component.textfield.visualtransformation.TimeVisualTransformation
@@ -85,7 +87,8 @@ import org.orbitmvi.orbit.compose.collectSideEffect
 fun LedgerManualScreen(
     modifier: Modifier = Modifier,
     viewModel: LedgerManualViewModel = hiltViewModel(),
-    popBackStack: () -> Unit
+    popBackStack: () -> Unit,
+    navigateToHome: (NavOptions?, Boolean) -> Unit
 ) {
     val context = LocalContext.current
     val state = viewModel.collectAsState().value
@@ -110,25 +113,45 @@ fun LedgerManualScreen(
                 )
             }
 
+            is LedgerManualSideEffect.LedgerManualNavigateToHome -> {
+                navigateToHome(null, true)
+            }
+
+            is LedgerManualSideEffect.LedgerManualShowPopBackStackModal -> {
+                viewModel.showPopBackStackModal(true)
+            }
+
+            is LedgerManualSideEffect.LegerManualHidePopBackStackModal -> {
+                viewModel.showPopBackStackModal(false)
+                if (it.navigate) {
+                    popBackStack()
+                }
+            }
+
+            is LedgerManualSideEffect.LedgerManualPostTransaction -> {
+                viewModel.postLedgerTransaction()
+            }
         }
     }
 
-    if (false) { // TODO
+    BackHandler(onBack = { viewModel.eventEmit(LedgerManualSideEffect.LedgerManualShowPopBackStackModal) })
+
+    if (state.showPopBackStackModal) {
         MDSModal(
             icon = drawable.ic_warning_filled,
             title = "정말 나가시겠습니까?",
             description = "작성한 내용이 저장되지 않습니다",
             negativeBtnText = "취소",
             positiveBtnText = "확인",
-            onClickNegative = { /*TODO*/ },
-            onClickPositive = { /*TODO*/ },
+            onClickNegative = { viewModel.eventEmit(LedgerManualSideEffect.LegerManualHidePopBackStackModal(false)) },
+            onClickPositive = { viewModel.eventEmit(LedgerManualSideEffect.LegerManualHidePopBackStackModal(true)) },
         )
     }
 
     Scaffold(
         topBar = {
             LedgerManualTopbarView(
-                onClickClose = { /*TODO*/ }
+                onClickClose = { viewModel.eventEmit(LedgerManualSideEffect.LedgerManualShowPopBackStackModal) }
             )
         }
     ) {
@@ -196,14 +219,14 @@ fun LedgerManualScreen(
                     MDSSelection(
                         modifier = Modifier.weight(1f),
                         text = "지출",
-                        isSelected = state.fundType == FundType.INCOME,
-                        onClick = { /*TODO*/ }
+                        isSelected = state.fundType == FundType.EXPENSE,
+                        onClick = { viewModel.onChangeFundType(FundType.EXPENSE) }
                     )
                     MDSSelection(
                         modifier = Modifier.weight(1f),
                         text = "수입",
-                        isSelected = state.fundType == FundType.EXPENSE,
-                        onClick = { /*TODO*/ }
+                        isSelected = state.fundType == FundType.INCOME,
+                        onClick = { viewModel.onChangeFundType(FundType.INCOME) }
                     )
                 }
                 Spacer(modifier = Modifier.height(24.dp))
@@ -407,18 +430,18 @@ fun LedgerManualScreen(
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                    text = "안병헌",
+                    text = "안병헌", // TODO
                     style = Body3,
                     color = Gray10
                 )
                 Spacer(modifier = Modifier.height(64.dp))
                 MDSButton(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth().imePadding(),
                     text = "작성하기",
                     enabled = state.enabled,
                     type = MDSButtonType.PRIMARY,
                     size = MDSButtonSize.LARGE,
-                    onClick = { /*TODO*/ }
+                    onClick = viewModel::onClickPostTransaction
                 )
                 Spacer(modifier = Modifier.height(28.dp))
             }
@@ -430,6 +453,7 @@ fun LedgerManualScreen(
 @Composable
 fun LedgerManualScreenPreview() {
     LedgerManualScreen(
-        popBackStack = {}
+        popBackStack = {},
+        navigateToHome = { _, _ ->}
     )
 }

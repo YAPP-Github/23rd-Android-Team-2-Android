@@ -5,7 +5,10 @@ import com.moneymong.moneymong.common.base.BaseViewModel
 import com.moneymong.moneymong.common.ui.isValidPaymentDate
 import com.moneymong.moneymong.common.ui.isValidPaymentTime
 import com.moneymong.moneymong.common.ui.validateValue
+import com.moneymong.moneymong.domain.param.ledger.FundType
+import com.moneymong.moneymong.domain.param.ledger.LedgerTransactionParam
 import com.moneymong.moneymong.domain.param.ocr.FileUploadParam
+import com.moneymong.moneymong.domain.usecase.ledger.PostLedgerTransactionUseCase
 import com.moneymong.moneymong.domain.usecase.ocr.PostFileUploadUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import org.orbitmvi.orbit.syntax.simple.blockingIntent
@@ -17,8 +20,31 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LedgerManualViewModel @Inject constructor(
+    private val postLedgerTransactionUseCase: PostLedgerTransactionUseCase,
     private val postFileUploadUseCase: PostFileUploadUseCase
 ) : BaseViewModel<LedgerManualState, LedgerManualSideEffect>(LedgerManualState()) {
+
+    fun postLedgerTransaction() = intent {
+        if (!state.isLoading) {
+            reduce { state.copy(isLoading = true) }
+            val ledgerTransactionParam = LedgerTransactionParam(
+                id = 1, // TODO
+                storeInfo = state.storeNameValue.text,
+                fundType = state.fundType,
+                amount = state.totalPriceValue.text.toInt(),
+                description = state.memoValue.text.ifEmpty { "내용 없음" },
+                paymentDate = state.postPaymentDate,
+                receiptImageUrls = state.receiptList,
+                documentImageUrls = state.documentList
+            )
+            postLedgerTransactionUseCase(ledgerTransactionParam)
+                .onSuccess {
+                    postSideEffect(LedgerManualSideEffect.LedgerManualNavigateToHome)
+                }.onFailure {
+                    // TODO
+                }.also { reduce { state.copy(isLoading = false) } }
+        }
+    }
 
     fun postS3URLImage(imageFile: File?) = intent {
         imageFile?.let {
@@ -113,6 +139,14 @@ class LedgerManualViewModel @Inject constructor(
         postSideEffect(LedgerManualSideEffect.LedgerManualOpenImagePicker)
     }
 
+    fun onChangeFundType(fundType: FundType) = intent {
+        reduce { state.copy(fundType = fundType) }
+    }
+
+    fun showPopBackStackModal(visible: Boolean) = intent {
+        reduce { state.copy(showPopBackStackModal = visible) }
+    }
+
     fun removeReceiptImage(image: String) = intent {
         reduce { state.copy(receiptList = state.receiptList - image) }
     }
@@ -120,6 +154,8 @@ class LedgerManualViewModel @Inject constructor(
     fun removeDocumentImage(image: String) = intent {
         reduce { state.copy(documentList = state.documentList - image) }
     }
+
+    fun onClickPostTransaction() = eventEmit(LedgerManualSideEffect.LedgerManualPostTransaction)
 
     companion object {
         const val MAX_TOTAL_PRICE = 999999999

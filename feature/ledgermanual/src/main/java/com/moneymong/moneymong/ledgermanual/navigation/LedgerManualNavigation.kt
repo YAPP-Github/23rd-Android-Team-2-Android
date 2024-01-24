@@ -15,13 +15,15 @@ fun NavController.navigateToLedgerDetail(
 }
 
 fun NavGraphBuilder.ledgerManualScreen(
-    popBackStack: () -> Unit
+    popBackStack: () -> Unit,
+    navigateToHome: (NavOptions?, Boolean) -> Unit
 ) {
     composable(
         route = ledgerManualRoute
     ) {
         LedgerManualScreen(
-            popBackStack = popBackStack
+            popBackStack = popBackStack,
+            navigateToHome = navigateToHome
         )
     }
 }
