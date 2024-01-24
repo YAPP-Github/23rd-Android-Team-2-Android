@@ -11,6 +11,7 @@ class UserRemoteDataSourceMock @Inject constructor() : UserRemoteDataSource {
         delay(2000)  // for test
         return Result.success(
             UserResponse(
+                id = 1,
                 name = "홍길동",
                 email = "hongroaddong@mymong.com",
                 university = "길동대학교",
