@@ -117,8 +117,6 @@ fun OCRDetailScreen(
             is OCRDetailSideEffect.OCRDetailNavigateToHome -> {
                 navigateToHome(true)
             }
-
-            else -> {}
         }
     }
 
