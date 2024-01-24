@@ -1,7 +1,7 @@
 package com.moneymong.moneymong.data.di
 
 import com.moneymong.moneymong.data.datasource.UserRemoteDataSource
-import com.moneymong.moneymong.data.datasource.mock.UserRemoteDataSourceMock
+import com.moneymong.moneymong.data.datasource.impl.UserRemoteDataSourceImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -12,7 +12,7 @@ import dagger.hilt.components.SingletonComponent
 interface DataSourceModule {
 
     @Binds
-    fun bindAgencyRemoteDataSource(
-        userRemoteDataSourceMock: UserRemoteDataSourceMock
+    fun bindUserRemoteDataSource(
+        userRemoteDataSourceImpl: UserRemoteDataSourceImpl
     ): UserRemoteDataSource
 }
