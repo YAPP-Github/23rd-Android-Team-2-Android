@@ -8,7 +8,7 @@ import com.moneymong.moneymong.ledgermanual.LedgerManualScreen
 
 const val ledgerManualRoute = "ledgerManual_route"
 
-fun NavController.navigateToLedgerDetail(
+fun NavController.navigateToLedgerManual(
     navOptions: NavOptions? = null
 ) {
     this.navigate("ledgerManual_route", navOptions)

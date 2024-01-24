@@ -29,7 +29,8 @@ fun HomeScreen(
     modifier: Modifier = Modifier,
     homeLedgerPostSuccess: Boolean,
     navigateToOCR: (NavOptions?) -> Unit,
-    navigateToLedgerDetail: (NavOptions?, Int) -> Unit
+    navigateToLedgerDetail: (NavOptions?, Int) -> Unit,
+    navigateToLedgerManual: (NavOptions?) -> Unit
 ) {
     val homeNavController = rememberHomeNavController()
     val coroutineScope = rememberCoroutineScope()
@@ -74,7 +75,8 @@ fun HomeScreen(
                 padding = it,
                 navigateToAgency = { homeNavController.navigate(agencyRoute) },
                 navigateToOCR = navigateToOCR,
-                navigateToLedgerDetail = navigateToLedgerDetail
+                navigateToLedgerDetail = navigateToLedgerDetail,
+                navigateToLedgerManual = navigateToLedgerManual
             )
 
             mymongScreen(padding = it)
@@ -88,6 +90,7 @@ fun HomeScreenPreview() {
     HomeScreen(
         homeLedgerPostSuccess = false,
         navigateToOCR = {},
-        navigateToLedgerDetail = { navOptions, i ->  }
+        navigateToLedgerDetail = { navOptions, i ->  },
+        navigateToLedgerManual = {}
     )
 }

@@ -64,7 +64,8 @@ fun LedgerScreen(
     viewModel: LedgerViewModel = hiltViewModel(),
     navigateToAgency: () -> Unit,
     navigateToOCR: (NavOptions?) -> Unit,
-    navigateToLedgerDetail: (NavOptions?, Int) -> Unit
+    navigateToLedgerDetail: (NavOptions?, Int) -> Unit,
+    navigateToLedgerManual: (NavOptions?) -> Unit
 ) {
     val state = viewModel.collectAsState().value
     var expandableFab by remember { mutableStateOf(false) }
@@ -84,6 +85,9 @@ fun LedgerScreen(
             }
             is LedgerSideEffect.LedgerNavigateToOCR -> {
                 navigateToOCR(null)
+            }
+            is LedgerSideEffect.LedgerNavigateToLedgerManual -> {
+                navigateToLedgerManual(null)
             }
             is LedgerSideEffect.LedgerOpenSheet -> {
                 viewModel.onChangeSheetState(true)
@@ -213,7 +217,7 @@ fun LedgerScreen(
                                         MDSFloatingActionButton(
                                             iconResource = R.drawable.ic_pencil,
                                             containerColor = Mint03,
-                                            onClick = { /*TODO*/ }
+                                            onClick = { viewModel.eventEmit(LedgerSideEffect.LedgerNavigateToLedgerManual) }
                                         )
                                     }
                                     if (expandableFab) Spacer(modifier = Modifier.height(10.dp))
@@ -244,6 +248,7 @@ fun LedgerScreenPreview() {
     LedgerScreen(
         navigateToAgency = {},
         navigateToOCR = {},
-        navigateToLedgerDetail = { navOptions, i -> }
+        navigateToLedgerDetail = { navOptions, i -> },
+        navigateToLedgerManual = {}
     )
 }

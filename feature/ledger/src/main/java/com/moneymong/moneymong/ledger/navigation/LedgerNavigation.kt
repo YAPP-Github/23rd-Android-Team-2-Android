@@ -14,14 +14,16 @@ fun NavGraphBuilder.ledgerScreen(
     padding: PaddingValues,
     navigateToAgency: () -> Unit,
     navigateToOCR: (NavOptions?) -> Unit,
-    navigateToLedgerDetail: (NavOptions?, Int) -> Unit
+    navigateToLedgerDetail: (NavOptions?, Int) -> Unit,
+    navigateToLedgerManual: (NavOptions?) -> Unit
 ) {
     composable(route = ledgerRoute) {
         LedgerScreen(
             modifier = Modifier.padding(padding),
             navigateToAgency = navigateToAgency,
             navigateToOCR = navigateToOCR,
-            navigateToLedgerDetail = navigateToLedgerDetail
+            navigateToLedgerDetail = navigateToLedgerDetail,
+            navigateToLedgerManual = navigateToLedgerManual
         )
     }
 }
