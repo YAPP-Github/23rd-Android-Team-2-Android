@@ -19,7 +19,8 @@ data class LedgerManualState(
     val isTotalPriceError: Boolean = false,
     val isPaymentDateError: Boolean = false,
     val isPaymentTimeError: Boolean = false,
-    val isMemoError: Boolean = false
+    val isMemoError: Boolean = false,
+    val isReceipt: Boolean? = null
 ) : State {
 
     val enabled: Boolean

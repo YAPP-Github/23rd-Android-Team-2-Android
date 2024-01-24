@@ -1,5 +1,9 @@
 package com.moneymong.moneymong.ledgermanual
 
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -24,7 +28,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -34,14 +37,28 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
+import com.bumptech.glide.integration.compose.GlideImage
+import com.moneymong.moneymong.common.ext.base64ToFile
+import com.moneymong.moneymong.common.ext.encodingBase64
+import com.moneymong.moneymong.common.ui.noRippleClickable
+import com.moneymong.moneymong.design_system.R
 import com.moneymong.moneymong.design_system.R.*
+import com.moneymong.moneymong.design_system.component.button.MDSButton
+import com.moneymong.moneymong.design_system.component.button.MDSButtonSize
+import com.moneymong.moneymong.design_system.component.button.MDSButtonType
 import com.moneymong.moneymong.design_system.component.modal.MDSModal
 import com.moneymong.moneymong.design_system.component.selection.MDSSelection
 import com.moneymong.moneymong.design_system.component.textfield.MDSTextField
@@ -51,23 +68,50 @@ import com.moneymong.moneymong.design_system.component.textfield.visualtransform
 import com.moneymong.moneymong.design_system.component.textfield.visualtransformation.PriceVisualTransformation
 import com.moneymong.moneymong.design_system.component.textfield.visualtransformation.TimeVisualTransformation
 import com.moneymong.moneymong.design_system.theme.Blue03
+import com.moneymong.moneymong.design_system.theme.Blue04
 import com.moneymong.moneymong.design_system.theme.Body2
+import com.moneymong.moneymong.design_system.theme.Body3
 import com.moneymong.moneymong.design_system.theme.Gray06
+import com.moneymong.moneymong.design_system.theme.Gray10
 import com.moneymong.moneymong.design_system.theme.MMHorizontalSpacing
 import com.moneymong.moneymong.design_system.theme.White
 import com.moneymong.moneymong.domain.param.ledger.FundType
 import com.moneymong.moneymong.ledgermanual.view.LedgerManualTopbarView
 import org.orbitmvi.orbit.compose.collectAsState
+import org.orbitmvi.orbit.compose.collectSideEffect
 
+@OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun LedgerManualScreen(
     modifier: Modifier = Modifier,
     viewModel: LedgerManualViewModel = hiltViewModel(),
     popBackStack: () -> Unit
 ) {
+    val context = LocalContext.current
     val state = viewModel.collectAsState().value
     val verticalScrollState = rememberScrollState()
     val focusManager = LocalFocusManager.current
+    val singlePhotoPickerLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.PickVisualMedia(),
+        onResult = { uri ->
+            uri?.let {
+                viewModel.postS3URLImage(it.encodingBase64(context).base64ToFile(context))
+            }
+        }
+    )
+
+    viewModel.collectSideEffect {
+        when (it) {
+            is LedgerManualSideEffect.LedgerManualOpenImagePicker -> {
+                singlePhotoPickerLauncher.launch(
+                    PickVisualMediaRequest(
+                        ActivityResultContracts.PickVisualMedia.ImageOnly
+                    )
+                )
+            }
+
+        }
+    }
 
     if (false) { // TODO
         MDSModal(
@@ -203,7 +247,12 @@ fun LedgerManualScreen(
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
                 )
                 Text(
-                    text = "영수증 (최대 12장)",
+                    text = buildAnnotatedString {
+                        append("영수증 (최대 12장)\n")
+                        withStyle(SpanStyle(color = Blue04)) {
+                            append("*지출일 경우 영수증을 꼭 제출해주세요")
+                        }
+                    },
                     style = Body2,
                     color = Gray06
                 )
@@ -211,27 +260,55 @@ fun LedgerManualScreen(
                 LazyVerticalGrid(
                     modifier = modifier
                         .fillMaxSize()
-                        .heightIn(max = 324.dp)
+                        .heightIn(max = 504.dp)
                         .background(White),
                     columns = GridCells.Fixed(3),
                     verticalArrangement = Arrangement.spacedBy(8.dp),
                     horizontalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
-                    itemsIndexed(items = listOf(1)) { index, item -> // TODO
+                    if (state.receiptList.size < 12) {
+                        item {
+                            Box(
+                                modifier = Modifier
+                                    .height(120.dp)
+                                    .clip(RoundedCornerShape(8.dp))
+                                    .border(
+                                        width = 1.dp,
+                                        color = Blue03,
+                                        shape = RoundedCornerShape(8.dp)
+                                    )
+                                    .background(White)
+                                    .noRippleClickable {
+                                        viewModel.onChangeImageType(true)
+                                    },
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Icon(
+                                    painter = painterResource(id = drawable.ic_plus_filled),
+                                    contentDescription = null,
+                                    tint = Color.Unspecified
+                                )
+                            }
+                        }
+                    }
+                    itemsIndexed(items = state.receiptList) { index, item ->
                         Box(
                             modifier = Modifier
                                 .height(120.dp)
                                 .clip(RoundedCornerShape(8.dp))
-                                .border(
-                                    width = 1.dp,
-                                    color = Blue03,
-                                    shape = RoundedCornerShape(8.dp)
-                                )
-                                .background(White),
-                            contentAlignment = Alignment.Center
                         ) {
+                            GlideImage(
+                                modifier = Modifier.fillMaxSize(),
+                                model = Uri.parse(item),
+                                contentDescription = null,
+                                contentScale = ContentScale.FillWidth
+                            )
                             Icon(
-                                painter = painterResource(id = drawable.ic_plus_filled),
+                                modifier = Modifier
+                                    .align(Alignment.TopEnd)
+                                    .noRippleClickable { viewModel.removeReceiptImage(item) }
+                                    .padding(5.dp),
+                                painter = painterResource(id = R.drawable.ic_close_filled),
                                 contentDescription = null,
                                 tint = Color.Unspecified
                             )
@@ -248,27 +325,55 @@ fun LedgerManualScreen(
                 LazyVerticalGrid(
                     modifier = modifier
                         .fillMaxSize()
-                        .heightIn(max = 324.dp)
+                        .heightIn(max = 504.dp)
                         .background(White),
                     columns = GridCells.Fixed(3),
                     verticalArrangement = Arrangement.spacedBy(8.dp),
                     horizontalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
-                    itemsIndexed(items = listOf(1)) { index, item -> // TODO
+                    if (state.documentList.size < 12) {
+                        item {
+                            Box(
+                                modifier = Modifier
+                                    .height(120.dp)
+                                    .clip(RoundedCornerShape(8.dp))
+                                    .border(
+                                        width = 1.dp,
+                                        color = Blue03,
+                                        shape = RoundedCornerShape(8.dp)
+                                    )
+                                    .background(White)
+                                    .noRippleClickable {
+                                        viewModel.onChangeImageType(false)
+                                    },
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Icon(
+                                    painter = painterResource(id = drawable.ic_plus_filled),
+                                    contentDescription = null,
+                                    tint = Color.Unspecified
+                                )
+                            }
+                        }
+                    }
+                    itemsIndexed(items = state.documentList) { index, item ->
                         Box(
                             modifier = Modifier
                                 .height(120.dp)
                                 .clip(RoundedCornerShape(8.dp))
-                                .border(
-                                    width = 1.dp,
-                                    color = Blue03,
-                                    shape = RoundedCornerShape(8.dp)
-                                )
-                                .background(White),
-                            contentAlignment = Alignment.Center
                         ) {
+                            GlideImage(
+                                modifier = Modifier.fillMaxSize(),
+                                model = Uri.parse(item),
+                                contentDescription = null,
+                                contentScale = ContentScale.FillWidth
+                            )
                             Icon(
-                                painter = painterResource(id = drawable.ic_plus_filled),
+                                modifier = Modifier
+                                    .align(Alignment.TopEnd)
+                                    .noRippleClickable { viewModel.removeDocumentImage(item) }
+                                    .padding(5.dp),
+                                painter = painterResource(id = drawable.ic_close_filled),
                                 contentDescription = null,
                                 tint = Color.Unspecified
                             )
@@ -294,8 +399,29 @@ fun LedgerManualScreen(
                     icon = MDSTextFieldIcons.Clear,
                     keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() })
                 )
+                Spacer(modifier = Modifier.height(28.dp))
+                Text(
+                    text = "작성자",
+                    style = Body2,
+                    color = Gray06
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = "안병헌",
+                    style = Body3,
+                    color = Gray10
+                )
+                Spacer(modifier = Modifier.height(64.dp))
+                MDSButton(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = "작성하기",
+                    enabled = state.enabled,
+                    type = MDSButtonType.PRIMARY,
+                    size = MDSButtonSize.LARGE,
+                    onClick = { /*TODO*/ }
+                )
+                Spacer(modifier = Modifier.height(28.dp))
             }
-            Spacer(modifier = Modifier.height(28.dp))
         }
     }
 }
