@@ -98,8 +98,6 @@ fun OCRResultScreen(
                 val documentString = it.document?.let { Gson().toJson(it) }.orEmpty()
                 navigateToOCRDetail(null, documentString)
             }
-
-            else -> {}
         }
     }
 

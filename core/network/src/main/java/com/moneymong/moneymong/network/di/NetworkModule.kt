@@ -29,11 +29,11 @@ import javax.inject.Singleton
 object NetworkModule {
 
     @Qualifier
-    @Retention
+    @Retention(AnnotationRetention.BINARY)
     annotation class ClovaRetrofit
 
     @Qualifier
-    @Retention
+    @Retention(AnnotationRetention.BINARY)
     annotation class MoneyMongRetrofit
 
     @Provides
