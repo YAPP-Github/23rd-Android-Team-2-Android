@@ -5,15 +5,48 @@ import com.moneymong.moneymong.common.base.BaseViewModel
 import com.moneymong.moneymong.common.ui.isValidPaymentDate
 import com.moneymong.moneymong.common.ui.isValidPaymentTime
 import com.moneymong.moneymong.common.ui.validateValue
+import com.moneymong.moneymong.domain.param.ocr.FileUploadParam
+import com.moneymong.moneymong.domain.usecase.ocr.PostFileUploadUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import org.orbitmvi.orbit.syntax.simple.blockingIntent
+import org.orbitmvi.orbit.syntax.simple.intent
+import org.orbitmvi.orbit.syntax.simple.postSideEffect
 import org.orbitmvi.orbit.syntax.simple.reduce
+import java.io.File
 import javax.inject.Inject
 
 @HiltViewModel
 class LedgerManualViewModel @Inject constructor(
-
+    private val postFileUploadUseCase: PostFileUploadUseCase
 ) : BaseViewModel<LedgerManualState, LedgerManualSideEffect>(LedgerManualState()) {
+
+    fun postS3URLImage(imageFile: File?) = intent {
+        imageFile?.let {
+            if (!state.isLoading) {
+                reduce { state.copy(isLoading = true) }
+                val file = FileUploadParam(it, "ledgerManual")
+                postFileUploadUseCase(file)
+                    .onSuccess { response ->
+                        state.isReceipt?.let { isReceipt ->
+                            if (isReceipt) {
+                                reduce { state.copy(receiptList = state.receiptList + response.path) }
+                            } else {
+                                reduce { state.copy(documentList = state.documentList + response.path) }
+                            }
+                        }
+                    }.onFailure {
+                        // TODO
+                    }.also {
+                        reduce {
+                            state.copy(
+                                isLoading = false,
+                                isReceipt = null
+                            )
+                        }
+                    }
+            }
+        }
+    }
 
     fun onChangeStoreNameValue(value: TextFieldValue) = blockingIntent {
         val validate = value.text.validateValue(length = 20)
@@ -73,6 +106,19 @@ class LedgerManualViewModel @Inject constructor(
                 isMemoError = !validate
             )
         }
+    }
+
+    fun onChangeImageType(isReceipt: Boolean) = intent {
+        reduce { state.copy(isReceipt = isReceipt) }
+        postSideEffect(LedgerManualSideEffect.LedgerManualOpenImagePicker)
+    }
+
+    fun removeReceiptImage(image: String) = intent {
+        reduce { state.copy(receiptList = state.receiptList - image) }
+    }
+
+    fun removeDocumentImage(image: String) = intent {
+        reduce { state.copy(documentList = state.documentList - image) }
     }
 
     companion object {
