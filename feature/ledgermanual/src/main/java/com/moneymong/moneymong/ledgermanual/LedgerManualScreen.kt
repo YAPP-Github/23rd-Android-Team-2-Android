@@ -88,7 +88,7 @@ fun LedgerManualScreen(
     modifier: Modifier = Modifier,
     viewModel: LedgerManualViewModel = hiltViewModel(),
     popBackStack: () -> Unit,
-    navigateToHome: (NavOptions?, Boolean) -> Unit
+    navigateToHome: (Boolean) -> Unit
 ) {
     val context = LocalContext.current
     val state = viewModel.collectAsState().value
@@ -114,7 +114,7 @@ fun LedgerManualScreen(
             }
 
             is LedgerManualSideEffect.LedgerManualNavigateToHome -> {
-                navigateToHome(null, true)
+                navigateToHome(true)
             }
 
             is LedgerManualSideEffect.LedgerManualShowPopBackStackModal -> {
@@ -124,7 +124,7 @@ fun LedgerManualScreen(
             is LedgerManualSideEffect.LegerManualHidePopBackStackModal -> {
                 viewModel.showPopBackStackModal(false)
                 if (it.navigate) {
-                    popBackStack()
+                    navigateToHome(false)
                 }
             }
 
@@ -454,6 +454,6 @@ fun LedgerManualScreen(
 fun LedgerManualScreenPreview() {
     LedgerManualScreen(
         popBackStack = {},
-        navigateToHome = { _, _ ->}
+        navigateToHome = {}
     )
 }
