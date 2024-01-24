@@ -38,8 +38,9 @@ import com.moneymong.moneymong.design_system.theme.White
 @Composable
 fun MemberCardView(
     modifier : Modifier = Modifier,
-    onCopyChange : () -> Unit,
-    onReissueChange : () -> Unit
+    invitationCode : String,
+    onCopyChange : (Boolean) -> Unit,
+    onReissueChange : (Boolean) -> Unit
 ) {
     val user = User("김세현", UserType.ADMINISTRATOR)
 
@@ -95,7 +96,7 @@ fun MemberCardView(
             ) {
                 Text(
                     modifier = Modifier.weight(1f),
-                    text = "초대코드 123456",
+                    text = "초대코드 $invitationCode",
                     style = Body3,
                     color = Gray10
                 )
@@ -103,7 +104,7 @@ fun MemberCardView(
                     modifier = Modifier
                         .padding(start = 63.dp)
                         .clickable {
-                            onCopyChange()
+                            onCopyChange(true)
                         },
                 ){
                     Text(
@@ -125,7 +126,7 @@ fun MemberCardView(
                     modifier = Modifier
                         .padding(start = 10.dp)
                         .clickable {
-                            onReissueChange()
+                            onReissueChange(true)
                         }
 
                 ){

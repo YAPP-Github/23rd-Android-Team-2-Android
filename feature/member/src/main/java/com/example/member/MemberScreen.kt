@@ -31,6 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.moneymong.moneymong.design_system.R
 import com.example.member.component.MemberCardView
 import com.example.member.component.MemberDialogView
@@ -51,60 +52,57 @@ import com.moneymong.moneymong.design_system.theme.MMHorizontalSpacing
 import com.moneymong.moneymong.design_system.theme.Red03
 import com.moneymong.moneymong.design_system.theme.White
 import kotlinx.coroutines.launch
+import org.orbitmvi.orbit.compose.collectAsState
+import org.orbitmvi.orbit.compose.collectSideEffect
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MemberScreen() {
+fun MemberScreen(
+    viewModel: MemberViewModel = hiltViewModel()
+) {
     val sheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = true,
         confirmValueChange = { true }
     )
 
+    val state = viewModel.collectAsState().value
     val bottomSheetType = remember { mutableStateOf(BottomSheetType.ROLE_ASSIGNMENT_EXPORT) }
     val coroutineScope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
 
-    val onCopyClick = remember { mutableStateOf(false) }
-    val onReissueChange = remember { mutableStateOf(false) }
-    val vertClick = remember { mutableStateOf(false) }
-    val isStaffChecked = remember { mutableStateOf(false) }
-    val isMemberChecked = remember { mutableStateOf(false) }
-    val roleChanged = remember { mutableStateOf(false) }
-    val showDialog = remember { mutableStateOf(false) }
 
-    fun onIconClick() {
-        vertClick.value = true
+    viewModel.collectSideEffect{
+        when(it) {
+            is MemberSideEffect.getInvitationCode -> {
+                viewModel.getInvitationCode(it.agencyId)
+            }
+        }
     }
 
-    fun onCopyChange() {
-        onCopyClick.value = true
-    }
+    viewModel.eventEmit(MemberSideEffect.getInvitationCode(4)) //TODO
 
-    fun onReissueChange() {
-        onReissueChange.value = true
-    }
-
-    if (showDialog.value) {
+    if (state.showDialog) {
         MemberDialogView(
             onDismissRequest = {
-                showDialog.value = false
+                viewModel.onShowDialogChanged(false)
             },
             onConfirmation = {
-                showDialog.value = false
+                viewModel.onShowDialogChanged(false)
             }
         )
     }
 
-    if (vertClick.value) {
-        isStaffChecked.value = false
-        isMemberChecked.value = false
-        roleChanged.value = false
+    if (state.vertClick) {
+        viewModel.isStaffCheckedChanged(false)
+        viewModel.isMemberCheckedChanged(false)
+        viewModel.isRoleChanged(false)
+
         ModalBottomSheet(
             onDismissRequest = {
                 coroutineScope.launch {
                     sheetState.hide()
-                    vertClick.value = false
+                    viewModel.onVertClickChanged(false)
                 }
             },
             modifier = Modifier,
@@ -152,8 +150,8 @@ fun MemberScreen() {
                         modifier = Modifier
                             .fillMaxWidth()
                             .clickable {
-                                vertClick.value = false
-                                showDialog.value = true
+                                viewModel.onVertClickChanged(false)
+                                viewModel.onShowDialogChanged(true)
                             },
                         text = "내보내기",
                         style = Body4,
@@ -172,15 +170,16 @@ fun MemberScreen() {
                         modifier = Modifier
                             .fillMaxWidth()
                             .clickable {
-                                isStaffChecked.value = !isStaffChecked.value
-                                isMemberChecked.value = false
+                                viewModel.isStaffCheckedChanged(!state.isStaffChecked)
+                                //isStaffChecked.value = !isStaffChecked.value
+                                viewModel.isMemberCheckedChanged(false)
                             }
                     ) {
                         Text(
                             modifier = Modifier,
                             text = "운영진",
                             style = Body4,
-                            color = if (isStaffChecked.value) Blue04 else Gray05
+                            color = if (state.isStaffChecked) Blue04 else Gray05
                         )
                         Icon(
                             modifier = Modifier
@@ -188,7 +187,7 @@ fun MemberScreen() {
                                 .padding(start = 253.dp),
                             painter = painterResource(id = R.drawable.ic_check),
                             contentDescription = null,
-                            tint = if (isStaffChecked.value) Blue04 else Gray03
+                            tint = if (state.isStaffChecked) Blue04 else Gray03
                         )
                     }
                     Spacer(modifier = Modifier.height(20.dp))
@@ -196,15 +195,16 @@ fun MemberScreen() {
                         modifier = Modifier
                             .fillMaxWidth()
                             .clickable {
-                                isMemberChecked.value = !isMemberChecked.value
-                                isStaffChecked.value = false
+                                viewModel.isMemberCheckedChanged(!state.isMemberChecked)
+                                //isMemberChecked.value = !isMemberChecked.value
+                                viewModel.isStaffCheckedChanged(false)
                             },
                     ) {
                         Text(
                             modifier = Modifier,
                             text = "일반멤버",
                             style = Body4,
-                            color = if (isMemberChecked.value) Blue04 else Gray05
+                            color = if (state.isMemberChecked) Blue04 else Gray05
                         )
                         Icon(
                             modifier = Modifier
@@ -212,7 +212,7 @@ fun MemberScreen() {
                                 .padding(start = 253.dp),
                             painter = painterResource(id = R.drawable.ic_check),
                             contentDescription = null,
-                            tint = if (isMemberChecked.value) Blue04 else Gray03
+                            tint = if (state.isMemberChecked) Blue04 else Gray03
                         )
 
                     }
@@ -223,10 +223,11 @@ fun MemberScreen() {
                             coroutineScope.launch {
                                 sheetState.hide()
                             }
-                            roleChanged.value = isStaffChecked.value || isMemberChecked.value
+                            val boolean = state.isStaffChecked || state.isMemberChecked
+                            //roleChanged.value = isStaffChecked.value || isMemberChecked.value
+                            viewModel.isRoleChanged(boolean)
                             bottomSheetType.value = BottomSheetType.ROLE_ASSIGNMENT_EXPORT
-                            vertClick.value = false
-
+                            viewModel.onVertClickChanged(false)
                         },
                         text = "저장",
                         type = MDSButtonType.PRIMARY,
@@ -239,42 +240,42 @@ fun MemberScreen() {
     }
 
     // vertClick 상태가 변경될 때 바텀 시트의 상태를 제어
-    LaunchedEffect(key1 = vertClick.value) {
-        if (vertClick.value) {
+    LaunchedEffect(key1 = state.vertClick) {
+        if (state.vertClick) {
             coroutineScope.launch {
                 sheetState.show()
             }
         }
     }
 
-    LaunchedEffect(key1 = onCopyClick.value) {
-        if (onCopyClick.value) {
+    LaunchedEffect(key1 = state.onCopyClick) {
+        if (state.onCopyClick) {
             val result = snackbarHostState.showSnackbar(
                 message = "초대코드 123456이 복사되었습니다",
                 withDismissAction = true
             )
             // 스낵바가 닫히면 onClick 상태를 false로 변경
             if (result == SnackbarResult.Dismissed) {
-                onCopyClick.value = false
+                viewModel.onCopyClickChanged(false)
             }
         }
     }
 
-    LaunchedEffect(key1 = onReissueChange.value) {
-        if (onReissueChange.value) {
+    LaunchedEffect(key1 = state.onReissueChange) {
+        if (state.onReissueChange) {
             val result = snackbarHostState.showSnackbar(
                 message = "초대코드가 재발급 되었습니다",
                 withDismissAction = true
             )
             // 스낵바가 닫히면 onClick 상태를 false로 변경
             if (result == SnackbarResult.Dismissed) {
-                onReissueChange.value = false
+                viewModel.onReissueChanged(false)
             }
         }
     }
 
-    LaunchedEffect(roleChanged.value) {
-        if (roleChanged.value) {
+    LaunchedEffect(state.roleChanged) {
+        if (state.roleChanged) {
             snackbarHostState.showSnackbar(
                 message = "역할이 성공적으로 변경됐습니다.",
                 withDismissAction = true
@@ -297,13 +298,14 @@ fun MemberScreen() {
         )
         MemberCardView(
             modifier = Modifier,
-            onCopyChange = { onCopyChange() },
-            onReissueChange = { onReissueChange() }
+            invitationCode = state.isInvitationCode,
+            onCopyChange = { onCopyClick -> viewModel.onCopyClickChanged(onCopyClick) },
+            onReissueChange = { onReissueChange -> viewModel.onReissueChanged(onReissueChange) }
         )
 
         MemberListView(
             modifier = Modifier.padding(top = 24.dp),
-            onIconClick = { onIconClick() }
+            onIconClick = { vertClick -> viewModel.onVertClickChanged(vertClick) }
         )
 
         Box(

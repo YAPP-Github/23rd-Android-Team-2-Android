@@ -24,7 +24,10 @@ import com.moneymong.moneymong.design_system.theme.Gray07
 import com.moneymong.moneymong.design_system.theme.White
 
 @Composable
-fun MemberListView(modifier: Modifier = Modifier, onIconClick: () -> Unit) {
+fun MemberListView(
+    modifier: Modifier = Modifier,
+    onIconClick: (Boolean) -> Unit
+) {
     val memberList = listOf(
         Member(1, "김도하", MemberType.GENERAL_MEMBER),
         Member(2, "구나연", MemberType.ADMINISTRATOR),
@@ -52,9 +55,8 @@ fun MemberListView(modifier: Modifier = Modifier, onIconClick: () -> Unit) {
         ) {
             items(
                 items = members,
-                itemContent = { MemberListItem(it, onIconClick = { onIconClick() }) }
+                itemContent = { MemberListItem(it, onIconClick = { onIconClick(true) }) }
             )
         }
     }
 }
-
