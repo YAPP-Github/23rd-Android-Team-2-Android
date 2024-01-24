@@ -11,6 +11,7 @@ data class MemberState(
     val isMemberChecked: Boolean = false,
     val roleChanged: Boolean = false,
     val showDialog: Boolean = false,
-    val isInvitationCode: String = ""
+    val isInvitationCode: String = "",
+    val isUserAuthor : String = ""
 
 ) : State

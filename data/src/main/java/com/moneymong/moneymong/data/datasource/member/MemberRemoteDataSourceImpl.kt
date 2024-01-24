@@ -10,4 +10,8 @@ class MemberRemoteDataSourceImpl @Inject constructor(
     override suspend fun getInvitationCode(data: Long): Result<InvitationCodeResponse> {
         return moneyMongApi.getInvitationCode(data)
     }
+
+    override suspend fun reInvitationCode(data: Long): Result<InvitationCodeResponse> {
+        return moneyMongApi.reInvitationCode(data)
+    }
 }
