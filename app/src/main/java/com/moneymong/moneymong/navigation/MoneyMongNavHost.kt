@@ -63,7 +63,14 @@ fun MoneyMongNavHost(
             popBackStack = navController::popBackStack
         )
         ledgerManualScreen(
-            popBackStack = navController::popBackStack
+            popBackStack = navController::popBackStack,
+            navigateToHome = { _, success ->
+                navController.navigateToHome(navOptions {
+                    popUpTo(
+                        navController.graph.id
+                    ) { inclusive = true }
+                }, success)
+            }
         )
     }
 }
