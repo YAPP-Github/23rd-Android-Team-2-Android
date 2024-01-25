@@ -1,5 +1,8 @@
 package com.moneymong.moneymong.ledgerdetail
 
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -34,6 +37,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
@@ -43,6 +47,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
+import com.moneymong.moneymong.common.ext.base64ToFile
+import com.moneymong.moneymong.common.ext.encodingBase64
 import com.moneymong.moneymong.common.ui.DottedShape
 import com.moneymong.moneymong.common.ui.noRippleClickable
 import com.moneymong.moneymong.design_system.R
@@ -56,7 +62,9 @@ import com.moneymong.moneymong.design_system.component.textfield.util.PriceType
 import com.moneymong.moneymong.design_system.component.textfield.visualtransformation.DateVisualTransformation
 import com.moneymong.moneymong.design_system.component.textfield.visualtransformation.PriceVisualTransformation
 import com.moneymong.moneymong.design_system.component.textfield.visualtransformation.TimeVisualTransformation
+import com.moneymong.moneymong.design_system.theme.Blue01
 import com.moneymong.moneymong.design_system.theme.Blue03
+import com.moneymong.moneymong.design_system.theme.Blue04
 import com.moneymong.moneymong.design_system.theme.Body2
 import com.moneymong.moneymong.design_system.theme.Body3
 import com.moneymong.moneymong.design_system.theme.Gray01
@@ -77,25 +85,43 @@ fun LedgerDetailScreen(
     ledgerTransactionId: Int,
     popBackStack: () -> Unit
 ) {
+    val context = LocalContext.current
     val state = viewModel.collectAsState().value
     val verticalScrollState = rememberScrollState()
     val focusManager = LocalFocusManager.current
 
+    val singlePhotoPickerLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.PickVisualMedia(),
+        onResult = { uri ->
+            uri?.let {
+                viewModel.postS3URLImage(it.encodingBase64(context).base64ToFile(context))
+            }
+        }
+    )
+
     viewModel.collectSideEffect {
         when (it) {
             is LedgerDetailSideEffect.LedgerDetailEdit -> {
-                viewModel.onChangeEditMode(true)
                 verticalScrollState.scrollTo(0)
+                viewModel.onChangeEditMode(true)
             }
 
             is LedgerDetailSideEffect.LedgerDetailEditDone -> {
-                viewModel.onChangeEditMode(false)
                 verticalScrollState.scrollTo(0)
-                // TODO
+                viewModel.onChangeEditMode(false)
+                viewModel.ledgerTransactionEdit(detailId = ledgerTransactionId)
             }
 
             is LedgerDetailSideEffect.LedgerDetailFetchTransactionDetail -> {
                 viewModel.fetchLedgerTransactionDetail(it.detailId)
+            }
+
+            is LedgerDetailSideEffect.LedgerDetailOpenImagePicker -> {
+                singlePhotoPickerLauncher.launch(
+                    PickVisualMediaRequest(
+                        ActivityResultContracts.PickVisualMedia.ImageOnly
+                    )
+                )
             }
         }
     }
@@ -123,7 +149,7 @@ fun LedgerDetailScreen(
         topBar = {
             LedgerDetailTopbarView(
                 useEditMode = state.useEditMode,
-                enabledDone = state.enabled,
+                enabledDone = state.enabledEdit,
                 onClickPrev = popBackStack,
                 onClickDelete = { /*TODO*/ },
                 onClickDone = { viewModel.eventEmit(LedgerDetailSideEffect.LedgerDetailEditDone) }
@@ -358,14 +384,34 @@ fun LedgerDetailScreen(
                     LazyVerticalGrid(
                         modifier = modifier
                             .fillMaxSize()
-                            .heightIn(max = 324.dp)
+                            .heightIn(max = 504.dp)
                             .background(White),
                         columns = GridCells.Fixed(3),
                         verticalArrangement = Arrangement.spacedBy(8.dp),
                         horizontalArrangement = Arrangement.spacedBy(10.dp)
                     ) {
-                        val receiptImages = state.ledgerTransactionDetail?.receiptImageUrls.orEmpty()
-                        itemsIndexed(items = receiptImages) { index, item ->
+                        val showAddReceipt = state.useEditMode && state.receiptList.size < 12
+                        if (showAddReceipt) {
+                            item {
+                                Box(
+                                    modifier = Modifier
+                                        .height(120.dp)
+                                        .clip(RoundedCornerShape(8.dp))
+                                        .background(Blue01)
+                                        .noRippleClickable {
+                                            viewModel.onChangeImageType(isReceipt = true)
+                                        },
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Icon(
+                                        painter = painterResource(id = R.drawable.ic_plus_outline),
+                                        contentDescription = null,
+                                        tint = Blue04
+                                    )
+                                }
+                            }
+                        }
+                        itemsIndexed(items = state.receiptList) { index, item ->
                             Box(
                                 modifier = Modifier
                                     .height(120.dp)
@@ -373,7 +419,7 @@ fun LedgerDetailScreen(
                             ) {
                                 GlideImage(
                                     modifier = Modifier.fillMaxSize(),
-                                    model = item.receiptImageUrl,
+                                    model = item,
                                     contentDescription = null,
                                     contentScale = ContentScale.FillWidth
                                 )
@@ -381,7 +427,9 @@ fun LedgerDetailScreen(
                                     Icon(
                                         modifier = Modifier
                                             .align(Alignment.TopEnd)
-                                            .noRippleClickable {  }
+                                            .noRippleClickable {
+                                                viewModel.onClickRemoveReceipt(item)
+                                            }
                                             .padding(5.dp),
                                         painter = painterResource(id = R.drawable.ic_close_filled),
                                         contentDescription = null,
@@ -407,14 +455,34 @@ fun LedgerDetailScreen(
                     LazyVerticalGrid(
                         modifier = modifier
                             .fillMaxSize()
-                            .heightIn(max = 324.dp)
+                            .heightIn(max = 504.dp)
                             .background(White),
                         columns = GridCells.Fixed(3),
                         verticalArrangement = Arrangement.spacedBy(8.dp),
                         horizontalArrangement = Arrangement.spacedBy(10.dp)
                     ) {
-                        val documentImages = state.ledgerTransactionDetail?.documentImageUrls.orEmpty()
-                        itemsIndexed(items = documentImages) { index, item ->
+                        val showAddDocument = state.useEditMode && state.documentList.size < 12
+                        if (showAddDocument) {
+                            item {
+                                Box(
+                                    modifier = Modifier
+                                        .height(120.dp)
+                                        .clip(RoundedCornerShape(8.dp))
+                                        .background(Blue01)
+                                        .noRippleClickable {
+                                            viewModel.onChangeImageType(isReceipt = false)
+                                        },
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Icon(
+                                        painter = painterResource(id = R.drawable.ic_plus_outline),
+                                        contentDescription = null,
+                                        tint = Blue04
+                                    )
+                                }
+                            }
+                        }
+                        itemsIndexed(items = state.documentList) { index, item ->
                             Box(
                                 modifier = Modifier
                                     .height(120.dp)
@@ -422,7 +490,7 @@ fun LedgerDetailScreen(
                             ) {
                                 GlideImage(
                                     modifier = Modifier.fillMaxSize(),
-                                    model = item.documentImageUrl,
+                                    model = item,
                                     contentDescription = null,
                                     contentScale = ContentScale.FillWidth
                                 )
@@ -430,7 +498,9 @@ fun LedgerDetailScreen(
                                     Icon(
                                         modifier = Modifier
                                             .align(Alignment.TopEnd)
-                                            .noRippleClickable {  }
+                                            .noRippleClickable {
+                                                viewModel.onClickRemoveDocument(item)
+                                            }
                                             .padding(5.dp),
                                         painter = painterResource(id = R.drawable.ic_close_filled),
                                         contentDescription = null,
@@ -466,7 +536,7 @@ fun LedgerDetailScreen(
                         .fillMaxWidth()
                         .padding(vertical = 24.dp, horizontal = 20.dp),
                     text = "완료하기",
-                    enabled = state.enabled,
+                    enabled = state.enabledEdit,
                     size = MDSButtonSize.MEDIUM,
                     type = MDSButtonType.PRIMARY,
                     onClick = { viewModel.eventEmit(LedgerDetailSideEffect.LedgerDetailEditDone) }
