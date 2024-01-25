@@ -4,7 +4,9 @@ import androidx.compose.ui.text.input.TextFieldValue
 import com.moneymong.moneymong.common.base.State
 import com.moneymong.moneymong.common.ext.toDateFormat
 import com.moneymong.moneymong.common.ui.toWonFormat
-import com.moneymong.moneymong.domain.entity.ledger.LedgerTransactionDetailEntity
+import com.moneymong.moneymong.design_system.component.textfield.util.PriceType
+import com.moneymong.moneymong.domain.entity.ledgerdetail.LedgerTransactionDetailEntity
+import com.moneymong.moneymong.domain.param.ledger.FundType
 import java.time.LocalDateTime
 import java.time.OffsetDateTime
 import java.time.ZoneOffset
@@ -29,8 +31,19 @@ data class LedgerDetailState(
     val documentList: List<String> = emptyList(),
     val isReceipt: Boolean? = null,
     val receiptIdList: List<Int> = emptyList(),
-    val documentIdList: List<Int> = emptyList()
+    val documentIdList: List<Int> = emptyList(),
+    val showConfirmModal: Boolean = false,
 ) : State {
+
+    val fundTypeText: String
+        get() = ledgerTransactionDetail?.fundType?.let {
+            if (it == FundType.INCOME.name) "수입" else "지출"
+        }.orEmpty()
+
+    val priceType: PriceType
+        get() = ledgerTransactionDetail?.fundType?.let {
+            if (it == FundType.INCOME.name) PriceType.Income else PriceType.Expense
+        } ?: PriceType.None
 
     val totalPrice: String
         get() = ledgerTransactionDetail?.amount?.let { it.toString().toWonFormat() } ?: "0"

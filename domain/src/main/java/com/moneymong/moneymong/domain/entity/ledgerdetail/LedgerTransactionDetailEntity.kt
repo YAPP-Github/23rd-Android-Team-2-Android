@@ -1,4 +1,7 @@
-package com.moneymong.moneymong.domain.entity.ledger
+package com.moneymong.moneymong.domain.entity.ledgerdetail
+
+import com.moneymong.moneymong.domain.entity.ledger.DocumentImageURLEntity
+import com.moneymong.moneymong.domain.entity.ledger.ReceiptImageURLEntity
 
 data class LedgerTransactionDetailEntity(
     val id: Int,

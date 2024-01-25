@@ -1,10 +1,10 @@
 package com.moneymong.moneymong.network.api
 
-import com.moneymong.moneymong.network.request.ledger.LedgerDocumentRequest
-import com.moneymong.moneymong.network.request.ledger.LedgerReceiptRequest
-import com.moneymong.moneymong.network.request.ledger.LedgerTransactionDetailRequest
+import com.moneymong.moneymong.network.request.ledgerdetail.LedgerDocumentRequest
+import com.moneymong.moneymong.network.request.ledgerdetail.LedgerReceiptRequest
+import com.moneymong.moneymong.network.request.ledgerdetail.LedgerTransactionDetailRequest
 import com.moneymong.moneymong.network.request.ledger.LedgerTransactionRequest
-import com.moneymong.moneymong.network.response.ledger.LedgerTransactionDetailResponse
+import com.moneymong.moneymong.network.response.ledgerdetail.LedgerTransactionDetailResponse
 import com.moneymong.moneymong.network.response.ledger.LedgerTransactionListResponse
 import com.moneymong.moneymong.network.response.ledger.LedgerTransactionResponse
 import com.moneymong.moneymong.network.response.ocr.FileUploadResponse
@@ -95,5 +95,11 @@ interface MoneyMongApi {
         @Header("Authorization") header: String = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiUk9MRV9VU0VSIiwidXNlcklkIjozLCJpYXQiOjE3MDQ3MTU0NTEsImV4cCI6MTczNjI3MzA1MX0.2yYEy71Gz4YIz0DYzlx0glYMgZA0JAZs05jsVRvvQx4",
         @Path("detailId") detailId: Int,
         @Path("documentId") documentId: Int
+    ): Result<Unit>
+
+    @DELETE("api/v1/ledger-detail/{detailId}")
+    suspend fun deleteLedgerDetail(
+        @Header("Authorization") header: String = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiUk9MRV9VU0VSIiwidXNlcklkIjozLCJpYXQiOjE3MDQ3MTU0NTEsImV4cCI6MTczNjI3MzA1MX0.2yYEy71Gz4YIz0DYzlx0glYMgZA0JAZs05jsVRvvQx4",
+        @Path("detailId") detailId: Int
     ): Result<Unit>
 }
