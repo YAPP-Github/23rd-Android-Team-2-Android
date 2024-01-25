@@ -25,13 +25,16 @@ fun MyMongScreen(
     modifier: Modifier = Modifier,
     viewModel: MyMongViewModel = hiltViewModel(),
     navigateToTermsOfUse: () -> Unit,
-    navigateToPrivacyPolicy: () -> Unit
+    navigateToPrivacyPolicy: () -> Unit,
+    navigateToWithdrawal: () -> Unit
 ) {
     val state by viewModel.collectAsState()
 
     viewModel.collectSideEffect {
         when (it) {
-            is MyMongSideEffect.NavigateToWithdrawal -> Unit // todo
+            is MyMongSideEffect.NavigateToWithdrawal -> {
+                navigateToWithdrawal()
+            }
 
             is MyMongSideEffect.NavigateToPrivacyPolicy -> {
                 navigateToPrivacyPolicy()

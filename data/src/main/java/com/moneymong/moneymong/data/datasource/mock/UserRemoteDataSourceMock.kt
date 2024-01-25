@@ -19,4 +19,9 @@ class UserRemoteDataSourceMock @Inject constructor() : UserRemoteDataSource {
         )
 //        return Result.failure(Throwable("테스트 에러"))
     }
+
+    override suspend fun withdrawal(): Result<Unit> {
+        return Result.success(Unit)
+//        return Result.failure(Throwable("테스트 에러"))
+    }
 }
