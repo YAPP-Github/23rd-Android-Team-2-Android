@@ -5,4 +5,6 @@ import com.moneymong.moneymong.network.response.user.UserResponse
 interface UserRemoteDataSource {
 
     suspend fun getMyInfo(): Result<UserResponse>
+
+    suspend fun withdrawal(): Result<Unit>
 }

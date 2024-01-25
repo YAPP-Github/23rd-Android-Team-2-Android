@@ -23,7 +23,7 @@ import com.moneymong.moneymong.design_system.theme.Heading1
 internal fun MyMongInnerTopBar(
     modifier: Modifier = Modifier,
     title: String,
-    onBackClick: () -> Unit = {},    // todo
+    onBackClick: () -> Unit
 ) {
     Row(
         modifier = modifier.fillMaxWidth(),
