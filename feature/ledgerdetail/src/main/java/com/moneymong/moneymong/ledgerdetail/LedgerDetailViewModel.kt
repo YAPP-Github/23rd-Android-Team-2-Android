@@ -4,14 +4,15 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.core.text.isDigitsOnly
 import com.moneymong.moneymong.common.base.BaseViewModel
 import com.moneymong.moneymong.common.ext.toDateFormat
-import com.moneymong.moneymong.domain.entity.ledger.LedgerTransactionDetailEntity
+import com.moneymong.moneymong.domain.entity.ledgerdetail.LedgerTransactionDetailEntity
 import com.moneymong.moneymong.domain.param.ledgerdetail.DeleteLedgerDocumentParam
 import com.moneymong.moneymong.domain.param.ledgerdetail.DeleteLedgerReceiptParam
 import com.moneymong.moneymong.domain.param.ledgerdetail.LedgerDocumentParam
 import com.moneymong.moneymong.domain.param.ledgerdetail.LedgerReceiptParam
 import com.moneymong.moneymong.domain.param.ledgerdetail.LedgerTransactionDetailParam
 import com.moneymong.moneymong.domain.param.ocr.FileUploadParam
-import com.moneymong.moneymong.domain.usecase.ledger.FetchLedgerTransactionDetailUseCase
+import com.moneymong.moneymong.domain.usecase.ledgerdetail.FetchLedgerTransactionDetailUseCase
+import com.moneymong.moneymong.domain.usecase.ledgerdetail.DeleteLedgerDetailUseCase
 import com.moneymong.moneymong.domain.usecase.ledgerdetail.DeleteLedgerDocumentTransactionUseCase
 import com.moneymong.moneymong.domain.usecase.ledgerdetail.DeleteLedgerReceiptTransactionUseCase
 import com.moneymong.moneymong.domain.usecase.ledgerdetail.PostLedgerDocumentTransactionUseCase
@@ -37,7 +38,8 @@ class LedgerDetailViewModel @Inject constructor(
     private val postLedgerDocumentTransactionUseCase: PostLedgerDocumentTransactionUseCase,
     private val deleteLedgerReceiptTransactionUseCase: DeleteLedgerReceiptTransactionUseCase,
     private val deleteLedgerDocumentTransactionUseCase: DeleteLedgerDocumentTransactionUseCase,
-    private val postFileUploadUseCase: PostFileUploadUseCase
+    private val postFileUploadUseCase: PostFileUploadUseCase,
+    private val deleteLedgerDetailUseCase: DeleteLedgerDetailUseCase
 ) : BaseViewModel<LedgerDetailState, LedgerDetailSideEffect>(LedgerDetailState()) {
 
     fun ledgerTransactionEdit(detailId: Int) = intent {
@@ -134,6 +136,18 @@ class LedgerDetailViewModel @Inject constructor(
                         // TODO
                     }
             }
+        }
+    }
+
+    fun deleteLedgerDetail(detailId: Int) = intent {
+        if (!state.isLoading) {
+            reduce { state.copy(isLoading = true) }
+            deleteLedgerDetailUseCase(detailId)
+                .onSuccess {
+                    postSideEffect(LedgerDetailSideEffect.LedgerDetailNavigateToLedger)
+                }.onFailure {
+                    // TODO
+                }.also { reduce { state.copy(isLoading = false) } }
         }
     }
 
@@ -301,6 +315,10 @@ class LedgerDetailViewModel @Inject constructor(
     fun onChangeImageType(isReceipt: Boolean) = intent {
         reduce { state.copy(isReceipt = isReceipt) }
         postSideEffect(LedgerDetailSideEffect.LedgerDetailOpenImagePicker)
+    }
+
+    fun onChangeVisibleConfirmModal(visible: Boolean) = intent {
+        reduce { state.copy(showConfirmModal = visible) }
     }
 
     private fun validateValue(

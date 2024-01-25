@@ -123,6 +123,19 @@ fun LedgerDetailScreen(
                     )
                 )
             }
+
+            is LedgerDetailSideEffect.LedgerDetailNavigateToLedger -> {
+                popBackStack()
+            }
+
+            is LedgerDetailSideEffect.LedgerDetailConfirmModalNegative -> {
+                viewModel.onChangeVisibleConfirmModal(false)
+            }
+
+            is LedgerDetailSideEffect.LedgerDetailConfirmModalPositive -> {
+                viewModel.onChangeVisibleConfirmModal(false)
+                viewModel.deleteLedgerDetail(detailId = ledgerTransactionId)
+            }
         }
     }
 
@@ -134,24 +147,25 @@ fun LedgerDetailScreen(
         )
     }
 
-    if (false) { // TODO
+    if (state.showConfirmModal) {
         MDSModal(
-            icon = R.drawable.ic_warning_filled, // TODO
-            title = "사진을 삭제하시겠습니까?", // TODO
-            description = "삭제된 사진은 되돌릴 수 없습니다", // TODO
+            icon = R.drawable.ic_warning_filled,
+            title = "장부 내역을 삭제하시겠습니까?",
+            description = "삭제된 내역은 되돌릴 수 없습니다",
             negativeBtnText = "취소",
             positiveBtnText = "확인",
-            onClickNegative = { /*TODO*/ },
-            onClickPositive = { /*TODO*/ })
+            onClickNegative = { viewModel.eventEmit(LedgerDetailSideEffect.LedgerDetailConfirmModalNegative) },
+            onClickPositive = { viewModel.eventEmit(LedgerDetailSideEffect.LedgerDetailConfirmModalPositive) })
     }
 
     Scaffold(
         topBar = {
             LedgerDetailTopbarView(
+                title = "${state.fundTypeText} 상세내역",
                 useEditMode = state.useEditMode,
                 enabledDone = state.enabledEdit,
                 onClickPrev = popBackStack,
-                onClickDelete = { /*TODO*/ },
+                onClickDelete = { viewModel.onChangeVisibleConfirmModal(true) },
                 onClickDone = { viewModel.eventEmit(LedgerDetailSideEffect.LedgerDetailEditDone) }
             )
         }
@@ -224,7 +238,7 @@ fun LedgerDetailScreen(
                                 .onFocusChanged { isTotalPriceFilled = !it.isFocused },
                             value = state.totalPriceValue,
                             onValueChange = viewModel::onChangeTotalPriceValue,
-                            title = "지출 금액",
+                            title = "${state.fundTypeText} 금액",
                             placeholder = "",
                             isFilled = isTotalPriceFilled,
                             isError = state.isTotalPriceError,
@@ -232,19 +246,19 @@ fun LedgerDetailScreen(
                             onIconClick = { viewModel.onChangeTotalPriceValue(TextFieldValue()) },
                             singleLine = true,
                             icon = MDSTextFieldIcons.Clear,
-                            visualTransformation = PriceVisualTransformation(type = PriceType.None),
+                            visualTransformation = PriceVisualTransformation(type = state.priceType),
                             keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
                         )
                     } else {
                         Text(
-                            text = "지출 금액",
+                            text = "${state.fundTypeText} 금액",
                             style = Body2,
                             color = Gray06
                         )
                         Spacer(modifier = Modifier.height(8.dp))
                         Text(
-                            text = "${state.totalPrice}원",
+                            text = "${state.priceType.symbol}${state.totalPrice}원",
                             style = Body3,
                             color = Gray10
                         )

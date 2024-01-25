@@ -26,6 +26,7 @@ import com.moneymong.moneymong.design_system.theme.MMHorizontalSpacing
 @Composable
 fun LedgerDetailTopbarView(
     modifier: Modifier = Modifier,
+    title: String,
     useEditMode: Boolean,
     enabledDone: Boolean,
     onClickPrev: () -> Unit,
@@ -52,7 +53,7 @@ fun LedgerDetailTopbarView(
             modifier = Modifier
                 .padding(vertical = 8.dp)
                 .align(Alignment.Center),
-            text = "지출 상세내역",
+            text = title,
             style = Heading1,
             color = Gray10
         )
@@ -88,6 +89,7 @@ fun LedgerDetailTopbarView(
 @Composable
 fun LedgerDetailTopbarPreview() {
     LedgerDetailTopbarView(
+        title = "지출 상세내역",
         useEditMode = false,
         enabledDone = false,
         onClickPrev = { /*TODO*/ },
