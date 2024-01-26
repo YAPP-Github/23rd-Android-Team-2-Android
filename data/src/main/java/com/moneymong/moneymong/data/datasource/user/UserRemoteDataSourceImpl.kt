@@ -1,16 +1,15 @@
-package com.moneymong.moneymong.data.datasource.impl
+package com.moneymong.moneymong.data.datasource.user
 
-import com.moneymong.moneymong.data.datasource.UserRemoteDataSource
-import com.moneymong.moneymong.network.api.MoneyMongApi
+import com.moneymong.moneymong.network.api.UserApi
 import com.moneymong.moneymong.network.response.user.UserResponse
 import javax.inject.Inject
 
 class UserRemoteDataSourceImpl @Inject constructor(
-    private val moneyMongApi: MoneyMongApi
+    private val userApi: UserApi
 ) : UserRemoteDataSource {
 
     override suspend fun getMyInfo(): Result<UserResponse> {
-        return moneyMongApi.getMyInfo()
+        return userApi.getMyInfo()
     }
 
     override suspend fun withdrawal(): Result<Unit> {

@@ -8,8 +8,12 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.moneymong.moneymong.network.BuildConfig
 import com.moneymong.moneymong.network.adapter.ResultCallAdapterFactory
+import com.moneymong.moneymong.network.api.AgencyApi
 import com.moneymong.moneymong.network.api.ClovaApi
+import com.moneymong.moneymong.network.api.LedgerApi
+import com.moneymong.moneymong.network.api.LedgerDetailApi
 import com.moneymong.moneymong.network.api.MoneyMongApi
+import com.moneymong.moneymong.network.api.UserApi
 import com.moneymong.moneymong.network.util.MoneyMongTokenAuthenticator
 import dagger.Module
 import dagger.Provides
@@ -103,6 +107,22 @@ object NetworkModule {
     @Provides
     fun provideMoneyMongApi(@MoneyMongRetrofit retrofit: Retrofit): MoneyMongApi =
         retrofit.create(MoneyMongApi::class.java)
+
+    @Provides
+    fun provideAgencyApi(@MoneyMongRetrofit retrofit: Retrofit): AgencyApi =
+        retrofit.create(AgencyApi::class.java)
+
+    @Provides
+    fun provideLedgerApi(@MoneyMongRetrofit retrofit: Retrofit): LedgerApi =
+        retrofit.create(LedgerApi::class.java)
+
+    @Provides
+    fun provideLedgerDetailApi(@MoneyMongRetrofit retrofit: Retrofit): LedgerDetailApi =
+        retrofit.create(LedgerDetailApi::class.java)
+
+    @Provides
+    fun provideUserApi(@MoneyMongRetrofit retrofit: Retrofit): UserApi =
+        retrofit.create(UserApi::class.java)
 
     @Provides
     fun provideClovaApi(@ClovaRetrofit retrofit: Retrofit): ClovaApi =

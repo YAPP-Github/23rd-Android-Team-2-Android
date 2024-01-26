@@ -1,7 +1,7 @@
 package com.moneymong.moneymong.data.di
 
-import com.moneymong.moneymong.data.repository.UserRepositoryImpl
-import com.moneymong.moneymong.domain.repository.UserRepository
+import com.moneymong.moneymong.data.repository.user.UserRepositoryImpl
+import com.moneymong.moneymong.domain.repository.user.UserRepository
 import com.moneymong.moneymong.data.repository.ledger.LedgerRepositoryImpl
 import com.moneymong.moneymong.data.repository.ledgerdetail.LedgerDetailRepositoryImpl
 import com.moneymong.moneymong.data.repository.ocr.OCRRepositoryImpl
