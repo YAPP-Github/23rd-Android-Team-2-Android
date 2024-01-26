@@ -16,5 +16,15 @@ class UserRepositoryImpl @Inject constructor(
 
     override suspend fun withdrawal(): Result<Unit> {
         return userRemoteDataSource.withdrawal()
+            .onSuccess {
+                // TODO:  탈퇴 성공 시 로컬 토큰 삭제
+            }
+    }
+
+    override suspend fun logout(): Result<Unit> {
+        return userRemoteDataSource.logout()
+            .onSuccess {
+                // TODO:  로그아웃 성공 시 로컬 토큰 삭제
+            }
     }
 }
