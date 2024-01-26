@@ -4,6 +4,7 @@ import android.Manifest.permission.*
 import android.content.Intent
 import android.net.Uri
 import android.provider.Settings
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -22,67 +23,80 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavOptions
+import com.google.gson.Gson
 import com.moneymong.moneymong.design_system.component.modal.MDSModal
 import com.moneymong.moneymong.design_system.theme.Heading1
 import com.moneymong.moneymong.design_system.theme.Mint03
 import com.moneymong.moneymong.design_system.theme.White
 import com.moneymong.moneymong.common.ext.hasPermission
+import com.moneymong.moneymong.common.ui.noRippleClickable
+import com.moneymong.moneymong.common.util.DisposableEffectWithLifeCycle
+import com.moneymong.moneymong.design_system.theme.Black
 import com.moneymong.moneymong.ocr.view.OCRCameraPermissionDeniedView
 import com.moneymong.moneymong.ocr.view.OCRCaptureView
 import com.moneymong.moneymong.ocr.view.OCRHelperView
-import com.moneymong.moneymong.ocr.view.OCRInteractionView
 import com.moneymong.moneymong.ocr.view.OCRTopbarView
-import kotlinx.coroutines.flow.collect
 import org.orbitmvi.orbit.compose.collectAsState
+import org.orbitmvi.orbit.compose.collectSideEffect
 
 @Composable
 fun OCRScreen(
     modifier: Modifier = Modifier,
-    viewModel: OCRViewModel = hiltViewModel()
+    viewModel: OCRViewModel = hiltViewModel(),
+    navigateToOCRResult: (navOptions: NavOptions?, document: String) -> Unit,
+    navigateToHome: (homeLedgerPostSuccess: Boolean) -> Unit,
+    popBackStack: () -> Unit
 ) {
     val state = viewModel.collectAsState().value
-    val sideEffect = viewModel.container.sideEffectFlow
     val context = LocalContext.current
-    val lifecycleOwner = LocalLifecycleOwner.current // TODO
     var hasCameraPermission by remember { mutableStateOf(context.hasPermission(CAMERA)) }
-    var visibleHelper by remember { mutableStateOf(true) }
+
+    BackHandler(onBack = { navigateToHome(false) })
+
+    DisposableEffectWithLifeCycle(
+        onResume = { hasCameraPermission = context.hasPermission(CAMERA) }
+    )
 
     LaunchedEffect(Unit) {
         viewModel.visiblePermissionDialog(hasCameraPermission)
     }
 
-    LaunchedEffect(viewModel) {
-        sideEffect.collect {
-            when (it) {
-                OCRSideEffect.OCRMoveToPermissionSetting -> {
-                    context.startActivity(
-                        Intent(
-                            Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
-                            Uri.fromParts("package", context.packageName, null)
-                        )
+    viewModel.collectSideEffect {
+        when (it) {
+            is OCRSideEffect.OCRMoveToPermissionSetting -> {
+                context.startActivity(
+                    Intent(
+                        Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                        Uri.fromParts("package", context.packageName, null)
                     )
-                }
-                else -> {}
+                )
             }
+
+            is OCRSideEffect.OCRPostDocumentApi -> {
+                viewModel.postDocumentOCR(it.base64)
+            }
+
+            is OCRSideEffect.OCRNavigateToOCRResult -> {
+                val documentString = it.document?.let { Gson().toJson(it) }.orEmpty()
+                navigateToOCRResult(null, documentString)
+            }
+
+            else -> {}
         }
     }
-
-
-
-
 
     if (state.showPermissionDialog) {
         MDSModal(
             icon = state.modalType.icon,
             title = state.modalType.title,
             description = state.modalType.description,
-            negativeBtnText = "확인",
-            positiveBtnText = "이동",
+            negativeBtnText = "허용 안 함",
+            positiveBtnText = "허용",
             onClickNegative = viewModel::onClickDialogNegative,
             onClickPositive = viewModel::onClickDialogPositive
         )
@@ -97,35 +111,50 @@ fun OCRScreen(
             contentAlignment = Alignment.Center
         ) {
             if (!hasCameraPermission) {
-                OCRCameraPermissionDeniedView(onClickRequestPermission = { /* TODO */ })
+                OCRCameraPermissionDeniedView(onClickRequestPermission = {
+                    viewModel.eventEmit(
+                        OCRSideEffect.OCRMoveToPermissionSetting
+                    )
+                })
             } else {
-                OCRCaptureView()
-                Text(
-                    modifier = Modifier.align(Alignment.Center),
-                    text = "영수증의 처음과 끝이\n모두 포함되게 촬영해주세요",
-                    style = Heading1,
-                    color = Color.White,
-                    textAlign = TextAlign.Center
+                OCRCaptureView(
+                    onClickCapture = {
+                        viewModel.eventEmit(OCRSideEffect.OCRPostDocumentApi(it))
+                    }
                 )
-                if (visibleHelper) { // TODO 최초 진입 시, 혹은 도움말 아이콘 클릭 시
-                    OCRHelperView(onClickClose = { visibleHelper = !visibleHelper })
+                if (!state.isLoading) {
+                    Text(
+                        modifier = Modifier.align(Alignment.Center),
+                        text = "영수증의 처음과 끝이\n모두 포함되게 촬영해주세요",
+                        style = Heading1,
+                        color = Color.White,
+                        textAlign = TextAlign.Center
+                    )
                 }
             }
             OCRTopbarView(
                 modifier = Modifier.align(Alignment.TopCenter),
-                onClickHelp = { /*TODO*/ },
-                onClickClose = { /* TODO */ }
+                onClickHelp = viewModel::onClickHelper,
+                onClickClose = { navigateToHome(false) }
             )
-            OCRInteractionView(
-                modifier = Modifier.align(Alignment.BottomCenter),
-            )
-            if (false) { // TODO ocr loading
-                CircularProgressIndicator(
-                    modifier = Modifier.size(74.dp),
-                    color = Mint03,
-                    trackColor = White,
-                    strokeWidth = 7.dp
-                )
+            if (state.isLoading) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(Black.copy(alpha = 0.6f))
+                        .noRippleClickable { }, // 로딩 중 클릭 이벤트를 방지하기 위해 추가함
+                    contentAlignment = Alignment.Center
+                ) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.size(74.dp),
+                        color = Mint03,
+                        trackColor = White,
+                        strokeWidth = 7.dp
+                    )
+                }
+            }
+            if (state.visibleHelper && hasCameraPermission) {
+                OCRHelperView(onClickClose = viewModel::onClickHelper)
             }
         }
     }
@@ -134,5 +163,8 @@ fun OCRScreen(
 @Preview(showBackground = true)
 @Composable
 fun OCRScreenPreview() {
-    OCRScreen()
+    OCRScreen(
+        navigateToOCRResult = { navOptions, s -> },
+        popBackStack = {},
+        navigateToHome = {})
 }

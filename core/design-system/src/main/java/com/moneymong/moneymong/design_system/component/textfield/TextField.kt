@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import com.moneymong.moneymong.design_system.component.textfield.util.MDSTextFieldIcons
 
@@ -32,6 +33,7 @@ fun MDSTextField(
     minLines: Int = 1,
     icon: MDSTextFieldIcons? = null,
     onIconClick: (() -> Unit) = {},
+    visualTransformation: VisualTransformation = VisualTransformation.None,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default
 ) {
@@ -50,6 +52,7 @@ fun MDSTextField(
         minLines = minLines,
         icon = icon,
         onIconClick = onIconClick,
+        visualTransformation = visualTransformation,
         keyboardOptions = keyboardOptions,
         keyboardActions = keyboardActions
     )
