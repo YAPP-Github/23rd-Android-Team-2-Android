@@ -9,13 +9,15 @@ const val mymongRoute = "mymong_route"
 internal fun NavGraphBuilder.myMongScreen(
     navigateToTermsOfUse: () -> Unit,
     navigateToPrivacyPolicy: () -> Unit,
-    navigateToWithdrawal: () -> Unit
+    navigateToWithdrawal: () -> Unit,
+    navigateToLogin: () -> Unit,
 ) {
     composable(route = mymongRoute) {
         MyMongScreen(
             navigateToTermsOfUse = navigateToTermsOfUse,
             navigateToPrivacyPolicy = navigateToPrivacyPolicy,
-            navigateToWithdrawal = navigateToWithdrawal
+            navigateToWithdrawal = navigateToWithdrawal,
+            navigateToLogin = navigateToLogin,
         )
     }
 }
@@ -30,7 +32,8 @@ fun NavGraphBuilder.myMongNavGraph(
     myMongScreen(
         navigateToTermsOfUse = navigateToTermsOfUse,
         navigateToPrivacyPolicy = navigateToPrivacyPolicy,
-        navigateToWithdrawal = navigateToWithdrawal
+        navigateToWithdrawal = navigateToWithdrawal,
+        navigateToLogin = navigateToLogin,
     )
     privacyPolicyScreen(navigateUp = navigateUp)
 

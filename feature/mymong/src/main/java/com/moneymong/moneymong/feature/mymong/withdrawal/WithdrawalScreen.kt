@@ -61,7 +61,7 @@ fun WithdrawalScreen(
             description = "탈퇴시 계정은 삭제되며 복구되지 않습니다",
             negativeBtnText = "취소",
             positiveBtnText = "확인",
-            onClickNegative = viewModel::onNegativeClickWithdrawalDialog,
+            onClickNegative = { viewModel.changeWithdrawalDialogVisibility(false) },
             onClickPositive = viewModel::withdrawal
         )
     }
@@ -69,7 +69,7 @@ fun WithdrawalScreen(
     if (state.visibleErrorDialog) {
         WithdrawalErrorDialog(
             message = state.errorMessage,
-            onConfirm = viewModel::onConfirmErrorDialog
+            onConfirm = { viewModel.changeErrorDialogVisibility(false) }
         )
     }
 
@@ -86,7 +86,7 @@ fun WithdrawalScreen(
         Spacer(modifier = Modifier.height(20.dp))
         ContentView(
             isChecked = state.isAgreed,
-            onCheckedChange = viewModel::onClickAgree
+            onCheckedChange = viewModel::toggleIsAgreed
         )
         Spacer(modifier = Modifier.weight(1f))
         MDSButton(
@@ -94,7 +94,7 @@ fun WithdrawalScreen(
                 .fillMaxWidth()
                 .padding(bottom = 28.dp),
             text = "탈퇴하기",
-            onClick = viewModel::onClickWithdrawalButton,
+            onClick = { viewModel.changeWithdrawalDialogVisibility(true) },
             enabled = state.isAgreed
         )
     }

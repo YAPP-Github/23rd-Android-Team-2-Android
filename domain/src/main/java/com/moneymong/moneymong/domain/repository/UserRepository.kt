@@ -7,4 +7,6 @@ interface UserRepository {
     suspend fun getMyInfo(): Result<UserEntity>
 
     suspend fun withdrawal(): Result<Unit>
+
+    suspend fun logout(): Result<Unit>
 }
