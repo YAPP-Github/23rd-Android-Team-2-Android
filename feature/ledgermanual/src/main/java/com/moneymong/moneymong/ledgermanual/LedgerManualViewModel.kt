@@ -85,7 +85,8 @@ class LedgerManualViewModel @Inject constructor(
     }
 
     fun onChangeTotalPriceValue(value: TextFieldValue) = blockingIntent {
-        val validate = value.text.validateValue(length = 12, isDigit = true)
+        val trimValue = trimStartWithZero(value)
+        val validate = trimValue.text.validateValue(length = 12, isDigit = true)
         if (validate) {
             val elvisValue = value.text.ifEmpty { "0" }
             if (elvisValue.toLong() > MAX_TOTAL_PRICE) {
@@ -94,7 +95,7 @@ class LedgerManualViewModel @Inject constructor(
                 reduce { state.copy(isTotalPriceError = false) }
             }
 
-            reduce { state.copy(totalPriceValue = value) }
+            reduce { state.copy(totalPriceValue = trimValue) }
         }
     }
 
@@ -143,7 +144,7 @@ class LedgerManualViewModel @Inject constructor(
         reduce { state.copy(fundType = fundType) }
     }
 
-    fun showPopBackStackModal(visible: Boolean) = intent {
+    fun visiblePopBackStackModal(visible: Boolean) = intent {
         reduce { state.copy(showPopBackStackModal = visible) }
     }
 
@@ -156,6 +157,13 @@ class LedgerManualViewModel @Inject constructor(
     }
 
     fun onClickPostTransaction() = eventEmit(LedgerManualSideEffect.LedgerManualPostTransaction)
+
+    private fun trimStartWithZero(value: TextFieldValue) =
+        if (value.text.isNotEmpty() && value.text.all { it == '0' }) {
+            value.copy(text = "0")
+        } else {
+            value.copy(text = value.text.trimStart('0'))
+        }
 
     companion object {
         const val MAX_TOTAL_PRICE = 999999999

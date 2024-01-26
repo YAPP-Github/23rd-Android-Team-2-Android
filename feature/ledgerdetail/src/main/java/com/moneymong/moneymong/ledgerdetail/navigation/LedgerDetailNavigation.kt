@@ -19,7 +19,7 @@ fun NavController.navigateToLedgerDetail(
 }
 
 fun NavGraphBuilder.ledgerDetailScreen(
-    navigateToHome: (Boolean) -> Unit,
+    navigateToHome: (homeLedgerPostSuccess: Boolean) -> Unit,
     popBackStack: () -> Unit
 ) {
     composable(
