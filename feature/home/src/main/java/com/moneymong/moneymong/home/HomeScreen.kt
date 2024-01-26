@@ -17,8 +17,11 @@ import androidx.navigation.compose.NavHost
 import com.moneymong.moneymong.design_system.component.snackbar.MDSSnackbarHost
 import com.moneymong.moneymong.feature.agency.navigation.agencyRoute
 import com.moneymong.moneymong.feature.agency.navigation.agencyScreen
-import com.moneymong.moneymong.feature.mymong.navigation.mymongScreen
-import com.moneymong.moneymong.home.navigation.rememberHomeNavController
+import com.moneymong.moneymong.feature.mymong.navigation.myMongNavGraph
+import com.moneymong.moneymong.feature.mymong.navigation.navigatePrivacyPolicy
+import com.moneymong.moneymong.feature.mymong.navigation.navigateTermsOfUse
+import com.moneymong.moneymong.feature.mymong.navigation.navigateWithdrawal
+import com.moneymong.moneymong.home.navigation.rememberHomeNavigator
 import com.moneymong.moneymong.home.view.HomeBottomBarView
 import com.moneymong.moneymong.ledger.navigation.ledgerRoute
 import com.moneymong.moneymong.ledger.navigation.ledgerScreen
@@ -32,7 +35,8 @@ fun HomeScreen(
     navigateToLedgerDetail: (NavOptions?, Int) -> Unit,
     navigateToLedgerManual: (NavOptions?) -> Unit
 ) {
-    val homeNavController = rememberHomeNavController()
+    val homeNavigator = rememberHomeNavigator()
+    val homeNavController = homeNavigator.navHostController
     val coroutineScope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
 
@@ -52,7 +56,7 @@ fun HomeScreen(
         modifier = modifier,
         bottomBar = {
             HomeBottomBarView(
-                homeNavHostController = homeNavController,
+                homeNavigator = homeNavigator,
                 tabs = HomeBottomTabs.entries.toList()
             )
         },
@@ -64,13 +68,14 @@ fun HomeScreen(
         }
     ) {
         NavHost(
-            navController = homeNavController.navHostController,
+            modifier = Modifier.padding(it),
+            navController = homeNavController,
             startDestination = ledgerRoute,
             enterTransition = { EnterTransition.None },
             exitTransition = { ExitTransition.None }
         ) {
-            agencyScreen(padding = it)
-
+            agencyScreen()
+            
             ledgerScreen(
                 padding = it,
                 navigateToAgency = { homeNavController.navigate(agencyRoute) },
@@ -79,7 +84,13 @@ fun HomeScreen(
                 navigateToLedgerManual = navigateToLedgerManual
             )
 
-            mymongScreen(padding = it)
+            myMongNavGraph(
+                navigateToTermsOfUse = homeNavController::navigateTermsOfUse,
+                navigateToPrivacyPolicy = homeNavController::navigatePrivacyPolicy,
+                navigateToWithdrawal = homeNavController::navigateWithdrawal,
+                navigateToLogin = { /* todo navigateToLogin */ },
+                navigateUp = homeNavController::navigateUp
+            )
         }
     }
 }
