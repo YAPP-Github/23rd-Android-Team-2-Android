@@ -139,7 +139,11 @@ private fun SettingItem(
     onNavigateClick: () -> Unit
 ) {
     Row(
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier
+            .fillMaxWidth()
+            .noRippleClickable {
+                onNavigateClick()
+            },
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
@@ -156,7 +160,6 @@ private fun SettingItem(
             style = Body4
         )
         Icon(
-            modifier = Modifier.clickable { onNavigateClick() },
             painter = painterResource(id = R.drawable.ic_chevron_right),
             tint = Gray07,
             contentDescription = "navigate icon",
