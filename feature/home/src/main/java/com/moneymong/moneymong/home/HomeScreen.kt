@@ -77,7 +77,6 @@ fun HomeScreen(
             agencyScreen()
             
             ledgerScreen(
-                padding = it,
                 navigateToAgency = { homeNavController.navigate(agencyRoute) },
                 navigateToOCR = navigateToOCR,
                 navigateToLedgerDetail = navigateToLedgerDetail,

@@ -8,7 +8,6 @@ import com.moneymong.moneymong.ledger.LedgerScreen
 const val ledgerRoute = "ledger_route"
 
 fun NavGraphBuilder.ledgerScreen(
-    padding: PaddingValues,
     navigateToAgency: () -> Unit,
     navigateToOCR: (NavOptions?) -> Unit,
     navigateToLedgerDetail: (NavOptions?, Int) -> Unit,
@@ -16,7 +15,6 @@ fun NavGraphBuilder.ledgerScreen(
 ) {
     composable(route = ledgerRoute) {
         LedgerScreen(
-            modifier = Modifier.padding(padding),
             navigateToAgency = navigateToAgency,
             navigateToOCR = navigateToOCR,
             navigateToLedgerDetail = navigateToLedgerDetail,
