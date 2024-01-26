@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import dagger.hilt.android.AndroidEntryPoint
 import com.moneymong.moneymong.design_system.theme.MMTheme
+import com.moneymong.moneymong.ocr.OCRScreen
 import com.moneymong.moneymong.ui.MoneyMongApp
 
 @AndroidEntryPoint

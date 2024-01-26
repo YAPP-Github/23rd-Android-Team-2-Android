@@ -36,9 +36,13 @@ import com.moneymong.moneymong.ocr_result.view.item.OCRResultBottomItem
 fun OCRResultBottomView(
     modifier: Modifier = Modifier,
     source: String,
-    amount: Long,
+    amount: String,
     date: String,
-    onClickRetryOCR: () -> Unit
+    time: String,
+    btnEnabled: Boolean,
+    onClickRetryOCR: () -> Unit,
+    onClickRegister: () -> Unit,
+    onClickEdit: () -> Unit
 ) {
     Column(
         modifier = modifier.fillMaxWidth(),
@@ -84,7 +88,7 @@ fun OCRResultBottomView(
                     modifier = Modifier.fillMaxWidth(),
                     icon = drawable.ic_agency,
                     prefix = "수입·지출 출처",
-                    suffix = "팬도로시(아주대학생회관점)" // TODO
+                    suffix = source
                 )
                 Spacer(modifier = Modifier.height(14.dp))
                 OCRResultBottomItem(
@@ -92,21 +96,21 @@ fun OCRResultBottomView(
                         .fillMaxWidth(),
                     icon = drawable.ic_agency,
                     prefix = "금액",
-                    suffix = "1,800원" //TODO
+                    suffix = amount
                 )
                 Spacer(modifier = Modifier.height(14.dp))
                 OCRResultBottomItem(
                     modifier = Modifier.fillMaxWidth(),
                     icon = drawable.ic_agency,
                     prefix = "날짜",
-                    suffix = "2023년 11월 15일" // TODO
+                    suffix = date
                 )
                 Spacer(modifier = Modifier.height(14.dp))
                 OCRResultBottomItem(
                     modifier = Modifier.fillMaxWidth(),
                     icon = drawable.ic_agency,
                     prefix = "시간",
-                    suffix = "14:02" // TODO
+                    suffix = time
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 Row(
@@ -120,7 +124,7 @@ fun OCRResultBottomView(
                         text = "수정하기",
                         size = MDSButtonSize.LARGE,
                         type = MDSButtonType.SECONDARY,
-                        onClick = { /*TODO*/ }
+                        onClick = onClickEdit
                     )
                     Spacer(modifier = Modifier.width(10.dp))
                     MDSButton(
@@ -130,7 +134,8 @@ fun OCRResultBottomView(
                         text = "등록하기",
                         size = MDSButtonSize.LARGE,
                         type = MDSButtonType.PRIMARY,
-                        onClick = { /*TODO*/ }
+                        enabled = btnEnabled,
+                        onClick = onClickRegister
                     )
                 }
                 Spacer(modifier = Modifier.height(24.dp))
@@ -144,8 +149,12 @@ fun OCRResultBottomView(
 fun OCRResultBottomPreview() {
     OCRResultBottomView(
         source = "",
-        amount = 0L,
+        amount = "",
         date = "",
-        onClickRetryOCR = {}
+        time = "",
+        onClickRetryOCR = {},
+        btnEnabled = true,
+        onClickRegister = {},
+        onClickEdit = {}
     )
 }
