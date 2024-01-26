@@ -48,8 +48,8 @@ import org.orbitmvi.orbit.compose.collectSideEffect
 fun OCRScreen(
     modifier: Modifier = Modifier,
     viewModel: OCRViewModel = hiltViewModel(),
-    navigateToOCRResult: (NavOptions?, String) -> Unit,
-    navigateToHome: (Boolean) -> Unit,
+    navigateToOCRResult: (navOptions: NavOptions?, document: String) -> Unit,
+    navigateToHome: (homeLedgerPostSuccess: Boolean) -> Unit,
     popBackStack: () -> Unit
 ) {
     val state = viewModel.collectAsState().value

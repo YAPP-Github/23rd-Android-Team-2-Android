@@ -86,7 +86,7 @@ fun OCRDetailScreen(
     modifier: Modifier = Modifier,
     viewModel: OCRDetailViewModel = hiltViewModel(),
     document: DocumentEntity?,
-    navigateToHome: (Boolean) -> Unit,
+    navigateToHome: (homeLedgerPostSuccess: Boolean) -> Unit,
     popBackStack: () -> Unit
 ) {
     val context = LocalContext.current

@@ -27,11 +27,14 @@ fun NavController.navigateToHome(
 }
 
 fun NavController.topLevelNavigateToHome(homeLedgerPostSuccess: Boolean = false) {
-    this.navigateToHome(navOptions {
-        popUpTo(
-            graph.id
-        ) { inclusive = true }
-    }, homeLedgerPostSuccess)
+    this.navigateToHome(
+        navOptions = navOptions {
+            popUpTo(
+                graph.id
+            ) { inclusive = true }
+        },
+        homeLedgerPostSuccess = homeLedgerPostSuccess
+    )
 }
 
 fun NavGraphBuilder.homeScreen(

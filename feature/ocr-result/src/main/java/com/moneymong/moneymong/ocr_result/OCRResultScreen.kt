@@ -53,8 +53,8 @@ fun OCRResultScreen(
     modifier: Modifier = Modifier,
     viewModel: OCRResultViewModel = hiltViewModel(),
     document: DocumentEntity?,
-    navigateToHome: (Boolean) -> Unit,
-    navigateToOCRDetail: (NavOptions?, String) -> Unit,
+    navigateToHome: (homeLedgerPostSuccess: Boolean) -> Unit,
+    navigateToOCRDetail: (navOptions: NavOptions?, document: String) -> Unit,
     popBackStack: () -> Unit,
 ) {
     val context = LocalContext.current

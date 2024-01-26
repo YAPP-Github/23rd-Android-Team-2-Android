@@ -51,7 +51,6 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavOptions
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.moneymong.moneymong.common.ext.base64ToFile
@@ -88,7 +87,7 @@ fun LedgerManualScreen(
     modifier: Modifier = Modifier,
     viewModel: LedgerManualViewModel = hiltViewModel(),
     popBackStack: () -> Unit,
-    navigateToHome: (Boolean) -> Unit
+    navigateToHome: (homeLedgerPostSuccess: Boolean) -> Unit
 ) {
     val context = LocalContext.current
     val state = viewModel.collectAsState().value
@@ -118,11 +117,11 @@ fun LedgerManualScreen(
             }
 
             is LedgerManualSideEffect.LedgerManualShowPopBackStackModal -> {
-                viewModel.showPopBackStackModal(true)
+                viewModel.visiblePopBackStackModal(true)
             }
 
             is LedgerManualSideEffect.LegerManualHidePopBackStackModal -> {
-                viewModel.showPopBackStackModal(false)
+                viewModel.visiblePopBackStackModal(false)
                 if (it.navigate) {
                     navigateToHome(false)
                 }
@@ -143,8 +142,20 @@ fun LedgerManualScreen(
             description = "작성한 내용이 저장되지 않습니다",
             negativeBtnText = "취소",
             positiveBtnText = "확인",
-            onClickNegative = { viewModel.eventEmit(LedgerManualSideEffect.LegerManualHidePopBackStackModal(false)) },
-            onClickPositive = { viewModel.eventEmit(LedgerManualSideEffect.LegerManualHidePopBackStackModal(true)) },
+            onClickNegative = {
+                viewModel.eventEmit(
+                    LedgerManualSideEffect.LegerManualHidePopBackStackModal(
+                        false
+                    )
+                )
+            },
+            onClickPositive = {
+                viewModel.eventEmit(
+                    LedgerManualSideEffect.LegerManualHidePopBackStackModal(
+                        true
+                    )
+                )
+            },
         )
     }
 
@@ -183,7 +194,8 @@ fun LedgerManualScreen(
                     isError = state.isStoreNameError,
                     singleLine = true,
                     icon = MDSTextFieldIcons.Clear,
-                    onIconClick = { viewModel.onChangeStoreNameValue(TextFieldValue()) }
+                    onIconClick = { viewModel.onChangeStoreNameValue(TextFieldValue()) },
+                    keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() })
                 )
                 Spacer(modifier = Modifier.height(24.dp))
                 var isTotalPriceFilled by remember { mutableStateOf(false) }
@@ -436,7 +448,9 @@ fun LedgerManualScreen(
                 )
                 Spacer(modifier = Modifier.height(64.dp))
                 MDSButton(
-                    modifier = Modifier.fillMaxWidth().imePadding(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .imePadding(),
                     text = "작성하기",
                     enabled = state.enabled,
                     type = MDSButtonType.PRIMARY,

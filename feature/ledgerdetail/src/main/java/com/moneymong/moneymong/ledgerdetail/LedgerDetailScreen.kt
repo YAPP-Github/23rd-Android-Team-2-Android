@@ -85,7 +85,7 @@ fun LedgerDetailScreen(
     modifier: Modifier = Modifier,
     viewModel: LedgerDetailViewModel = hiltViewModel(),
     ledgerTransactionId: Int,
-    navigateToHome: (Boolean) -> Unit,
+    navigateToHome: (homeLedgerPostSuccess: Boolean) -> Unit,
     popBackStack: () -> Unit
 ) {
     val context = LocalContext.current
