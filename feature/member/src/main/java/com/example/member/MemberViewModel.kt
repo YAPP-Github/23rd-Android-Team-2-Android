@@ -124,28 +124,13 @@ class MemberViewModel @Inject constructor(
                 //TODO - 에러화면
             }
     }
-    private val mockAgencyUsers = listOf(
-        AgencyUserEntity(id = 2, userId = 4, nickname = "기은서", agencyUserRole = "STAFF"),
-        AgencyUserEntity(id = 1, userId = 3, nickname = "김기서", agencyUserRole = "STAFF"),
-        AgencyUserEntity(id = 3, userId = 5, nickname = "장희직", agencyUserRole = "STAFF"),
-        AgencyUserEntity(id = 4, userId = 6, nickname = "안병헌", agencyUserRole = "MEMBER"),
-        AgencyUserEntity(id = 5, userId = 7, nickname = "김세현", agencyUserRole = "MEMBER"),
-        AgencyUserEntity(id = 6, userId = 8, nickname = "구나연", agencyUserRole = "MEMBER"),
-        AgencyUserEntity(id = 7, userId = 9, nickname = "김도하", agencyUserRole = "MEMBER"),
-        AgencyUserEntity(id = 8, userId = 10, nickname = "한규리", agencyUserRole = "MEMBER"),
-        AgencyUserEntity(id = 9, userId = 11, nickname = "임가은", agencyUserRole = "MEMBER"),
-        AgencyUserEntity(id = 10, userId = 12, nickname = "김도하", agencyUserRole = "MEMBER"),
-        AgencyUserEntity(id = 11, userId = 13, nickname = "한규리", agencyUserRole = "MEMBER"),
-        AgencyUserEntity(id = 12, userId = 14, nickname = "임가은", agencyUserRole = "MEMBER"),
-    )
+
     fun getMemberList(agencyId: Long) = intent {
         memberListUseCase.invoke(agencyId)
             .onSuccess {
                 reduce {
                     state.copy(
-//                        memberList = it.agencyUsers
-                        memberList = mockAgencyUsers
-
+                        memberList = it.agencyUsers
                     )
                 }
             }
