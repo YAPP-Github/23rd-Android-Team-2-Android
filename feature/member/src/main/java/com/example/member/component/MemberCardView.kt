@@ -22,8 +22,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import com.example.member.User
-import com.example.member.UserType
 import com.example.member.util.MemberRoundRectShadow
 import com.moneymong.moneymong.design_system.R
 import com.moneymong.moneymong.design_system.component.tag.MDSTag
@@ -34,22 +32,29 @@ import com.moneymong.moneymong.design_system.theme.Gray02
 import com.moneymong.moneymong.design_system.theme.Gray10
 import com.moneymong.moneymong.design_system.theme.Mint03
 import com.moneymong.moneymong.design_system.theme.White
+import com.moneymong.moneymong.domain.entity.member.AgencyUserEntity
 
 @Composable
 fun MemberCardView(
     modifier: Modifier = Modifier,
+    memberList: List<AgencyUserEntity>,
+    memberMyInfoId: Long,
+    memberMyInfoList: AgencyUserEntity,
+    memberMyInfoChanged: (Long, Int, String, String) -> Unit,
     invitationCode: String,
     isReInvitationCode: (Long) -> Unit,
     onCopyChange: (Boolean) -> Unit,
-    isUserAuthor: String,
 ) {
-    val user = User("김세현", UserType.ADMINISTRATOR)
     val context = LocalContext.current
 
     fun copyToClipboard(text: String) {
         val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
         val clip = ClipData.newPlainText("invitation_code", text)
         clipboard.setPrimaryClip(clip)
+    }
+
+    memberList.find { it.userId.toLong() == memberMyInfoId }?.let {
+        memberMyInfoChanged(it.id, it.userId, it.nickname, it.agencyUserRole)
     }
 
     Column(
@@ -74,21 +79,21 @@ fun MemberCardView(
 
                 Text(
                     modifier = Modifier.padding(start = 8.dp),
-                    text = user.name,
+                    text = memberMyInfoList.nickname,
                     style = Body4,
                     color = Gray10
                 )
 
                 MDSTag(
                     modifier = Modifier.padding(start = 6.dp),
-                    text = if (user.type == UserType.GENERAL_MEMBER) "일반멤버" else "운영진",
-                    backgroundColor = if (user.type == UserType.GENERAL_MEMBER) Mint03 else Blue04,
+                    text = if (memberMyInfoList.agencyUserRole == "MEMBER") "일반멤버" else "운영진",
+                    backgroundColor = if (memberMyInfoList.agencyUserRole == "MEMBER") Mint03 else Blue04,
                     contentColor = White,
                 )
 
             }
 
-            if (isUserAuthor == "STAFF") {
+            if (memberMyInfoList.agencyUserRole == "STAFF") {
                 Divider(
                     modifier = Modifier
                         .fillMaxWidth()

@@ -1,6 +1,5 @@
 package com.example.member
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -27,11 +26,10 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.BottomCenter
-import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.moneymong.moneymong.design_system.R
@@ -76,19 +74,28 @@ fun MemberScreen(
 
     viewModel.collectSideEffect {
         when (it) {
-            is MemberSideEffect.getInvitationCode -> {
+            is MemberSideEffect.GetInvitationCode -> {
                 viewModel.getInvitationCode(it.agencyId)
             }
 
-            is MemberSideEffect.getReInvitationCode -> {
-                Log.d("실행", "실행")
+            is MemberSideEffect.GetReInvitationCode -> {
                 viewModel.getReInvitationCode(it.agencyId)
+            }
+
+            is MemberSideEffect.MemberList -> {
+                viewModel.getMemberList(it.agencyId)
+            }
+
+            is MemberSideEffect.GetMyInfo -> {
+                viewModel.getMyInfo(it.data)
             }
         }
     }
 
     LaunchedEffect(key1 = Unit) {
-        viewModel.eventEmit(MemberSideEffect.getInvitationCode(4)) //TODO
+        viewModel.eventEmit(MemberSideEffect.GetInvitationCode(5)) //TODO
+        viewModel.eventEmit(MemberSideEffect.MemberList(5)) //TODO
+        viewModel.eventEmit(MemberSideEffect.GetMyInfo(Unit)) //TODO - 마이몽 유저 정보 조회 연결
     }
 
 
@@ -158,6 +165,7 @@ fun MemberScreen(
                 coroutineScope.launch {
                     sheetState.hide()
                     viewModel.onVertClickChanged(false)
+                    bottomSheetType.value = BottomSheetType.ROLE_ASSIGNMENT_EXPORT
                 }
             },
             modifier = Modifier,
@@ -218,7 +226,7 @@ fun MemberScreen(
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(vertical = 20.dp)
+                        .padding(horizontal = 20.dp)
                         .windowInsetsPadding(BottomSheetDefaults.windowInsets)
                 ) {
                     Row(
@@ -230,15 +238,15 @@ fun MemberScreen(
                             }
                     ) {
                         Text(
-                            modifier = Modifier,
+                            modifier = Modifier.weight(1f),
                             text = "운영진",
                             style = Body4,
                             color = if (state.isStaffChecked) Blue04 else Gray05
                         )
                         Icon(
                             modifier = Modifier
-                                .size(24.dp)
-                                .padding(start = 253.dp),
+                                .align(Alignment.CenterVertically)
+                                .size(24.dp),
                             painter = painterResource(id = R.drawable.ic_check),
                             contentDescription = null,
                             tint = if (state.isStaffChecked) Blue04 else Gray03
@@ -254,15 +262,15 @@ fun MemberScreen(
                             },
                     ) {
                         Text(
-                            modifier = Modifier,
+                            modifier = Modifier.weight(1f),
                             text = "일반멤버",
                             style = Body4,
                             color = if (state.isMemberChecked) Blue04 else Gray05
                         )
                         Icon(
                             modifier = Modifier
-                                .size(24.dp)
-                                .padding(start = 253.dp),
+                                .align(Alignment.CenterVertically)
+                                .size(24.dp),
                             painter = painterResource(id = R.drawable.ic_check),
                             contentDescription = null,
                             tint = if (state.isMemberChecked) Blue04 else Gray03
@@ -285,7 +293,6 @@ fun MemberScreen(
                         type = MDSButtonType.PRIMARY,
                         size = MDSButtonSize.LARGE,
                     )
-                    Spacer(modifier = Modifier.height(24.dp))
                 }
             }
         }
@@ -305,15 +312,30 @@ fun MemberScreen(
         )
         MemberCardView(
             modifier = Modifier,
+            memberList = state.memberList,
+            memberMyInfoId = state.memberMyInfoId,
+            memberMyInfoList = state.memberMyInfoList,
+            memberMyInfoChanged = { id, userId, nickname, agencyUserRole ->
+                viewModel.memberMyInfoChanged(
+                    id,
+                    userId,
+                    nickname,
+                    agencyUserRole
+                )
+            },
             invitationCode = state.isInvitationCode,
-            isReInvitationCode = { viewModel.eventEmit(MemberSideEffect.getReInvitationCode(it)) }, //TODO
+            isReInvitationCode = { viewModel.eventEmit(MemberSideEffect.GetReInvitationCode(it)) }, //TODO
             onCopyChange = { onCopyClick -> viewModel.onCopyClickChanged(onCopyClick) },
-            isUserAuthor = state.isUserAuthor
         )
 
         MemberListView(
             modifier = Modifier.padding(top = 24.dp),
-            onIconClick = { vertClick -> viewModel.onVertClickChanged(vertClick) }
+            memberList = state.memberList,
+            memberMyInfoId = state.memberMyInfoId,
+            filteredMemberList = state.filteredMemberList,
+            onIconClick = { vertClick -> viewModel.onVertClickChanged(vertClick) },
+            updateFilteredMemberList = {memberMyInfoId -> viewModel.updateFilteredMemberList(memberMyInfoId)},
+
         )
 
         Box(
@@ -324,7 +346,7 @@ fun MemberScreen(
             MDSSnackbarHost(
                 hostState = snackbarHostState,
                 modifier = Modifier
-                    .align(Center)
+                    .align(BottomCenter)
                     .padding(bottom = 12.dp)
             )
         }
