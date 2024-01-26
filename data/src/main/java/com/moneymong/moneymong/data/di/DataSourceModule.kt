@@ -1,7 +1,7 @@
 package com.moneymong.moneymong.data.di
 
 import com.moneymong.moneymong.data.datasource.AgencyRemoteDataSource
-import com.moneymong.moneymong.data.datasource.mock.AgencyRemoteDataSourceMock
+import com.moneymong.moneymong.data.datasource.impl.AgencyRemoteDataSourceImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -13,6 +13,6 @@ interface DataSourceModule {
 
     @Binds
     fun bindAgencyRemoteDataSource(
-        agencyRemoteDataSourceMock: AgencyRemoteDataSourceMock
+        agencyRemoteDataSourceImpl: AgencyRemoteDataSourceImpl
     ): AgencyRemoteDataSource
 }

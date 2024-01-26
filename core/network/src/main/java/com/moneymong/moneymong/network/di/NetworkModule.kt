@@ -8,6 +8,7 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.moneymong.moneymong.network.BuildConfig
 import com.moneymong.moneymong.network.adapter.ResultCallAdapterFactory
+import com.moneymong.moneymong.network.api.MoneyMongApi
 import com.moneymong.moneymong.network.util.MoneyMongTokenAuthenticator
 import dagger.Module
 import dagger.Provides
@@ -73,8 +74,11 @@ object NetworkModule {
         addConverterFactory(GsonConverterFactory.create(gson))
         addCallAdapterFactory(ResultCallAdapterFactory.create())
         client(okHttpClient)
-        baseUrl("")
+        baseUrl("https://dev.moneymong.site/")
     }.build()
 
-    // TODO Api Provider
+    @Provides
+    @Singleton
+    fun provideMoneyMongApi(retrofit: Retrofit): MoneyMongApi =
+        retrofit.create(MoneyMongApi::class.java)
 }
