@@ -1,7 +1,7 @@
 package com.moneymong.moneymong.data.di
 
-import com.moneymong.moneymong.data.datasource.UserRemoteDataSource
-import com.moneymong.moneymong.data.datasource.impl.UserRemoteDataSourceImpl
+import com.moneymong.moneymong.data.datasource.user.UserRemoteDataSource
+import com.moneymong.moneymong.data.datasource.user.UserRemoteDataSourceImpl
 import com.moneymong.moneymong.data.datasource.ledger.LedgerRemoteDataSource
 import com.moneymong.moneymong.data.datasource.ledger.LedgerRemoteDataSourceImpl
 import com.moneymong.moneymong.data.datasource.ledgerdetail.LedgerDetailRemoteDataSource

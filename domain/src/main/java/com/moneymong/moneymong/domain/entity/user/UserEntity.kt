@@ -1,4 +1,4 @@
-package com.moneymong.moneymong.domain.entity.mymong
+package com.moneymong.moneymong.domain.entity.user
 
 data class UserEntity(
     val id: Long,

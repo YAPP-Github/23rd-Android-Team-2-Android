@@ -2,7 +2,7 @@ package com.moneymong.moneymong.feature.mymong.withdrawal
 
 import com.moneymong.moneymong.common.base.BaseViewModel
 import com.moneymong.moneymong.common.error.MoneyMongError
-import com.moneymong.moneymong.domain.usecase.WithdrawalUseCase
+import com.moneymong.moneymong.domain.usecase.user.WithdrawalUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.postSideEffect

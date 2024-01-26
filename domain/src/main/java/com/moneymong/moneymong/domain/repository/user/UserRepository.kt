@@ -1,6 +1,6 @@
-package com.moneymong.moneymong.domain.repository
+package com.moneymong.moneymong.domain.repository.user
 
-import com.moneymong.moneymong.domain.entity.mymong.UserEntity
+import com.moneymong.moneymong.domain.entity.user.UserEntity
 
 interface UserRepository {
 

@@ -1,6 +1,6 @@
-package com.moneymong.moneymong.data.datasource.mock
+package com.moneymong.moneymong.data.datasource.user
 
-import com.moneymong.moneymong.data.datasource.UserRemoteDataSource
+import com.moneymong.moneymong.data.datasource.user.UserRemoteDataSource
 import com.moneymong.moneymong.network.response.user.UserResponse
 import kotlinx.coroutines.delay
 import javax.inject.Inject

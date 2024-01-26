@@ -1,4 +1,4 @@
-package com.moneymong.moneymong.data.datasource
+package com.moneymong.moneymong.data.datasource.user
 
 import com.moneymong.moneymong.network.response.user.UserResponse
 

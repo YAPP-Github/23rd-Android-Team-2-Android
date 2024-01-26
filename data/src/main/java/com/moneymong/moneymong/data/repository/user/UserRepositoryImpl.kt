@@ -1,9 +1,9 @@
-package com.moneymong.moneymong.data.repository
+package com.moneymong.moneymong.data.repository.user
 
-import com.moneymong.moneymong.data.datasource.UserRemoteDataSource
+import com.moneymong.moneymong.data.datasource.user.UserRemoteDataSource
 import com.moneymong.moneymong.data.mapper.user.toEntity
-import com.moneymong.moneymong.domain.entity.mymong.UserEntity
-import com.moneymong.moneymong.domain.repository.UserRepository
+import com.moneymong.moneymong.domain.entity.user.UserEntity
+import com.moneymong.moneymong.domain.repository.user.UserRepository
 import javax.inject.Inject
 
 class UserRepositoryImpl @Inject constructor(
