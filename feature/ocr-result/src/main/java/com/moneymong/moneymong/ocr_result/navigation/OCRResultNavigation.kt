@@ -18,9 +18,9 @@ fun NavController.navigateToOCRResult(
 }
 
 fun NavGraphBuilder.ocrResultScreen(
-    navigateToHome: (NavOptions?, Boolean) -> Unit,
+    navigateToHome: (homeLedgerPostSuccess: Boolean) -> Unit,
     popBackStack: () -> Unit,
-    navigateToOCRDetail: (NavOptions?, String) -> Unit
+    navigateToOCRDetail: (navOptions: NavOptions?, document: String) -> Unit
 ) {
     composable(route = ocrResultRoute) { backStackEntry ->
         val match = "[^\uAC00-\uD7A3xfe0-9a-zA-Z~!@#$%^&*()_+|<>?:{}]"

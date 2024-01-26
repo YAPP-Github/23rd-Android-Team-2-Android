@@ -1,9 +1,11 @@
 package com.moneymong.moneymong.ledgerdetail
 
 import androidx.compose.ui.text.input.TextFieldValue
-import androidx.core.text.isDigitsOnly
 import com.moneymong.moneymong.common.base.BaseViewModel
 import com.moneymong.moneymong.common.ext.toDateFormat
+import com.moneymong.moneymong.common.ui.isValidPaymentDate
+import com.moneymong.moneymong.common.ui.isValidPaymentTime
+import com.moneymong.moneymong.common.ui.validateValue
 import com.moneymong.moneymong.domain.entity.ledgerdetail.LedgerTransactionDetailEntity
 import com.moneymong.moneymong.domain.param.ledgerdetail.DeleteLedgerDocumentParam
 import com.moneymong.moneymong.domain.param.ledgerdetail.DeleteLedgerReceiptParam
@@ -26,8 +28,6 @@ import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.postSideEffect
 import org.orbitmvi.orbit.syntax.simple.reduce
 import java.io.File
-import java.text.ParseException
-import java.text.SimpleDateFormat
 import javax.inject.Inject
 
 @HiltViewModel
@@ -249,7 +249,7 @@ class LedgerDetailViewModel @Inject constructor(
     }
 
     fun onChangeStoreNameValue(value: TextFieldValue) = blockingIntent {
-        val validate = validateValue(targetValue = value, length = 20)
+        val validate = value.text.validateValue(length = 20)
         if (!validate) {
             reduce { state.copy(isStoreNameError = true) }
         } else {
@@ -259,7 +259,7 @@ class LedgerDetailViewModel @Inject constructor(
     }
 
     fun onChangeTotalPriceValue(value: TextFieldValue) = blockingIntent {
-        val validate = validateValue(targetValue = value, length = 12, isDigit = true)
+        val validate = value.text.validateValue(length = 12, isDigit = true)
         if (validate) {
             val elvisValue = value.text.ifEmpty { "0" }
             if (elvisValue.toLong() > MAX_TOTAL_PRICE) {
@@ -273,9 +273,9 @@ class LedgerDetailViewModel @Inject constructor(
     }
 
     fun onChangePaymentDateValue(value: TextFieldValue) = blockingIntent {
-        val validate = validateValue(targetValue = value, length = 8, isDigit = true)
+        val validate = value.text.validateValue(length = 8, isDigit = true)
         if (validate) {
-            val isPaymentDateError = !isValidPaymentDate(value.text)
+            val isPaymentDateError = !value.text.isValidPaymentDate()
             reduce {
                 state.copy(
                     paymentDateValue = value,
@@ -286,9 +286,9 @@ class LedgerDetailViewModel @Inject constructor(
     }
 
     fun onChangePaymentTimeValue(value: TextFieldValue) = blockingIntent {
-        val validate = validateValue(targetValue = value, length = 6, isDigit = true)
+        val validate = value.text.validateValue(length = 6, isDigit = true)
         if (validate) {
-            val isPaymentTimeError = !isValidPaymentTime(value.text)
+            val isPaymentTimeError = !value.text.isValidPaymentTime()
             reduce {
                 state.copy(
                     paymentTimeValue = value,
@@ -299,13 +299,13 @@ class LedgerDetailViewModel @Inject constructor(
     }
 
     fun onChangeMemoValue(value: TextFieldValue) = blockingIntent {
-        val validate = validateValue(targetValue = value, length = 300)
-        if (!validate) {
-            reduce { state.copy(isMemoError = true) }
-        } else {
-            reduce { state.copy(isMemoError = false) }
+        val validate = value.text.validateValue(length = 300)
+        reduce {
+            state.copy(
+                memoValue = value,
+                isMemoError = !validate
+            )
         }
-        reduce { state.copy(memoValue = value) }
     }
 
     fun onChangeEditMode(useEditMode: Boolean) = intent {
@@ -319,38 +319,6 @@ class LedgerDetailViewModel @Inject constructor(
 
     fun onChangeVisibleConfirmModal(visible: Boolean) = intent {
         reduce { state.copy(showConfirmModal = visible) }
-    }
-
-    private fun validateValue(
-        targetValue: TextFieldValue,
-        length: Int,
-        isDigit: Boolean = false
-    ) = if (isDigit) {
-        targetValue.text.isDigitsOnly() && targetValue.text.length <= length
-    } else {
-        targetValue.text.length <= length
-    }
-
-    private fun isValidPaymentDate(date: String): Boolean {
-        val formatted = SimpleDateFormat("yyyyMMdd")
-        formatted.isLenient = false
-        try {
-            formatted.parse(date)
-        } catch (e: ParseException) {
-            return false
-        }
-        return true
-    }
-
-    private fun isValidPaymentTime(time: String): Boolean {
-        val formatted = SimpleDateFormat("HHmmss")
-        formatted.isLenient = false
-        try {
-            formatted.parse(time)
-        } catch (e: ParseException) {
-            return false
-        }
-        return true
     }
 
     companion object {
