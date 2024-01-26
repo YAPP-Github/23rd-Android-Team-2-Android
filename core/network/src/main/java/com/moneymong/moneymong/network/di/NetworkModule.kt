@@ -8,6 +8,8 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.moneymong.moneymong.network.BuildConfig
 import com.moneymong.moneymong.network.adapter.ResultCallAdapterFactory
+import com.moneymong.moneymong.network.api.ClovaApi
+import com.moneymong.moneymong.network.api.MoneyMongApi
 import com.moneymong.moneymong.network.util.MoneyMongTokenAuthenticator
 import dagger.Module
 import dagger.Provides
@@ -18,11 +20,21 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.create
+import javax.inject.Qualifier
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
+
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
+    annotation class ClovaRetrofit
+
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
+    annotation class MoneyMongRetrofit
 
     @Provides
     fun provideOkhttpClient(
@@ -66,15 +78,33 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideRetrofitClient(
+    @MoneyMongRetrofit
+    fun provideMoneyMongClient(
         okHttpClient: OkHttpClient,
         gson: Gson
     ): Retrofit = Retrofit.Builder().apply {
+        client(okHttpClient)
+        baseUrl(BuildConfig.MONEYMONG_BASE_URL)
         addConverterFactory(GsonConverterFactory.create(gson))
         addCallAdapterFactory(ResultCallAdapterFactory.create())
-        client(okHttpClient)
-        baseUrl("")
     }.build()
 
-    // TODO Api Provider
+    @Provides
+    @Singleton
+    @ClovaRetrofit
+    fun provideClovaClient(okHttpClient: OkHttpClient, gson: Gson): Retrofit =
+        Retrofit.Builder().apply {
+            client(okHttpClient)
+            baseUrl(BuildConfig.CLOVA_OCR_DOCUMENT_BASEURL)
+            addConverterFactory(GsonConverterFactory.create(gson))
+            addCallAdapterFactory(ResultCallAdapterFactory.create())
+        }.build()
+
+    @Provides
+    fun provideMoneyMongApi(@MoneyMongRetrofit retrofit: Retrofit): MoneyMongApi =
+        retrofit.create(MoneyMongApi::class.java)
+
+    @Provides
+    fun provideClovaApi(@ClovaRetrofit retrofit: Retrofit): ClovaApi =
+        retrofit.create(ClovaApi::class.java)
 }
