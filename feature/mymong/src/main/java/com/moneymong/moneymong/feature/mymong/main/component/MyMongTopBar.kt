@@ -1,4 +1,4 @@
-package com.moneymong.moneymong.feature.mymong.component
+package com.moneymong.moneymong.feature.mymong.main.component
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
@@ -13,7 +13,7 @@ fun MyMongTopBar(
     modifier: Modifier = Modifier
 ) {
     Text(
-        modifier = modifier.padding(vertical = 8.dp),
+        modifier = modifier.padding(vertical = 16.dp),
         text = "마이몽",
         color = Gray10,
         style = Heading1

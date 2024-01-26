@@ -60,10 +60,10 @@ fun NavGraphBuilder.homeScreen(
 }
 
 @Composable
-internal fun rememberHomeNavController(navHostController: NavHostController = rememberNavController()) =
-    remember { HomeNavHostController(navHostController = navHostController) }
+internal fun rememberHomeNavigator(navHostController: NavHostController = rememberNavController()) =
+    remember { HomeNavigator(navHostController = navHostController) }
 
-internal class HomeNavHostController(
+internal class HomeNavigator(
     val navHostController: NavHostController
 ) {
     private val navBackStackEntry: NavBackStackEntry?

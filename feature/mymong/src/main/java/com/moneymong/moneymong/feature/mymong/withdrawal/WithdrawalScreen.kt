@@ -1,4 +1,4 @@
-package com.moneymong.moneymong.feature.mymong
+package com.moneymong.moneymong.feature.mymong.withdrawal
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -15,13 +15,14 @@ import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.moneymong.moneymong.common.ui.noRippleClickable
+import com.moneymong.moneymong.design_system.R
 import com.moneymong.moneymong.design_system.component.button.MDSButton
+import com.moneymong.moneymong.design_system.component.modal.MDSModal
 import com.moneymong.moneymong.design_system.theme.Body3
 import com.moneymong.moneymong.design_system.theme.Body4
 import com.moneymong.moneymong.design_system.theme.Gray02
@@ -31,14 +32,46 @@ import com.moneymong.moneymong.design_system.theme.Heading1
 import com.moneymong.moneymong.design_system.theme.MMHorizontalSpacing
 import com.moneymong.moneymong.design_system.theme.Red03
 import com.moneymong.moneymong.design_system.theme.White
-import com.moneymong.moneymong.feature.mymong.component.MyMongCheckBox
-import com.moneymong.moneymong.feature.mymong.component.MyMongWithdrawalTopBar
+import com.moneymong.moneymong.feature.mymong.component.MyMongInnerTopBar
+import com.moneymong.moneymong.feature.mymong.withdrawal.component.WithdrawalCheckBox
+import com.moneymong.moneymong.feature.mymong.withdrawal.component.WithdrawalErrorDialog
+import org.orbitmvi.orbit.compose.collectAsState
+import org.orbitmvi.orbit.compose.collectSideEffect
 
 @Composable
-fun MyMongWithdrawalScreen(
-    modifier: Modifier = Modifier
+fun WithdrawalScreen(
+    modifier: Modifier = Modifier,
+    viewModel: WithdrawalViewModel = hiltViewModel(),
+    navigateToLogin: () -> Unit,
+    navigateUp: () -> Unit
 ) {
-    var isAgreed by remember { mutableStateOf(false) }
+    val state by viewModel.collectAsState()
+
+    viewModel.collectSideEffect {
+        when (it) {
+            is WithdrawalSideEffect.NavigateToLogin -> navigateToLogin()
+            is WithdrawalSideEffect.NavigateUp -> Unit
+        }
+    }
+
+    if (state.visibleWithdrawalDialog) {
+        MDSModal(
+            icon = R.drawable.ic_warning_filled,
+            title = "정말 탈퇴 하시겠습니까?",
+            description = "탈퇴시 계정은 삭제되며 복구되지 않습니다",
+            negativeBtnText = "취소",
+            positiveBtnText = "확인",
+            onClickNegative = { viewModel.changeWithdrawalDialogVisibility(false) },
+            onClickPositive = viewModel::withdrawal
+        )
+    }
+
+    if (state.visibleErrorDialog) {
+        WithdrawalErrorDialog(
+            message = state.errorMessage,
+            onConfirm = { viewModel.changeErrorDialogVisibility(false) }
+        )
+    }
 
     Column(
         modifier = modifier
@@ -46,11 +79,14 @@ fun MyMongWithdrawalScreen(
             .background(color = White)
             .padding(horizontal = MMHorizontalSpacing),
     ) {
-        MyMongWithdrawalTopBar()
+        MyMongInnerTopBar(
+            title = "회원탈퇴",
+            onBackClick = navigateUp
+        )
         Spacer(modifier = Modifier.height(20.dp))
         ContentView(
-            isChecked = isAgreed,
-            onCheckedChange = { isAgreed = it }
+            isChecked = state.isAgreed,
+            onCheckedChange = viewModel::toggleIsAgreed
         )
         Spacer(modifier = Modifier.weight(1f))
         MDSButton(
@@ -58,8 +94,8 @@ fun MyMongWithdrawalScreen(
                 .fillMaxWidth()
                 .padding(bottom = 28.dp),
             text = "탈퇴하기",
-            onClick = { /* todo */ },
-            enabled = isAgreed
+            onClick = { viewModel.changeWithdrawalDialogVisibility(true) },
+            enabled = state.isAgreed
         )
     }
 }
@@ -68,7 +104,7 @@ fun MyMongWithdrawalScreen(
 private fun ContentView(
     modifier: Modifier = Modifier,
     isChecked: Boolean,
-    onCheckedChange: (Boolean) -> Unit,
+    onCheckedChange: () -> Unit,
 ) {
     Column(
         modifier = modifier
@@ -93,11 +129,11 @@ private fun ContentView(
                 .height(1.dp),
             color = Gray02
         )
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            MyMongCheckBox(
-                checked = isChecked,
-                onCheckedChange = onCheckedChange
-            )
+        Row(
+            modifier = Modifier.noRippleClickable { onCheckedChange() },
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            WithdrawalCheckBox(checked = isChecked)
             Spacer(modifier = Modifier.width(10.dp))
             Text(
                 text = "해당 내용에 동의하시겠습니까?",

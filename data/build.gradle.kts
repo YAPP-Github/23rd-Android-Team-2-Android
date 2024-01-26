@@ -9,9 +9,9 @@ android {
 }
 
 dependencies {
-    implementation(projects.core.common)
-    implementation(projects.core.network)
     implementation(projects.domain)
+    implementation(projects.core.network)
+    implementation(projects.core.common)
 
     implementation("androidx.core:core-ktx:1.9.0")
     implementation("androidx.appcompat:appcompat:1.6.1")

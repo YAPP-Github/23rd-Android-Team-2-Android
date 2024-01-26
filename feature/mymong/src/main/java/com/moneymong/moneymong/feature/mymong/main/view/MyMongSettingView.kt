@@ -1,5 +1,7 @@
-package com.moneymong.moneymong.feature.mymong.view
+package com.moneymong.moneymong.feature.mymong.main.view
 
+import android.content.pm.PackageManager
+import android.os.Build
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -18,8 +20,10 @@ import androidx.compose.material3.Divider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.moneymong.moneymong.common.ui.noRippleClickable
 import com.moneymong.moneymong.design_system.R
 import com.moneymong.moneymong.design_system.theme.Blue04
 import com.moneymong.moneymong.design_system.theme.Body4
@@ -28,12 +32,25 @@ import com.moneymong.moneymong.design_system.theme.Gray06
 import com.moneymong.moneymong.design_system.theme.Gray07
 import com.moneymong.moneymong.design_system.theme.Gray10
 import com.moneymong.moneymong.design_system.theme.White
-import com.moneymong.moneymong.feature.mymong.util.myMongRoundRectShadow
+import com.moneymong.moneymong.feature.mymong.main.util.myMongRoundRectShadow
 
 @Composable
 internal fun MyMongSettingView(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    navigateToTermsOfUse: () -> Unit,
+    navigateToPrivacyPolicy: () -> Unit,
+    navigateToWithdrawal: () -> Unit,
+    showLogoutDialog: () -> Unit,
 ) {
+    val context = LocalContext.current
+    val versionName = with(context) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            packageManager.getPackageInfo(packageName, PackageManager.PackageInfoFlags.of(0))
+        } else {
+            packageManager.getPackageInfo(packageName, 0)
+        }
+    }.versionName
+
     Column(modifier = modifier.fillMaxWidth()) {
         Text(
             text = "내 설정",
@@ -51,26 +68,41 @@ internal fun MyMongSettingView(
             SettingItem(
                 iconRes = R.drawable.ic_paper,
                 title = "서비스 이용약관",
-                onNavigateClick = { /* todo */ }
+                onNavigateClick = navigateToTermsOfUse
             )
             SettingDivider()
             SettingItem(
                 iconRes = R.drawable.ic_paper,
                 title = "개인정보 처리 방침",
-                onNavigateClick = { /* todo */ }
+                onNavigateClick = navigateToPrivacyPolicy
             )
             SettingDivider()
             SettingItem(
                 iconRes = R.drawable.ic_logout,
-                title = "로그아웃",
-                onNavigateClick = { /* todo */ }
+                title = "회원탈퇴",
+                onNavigateClick = navigateToWithdrawal
             )
             SettingDivider()
-            SettingItem(
-                iconRes = R.drawable.ic_delete,
-                title = "회원탈퇴",
-                onNavigateClick = { /* todo */ }
-            )
+            Row(
+                modifier = modifier
+                    .fillMaxWidth()
+                    .noRippleClickable { showLogoutDialog() },
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    modifier = Modifier.size(20.dp),
+                    painter = painterResource(id = R.drawable.ic_delete),
+                    tint = Gray07,
+                    contentDescription = null
+                )
+                Spacer(modifier = Modifier.width(12.dp))
+                Text(
+                    modifier = Modifier.weight(1f),
+                    text = "로그아웃",
+                    color = Gray06,
+                    style = Body4
+                )
+            }
             SettingDivider()
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -90,7 +122,7 @@ internal fun MyMongSettingView(
                     style = Body4
                 )
                 Text(
-                    text = "1.0.0",
+                    text = versionName,
                     color = Blue04,
                     style = Body4
                 )
