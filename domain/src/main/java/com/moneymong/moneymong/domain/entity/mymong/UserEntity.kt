@@ -1,6 +1,7 @@
 package com.moneymong.moneymong.domain.entity.mymong
 
 data class UserEntity(
+    val id: Long,
     val name: String,
     val email: String,
     val university: String,
