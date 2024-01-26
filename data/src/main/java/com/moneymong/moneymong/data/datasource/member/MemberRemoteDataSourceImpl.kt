@@ -2,6 +2,7 @@ package com.moneymong.moneymong.data.datasource.member
 
 import com.moneymong.moneymong.network.api.MoneyMongApi
 import com.moneymong.moneymong.network.response.member.InvitationCodeResponse
+import com.moneymong.moneymong.network.response.member.MemberListResponse
 import javax.inject.Inject
 
 class MemberRemoteDataSourceImpl @Inject constructor(
@@ -13,5 +14,8 @@ class MemberRemoteDataSourceImpl @Inject constructor(
 
     override suspend fun reInvitationCode(data: Long): Result<InvitationCodeResponse> {
         return moneyMongApi.reInvitationCode(data)
+    }
+    override suspend fun memberList(data: Long): Result<MemberListResponse> {
+        return moneyMongApi.MemberList(data)
     }
 }
