@@ -94,12 +94,16 @@ fun MemberScreen(
             is MemberSideEffect.UpdateMemberAuthor -> {
                 viewModel.updateMemberAuthor(it.agencyId, it.role, it.userId)
             }
+
+            is MemberSideEffect.BlockMemberAuthor -> {
+                viewModel.blockMemberAuthor(it.agencyId, it.userId)
+            }
         }
     }
 
     LaunchedEffect(key1 = Unit) {
-        viewModel.eventEmit(MemberSideEffect.GetInvitationCode(1)) //TODO - agency Id 연결
-        viewModel.eventEmit(MemberSideEffect.MemberList(1)) //TODO - agencyId 연결
+        viewModel.eventEmit(MemberSideEffect.GetInvitationCode(4)) //TODO - agency Id 연결
+        viewModel.eventEmit(MemberSideEffect.MemberList(4)) //TODO - agencyId 연결
         viewModel.eventEmit(MemberSideEffect.GetMyInfo(Unit)) //TODO - 마이몽 유저 정보 조회 연결
     }
 
@@ -156,6 +160,7 @@ fun MemberScreen(
         MemberDialogView(
             onDismissRequest = {
                 viewModel.onShowDialogChanged(false)
+                viewModel.eventEmit(MemberSideEffect.BlockMemberAuthor(4, state.vertClickedUserId))
             },
             onConfirmation = {
                 viewModel.onShowDialogChanged(false)
@@ -298,13 +303,9 @@ fun MemberScreen(
                             bottomSheetType.value = BottomSheetType.ROLE_ASSIGNMENT_EXPORT
                             viewModel.onVertClickChanged(false)
                             if (state.isStaffChecked && !state.isMemberChecked) {
-                                Log.d(
-                                    "state.vertClickedUserId1",
-                                    state.vertClickedUserId.toString()
-                                )
                                 viewModel.eventEmit(
                                     MemberSideEffect.UpdateMemberAuthor(
-                                        1,
+                                        4,
                                         "STAFF",
                                         state.vertClickedUserId
                                     )
@@ -312,13 +313,9 @@ fun MemberScreen(
                                 viewModel.isStaffCheckedChanged(false)
 
                             } else if (!state.isStaffChecked && state.isMemberChecked) {
-                                Log.d(
-                                    "state.vertClickedUserId2",
-                                    state.vertClickedUserId.toString()
-                                )
                                 viewModel.eventEmit(
                                     MemberSideEffect.UpdateMemberAuthor(
-                                        1,
+                                        4,
                                         "MEMBER",
                                         state.vertClickedUserId
                                     )
