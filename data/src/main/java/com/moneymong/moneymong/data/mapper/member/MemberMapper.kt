@@ -3,7 +3,9 @@ package com.moneymong.moneymong.data.mapper.member
 import com.moneymong.moneymong.domain.entity.member.AgencyCodeEntity
 import com.moneymong.moneymong.domain.entity.member.AgencyUserEntity
 import com.moneymong.moneymong.domain.entity.member.MemberListEntity
+import com.moneymong.moneymong.domain.param.member.MemberBlockParam
 import com.moneymong.moneymong.domain.param.member.UpdateAuthorParam
+import com.moneymong.moneymong.network.request.member.MemberBlockRequest
 import com.moneymong.moneymong.network.request.member.UpdateAuthorRequest
 import com.moneymong.moneymong.network.response.member.AgencyUser
 import com.moneymong.moneymong.network.response.member.InvitationCodeResponse
@@ -29,5 +31,9 @@ fun AgencyUser.toEntity() = AgencyUserEntity(
 
 fun UpdateAuthorParam.toRequest() = UpdateAuthorRequest(
     role = this.role,
+    userId = this.userId
+)
+
+fun MemberBlockParam.toRequest() = MemberBlockRequest(
     userId = this.userId
 )
