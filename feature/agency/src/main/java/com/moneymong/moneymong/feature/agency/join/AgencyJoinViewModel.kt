@@ -19,7 +19,7 @@ class AgencyJoinViewModel @Inject constructor(
     fun agencyCodeNumbers(agencyId: Long) = intent {
         val codeNumbers =  state.numbers.joinToString(separator = "")
         viewModelScope.launch {
-            useCase.invoke(AgencyJoinParam(agencyId, codeNumbers))
+            useCase.invoke(agencyId, AgencyJoinParam(codeNumbers))
                 .onSuccess {
                     if (it.certified) {
                         reduce {

@@ -6,7 +6,6 @@ import com.moneymong.moneymong.network.request.agency.AgencyJoinRequest
 import com.moneymong.moneymong.network.response.agency.AgencyJoinResponse
 
 fun AgencyJoinParam.toRequest() = AgencyJoinRequest(
-    agencyId = this.agencyId,
     invitationCode = this.invitationCode
 )
 
