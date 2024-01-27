@@ -1,6 +1,6 @@
 package com.moneymong.moneymong.data.datasource.mock
 
-import com.moneymong.moneymong.data.datasource.AgencyRemoteDataSource
+import com.moneymong.moneymong.data.datasource.agency.AgencyRemoteDataSource
 import com.moneymong.moneymong.network.api.MoneyMongApi
 import com.moneymong.moneymong.network.request.agency.AgencyJoinRequest
 import com.moneymong.moneymong.network.request.agency.AgencyRegisterRequest
@@ -24,9 +24,14 @@ class AgencyRemoteDataSourceMock @Inject constructor(
     }
 
     override suspend fun agencyCodeNumbers(
-       data: AgencyJoinRequest
+        agencyId: Long,
+        data: AgencyJoinRequest
     ): Result<AgencyJoinResponse> {
-        return moneyMongApi.agencyCodeNumbers("Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiUk9MRV9VU0VSIiwidXNlcklkIjozLCJpYXQiOjE3MDQ3MTU0NTEsImV4cCI6MTczNjI3MzA1MX0.2yYEy71Gz4YIz0DYzlx0glYMgZA0JAZs05jsVRvvQx4", data.agencyId, data.invitationCode)
+        return moneyMongApi.agencyCodeNumbers(
+            "Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiUk9MRV9VU0VSIiwidXNlcklkIjozLCJpYXQiOjE3MDQ3MTU0NTEsImV4cCI6MTczNjI3MzA1MX0.2yYEy71Gz4YIz0DYzlx0glYMgZA0JAZs05jsVRvvQx4",
+            agencyId,
+            data
+        )
     }
 
     private companion object {

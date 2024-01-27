@@ -8,10 +8,7 @@ import com.moneymong.moneymong.domain.param.agency.AgencyRegisterParam
 import kotlinx.coroutines.flow.Flow
 
 interface AgencyRepository {
-
     suspend fun registerAgency(param: AgencyRegisterParam): Result<Unit>
-
     fun getAgencies(): Flow<PagingData<AgencyGetEntity>>
-
-    suspend fun agencyCodeNumbers(data: AgencyJoinParam) : Result<AgencyJoinEntity>
+    suspend fun agencyCodeNumbers(agencyId : Long, data: AgencyJoinParam) : Result<AgencyJoinEntity>
 }

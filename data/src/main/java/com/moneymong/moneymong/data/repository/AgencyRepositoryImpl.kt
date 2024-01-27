@@ -4,7 +4,7 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.map
-import com.moneymong.moneymong.data.datasource.AgencyRemoteDataSource
+import com.moneymong.moneymong.data.datasource.agency.AgencyRemoteDataSource
 import com.moneymong.moneymong.data.mapper.agency.toEntity
 import com.moneymong.moneymong.data.mapper.agency.toRequest
 import com.moneymong.moneymong.data.pagingsource.AgencyPagingSource
@@ -37,8 +37,10 @@ class AgencyRepositoryImpl @Inject constructor(
     }
 
     override suspend fun agencyCodeNumbers(
+        agencyId: Long,
         data: AgencyJoinParam
     ): Result<AgencyJoinEntity> {
-        return agencyRemoteDataSource.agencyCodeNumbers(data.toRequest()).map { it.toEntity() }
+        return agencyRemoteDataSource.agencyCodeNumbers(agencyId, data.toRequest())
+            .map { it.toEntity() }
     }
 }
