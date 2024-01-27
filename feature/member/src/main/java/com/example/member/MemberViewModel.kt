@@ -4,8 +4,10 @@ import android.provider.ContactsContract.CommonDataKinds.StructuredName
 import android.util.Log
 import com.moneymong.moneymong.common.base.BaseViewModel
 import com.moneymong.moneymong.domain.entity.member.AgencyUserEntity
+import com.moneymong.moneymong.domain.param.member.MemberBlockParam
 import com.moneymong.moneymong.domain.param.member.UpdateAuthorParam
 import com.moneymong.moneymong.domain.usecase.member.GetMyInfoUseCase
+import com.moneymong.moneymong.domain.usecase.member.MemberBlockUseCase
 import com.moneymong.moneymong.domain.usecase.member.MemberInvitationCodeUseCase
 import com.moneymong.moneymong.domain.usecase.member.MemberListUseCase
 import com.moneymong.moneymong.domain.usecase.member.MemberReInvitationCodeUseCase
@@ -21,7 +23,8 @@ class MemberViewModel @Inject constructor(
     private val memberReInvitationCodeUseCase: MemberReInvitationCodeUseCase,
     private val memberListUseCase: MemberListUseCase,
     private val getMyInfoUseCase: GetMyInfoUseCase,
-    private val updateMemberAuthorUseCase: UpdateMemberAuthorUseCase
+    private val updateMemberAuthorUseCase: UpdateMemberAuthorUseCase,
+    private val memberBlockUseCase: MemberBlockUseCase
 ) : BaseViewModel<MemberState, MemberSideEffect>(MemberState()) {
 
     fun onVertClickChanged(vertClick: Boolean) = intent {
@@ -172,6 +175,16 @@ class MemberViewModel @Inject constructor(
             }
             .onFailure {
                 //TODO - 에러 화면
+            }
+    }
+
+    fun blockMemberAuthor(agencyId : Long, userId: Long) = intent{
+        memberBlockUseCase.invoke(agencyId, MemberBlockParam(userId))
+            .onSuccess {
+
+            }
+            .onFailure {
+
             }
     }
 
