@@ -40,7 +40,7 @@ fun MemberCardView(
     memberList: List<AgencyUserEntity>,
     memberMyInfoId: Long,
     memberMyInfoList: AgencyUserEntity,
-    memberMyInfoChanged: (Long, Int, String, String) -> Unit,
+    memberMyInfoChanged: (Long, Long, String, String) -> Unit,
     invitationCode: String,
     isReInvitationCode: (Long) -> Unit,
     onCopyChange: (Boolean) -> Unit,
@@ -53,7 +53,7 @@ fun MemberCardView(
         clipboard.setPrimaryClip(clip)
     }
 
-    memberList.find { it.userId.toLong() == memberMyInfoId }?.let {
+    memberList.find { it.userId == memberMyInfoId }?.let {
         memberMyInfoChanged(it.id, it.userId, it.nickname, it.agencyUserRole)
     }
 

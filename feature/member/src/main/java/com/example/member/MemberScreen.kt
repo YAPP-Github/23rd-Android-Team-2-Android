@@ -1,5 +1,6 @@
 package com.example.member
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -89,12 +90,16 @@ fun MemberScreen(
             is MemberSideEffect.GetMyInfo -> {
                 viewModel.getMyInfo(it.data)
             }
+
+            is MemberSideEffect.UpdateMemberAuthor -> {
+                viewModel.updateMemberAuthor(it.agencyId, it.role, it.userId)
+            }
         }
     }
 
     LaunchedEffect(key1 = Unit) {
-        viewModel.eventEmit(MemberSideEffect.GetInvitationCode(5)) //TODO
-        viewModel.eventEmit(MemberSideEffect.MemberList(5)) //TODO
+        viewModel.eventEmit(MemberSideEffect.GetInvitationCode(1)) //TODO - agency Id 연결
+        viewModel.eventEmit(MemberSideEffect.MemberList(1)) //TODO - agencyId 연결
         viewModel.eventEmit(MemberSideEffect.GetMyInfo(Unit)) //TODO - 마이몽 유저 정보 조회 연결
     }
 
@@ -136,11 +141,14 @@ fun MemberScreen(
 
     LaunchedEffect(state.roleChanged) {
         if (state.roleChanged) {
-            snackbarHostState.showSnackbar(
+            val result = snackbarHostState.showSnackbar(
                 message = "역할이 성공적으로 변경됐습니다.",
                 withDismissAction = true
             )
-
+            // 스낵바가 닫히면 onClick 상태를 false로 변경
+            if (result == SnackbarResult.Dismissed) {
+                viewModel.isRoleChanged(false)
+            }
         }
     }
 
@@ -156,8 +164,6 @@ fun MemberScreen(
     }
 
     if (state.vertClick) {
-        viewModel.isStaffCheckedChanged(false)
-        viewModel.isMemberCheckedChanged(false)
         viewModel.isRoleChanged(false)
 
         ModalBottomSheet(
@@ -165,6 +171,8 @@ fun MemberScreen(
                 coroutineScope.launch {
                     sheetState.hide()
                     viewModel.onVertClickChanged(false)
+                    viewModel.isStaffCheckedChanged(false)
+                    viewModel.isMemberCheckedChanged(false)
                     bottomSheetType.value = BottomSheetType.ROLE_ASSIGNMENT_EXPORT
                 }
             },
@@ -233,7 +241,7 @@ fun MemberScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .clickable {
-                                viewModel.isStaffCheckedChanged(!state.isStaffChecked)
+                                viewModel.isStaffCheckedChanged(true)
                                 viewModel.isMemberCheckedChanged(false)
                             }
                     ) {
@@ -257,8 +265,8 @@ fun MemberScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .clickable {
-                                viewModel.isMemberCheckedChanged(!state.isMemberChecked)
                                 viewModel.isStaffCheckedChanged(false)
+                                viewModel.isMemberCheckedChanged(true)
                             },
                     ) {
                         Text(
@@ -267,6 +275,7 @@ fun MemberScreen(
                             style = Body4,
                             color = if (state.isMemberChecked) Blue04 else Gray05
                         )
+
                         Icon(
                             modifier = Modifier
                                 .align(Alignment.CenterVertically)
@@ -284,10 +293,40 @@ fun MemberScreen(
                             coroutineScope.launch {
                                 sheetState.hide()
                             }
-                            val boolean = state.isStaffChecked || state.isMemberChecked
-                            viewModel.isRoleChanged(boolean)
+                            viewModel.isStaffCheckedChanged(false)
+                            viewModel.isMemberCheckedChanged(false)
                             bottomSheetType.value = BottomSheetType.ROLE_ASSIGNMENT_EXPORT
                             viewModel.onVertClickChanged(false)
+                            if (state.isStaffChecked && !state.isMemberChecked) {
+                                Log.d(
+                                    "state.vertClickedUserId1",
+                                    state.vertClickedUserId.toString()
+                                )
+                                viewModel.eventEmit(
+                                    MemberSideEffect.UpdateMemberAuthor(
+                                        1,
+                                        "STAFF",
+                                        state.vertClickedUserId
+                                    )
+                                ) //TODO
+                                viewModel.isStaffCheckedChanged(false)
+
+                            } else if (!state.isStaffChecked && state.isMemberChecked) {
+                                Log.d(
+                                    "state.vertClickedUserId2",
+                                    state.vertClickedUserId.toString()
+                                )
+                                viewModel.eventEmit(
+                                    MemberSideEffect.UpdateMemberAuthor(
+                                        1,
+                                        "MEMBER",
+                                        state.vertClickedUserId
+                                    )
+                                ) //TODO
+                                viewModel.isMemberCheckedChanged(false)
+
+                            }
+
                         },
                         text = "저장",
                         type = MDSButtonType.PRIMARY,
@@ -330,12 +369,15 @@ fun MemberScreen(
 
         MemberListView(
             modifier = Modifier.padding(top = 24.dp),
-            memberList = state.memberList,
-            memberMyInfoId = state.memberMyInfoId,
+            memberMyInfoList = state.memberMyInfoList,
             filteredMemberList = state.filteredMemberList,
             onIconClick = { vertClick -> viewModel.onVertClickChanged(vertClick) },
-            updateFilteredMemberList = {memberMyInfoId -> viewModel.updateFilteredMemberList(memberMyInfoId)},
-
+            updateFilteredMemberList = { memberMyInfoId ->
+                viewModel.updateFilteredMemberList(
+                    memberMyInfoId
+                )
+            },
+            vertClickedUserIdChanged = { userId -> viewModel.vertClickedUserIdChanged(userId) },
         )
 
         Box(

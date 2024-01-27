@@ -82,10 +82,10 @@ interface MoneyMongApi {
 
     //멤머 내 권한 변경
     @PATCH("api/v1/agencies/{agencyId}/agency-users/roles")
-    suspend fun UpdateMemberAuthor(
+    suspend fun updateMemberAuthor(
         @Path("agencyId") agencyId: Long,
-        @Header("Authorization") header: String = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiUk9MRV9VU0VSIiwidXNlcklkIjozLCJpYXQiOjE3MDQ3MTU0NTEsImV4cCI6MTczNjI3MzA1MX0.2yYEy71Gz4YIz0DYzlx0glYMgZA0JAZs05jsVRvvQx4",
-        @Body body: UpdateAuthorRequest
+        @Body body: UpdateAuthorRequest,
+        @Header("Authorization") header: String = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiUk9MRV9VU0VSIiwidXNlcklkIjozLCJpYXQiOjE3MDQ3MTU0NTEsImV4cCI6MTczNjI3MzA1MX0.2yYEy71Gz4YIz0DYzlx0glYMgZA0JAZs05jsVRvvQx4"
     ) : Result<Unit>
 
 
