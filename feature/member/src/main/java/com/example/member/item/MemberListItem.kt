@@ -28,10 +28,11 @@ import com.moneymong.moneymong.domain.entity.member.AgencyUserEntity
 @Composable
 fun MemberListItem(
     agencyUser: AgencyUserEntity,
-    memberMyInfoId: Long,
+    memberMyInfoList: AgencyUserEntity,
     onIconClick: () -> Unit,
+    vertClickedUserIdChanged: (Long) -> Unit,
 ) {
-    if (agencyUser.userId.toLong() != memberMyInfoId) {
+    if (agencyUser.userId != memberMyInfoList.userId) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -56,19 +57,20 @@ fun MemberListItem(
                 backgroundColor = if (agencyUser.agencyUserRole == "MEMBER") Mint03 else Blue04,
                 contentColor = White,
             )
-
             Spacer(Modifier.weight(1f))
 
-            Icon(
-                modifier = Modifier.clickable {
-                    onIconClick()
-                },
-                painter = painterResource(id = R.drawable.ic_more_vert),
-                contentDescription = null,
-                tint = Gray05
-            )
+            if (memberMyInfoList.agencyUserRole == "STAFF") {
+                Icon(
+                    modifier = Modifier.clickable {
+                        onIconClick()
+                        vertClickedUserIdChanged(agencyUser.userId)
+                    },
+                    painter = painterResource(id = R.drawable.ic_more_vert),
+                    contentDescription = null,
+                    tint = Gray05
+                )
+            }
         }
     }
-
 }
 

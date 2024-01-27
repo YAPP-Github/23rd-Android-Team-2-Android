@@ -1,6 +1,7 @@
 package com.moneymong.moneymong.data.datasource.member
 
 import com.moneymong.moneymong.network.api.MoneyMongApi
+import com.moneymong.moneymong.network.request.member.UpdateAuthorRequest
 import com.moneymong.moneymong.network.response.member.InvitationCodeResponse
 import com.moneymong.moneymong.network.response.member.MemberListResponse
 import javax.inject.Inject
@@ -17,5 +18,9 @@ class MemberRemoteDataSourceImpl @Inject constructor(
     }
     override suspend fun memberList(data: Long): Result<MemberListResponse> {
         return moneyMongApi.MemberList(data)
+    }
+
+    override suspend fun updateMemberAuthor(agencyId : Long, data: UpdateAuthorRequest): Result<Unit> {
+        return moneyMongApi.updateMemberAuthor(agencyId,data)
     }
 }

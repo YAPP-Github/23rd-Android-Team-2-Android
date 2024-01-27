@@ -27,15 +27,14 @@ import com.moneymong.moneymong.domain.entity.member.AgencyUserEntity
 @Composable
 fun MemberListView(
     modifier: Modifier = Modifier,
-    memberList: List<AgencyUserEntity>,
-    memberMyInfoId: Long,
-    filteredMemberList : List<AgencyUserEntity>,
+    memberMyInfoList: AgencyUserEntity,
+    filteredMemberList: List<AgencyUserEntity>,
     onIconClick: (Boolean) -> Unit,
-    updateFilteredMemberList : (Long) -> Unit,
-
+    updateFilteredMemberList: (Long) -> Unit,
+    vertClickedUserIdChanged: (Long) -> Unit,
 ) {
 
-    updateFilteredMemberList(memberMyInfoId)
+    updateFilteredMemberList(memberMyInfoList.userId)
 
     Column(
         modifier = modifier
@@ -74,18 +73,20 @@ fun MemberListView(
                 verticalArrangement = Arrangement.spacedBy(10.dp)
             ) {
                 items(
-                    items = memberList,
+                    items = filteredMemberList,
                     itemContent = { filteredMemberList ->
                         MemberListItem(
                             filteredMemberList,
-                            memberMyInfoId = memberMyInfoId,
+                            memberMyInfoList = memberMyInfoList,
                             onIconClick = {
                                 onIconClick(true)
-                            }
+                            },
+                            vertClickedUserIdChanged = vertClickedUserIdChanged
                         )
                     }
                 )
             }
         }
     }
+
 }
