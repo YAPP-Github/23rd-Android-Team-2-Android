@@ -178,14 +178,39 @@ class MemberViewModel @Inject constructor(
             }
     }
 
-    fun blockMemberAuthor(agencyId : Long, userId: Long) = intent{
+    fun blockMemberAuthor(agencyId: Long, userId: Long) = intent {
         memberBlockUseCase.invoke(agencyId, MemberBlockParam(userId))
             .onSuccess {
-
+                blockedFilteredMemberList(userId)
+                blockedMemberList(userId)
             }
             .onFailure {
-
+                //TODO - 에러화면
             }
+    }
+
+    private fun blockedFilteredMemberList(userId: Long) = intent {
+        val currentMemberList = state.filteredMemberList
+        val updateBlockedMemberList = currentMemberList.filterNot { member ->
+            member.userId == userId
+        }
+        reduce {
+            state.copy(
+                filteredMemberList = updateBlockedMemberList,
+            )
+        }
+    }
+
+    private fun blockedMemberList(userId: Long) = intent {
+        val currentMemberList = state.memberList
+        val updateBlockedMemberList = currentMemberList.filterNot { member ->
+            member.userId == userId
+        }
+        reduce {
+            state.copy(
+                memberList = updateBlockedMemberList,
+            )
+        }
     }
 
     private fun updateFilteredMemberList(userId: Long, role: String) = intent {
