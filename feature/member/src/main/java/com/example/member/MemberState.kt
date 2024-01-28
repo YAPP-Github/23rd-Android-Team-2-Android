@@ -14,11 +14,11 @@ data class MemberState(
     val isInvitationCode: String = "",
     val memberList: List<AgencyUserEntity> = emptyList(),
     val memberMyInfoId: Long = 0,
-    val memberMyInfoList: AgencyUserEntity = AgencyUserEntity(
+    val memberMyInfo: AgencyUserEntity = AgencyUserEntity(
         id = 0L,
         userId = 0,
         nickname = "",
         agencyUserRole = ""
     ),
-    val filteredMemberList : List<AgencyUserEntity> = emptyList()
+    val filteredMemberList: List<AgencyUserEntity> = emptyList()
 ) : State

@@ -74,10 +74,10 @@ interface MoneyMongApi {
 
     //멤버 목록 조회 기능 구현
     @GET("api/v1/agencies/{agencyId}/agency-users")
-    suspend fun MemberList(
+    suspend fun getMemberLists(
         @Path("agencyId") agencyId: Long,
         @Header("Authorization") header: String = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiUk9MRV9VU0VSIiwidXNlcklkIjozLCJpYXQiOjE3MDQ3MTU0NTEsImV4cCI6MTczNjI3MzA1MX0.2yYEy71Gz4YIz0DYzlx0glYMgZA0JAZs05jsVRvvQx4"
-    ) : Result<MemberListResponse>
+    ): Result<MemberListResponse>
 
 
 }

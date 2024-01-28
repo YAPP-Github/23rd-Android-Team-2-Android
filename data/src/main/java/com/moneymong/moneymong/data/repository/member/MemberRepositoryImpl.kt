@@ -18,7 +18,7 @@ class MemberRepositoryImpl @Inject constructor(
         return memberRemoteDataSource.reInvitationCode(agencyId).map { it.toEntity() }
     }
 
-    override suspend fun memberList(agencyId: Long): Result<MemberListEntity> {
-        return memberRemoteDataSource.memberList(agencyId).map { it.toEntity() }
+    override suspend fun getMemberLists(agencyId: Long): Result<MemberListEntity> {
+        return memberRemoteDataSource.getMemberLists(agencyId).map { it.toEntity() }
     }
 }

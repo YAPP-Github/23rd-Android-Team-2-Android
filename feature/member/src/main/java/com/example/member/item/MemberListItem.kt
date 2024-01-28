@@ -28,46 +28,43 @@ import com.moneymong.moneymong.domain.entity.member.AgencyUserEntity
 @Composable
 fun MemberListItem(
     agencyUser: AgencyUserEntity,
-    memberMyInfoId: Long,
     onIconClick: () -> Unit,
 ) {
-    if (agencyUser.userId.toLong() != memberMyInfoId) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(44.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Image(
-                modifier = Modifier.size(44.dp),
-                painter = painterResource(id = R.drawable.img_profile),
-                contentDescription = null
-            )
-            Text(
-                modifier = Modifier.padding(start = 8.dp),
-                text = agencyUser.nickname,
-                style = Body4,
-                color = Gray10
-            )
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(44.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Image(
+            modifier = Modifier.size(44.dp),
+            painter = painterResource(id = R.drawable.img_profile),
+            contentDescription = null
+        )
+        Text(
+            modifier = Modifier.padding(start = 8.dp),
+            text = agencyUser.nickname,
+            style = Body4,
+            color = Gray10
+        )
 
-            MDSTag(
-                modifier = Modifier.padding(start = 6.dp),
-                text = if (agencyUser.agencyUserRole == "MEMBER") "일반 멤버" else "운영진",
-                backgroundColor = if (agencyUser.agencyUserRole == "MEMBER") Mint03 else Blue04,
-                contentColor = White,
-            )
+        MDSTag(
+            modifier = Modifier.padding(start = 6.dp),
+            text = if (agencyUser.agencyUserRole == "MEMBER") "일반 멤버" else "운영진",
+            backgroundColor = if (agencyUser.agencyUserRole == "MEMBER") Mint03 else Blue04,
+            contentColor = White,
+        )
 
-            Spacer(Modifier.weight(1f))
+        Spacer(Modifier.weight(1f))
 
-            Icon(
-                modifier = Modifier.clickable {
-                    onIconClick()
-                },
-                painter = painterResource(id = R.drawable.ic_more_vert),
-                contentDescription = null,
-                tint = Gray05
-            )
-        }
+        Icon(
+            modifier = Modifier.clickable {
+                onIconClick()
+            },
+            painter = painterResource(id = R.drawable.ic_more_vert),
+            contentDescription = null,
+            tint = Gray05
+        )
     }
 
 }
