@@ -1,6 +1,5 @@
 package com.example.member
 
-import android.provider.ContactsContract.CommonDataKinds.StructuredName
 import android.util.Log
 import com.moneymong.moneymong.common.base.BaseViewModel
 import com.moneymong.moneymong.domain.entity.member.AgencyUserEntity
@@ -181,15 +180,15 @@ class MemberViewModel @Inject constructor(
     fun blockMemberAuthor(agencyId: Long, userId: Long) = intent {
         memberBlockUseCase.invoke(MemberBlockParam(agencyId, userId))
             .onSuccess {
-                blockedFilteredMemberList(userId)
-                blockedMemberList(userId)
+                getBlockedFilteredMemberList(userId)
+                getBlockedMemberList(userId)
             }
             .onFailure {
                 //TODO - 에러화면
             }
     }
 
-    private fun blockedFilteredMemberList(userId: Long) = intent {
+    private fun getBlockedFilteredMemberList(userId: Long) = intent {
         val currentMemberList = state.filteredMemberList
         val updateBlockedMemberList = currentMemberList.filterNot { member ->
             member.userId == userId
@@ -201,7 +200,7 @@ class MemberViewModel @Inject constructor(
         }
     }
 
-    private fun blockedMemberList(userId: Long) = intent {
+    private fun getBlockedMemberList(userId: Long) = intent {
         val currentMemberList = state.memberList
         val updateBlockedMemberList = currentMemberList.filterNot { member ->
             member.userId == userId
