@@ -9,7 +9,7 @@ class MemberListUseCase @Inject constructor(
     private val memberRepository: MemberRepository
 ) : BaseUseCase<Long, Result<MemberListEntity>>(){
 
-    override suspend fun invoke(data: Long): Result<MemberListEntity> {
-        return memberRepository.memberList(data)
+    override suspend fun invoke(agencyId: Long): Result<MemberListEntity> {
+        return memberRepository.memberList(agencyId)
     }
 }
