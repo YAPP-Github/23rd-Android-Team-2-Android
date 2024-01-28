@@ -182,7 +182,7 @@ fun MemberScreen(
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(start = 20.dp, end = 20.dp, bottom = 24.dp)
+                        .padding(horizontal = 20.dp)
                         .windowInsetsPadding(BottomSheetDefaults.windowInsets)
                 ) {
                     Row(
