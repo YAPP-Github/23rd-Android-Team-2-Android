@@ -21,7 +21,7 @@ class MemberViewModel @Inject constructor(
     fun onVertClickChanged(vertClick: Boolean) = intent {
         reduce {
             state.copy(
-                vertClick = vertClick
+                visibleBottomSheet = vertClick
             )
         }
     }
@@ -78,10 +78,10 @@ class MemberViewModel @Inject constructor(
         CoroutineScope(Dispatchers.IO).launch {
             memberInvitationCodeUseCase.invoke(agencyId)
                 .onSuccess {
-                    Log.d("isInvitationCode", it.code)
+                    Log.d("invitationCode", it.code)
                     reduce {
                         state.copy(
-                            isInvitationCode = it.code
+                            invitationCode = it.code
                         )
                     }
                 }
@@ -98,7 +98,7 @@ class MemberViewModel @Inject constructor(
                     Log.d("isReInvitationCode", it.code)
                     reduce {
                         state.copy(
-                            isInvitationCode = it.code,
+                            invitationCode = it.code,
                             onReissueChange = true
                         )
                     }
