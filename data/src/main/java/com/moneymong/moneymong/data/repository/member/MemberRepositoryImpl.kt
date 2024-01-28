@@ -29,7 +29,8 @@ class MemberRepositoryImpl @Inject constructor(
         return memberRemoteDataSource.updateMemberAuthor(agencyId, data.toRequest())
     }
 
-    override suspend fun blockMemberAuthor(agencyId: Long, data: MemberBlockParam): Result<Unit> {
-        return memberRemoteDataSource.blockMemberAuthor(agencyId, data.toRequest())
+    override suspend fun blockMemberAuthor(data: MemberBlockParam): Result<Unit> {
+        return memberRemoteDataSource.blockMemberAuthor(data.agencyId, data.toRequest())
+
     }
 }

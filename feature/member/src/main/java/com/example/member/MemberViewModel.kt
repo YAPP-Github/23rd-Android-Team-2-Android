@@ -179,7 +179,7 @@ class MemberViewModel @Inject constructor(
     }
 
     fun blockMemberAuthor(agencyId: Long, userId: Long) = intent {
-        memberBlockUseCase.invoke(agencyId, MemberBlockParam(userId))
+        memberBlockUseCase.invoke(MemberBlockParam(agencyId, userId))
             .onSuccess {
                 blockedFilteredMemberList(userId)
                 blockedMemberList(userId)
