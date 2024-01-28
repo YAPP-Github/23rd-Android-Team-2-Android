@@ -27,11 +27,9 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Alignment.Companion.BottomCenter
 import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.moneymong.moneymong.design_system.R
@@ -92,9 +90,9 @@ fun MemberScreen(
     }
 
 
-    // vertClick 상태가 변경될 때 바텀 시트의 상태를 제어
-    LaunchedEffect(key1 = state.vertClick) {
-        if (state.vertClick) {
+    // visibleBottomSheet 상태가 변경될 때 바텀 시트의 상태를 제어
+    LaunchedEffect(key1 = state.visibleBottomSheet) {
+        if (state.visibleBottomSheet) {
             coroutineScope.launch {
                 sheetState.show()
             }
@@ -104,7 +102,7 @@ fun MemberScreen(
     LaunchedEffect(key1 = state.onCopyClick) {
         if (state.onCopyClick) {
             val result = snackbarHostState.showSnackbar(
-                message = "초대코드 ${state.isInvitationCode}이 복사되었습니다",
+                message = "초대코드 ${state.invitationCode}이 복사되었습니다",
                 withDismissAction = true
             )
             // 스낵바가 닫히면 onClick 상태를 false로 변경
@@ -148,7 +146,7 @@ fun MemberScreen(
         )
     }
 
-    if (state.vertClick) {
+    if (state.visibleBottomSheet) {
         viewModel.isStaffCheckedChanged(false)
         viewModel.isMemberCheckedChanged(false)
         viewModel.isRoleChanged(false)
@@ -305,7 +303,7 @@ fun MemberScreen(
         )
         MemberCardView(
             modifier = Modifier,
-            invitationCode = state.isInvitationCode,
+            invitationCode = state.invitationCode,
             isReInvitationCode = { viewModel.eventEmit(MemberSideEffect.getReInvitationCode(it)) }, //TODO
             onCopyChange = { onCopyClick -> viewModel.onCopyClickChanged(onCopyClick) },
             isUserAuthor = state.isUserAuthor
