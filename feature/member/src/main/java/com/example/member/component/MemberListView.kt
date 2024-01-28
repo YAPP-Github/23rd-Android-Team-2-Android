@@ -29,11 +29,10 @@ fun MemberListView(
     modifier: Modifier = Modifier,
     memberList: List<AgencyUserEntity>,
     memberMyInfoId: Long,
-    filteredMemberList : List<AgencyUserEntity>,
+    filteredMemberList: List<AgencyUserEntity>,
     onIconClick: (Boolean) -> Unit,
-    updateFilteredMemberList : (Long) -> Unit,
-
-) {
+    updateFilteredMemberList: (Long) -> Unit,
+    ) {
 
     updateFilteredMemberList(memberMyInfoId)
 
@@ -76,13 +75,14 @@ fun MemberListView(
                 items(
                     items = memberList,
                     itemContent = { filteredMemberList ->
-                        MemberListItem(
-                            filteredMemberList,
-                            memberMyInfoId = memberMyInfoId,
-                            onIconClick = {
-                                onIconClick(true)
-                            }
-                        )
+                        if (filteredMemberList.userId.toLong() != memberMyInfoId) {
+                            MemberListItem(
+                                filteredMemberList,
+                                onIconClick = {
+                                    onIconClick(true)
+                                }
+                            )
+                        }
                     }
                 )
             }

@@ -6,5 +6,5 @@ import com.moneymong.moneymong.network.response.member.MemberListResponse
 interface MemberRemoteDataSource {
     suspend fun getInvitationCode(agencyId: Long): Result<InvitationCodeResponse>
     suspend fun reInvitationCode(agencyId: Long): Result<InvitationCodeResponse>
-    suspend fun memberList(agencyId: Long) : Result<MemberListResponse>
+    suspend fun getMemberLists(agencyId: Long): Result<MemberListResponse>
 }

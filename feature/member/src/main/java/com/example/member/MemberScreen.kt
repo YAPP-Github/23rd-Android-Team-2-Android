@@ -82,8 +82,8 @@ fun MemberScreen(
                 viewModel.getReInvitationCode(it.agencyId)
             }
 
-            is MemberSideEffect.MemberList -> {
-                viewModel.getMemberList(it.agencyId)
+            is MemberSideEffect.GetMemberLists -> {
+                viewModel.getMemberLists(it.agencyId)
             }
 
             is MemberSideEffect.GetMyInfo -> {
@@ -94,7 +94,7 @@ fun MemberScreen(
 
     LaunchedEffect(key1 = Unit) {
         viewModel.eventEmit(MemberSideEffect.GetInvitationCode(5)) //TODO
-        viewModel.eventEmit(MemberSideEffect.MemberList(5)) //TODO
+        viewModel.eventEmit(MemberSideEffect.GetMemberLists(5)) //TODO
         viewModel.eventEmit(MemberSideEffect.GetMyInfo(Unit)) //TODO - 마이몽 유저 정보 조회 연결
     }
 
@@ -182,7 +182,7 @@ fun MemberScreen(
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 20.dp)
+                        .padding(start = 20.dp, end = 20.dp, bottom = 24.dp)
                         .windowInsetsPadding(BottomSheetDefaults.windowInsets)
                 ) {
                     Row(
@@ -226,7 +226,7 @@ fun MemberScreen(
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 20.dp)
+                        .padding(start = 20.dp, end = 20.dp, bottom = 24.dp)
                         .windowInsetsPadding(BottomSheetDefaults.windowInsets)
                 ) {
                     Row(
@@ -314,7 +314,7 @@ fun MemberScreen(
             modifier = Modifier,
             memberList = state.memberList,
             memberMyInfoId = state.memberMyInfoId,
-            memberMyInfoList = state.memberMyInfoList,
+            memberMyInfo = state.memberMyInfo,
             memberMyInfoChanged = { id, userId, nickname, agencyUserRole ->
                 viewModel.memberMyInfoChanged(
                     id,
@@ -334,9 +334,12 @@ fun MemberScreen(
             memberMyInfoId = state.memberMyInfoId,
             filteredMemberList = state.filteredMemberList,
             onIconClick = { vertClick -> viewModel.onVertClickChanged(vertClick) },
-            updateFilteredMemberList = {memberMyInfoId -> viewModel.updateFilteredMemberList(memberMyInfoId)},
-
-        )
+            updateFilteredMemberList = { memberMyInfoId ->
+                viewModel.updateFilteredMemberList(
+                    memberMyInfoId
+                )
+            },
+            )
 
         Box(
             modifier = Modifier

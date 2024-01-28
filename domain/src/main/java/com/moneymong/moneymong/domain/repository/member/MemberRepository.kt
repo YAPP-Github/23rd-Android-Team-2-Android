@@ -6,5 +6,5 @@ import com.moneymong.moneymong.domain.entity.member.MemberListEntity
 interface MemberRepository {
     suspend fun getInvitationCode(agencyId: Long): Result<AgencyCodeEntity>
     suspend fun reInvitationCode(agencyId: Long): Result<AgencyCodeEntity>
-    suspend fun memberList(agencyId: Long) : Result<MemberListEntity>
+    suspend fun getMemberLists(agencyId: Long) : Result<MemberListEntity>
 }

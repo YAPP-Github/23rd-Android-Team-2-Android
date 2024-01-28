@@ -1,6 +1,5 @@
 package com.example.member
 
-import android.provider.ContactsContract.CommonDataKinds.StructuredName
 import android.util.Log
 import com.moneymong.moneymong.common.base.BaseViewModel
 import com.moneymong.moneymong.domain.entity.member.AgencyUserEntity
@@ -12,7 +11,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.reduce
 import javax.inject.Inject
-import kotlin.math.log
 
 @HiltViewModel
 class MemberViewModel @Inject constructor(
@@ -78,21 +76,23 @@ class MemberViewModel @Inject constructor(
         }
     }
 
-    fun memberMyInfoChanged(id : Long, userId : Int, nickname: String, agencyUserRole: String ) = intent{
-        reduce {
-            state.copy(
-                memberMyInfoList = AgencyUserEntity(id, userId, nickname, agencyUserRole)
-            )
+    fun memberMyInfoChanged(id: Long, userId: Int, nickname: String, agencyUserRole: String) =
+        intent {
+            reduce {
+                state.copy(
+                    memberMyInfo = AgencyUserEntity(id, userId, nickname, agencyUserRole)
+                )
+            }
         }
-    }
 
-    fun updateFilteredMemberList(memberMyInfoId : Long ) = intent {
-        val updatedFilteredMemberList = state.memberList.filterNot { it.userId.toLong() == memberMyInfoId }
+    fun updateFilteredMemberList(memberMyInfoId: Long) = intent {
+        val updatedFilteredMemberList =
+            state.memberList.filterNot { it.userId.toLong() == memberMyInfoId }
 
         reduce {
             state.copy(filteredMemberList = updatedFilteredMemberList)
         }
-        Log.d("filteredMemberList" , state.filteredMemberList.toString())
+        Log.d("filteredMemberList", state.filteredMemberList.toString())
     }
 
     fun getInvitationCode(agencyId: Long) = intent {
@@ -125,7 +125,7 @@ class MemberViewModel @Inject constructor(
             }
     }
 
-    fun getMemberList(agencyId: Long) = intent {
+    fun getMemberLists(agencyId: Long) = intent {
         memberListUseCase.invoke(agencyId)
             .onSuccess {
                 reduce {
@@ -139,7 +139,7 @@ class MemberViewModel @Inject constructor(
             }
     }
 
-    fun getMyInfo(data : Unit) = intent{
+    fun getMyInfo(data: Unit) = intent {
         getMyInfoUseCase.invoke(Unit)
             .onSuccess {
                 reduce {

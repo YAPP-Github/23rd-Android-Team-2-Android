@@ -15,7 +15,8 @@ class MemberRemoteDataSourceImpl @Inject constructor(
     override suspend fun reInvitationCode(agencyId: Long): Result<InvitationCodeResponse> {
         return moneyMongApi.reInvitationCode(agencyId)
     }
-    override suspend fun memberList(agencyId: Long): Result<MemberListResponse> {
-        return moneyMongApi.MemberList(agencyId)
+
+    override suspend fun getMemberLists(agencyId: Long): Result<MemberListResponse> {
+        return moneyMongApi.getMemberLists(agencyId)
     }
 }
