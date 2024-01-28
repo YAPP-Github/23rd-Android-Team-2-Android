@@ -10,5 +10,5 @@ interface MemberRepository {
     suspend fun reInvitationCode(agencyId: Long): Result<AgencyCodeEntity>
     suspend fun memberList(agencyId: Long) : Result<MemberListEntity>
     suspend fun updateMemberAuthor(agencyId : Long, data : UpdateAuthorParam) : Result<Unit>
-    suspend fun blockMemberAuthor(agencyId: Long, data: MemberBlockParam) : Result<Unit>
+    suspend fun blockMemberAuthor(data: MemberBlockParam) : Result<Unit>
 }
