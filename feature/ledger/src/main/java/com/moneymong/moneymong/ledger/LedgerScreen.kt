@@ -43,11 +43,11 @@ import com.moneymong.moneymong.design_system.error.ErrorScreen
 import com.moneymong.moneymong.design_system.theme.Mint02
 import com.moneymong.moneymong.design_system.theme.Mint03
 import com.moneymong.moneymong.design_system.theme.White
-import com.moneymong.moneymong.ledger.view.LedgerStaffEmptyView
 import com.moneymong.moneymong.ledger.view.LedgerAgencyEmptyView
-import com.moneymong.moneymong.ledger.view.LedgerDefaultView
 import com.moneymong.moneymong.ledger.view.LedgerAgencySelectBottomSheet
+import com.moneymong.moneymong.ledger.view.LedgerDefaultView
 import com.moneymong.moneymong.ledger.view.LedgerMemberEmptyView
+import com.moneymong.moneymong.ledger.view.LedgerStaffEmptyView
 import com.moneymong.moneymong.ledger.view.LedgerTab
 import com.moneymong.moneymong.ledger.view.LedgerTabRowView
 import com.moneymong.moneymong.ledger.view.LedgerTopbarView
@@ -250,7 +250,9 @@ fun LedgerScreen(
                                 }
                             }
                         } else {
-                            MemberScreen()
+                            Box(modifier = modifier.fillMaxSize()) {
+                                MemberScreen()
+                            }
                         }
                     }
                 }
