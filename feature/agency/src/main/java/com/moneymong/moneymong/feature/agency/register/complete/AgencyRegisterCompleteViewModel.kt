@@ -10,11 +10,9 @@ class AgencyRegisterCompleteViewModel @Inject constructor() :
         AgencyRegisterCompleteState
     ) {
 
-    fun onNavigateLedgerButtonClicked() {
-        eventEmit(AgencyRegisterCompleteSideEffect.NavigateToLedger)
-    }
+    fun navigateToLedger() =
+        eventEmit(sideEffect = AgencyRegisterCompleteSideEffect.NavigateToLedger)
 
-    fun onBackButtonClicked() {
-        eventEmit(AgencyRegisterCompleteSideEffect.NavigateToAgencySearch)
-    }
+    fun navigateToAgencySearch() =
+        eventEmit(sideEffect = AgencyRegisterCompleteSideEffect.NavigateToAgencySearch)
 }

@@ -18,8 +18,23 @@ class AgencyRegisterViewModel @Inject constructor(
     private val registerAgencyUseCase: RegisterAgencyUseCase
 ) : BaseViewModel<AgencyRegisterState, AgencyRegisterSideEffect>(AgencyRegisterState()) {
 
+    fun navigateUp() = eventEmit(sideEffect = AgencyRegisterSideEffect.NavigateUp)
+
+    fun registerAgency() = intent {
+        registerAgencyUseCase(
+            data = AgencyRegisterParam(
+                name = state.agencyName.text,
+                type = state.agencyType.toParam()
+            )
+        ).onSuccess {
+            postSideEffect(AgencyRegisterSideEffect.NavigateToComplete)
+        }.onFailure {
+            // TODO: 에러 처라
+        }
+    }
+
     @OptIn(OrbitExperimental::class)
-    fun onAgencyNameChanged(agencyName: TextFieldValue) = blockingIntent {
+    fun changeAgencyName(agencyName: TextFieldValue) = blockingIntent {
         reduce {
             state.copy(
                 agencyName = agencyName
@@ -27,8 +42,7 @@ class AgencyRegisterViewModel @Inject constructor(
         }
     }
 
-
-    fun onAgencyTypeChanged(agencyType: AgencyType) = intent {
+    fun changeAgencyType(agencyType: AgencyType) = intent {
         reduce {
             state.copy(
                 agencyType = agencyType
@@ -44,29 +58,11 @@ class AgencyRegisterViewModel @Inject constructor(
         }
     }
 
-    fun onRegisterButtonClicked() = intent {
-        registerAgencyUseCase(
-            data = AgencyRegisterParam(
-                name = state.agencyName.text,
-                type = state.agencyType.toParam()
-            )
-        ).onSuccess {
-            postSideEffect(AgencyRegisterSideEffect.NavigateToComplete)
-        }.onFailure {
-            // TODO: 에러 처라
-        }
-    }
-
-
-    fun changeVisibleDialog(visible: Boolean) = intent {
+    fun changeOutDialogVisibility(visible: Boolean) = intent {
         reduce {
             state.copy(
                 visibleOutDialog = visible
             )
         }
-    }
-
-    fun onDialogPositiveButtonClicked() {
-        eventEmit(AgencyRegisterSideEffect.NavigateUp)
     }
 }

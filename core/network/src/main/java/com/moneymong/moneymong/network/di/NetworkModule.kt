@@ -79,7 +79,6 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideAgencyJoinApi(retrofit: Retrofit): MoneyMongApi {
-        return retrofit.create(MoneyMongApi::class.java)
-    }
+    fun provideMoneyMongApi(retrofit: Retrofit): MoneyMongApi =
+        retrofit.create(MoneyMongApi::class.java)
 }

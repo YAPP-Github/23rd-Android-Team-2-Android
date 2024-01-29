@@ -113,7 +113,7 @@ fun AgencySearchScreen(
                 Spacer(modifier = Modifier.height(8.dp))
             }
             MDSFloatingActionButton(
-                onClick = { viewModel.changeVisibleBottomSheet(true) },
+                onClick = navigateToRegister,
                 iconResource = R.drawable.ic_plus_default,
                 containerColor = Red03
             )

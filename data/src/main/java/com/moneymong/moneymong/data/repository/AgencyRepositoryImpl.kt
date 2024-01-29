@@ -27,7 +27,7 @@ class AgencyRepositoryImpl @Inject constructor(
 
     override fun getAgencies(): Flow<PagingData<AgencyGetEntity>> {
         return Pager(
-            config = PagingConfig(pageSize = 10),
+            config = PagingConfig(pageSize = 10, initialLoadSize = 10),
             pagingSourceFactory = { AgencyPagingSource(agencyRemoteDataSource) }
         ).flow.map { pagingData ->
             pagingData.map { response ->
