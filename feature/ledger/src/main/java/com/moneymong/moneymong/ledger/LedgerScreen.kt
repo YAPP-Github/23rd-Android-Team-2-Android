@@ -82,12 +82,15 @@ fun LedgerScreen(
             is LedgerSideEffect.LedgerNavigateToLedgerDetail -> {
                 navigateToLedgerDetail(null, it.id)
             }
+
             is LedgerSideEffect.LedgerNavigateToOCR -> {
                 navigateToOCR(null)
             }
+
             is LedgerSideEffect.LedgerOpenSheet -> {
                 viewModel.onChangeSheetState(true)
             }
+
             is LedgerSideEffect.LedgerCloseSheet -> {
                 viewModel.onChangeSheetState(false)
             }
@@ -230,7 +233,9 @@ fun LedgerScreen(
                             }
                         }
                     } else {
-                        MemberScreen()
+                        Box(modifier = modifier.fillMaxSize()) {
+                            MemberScreen()
+                        }
                     }
                 }
             }
