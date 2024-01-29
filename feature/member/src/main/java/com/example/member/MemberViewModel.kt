@@ -180,15 +180,15 @@ class MemberViewModel @Inject constructor(
     fun blockMemberAuthor(agencyId: Long, userId: Long) = intent {
         memberBlockUseCase.invoke(MemberBlockParam(agencyId, userId))
             .onSuccess {
-                getBlockedFilteredMemberList(userId)
-                getBlockedMemberList(userId)
+                updateFilteredMemberListByBlock(userId)
+                updateMemberListByBlock(userId)
             }
             .onFailure {
                 //TODO - 에러화면
             }
     }
 
-    private fun getBlockedFilteredMemberList(userId: Long) = intent {
+    private fun updateFilteredMemberListByBlock(userId: Long) = intent {
         val currentMemberList = state.filteredMemberList
         val updateBlockedMemberList = currentMemberList.filterNot { member ->
             member.userId == userId
@@ -200,7 +200,7 @@ class MemberViewModel @Inject constructor(
         }
     }
 
-    private fun getBlockedMemberList(userId: Long) = intent {
+    private fun updateMemberListByBlock(userId: Long) = intent {
         val currentMemberList = state.memberList
         val updateBlockedMemberList = currentMemberList.filterNot { member ->
             member.userId == userId
