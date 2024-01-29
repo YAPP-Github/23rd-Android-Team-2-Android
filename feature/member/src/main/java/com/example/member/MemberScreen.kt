@@ -344,7 +344,7 @@ fun MemberScreen(
 
         MemberListView(
             modifier = Modifier.padding(top = 24.dp),
-            memberMyInfoList = state.memberMyInfoList,
+            memberMyInfo = state.memberMyInfo,
             filteredMemberList = state.filteredMemberList,
             onIconClick = { vertClick -> viewModel.onVertClickChanged(vertClick) },
             updateFilteredMemberList = { memberMyInfoId ->
