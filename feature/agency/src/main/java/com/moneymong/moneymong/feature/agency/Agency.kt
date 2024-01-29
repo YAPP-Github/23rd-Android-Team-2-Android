@@ -4,7 +4,7 @@ import com.moneymong.moneymong.domain.entity.agency.AgencyGetEntity
 import com.moneymong.moneymong.domain.param.agency.AgencyRegisterParam
 
 data class Agency(
-    val id: Int,
+    val id: Long,
     val type: AgencyType,
     val name: String,
     val memberCount: Int

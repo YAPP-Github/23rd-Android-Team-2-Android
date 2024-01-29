@@ -8,7 +8,7 @@ data class AgenciesGetResponse(
 )
 
 data class AgencyGetResponse(
-    val id: Int,
+    val id: Long,
     val name: String,
     val headCount: Int,
     val type: String
