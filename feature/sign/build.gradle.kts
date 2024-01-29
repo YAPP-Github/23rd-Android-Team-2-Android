@@ -13,43 +13,28 @@ android {
 }
 
 dependencies {
+    implementation(projects.core.designSystem)
+    implementation(projects.core.common)
+    implementation(projects.core.network)
+    implementation(projects.domain)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.appcompat)
     implementation(libs.material)
 
     implementation(libs.lifecycle.runtime.ktx)
-    implementation(libs.androidx.activity.compose)
-    implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.compose.ui)
-    implementation(libs.ui.graphics)
-    implementation(libs.androidx.compose.ui.tooling.preview)
-    implementation(libs.androidx.compose.material3)
-    implementation(platform(libs.androidx.compose.bom))
 
     testImplementation(libs.junit4)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.test.espresso.core)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.ui.test.junit4)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
-    debugImplementation(libs.androidx.compose.ui.tooling)
-    debugImplementation(libs.androidx.compose.ui.testManifest)
 
-    implementation(project(":core:design-system"))
     // 카카오 SDK 의존성
     implementation(libs.kakao.v2.user)
-
-    implementation(projects.core.common)
-    implementation(projects.core.network)
-    implementation(projects.domain)
 
     implementation(libs.orbit.compose)
     implementation(libs.orbit.core)
     implementation(libs.orbit.viewModel)
 
     implementation(libs.accompanist.systemuicontroller)
-
-
-
 }

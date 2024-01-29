@@ -1,6 +1,6 @@
 package com.moneymong.moneymong.domain.usecase.login
 
-import com.moneymong.moneymong.domain.LoginCallback
+import com.moneymong.moneymong.domain.util.LoginCallback
 import com.moneymong.moneymong.domain.base.BaseUseCase
 import com.moneymong.moneymong.domain.repository.LoginRepository
 import javax.inject.Inject

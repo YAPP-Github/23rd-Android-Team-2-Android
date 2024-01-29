@@ -3,7 +3,7 @@ package com.moneymong.moneymong.feature.agency.join
 import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.moneymong.moneymong.common.base.BaseViewModel
-import com.moneymong.moneymong.domain.usecase.AgencyJoinUseCase
+import com.moneymong.moneymong.domain.usecase.agency.AgencyJoinUseCase
 import com.moneymong.moneymong.domain.param.agency.AgencyJoinParam
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch

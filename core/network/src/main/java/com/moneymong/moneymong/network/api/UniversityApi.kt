@@ -1,4 +1,4 @@
-package com.moneymong.moneymong.network.api.signup
+package com.moneymong.moneymong.network.api
 
 import com.moneymong.moneymong.network.request.signup.UnivRequest
 import com.moneymong.moneymong.network.response.signup.UniversitiesResponse

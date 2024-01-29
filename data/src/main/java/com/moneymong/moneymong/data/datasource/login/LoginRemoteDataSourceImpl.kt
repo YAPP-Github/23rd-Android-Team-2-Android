@@ -6,8 +6,8 @@ import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
 import com.moneymong.moneymong.data.util.LoginType
-import com.moneymong.moneymong.domain.LoginCallback
-import com.moneymong.moneymong.network.api.login.AccessTokenApi
+import com.moneymong.moneymong.domain.util.LoginCallback
+import com.moneymong.moneymong.network.api.AccessTokenApi
 import com.moneymong.moneymong.network.request.login.TokenRequest
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineScope

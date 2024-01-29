@@ -1,4 +1,4 @@
-package com.moneymong.moneymong.network.api.login
+package com.moneymong.moneymong.network.api
 
 import com.moneymong.moneymong.network.request.login.RefreshTokenRequest
 import com.moneymong.moneymong.network.request.login.TokenRequest

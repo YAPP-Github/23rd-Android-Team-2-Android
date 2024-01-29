@@ -8,8 +8,8 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.moneymong.moneymong.network.BuildConfig
 import com.moneymong.moneymong.network.adapter.ResultCallAdapterFactory
-import com.moneymong.moneymong.network.api.login.AccessTokenApi
-import com.moneymong.moneymong.network.api.signup.UniversityApi
+import com.moneymong.moneymong.network.api.AccessTokenApi
+import com.moneymong.moneymong.network.api.UniversityApi
 import com.moneymong.moneymong.network.util.AuthInterceptor
 import com.moneymong.moneymong.network.api.MoneyMongApi
 import com.moneymong.moneymong.network.api.AgencyApi
@@ -28,7 +28,6 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.create
 import javax.inject.Qualifier
 import javax.inject.Singleton
 
@@ -116,12 +115,12 @@ object NetworkModule {
         retrofit.create(MoneyMongApi::class.java)
         
     @Provides
-    fun provideUnivApi(retrofit: Retrofit): UniversityApi {
-        return retrofit.create(UniversityApi::class.java)
-    }
+    fun provideUnivApi(@MoneyMongRetrofit retrofit: Retrofit): UniversityApi =
+        retrofit.create(UniversityApi::class.java)
+
 
     @Provides
-    fun provideLoginApi(retrofit: Retrofit): AccessTokenApi {
+    fun provideLoginApi(@MoneyMongRetrofit retrofit: Retrofit): AccessTokenApi {
         return retrofit.create(AccessTokenApi::class.java)
     }
 

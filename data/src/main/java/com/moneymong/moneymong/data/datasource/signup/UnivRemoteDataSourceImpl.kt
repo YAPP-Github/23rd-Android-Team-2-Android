@@ -1,6 +1,6 @@
 package com.moneymong.moneymong.data.datasource.signup
 
-import com.moneymong.moneymong.network.api.signup.UniversityApi
+import com.moneymong.moneymong.network.api.UniversityApi
 import com.moneymong.moneymong.network.request.signup.SearchQueryRequest
 import com.moneymong.moneymong.network.request.signup.UnivRequest
 import com.moneymong.moneymong.network.response.signup.UniversitiesResponse

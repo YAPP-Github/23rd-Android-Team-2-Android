@@ -24,14 +24,12 @@ interface LedgerDetailApi {
     // POST
     @POST("api/v1/ledger-detail/{detailId}/ledger-receipt")
     suspend fun postLedgerReceiptTransaction(
-        @Header("Authorization") header: String = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiUk9MRV9VU0VSIiwidXNlcklkIjozLCJpYXQiOjE3MDQ3MTU0NTEsImV4cCI6MTczNjI3MzA1MX0.2yYEy71Gz4YIz0DYzlx0glYMgZA0JAZs05jsVRvvQx4",
         @Path("detailId") detailId: Int,
         @Body body: LedgerReceiptRequest
     ): Result<Unit>
 
     @POST("api/v1/ledger-detail/{detailId}/ledger-document")
     suspend fun postLedgerDocumentTransaction(
-        @Header("Authorization") header: String = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiUk9MRV9VU0VSIiwidXNlcklkIjozLCJpYXQiOjE3MDQ3MTU0NTEsImV4cCI6MTczNjI3MzA1MX0.2yYEy71Gz4YIz0DYzlx0glYMgZA0JAZs05jsVRvvQx4",
         @Path("detailId") detailId: Int,
         @Body body: LedgerDocumentRequest
     ): Result<Unit>
@@ -39,7 +37,6 @@ interface LedgerDetailApi {
     // PUT
     @PUT("api/v1/ledger/ledger-detail/{detailId}")
     suspend fun updateLedgerTransactionDetail(
-        @Header("Authorization") header: String = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiUk9MRV9VU0VSIiwidXNlcklkIjozLCJpYXQiOjE3MDQ3MTU0NTEsImV4cCI6MTczNjI3MzA1MX0.2yYEy71Gz4YIz0DYzlx0glYMgZA0JAZs05jsVRvvQx4",
         @Path("detailId") detailId: Int,
         @Body body: LedgerTransactionDetailRequest
     ): Result<LedgerTransactionDetailResponse>
@@ -47,21 +44,18 @@ interface LedgerDetailApi {
     // DELETE
     @DELETE("api/v1/ledger-detail/{detailId}/ledger-receipt/{receiptId}")
     suspend fun deleteLedgerReceiptTransaction(
-        @Header("Authorization") header: String = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiUk9MRV9VU0VSIiwidXNlcklkIjozLCJpYXQiOjE3MDQ3MTU0NTEsImV4cCI6MTczNjI3MzA1MX0.2yYEy71Gz4YIz0DYzlx0glYMgZA0JAZs05jsVRvvQx4",
         @Path("detailId") detailId: Int,
         @Path("receiptId") receiptId: Int
     ): Result<Unit>
 
     @DELETE("api/v1/ledger-detail/{detailId}/ledger-document/{documentId}")
     suspend fun deleteLedgerDocumentTransaction(
-        @Header("Authorization") header: String = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiUk9MRV9VU0VSIiwidXNlcklkIjozLCJpYXQiOjE3MDQ3MTU0NTEsImV4cCI6MTczNjI3MzA1MX0.2yYEy71Gz4YIz0DYzlx0glYMgZA0JAZs05jsVRvvQx4",
         @Path("detailId") detailId: Int,
         @Path("documentId") documentId: Int
     ): Result<Unit>
 
     @DELETE("api/v1/ledger-detail/{detailId}")
     suspend fun deleteLedgerDetail(
-        @Header("Authorization") header: String = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiUk9MRV9VU0VSIiwidXNlcklkIjozLCJpYXQiOjE3MDQ3MTU0NTEsImV4cCI6MTczNjI3MzA1MX0.2yYEy71Gz4YIz0DYzlx0glYMgZA0JAZs05jsVRvvQx4",
         @Path("detailId") detailId: Int
     ): Result<Unit>
 }

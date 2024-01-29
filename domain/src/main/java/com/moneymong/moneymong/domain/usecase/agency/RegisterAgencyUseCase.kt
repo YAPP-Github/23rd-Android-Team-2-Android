@@ -1,4 +1,4 @@
-package com.moneymong.moneymong.domain.usecase
+package com.moneymong.moneymong.domain.usecase.agency
 
 
 import com.moneymong.moneymong.domain.base.BaseUseCase
