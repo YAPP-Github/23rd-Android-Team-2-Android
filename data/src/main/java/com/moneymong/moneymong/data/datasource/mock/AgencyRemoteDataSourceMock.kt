@@ -1,18 +1,14 @@
 package com.moneymong.moneymong.data.datasource.mock
 
 import com.moneymong.moneymong.data.datasource.agency.AgencyRemoteDataSource
-import com.moneymong.moneymong.network.api.MoneyMongApi
 import com.moneymong.moneymong.network.request.agency.AgencyJoinRequest
 import com.moneymong.moneymong.network.request.agency.AgencyRegisterRequest
-import com.moneymong.moneymong.network.response.agency.AgencyJoinResponse
 import com.moneymong.moneymong.network.response.agency.AgenciesGetResponse
 import com.moneymong.moneymong.network.response.agency.AgencyGetResponse
+import com.moneymong.moneymong.network.response.agency.AgencyJoinResponse
 import kotlinx.coroutines.delay
-import javax.inject.Inject
 
-class AgencyRemoteDataSourceMock @Inject constructor(
-    private val moneyMongApi: MoneyMongApi
-) : AgencyRemoteDataSource {
+class AgencyRemoteDataSourceMock : AgencyRemoteDataSource {
 
     override suspend fun registerAgency(request: AgencyRegisterRequest): Result<Unit> {
         return Result.success(Unit)
@@ -27,10 +23,10 @@ class AgencyRemoteDataSourceMock @Inject constructor(
         agencyId: Long,
         data: AgencyJoinRequest
     ): Result<AgencyJoinResponse> {
-        return moneyMongApi.agencyCodeNumbers(
-            "Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiUk9MRV9VU0VSIiwidXNlcklkIjozLCJpYXQiOjE3MDQ3MTU0NTEsImV4cCI6MTczNjI3MzA1MX0.2yYEy71Gz4YIz0DYzlx0glYMgZA0JAZs05jsVRvvQx4",
-            agencyId,
-            data
+        return Result.success(
+            AgencyJoinResponse(
+                certified = true,
+            )
         )
     }
 

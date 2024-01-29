@@ -15,7 +15,7 @@ interface MoneyMongApi {
 
     @POST("/api/v1/agencies/{agencyId}/invitation-code")
     suspend fun agencyCodeNumbers(
-        @Header("Authorization") authToken: String,
+        @Header("Authorization") authToken: String = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiUk9MRV9VU0VSIiwidXNlcklkIjozLCJpYXQiOjE3MDQ3MTU0NTEsImV4cCI6MTczNjI3MzA1MX0.2yYEy71Gz4YIz0DYzlx0glYMgZA0JAZs05jsVRvvQx4",
         @Path("agencyId") agencyId: Long,
         @Body body: AgencyJoinRequest,
     ): Result<AgencyJoinResponse>
