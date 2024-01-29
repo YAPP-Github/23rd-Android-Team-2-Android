@@ -26,5 +26,5 @@ fun NavGraphBuilder.agencyScreen(
             navigateToRegister = navigateToRegister,
             navigateAgencyJoin = navigateAgencyJoin
         )
-    }
+   }
 }
