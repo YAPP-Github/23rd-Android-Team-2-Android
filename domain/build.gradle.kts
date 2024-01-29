@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.jvm)
 }
 
-dependencies {
 
+dependencies {
+    implementation(libs.javax.inject)
 }

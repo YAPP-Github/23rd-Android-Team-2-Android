@@ -12,10 +12,12 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.moneymong.moneymong.design_system.theme.Black
 import com.moneymong.moneymong.design_system.theme.Heading1
@@ -26,7 +28,22 @@ import com.moneymong.moneymong.feature.sign.view.SignCompleteView
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SignCompleteScreen(){
+fun SignCompleteScreen(
+    navigateToHome : () -> Unit
+) {
+
+    val isCompleteBtnClicked = remember { mutableStateOf(false) }
+
+    LaunchedEffect(key1 = isCompleteBtnClicked.value) {
+        if (isCompleteBtnClicked.value) {
+            navigateToHome()
+        }
+    }
+
+    fun onChangeCompleteBtn() {
+        isCompleteBtnClicked.value = true
+    }
+
     Scaffold(
         modifier = Modifier
             .fillMaxSize()
@@ -55,14 +72,20 @@ fun SignCompleteScreen(){
             )
         },
         content = { innerPadding ->
-            SignCompleteContent(modifier = Modifier.padding(innerPadding))
+            SignCompleteContent(
+                modifier = Modifier.padding(innerPadding),
+                onChangeCompleteBtn = { onChangeCompleteBtn() }
+            )
         }
     )
 }
 
 
 @Composable
-fun SignCompleteContent (modifier : Modifier = Modifier ){
+fun SignCompleteContent(
+    modifier: Modifier = Modifier,
+    onChangeCompleteBtn : () -> Unit
+) {
     Box(
         modifier = modifier
             .fillMaxSize()
@@ -72,13 +95,8 @@ fun SignCompleteContent (modifier : Modifier = Modifier ){
         SignCompleteButtonView(
             modifier = Modifier
                 .fillMaxWidth()
-                .align(Alignment.BottomCenter)
+                .align(Alignment.BottomCenter),
+            onChangeCompleteBtn = onChangeCompleteBtn
         )
     }
-}
-
-@Preview
-@Composable
-fun CompletePreview(){
-    SignCompleteScreen()
 }
