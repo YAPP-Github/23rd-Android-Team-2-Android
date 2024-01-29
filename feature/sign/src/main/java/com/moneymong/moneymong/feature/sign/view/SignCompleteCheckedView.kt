@@ -22,9 +22,11 @@ import com.moneymong.moneymong.design_system.theme.White
 
 @Composable
 fun SignCompleteCheckedView(
-    modifier: Modifier = Modifier ,
+    modifier: Modifier = Modifier,
     text: String,
-    onChanged : () -> Unit
+    onChanged: () -> Unit,
+    onSelectedGrade: () -> Unit,
+    onItemSelectedChange: (Boolean) -> Unit,
 ) {
     Row(
         modifier = modifier
@@ -39,7 +41,7 @@ fun SignCompleteCheckedView(
             modifier = Modifier
                 .weight(1f)
                 .height(22.dp)
-                .padding(start= 10.dp),
+                .padding(start = 10.dp),
             text = text,
             color = Black,
             style = Body4
@@ -47,7 +49,11 @@ fun SignCompleteCheckedView(
 
         IconButton(
             modifier = Modifier.size(24.dp),
-            onClick = { onChanged() }
+            onClick = {
+                onChanged()
+                onSelectedGrade()
+                onItemSelectedChange(false)
+            }
         ) {
 
             Icon(

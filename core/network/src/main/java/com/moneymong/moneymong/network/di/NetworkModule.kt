@@ -8,6 +8,9 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.moneymong.moneymong.network.BuildConfig
 import com.moneymong.moneymong.network.adapter.ResultCallAdapterFactory
+import com.moneymong.moneymong.network.api.login.AccessTokenApi
+import com.moneymong.moneymong.network.api.signup.UniversityApi
+import com.moneymong.moneymong.network.util.AuthInterceptor
 import com.moneymong.moneymong.network.api.MoneyMongApi
 import com.moneymong.moneymong.network.api.AgencyApi
 import com.moneymong.moneymong.network.api.ClovaApi
@@ -25,6 +28,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.create
 import javax.inject.Qualifier
 import javax.inject.Singleton
 
@@ -43,7 +47,8 @@ object NetworkModule {
     @Provides
     fun provideOkhttpClient(
         chuckerInterceptor: ChuckerInterceptor,
-        moneymongAuthenticator: MoneyMongTokenAuthenticator
+        moneymongAuthenticator: MoneyMongTokenAuthenticator,
+        authInterceptor: AuthInterceptor
     ): OkHttpClient {
         val okhttpLoggingClient = if (BuildConfig.DEBUG) {
             HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
@@ -52,9 +57,10 @@ object NetworkModule {
         }
 
         return OkHttpClient.Builder()
-            .authenticator(moneymongAuthenticator)
+            .addInterceptor(authInterceptor)
             .addInterceptor(okhttpLoggingClient)
             .addInterceptor(chuckerInterceptor)
+            .authenticator(moneymongAuthenticator)
             .build()
     }
 
@@ -93,7 +99,7 @@ object NetworkModule {
         addCallAdapterFactory(ResultCallAdapterFactory.create())
         client(okHttpClient)
     }.build()
-
+    
     @Provides
     @Singleton
     @ClovaRetrofit
@@ -108,6 +114,16 @@ object NetworkModule {
     @Provides
     fun provideMoneyMongApi(@MoneyMongRetrofit retrofit: Retrofit): MoneyMongApi =
         retrofit.create(MoneyMongApi::class.java)
+        
+    @Provides
+    fun provideUnivApi(retrofit: Retrofit): UniversityApi {
+        return retrofit.create(UniversityApi::class.java)
+    }
+
+    @Provides
+    fun provideLoginApi(retrofit: Retrofit): AccessTokenApi {
+        return retrofit.create(AccessTokenApi::class.java)
+    }
 
     @Provides
     fun provideAgencyApi(@MoneyMongRetrofit retrofit: Retrofit): AgencyApi =

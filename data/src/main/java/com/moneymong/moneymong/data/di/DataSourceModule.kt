@@ -1,5 +1,13 @@
 package com.moneymong.moneymong.data.di
 
+import com.moneymong.moneymong.data.datasource.login.LoginLocalDataSource
+import com.moneymong.moneymong.data.datasource.login.LoginLocalDataSourceImpl
+import com.moneymong.moneymong.data.datasource.login.LoginRemoteDataSource
+import com.moneymong.moneymong.data.datasource.login.LoginRemoteDataSourceImpl
+import com.moneymong.moneymong.data.datasource.login.TokenRemoteDataSource
+import com.moneymong.moneymong.data.datasource.login.TokenRemoteDataSourceImpl
+import com.moneymong.moneymong.data.datasource.signup.UnivRemoteDataSource
+import com.moneymong.moneymong.data.datasource.signup.UnivRemoteDataSourceImpl
 import com.moneymong.moneymong.data.datasource.agency.AgencyRemoteDataSource
 import com.moneymong.moneymong.data.datasource.impl.AgencyRemoteDataSourceImpl
 import com.moneymong.moneymong.data.datasource.ledger.LedgerRemoteDataSource
@@ -20,6 +28,26 @@ import dagger.hilt.components.SingletonComponent
 @Module
 @InstallIn(SingletonComponent::class)
 interface DataSourceModule {
+
+    @Binds
+    fun bindLoginDataSource(
+        loginRemoteDataSourceImpl: LoginRemoteDataSourceImpl
+    ): LoginRemoteDataSource
+
+    @Binds
+    fun bindUnivDataSource(
+        univRemoteDataSourceImpl: UnivRemoteDataSourceImpl
+    ): UnivRemoteDataSource
+
+    @Binds
+    fun bindLoginLocalDataSource(
+        loginLocalDataSourceImpl: LoginLocalDataSourceImpl
+    ): LoginLocalDataSource
+
+    @Binds
+    fun bindTokenRemoteDataSource(
+        tokenRemoteDataSourceImpl: TokenRemoteDataSourceImpl
+    ): TokenRemoteDataSource
 
     @Binds
     fun bindAgencyRemoteDataSource(
