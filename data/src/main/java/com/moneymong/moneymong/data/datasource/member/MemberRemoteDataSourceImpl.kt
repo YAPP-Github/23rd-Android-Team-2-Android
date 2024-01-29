@@ -10,15 +10,16 @@ import javax.inject.Inject
 class MemberRemoteDataSourceImpl @Inject constructor(
     private val moneyMongApi: MoneyMongApi
 ) : MemberRemoteDataSource {
-    override suspend fun getInvitationCode(data: Long): Result<InvitationCodeResponse> {
-        return moneyMongApi.getInvitationCode(data)
+    override suspend fun getInvitationCode(agencyId: Long): Result<InvitationCodeResponse> {
+        return moneyMongApi.getInvitationCode(agencyId)
     }
 
-    override suspend fun reInvitationCode(data: Long): Result<InvitationCodeResponse> {
-        return moneyMongApi.reInvitationCode(data)
+    override suspend fun reInvitationCode(agencyId: Long): Result<InvitationCodeResponse> {
+        return moneyMongApi.reInvitationCode(agencyId)
     }
-    override suspend fun memberList(data: Long): Result<MemberListResponse> {
-        return moneyMongApi.MemberList(data)
+
+    override suspend fun getMemberLists(agencyId: Long): Result<MemberListResponse> {
+        return moneyMongApi.getMemberLists(agencyId)
     }
 
     override suspend fun updateMemberAuthor(agencyId : Long, data: UpdateAuthorRequest): Result<Unit> {
