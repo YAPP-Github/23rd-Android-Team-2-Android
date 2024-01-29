@@ -14,7 +14,6 @@ import com.moneymong.moneymong.network.api.ClovaApi
 import com.moneymong.moneymong.network.api.LedgerApi
 import com.moneymong.moneymong.network.api.LedgerDetailApi
 import com.moneymong.moneymong.network.api.MemberApi
-import com.moneymong.moneymong.network.api.MoneyMongApi
 import com.moneymong.moneymong.network.api.UserApi
 import com.moneymong.moneymong.network.util.MoneyMongTokenAuthenticator
 import dagger.Module
@@ -95,6 +94,8 @@ object NetworkModule {
         client(okHttpClient)
     }.build()
 
+    @Provides
+    @Singleton
     @ClovaRetrofit
     fun provideClovaClient(okHttpClient: OkHttpClient, gson: Gson): Retrofit =
         Retrofit.Builder().apply {

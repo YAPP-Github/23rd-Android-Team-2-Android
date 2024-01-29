@@ -16,13 +16,11 @@ fun NavController.navigateAgencyRegister(navOptions: NavOptions? = null) {
 }
 
 fun NavGraphBuilder.agencyRegisterScreen(
-    padding: PaddingValues,
     navigateToComplete: () -> Unit,
     navigateUp: () -> Unit
 ) {
     composable(route = agencyRegisterRoute) {
         AgencyRegisterScreen(
-            modifier = Modifier.padding(padding),
             navigateToComplete = navigateToComplete,
             navigateUp = navigateUp
         )

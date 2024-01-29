@@ -26,7 +26,6 @@ fun NavController.navigateAgencyJoin(agencyId: Long, navOptions: NavOptions? = n
 }
 
 fun NavGraphBuilder.agencyJoinScreen(
-    padding: PaddingValues,
     navigateToComplete: () -> Unit,
     navigateUp: () -> Unit,
 ) {
@@ -35,7 +34,6 @@ fun NavGraphBuilder.agencyJoinScreen(
         arguments = arguments
     ) {
         AgencyJoinScreen(
-            modifier = Modifier.padding(padding),
             navigateToComplete = navigateToComplete,
             navigateUp = navigateUp,
             agencyId = it.arguments?.getLong(agencyIdArg) ?: 0

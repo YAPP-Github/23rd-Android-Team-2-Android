@@ -26,11 +26,7 @@ import com.moneymong.moneymong.feature.agency.navigation.agencyScreen
 import com.moneymong.moneymong.feature.agency.navigation.navigateAgency
 import com.moneymong.moneymong.feature.agency.navigation.navigateAgencyRegister
 import com.moneymong.moneymong.feature.agency.navigation.navigateAgencyRegisterComplete
-import com.moneymong.moneymong.feature.mymong.navigation.mymongScreen
-import com.moneymong.moneymong.home.navigation.rememberHomeNavController
 import com.moneymong.moneymong.design_system.component.snackbar.MDSSnackbarHost
-import com.moneymong.moneymong.feature.agency.navigation.agencyRoute
-import com.moneymong.moneymong.feature.agency.navigation.agencyScreen
 import com.moneymong.moneymong.feature.mymong.navigation.myMongNavGraph
 import com.moneymong.moneymong.feature.mymong.navigation.navigatePrivacyPolicy
 import com.moneymong.moneymong.feature.mymong.navigation.navigateTermsOfUse
@@ -89,21 +85,18 @@ fun HomeScreen(
             exitTransition = { ExitTransition.None }
         ) {
             agencyScreen(
-                padding = it,
-                navigateToRegister = { homeNavController.navHostController.navigateAgencyRegister() },
+                navigateToRegister = { homeNavController.navigateAgencyRegister() },
                 navigateAgencyJoin = { agencyId ->
-                    homeNavController.navHostController.navigateAgencyJoin(agencyId = agencyId)
+                    homeNavController.navigateAgencyJoin(agencyId = agencyId)
                 }
             )
             agencyJoinScreen(
-                padding = it,
-                navigateToComplete = { homeNavController.navHostController.navigateAgencyJoinComplete() },
-                navigateUp = { homeNavController.navHostController.navigateUp() }
+                navigateToComplete = { homeNavController.navigateAgencyJoinComplete() },
+                navigateUp = { homeNavController.navigateUp() }
             )
             agencyCompleteScreen(
-                padding = it,
                 navigateToLedger = {
-                    homeNavController.navHostController.navigate(
+                    homeNavController.navigate(
                         route = ledgerRoute,
                         navOptions = navOptions {
                             launchSingleTop = true
@@ -112,7 +105,7 @@ fun HomeScreen(
                     )
                 },
                 navigateToJoin = {
-                    homeNavController.navHostController.navigateAgency(
+                    homeNavController.navigateAgency(
                         navOptions = navOptions {
                             popUpTo(agencyRoute) { inclusive = true }
                         }
@@ -120,21 +113,19 @@ fun HomeScreen(
                 },
             )
             agencyRegisterScreen(
-                padding = it,
-                navigateToComplete = { homeNavController.navHostController.navigateAgencyRegisterComplete() },
-                navigateUp = { homeNavController.navHostController.navigateUp() }
+                navigateToComplete = { homeNavController.navigateAgencyRegisterComplete() },
+                navigateUp = { homeNavController.navigateUp() }
             )
             agencyRegisterCompleteScreen(
-                padding = it,
                 navigateToSearch = {
-                    homeNavController.navHostController.navigateAgency(
+                    homeNavController.navigateAgency(
                         navOptions = navOptions {
                             popUpTo(agencyRoute) { inclusive = true }
                         }
                     )
                 },
                 navigateToLedger = {
-                    homeNavController.navHostController.navigate(
+                    homeNavController.navigate(
                         route = ledgerRoute,
                         navOptions = navOptions {
                             launchSingleTop = true
