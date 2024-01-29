@@ -1,13 +1,13 @@
 package com.moneymong.moneymong.data.datasource.ledger
 
+import com.moneymong.moneymong.network.api.LedgerApi
 import com.moneymong.moneymong.network.api.MoneyMongApi
 import com.moneymong.moneymong.network.request.ledger.LedgerTransactionRequest
-import com.moneymong.moneymong.network.response.ledger.LedgerTransactionDetailResponse
 import com.moneymong.moneymong.network.response.ledger.LedgerTransactionListResponse
 import javax.inject.Inject
 
 class LedgerRemoteDataSourceImpl @Inject constructor(
-    private val moneyMongApi: MoneyMongApi
+    private val ledgerApi: LedgerApi
 ): LedgerRemoteDataSource {
     override suspend fun fetchLedgerTransactionList(
         id: Int,
@@ -16,7 +16,7 @@ class LedgerRemoteDataSourceImpl @Inject constructor(
         page: Int,
         limit: Int
     ): Result<LedgerTransactionListResponse> =
-        moneyMongApi.fetchLedgerTransactionList(
+        ledgerApi.fetchLedgerTransactionList(
             id = id,
             year = year,
             month = month,
@@ -25,11 +25,8 @@ class LedgerRemoteDataSourceImpl @Inject constructor(
         )
 
     override suspend fun fetchAgencyExistLedger(agencyId: Int): Result<Boolean> =
-        moneyMongApi.fetchAgencyExistLedger(agencyId = agencyId)
-
-    override suspend fun fetchLedgerTransactionDetail(detailId: Int): Result<LedgerTransactionDetailResponse> =
-        moneyMongApi.fetchLedgerTransactionDetail(detailId = detailId)
+        ledgerApi.fetchAgencyExistLedger(agencyId = agencyId)
 
     override suspend fun postLedgerTransaction(id: Int, body: LedgerTransactionRequest) =
-        moneyMongApi.postLedgerTransaction(id = id, body = body)
+        ledgerApi.postLedgerTransaction(id = id, body = body)
 }

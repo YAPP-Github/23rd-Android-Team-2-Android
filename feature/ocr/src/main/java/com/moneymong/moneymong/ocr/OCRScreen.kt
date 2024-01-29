@@ -4,6 +4,7 @@ import android.Manifest.permission.*
 import android.content.Intent
 import android.net.Uri
 import android.provider.Settings
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -47,12 +48,15 @@ import org.orbitmvi.orbit.compose.collectSideEffect
 fun OCRScreen(
     modifier: Modifier = Modifier,
     viewModel: OCRViewModel = hiltViewModel(),
-    navigateToOCRResult: (NavOptions?, String) -> Unit,
+    navigateToOCRResult: (navOptions: NavOptions?, document: String) -> Unit,
+    navigateToHome: (homeLedgerPostSuccess: Boolean) -> Unit,
     popBackStack: () -> Unit
 ) {
     val state = viewModel.collectAsState().value
     val context = LocalContext.current
     var hasCameraPermission by remember { mutableStateOf(context.hasPermission(CAMERA)) }
+
+    BackHandler(onBack = { navigateToHome(false) })
 
     DisposableEffectWithLifeCycle(
         onResume = { hasCameraPermission = context.hasPermission(CAMERA) }
@@ -107,7 +111,11 @@ fun OCRScreen(
             contentAlignment = Alignment.Center
         ) {
             if (!hasCameraPermission) {
-                OCRCameraPermissionDeniedView(onClickRequestPermission = { viewModel.eventEmit(OCRSideEffect.OCRMoveToPermissionSetting) })
+                OCRCameraPermissionDeniedView(onClickRequestPermission = {
+                    viewModel.eventEmit(
+                        OCRSideEffect.OCRMoveToPermissionSetting
+                    )
+                })
             } else {
                 OCRCaptureView(
                     onClickCapture = {
@@ -127,7 +135,7 @@ fun OCRScreen(
             OCRTopbarView(
                 modifier = Modifier.align(Alignment.TopCenter),
                 onClickHelp = viewModel::onClickHelper,
-                onClickClose = popBackStack
+                onClickClose = { navigateToHome(false) }
             )
             if (state.isLoading) {
                 Box(
@@ -155,5 +163,8 @@ fun OCRScreen(
 @Preview(showBackground = true)
 @Composable
 fun OCRScreenPreview() {
-    OCRScreen(navigateToOCRResult = { navOptions, s -> }, popBackStack = {})
+    OCRScreen(
+        navigateToOCRResult = { navOptions, s -> },
+        popBackStack = {},
+        navigateToHome = {})
 }

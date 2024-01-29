@@ -3,7 +3,6 @@ package com.moneymong.moneymong.data.repository.ledger
 import com.moneymong.moneymong.data.datasource.ledger.LedgerRemoteDataSource
 import com.moneymong.moneymong.data.mapper.ledger.toEntity
 import com.moneymong.moneymong.data.mapper.ledger.toRequest
-import com.moneymong.moneymong.domain.entity.ledger.LedgerTransactionDetailEntity
 import com.moneymong.moneymong.domain.entity.ledger.LedgerTransactionEntity
 import com.moneymong.moneymong.domain.entity.ledger.LedgerTransactionListEntity
 import com.moneymong.moneymong.domain.param.ledger.LedgerTransactionListParam
@@ -29,7 +28,4 @@ class LedgerRepositoryImpl @Inject constructor(
     override suspend fun postLedgerTransaction(param: LedgerTransactionParam): Result<LedgerTransactionEntity> =
         ledgerRemoteDataSource.postLedgerTransaction(id = param.id, body = param.toRequest())
             .map { it.toEntity() }
-
-    override suspend fun fetchLedgerTransactionDetail(detailId: Int): Result<LedgerTransactionDetailEntity> =
-        ledgerRemoteDataSource.fetchLedgerTransactionDetail(detailId = detailId).map { it.toEntity() }
 }

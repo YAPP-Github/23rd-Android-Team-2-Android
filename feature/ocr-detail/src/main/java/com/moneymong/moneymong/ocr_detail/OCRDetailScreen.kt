@@ -86,7 +86,7 @@ fun OCRDetailScreen(
     modifier: Modifier = Modifier,
     viewModel: OCRDetailViewModel = hiltViewModel(),
     document: DocumentEntity?,
-    navigateToHome: (NavOptions?, Boolean) -> Unit,
+    navigateToHome: (homeLedgerPostSuccess: Boolean) -> Unit,
     popBackStack: () -> Unit
 ) {
     val context = LocalContext.current
@@ -115,7 +115,7 @@ fun OCRDetailScreen(
                 )
             }
             is OCRDetailSideEffect.OCRDetailNavigateToHome -> {
-                navigateToHome(null, true)
+                navigateToHome(true)
             }
         }
     }
@@ -387,7 +387,7 @@ fun OCRDetailScreen(
 @Preview(showBackground = true)
 @Composable
 fun OCRDetailScreenPreview() {
-    OCRDetailScreen(document = null, navigateToHome = { navOptions, b ->  }) {
+    OCRDetailScreen(document = null, navigateToHome = {}) {
 
     }
 }
