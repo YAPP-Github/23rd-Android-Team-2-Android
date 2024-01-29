@@ -33,7 +33,6 @@ fun MemberListView(
     updateFilteredMemberList: (Long) -> Unit,
     vertClickedUserIdChanged: (Long) -> Unit,
 ) {
-
     updateFilteredMemberList(memberMyInfoList.userId)
 
     Column(
@@ -75,14 +74,15 @@ fun MemberListView(
                 items(
                     items = filteredMemberList,
                     itemContent = { filteredMemberList ->
-                        MemberListItem(
-                            filteredMemberList,
-                            memberMyInfoList = memberMyInfoList,
-                            onIconClick = {
-                                onIconClick(true)
-                            },
-                            vertClickedUserIdChanged = vertClickedUserIdChanged
-                        )
+                        if (filteredMemberList.userId.toLong() != memberMyInfoList.userId) {
+                            MemberListItem(
+                                filteredMemberList,
+                                onIconClick = {
+                                    onIconClick(true)
+                                },
+                               vertClickedUserIdChanged = vertClickedUserIdChanged
+                            )
+                        }
                     }
                 )
             }

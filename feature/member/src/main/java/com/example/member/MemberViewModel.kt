@@ -94,7 +94,7 @@ class MemberViewModel @Inject constructor(
         intent {
             reduce {
                 state.copy(
-                    memberMyInfoList = AgencyUserEntity(id, userId, nickname, agencyUserRole)
+                    memberMyInfo = AgencyUserEntity(id, userId, nickname, agencyUserRole)
                 )
             }
         }
@@ -138,7 +138,7 @@ class MemberViewModel @Inject constructor(
             }
     }
 
-    fun getMemberList(agencyId: Long) = intent {
+    fun getMemberLists(agencyId: Long) = intent {
         memberListUseCase.invoke(agencyId)
             .onSuccess {
                 reduce {

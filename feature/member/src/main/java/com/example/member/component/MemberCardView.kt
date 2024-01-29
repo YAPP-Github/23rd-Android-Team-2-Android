@@ -39,7 +39,7 @@ fun MemberCardView(
     modifier: Modifier = Modifier,
     memberList: List<AgencyUserEntity>,
     memberMyInfoId: Long,
-    memberMyInfoList: AgencyUserEntity,
+    memberMyInfo: AgencyUserEntity,
     memberMyInfoChanged: (Long, Long, String, String) -> Unit,
     invitationCode: String,
     isReInvitationCode: (Long) -> Unit,
@@ -79,21 +79,21 @@ fun MemberCardView(
 
                 Text(
                     modifier = Modifier.padding(start = 8.dp),
-                    text = memberMyInfoList.nickname,
+                    text = memberMyInfo.nickname,
                     style = Body4,
                     color = Gray10
                 )
 
                 MDSTag(
                     modifier = Modifier.padding(start = 6.dp),
-                    text = if (memberMyInfoList.agencyUserRole == "MEMBER") "일반멤버" else "운영진",
-                    backgroundColor = if (memberMyInfoList.agencyUserRole == "MEMBER") Mint03 else Blue04,
+                    text = if (memberMyInfo.agencyUserRole == "MEMBER") "일반멤버" else "운영진",
+                    backgroundColor = if (memberMyInfo.agencyUserRole == "MEMBER") Mint03 else Blue04,
                     contentColor = White,
                 )
 
             }
 
-            if (memberMyInfoList.agencyUserRole == "STAFF") {
+            if (memberMyInfo.agencyUserRole == "STAFF") {
                 Divider(
                     modifier = Modifier
                         .fillMaxWidth()

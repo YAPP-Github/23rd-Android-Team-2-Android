@@ -8,7 +8,7 @@ import com.moneymong.moneymong.domain.param.member.UpdateAuthorParam
 interface MemberRepository {
     suspend fun getInvitationCode(agencyId: Long): Result<AgencyCodeEntity>
     suspend fun reInvitationCode(agencyId: Long): Result<AgencyCodeEntity>
-    suspend fun memberList(agencyId: Long) : Result<MemberListEntity>
+    suspend fun getMemberLists(agencyId: Long) : Result<MemberListEntity>
     suspend fun updateMemberAuthor(agencyId : Long, data : UpdateAuthorParam) : Result<Unit>
     suspend fun blockMemberAuthor(data: MemberBlockParam) : Result<Unit>
 }

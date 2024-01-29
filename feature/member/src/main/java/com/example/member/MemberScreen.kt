@@ -78,8 +78,8 @@ fun MemberScreen(
                 viewModel.getReInvitationCode(it.agencyId)
             }
 
-            is MemberSideEffect.MemberList -> {
-                viewModel.getMemberList(it.agencyId)
+            is MemberSideEffect.GetMemberLists -> {
+                viewModel.getMemberLists(it.agencyId)
             }
 
             is MemberSideEffect.GetMyInfo -> {
@@ -98,7 +98,7 @@ fun MemberScreen(
 
     LaunchedEffect(key1 = Unit) {
         viewModel.eventEmit(MemberSideEffect.GetInvitationCode(4)) //TODO - agency Id 연결
-        viewModel.eventEmit(MemberSideEffect.MemberList(4)) //TODO - agencyId 연결
+        viewModel.eventEmit(MemberSideEffect.GetMemberLists(4)) //TODO - agencyId 연결
         viewModel.eventEmit(MemberSideEffect.GetMyInfo(Unit)) //TODO - 마이몽 유저 정보 조회 연결
     }
 
@@ -328,7 +328,7 @@ fun MemberScreen(
             modifier = Modifier,
             memberList = state.memberList,
             memberMyInfoId = state.memberMyInfoId,
-            memberMyInfoList = state.memberMyInfoList,
+            memberMyInfo = state.memberMyInfo,
             memberMyInfoChanged = { id, userId, nickname, agencyUserRole ->
                 viewModel.memberMyInfoChanged(
                     id,
@@ -354,6 +354,7 @@ fun MemberScreen(
             },
             vertClickedUserIdChanged = { userId -> viewModel.vertClickedUserIdChanged(userId) },
         )
+
 
         Box(
             modifier = Modifier

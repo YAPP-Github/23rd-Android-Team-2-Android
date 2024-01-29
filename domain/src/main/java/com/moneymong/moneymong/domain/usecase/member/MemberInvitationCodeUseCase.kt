@@ -8,7 +8,7 @@ import javax.inject.Inject
 class MemberInvitationCodeUseCase @Inject constructor(
     private val memberRepository: MemberRepository
 ) : BaseUseCase<Long, Result<AgencyCodeEntity>>() {
-    override suspend fun invoke(data: Long): Result<AgencyCodeEntity> {
-        return memberRepository.getInvitationCode(data)
+    override suspend fun invoke(agencyId: Long): Result<AgencyCodeEntity> {
+        return memberRepository.getInvitationCode(agencyId)
     }
 }
