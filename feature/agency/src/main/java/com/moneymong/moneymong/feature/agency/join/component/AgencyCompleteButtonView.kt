@@ -11,9 +11,14 @@ import androidx.compose.ui.unit.dp
 import com.moneymong.moneymong.design_system.component.button.MDSButton
 import com.moneymong.moneymong.design_system.component.button.MDSButtonSize
 import com.moneymong.moneymong.design_system.component.button.MDSButtonType
+import com.moneymong.moneymong.feature.agency.join.AgencyCompleteState
+import com.moneymong.moneymong.feature.agency.join.AgencyCompleteViewModel
 
 @Composable
-fun AgencyCompleteButtonView (modifier: Modifier = Modifier){
+fun AgencyCompleteButtonView (
+    modifier: Modifier = Modifier,
+    isBtnClickChanged : (Boolean) -> Unit
+){
 
     Column(
         modifier = modifier
@@ -21,6 +26,7 @@ fun AgencyCompleteButtonView (modifier: Modifier = Modifier){
         MDSButton(
             modifier = Modifier.fillMaxWidth(),
             onClick = {
+                isBtnClickChanged(true)
             },
             text = "확인하러 가기",
             type = MDSButtonType.PRIMARY,
@@ -30,10 +36,4 @@ fun AgencyCompleteButtonView (modifier: Modifier = Modifier){
         Spacer(modifier = Modifier.height(28.dp))
 
     }
-}
-
-@Preview
-@Composable
-fun CompleteButtonPreview(){
-    AgencyCompleteButtonView(modifier = Modifier.fillMaxWidth())
 }

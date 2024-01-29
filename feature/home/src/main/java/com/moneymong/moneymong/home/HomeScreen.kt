@@ -8,6 +8,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.navOptions
+import com.moneymong.moneymong.feature.agency.join.navigation.agencyCompleteScreen
+import com.moneymong.moneymong.feature.agency.join.navigation.agencyJoinScreen
+import com.moneymong.moneymong.feature.agency.join.navigation.navigateAgencyJoin
+import com.moneymong.moneymong.feature.agency.join.navigation.navigateAgencyJoinComplete
 import com.moneymong.moneymong.feature.agency.navigation.agencyRegisterCompleteScreen
 import com.moneymong.moneymong.feature.agency.navigation.agencyRegisterScreen
 import com.moneymong.moneymong.feature.agency.navigation.agencyRoute
@@ -43,7 +47,34 @@ fun HomeScreen(
         ) {
             agencyScreen(
                 padding = it,
-                navigateToRegister = { homeNavController.navHostController.navigateAgencyRegister() }
+                navigateToRegister = { homeNavController.navHostController.navigateAgencyRegister() },
+                navigateAgencyJoin = { agencyId ->
+                    homeNavController.navHostController.navigateAgencyJoin(agencyId = agencyId)
+                }
+            )
+            agencyJoinScreen(
+                padding = it,
+                navigateToComplete = { homeNavController.navHostController.navigateAgencyJoinComplete() },
+                navigateUp = { homeNavController.navHostController.navigateUp() }
+            )
+            agencyCompleteScreen(
+                padding = it,
+                navigateToLedger = {
+                    homeNavController.navHostController.navigate(
+                        route = ledgerRoute,
+                        navOptions = navOptions {
+                            launchSingleTop = true
+                            popUpTo(agencyRoute) { inclusive = true }
+                        }
+                    )
+                },
+                navigateToJoin = {
+                    homeNavController.navHostController.navigateAgency(
+                        navOptions = navOptions {
+                            popUpTo(agencyRoute) { inclusive = true }
+                        }
+                    )
+                },
             )
             agencyRegisterScreen(
                 padding = it,

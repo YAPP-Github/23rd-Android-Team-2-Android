@@ -4,7 +4,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
-import com.moneymong.moneymong.home.HomeScreen
 import com.moneymong.moneymong.home.navigation.homeRoute
 import com.moneymong.moneymong.home.navigation.homeScreen
 
