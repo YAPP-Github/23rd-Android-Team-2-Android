@@ -28,6 +28,7 @@ import com.moneymong.moneymong.domain.entity.member.AgencyUserEntity
 @Composable
 fun MemberListItem(
     agencyUser: AgencyUserEntity,
+    userId : Long,
     onIconClick: () -> Unit,
     vertClickedUserIdChanged: (Long) -> Unit,
 ) {
@@ -61,6 +62,7 @@ fun MemberListItem(
         Icon(
             modifier = Modifier.clickable {
                 onIconClick()
+                vertClickedUserIdChanged(userId)
             },
             painter = painterResource(id = R.drawable.ic_more_vert),
             contentDescription = null,
