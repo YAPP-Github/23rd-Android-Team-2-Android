@@ -7,6 +7,7 @@ data class MemberState(
     val onCopyClick: Boolean = false,
     val onReissueChange: Boolean = false,
     val vertClick: Boolean = false,
+    val vertClickedUserId : Long = 0L,
     val isStaffChecked: Boolean = false,
     val isMemberChecked: Boolean = false,
     val roleChanged: Boolean = false,

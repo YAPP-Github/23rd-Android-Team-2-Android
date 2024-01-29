@@ -29,6 +29,7 @@ import com.moneymong.moneymong.domain.entity.member.AgencyUserEntity
 fun MemberListItem(
     agencyUser: AgencyUserEntity,
     onIconClick: () -> Unit,
+    vertClickedUserIdChanged: (Long) -> Unit,
 ) {
     Row(
         modifier = Modifier
@@ -66,6 +67,5 @@ fun MemberListItem(
             tint = Gray05
         )
     }
-
 }
 

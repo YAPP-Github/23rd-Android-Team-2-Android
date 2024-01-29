@@ -1,22 +1,18 @@
 package com.example.member
 
+import BottomSheetType
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.windowInsetsPadding
-import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
@@ -32,15 +28,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.moneymong.moneymong.design_system.R
 import com.example.member.component.MemberCardView
 import com.example.member.component.MemberDialogView
 import com.example.member.component.MemberListView
+import com.moneymong.moneymong.design_system.R
+import com.moneymong.moneymong.design_system.component.bottomSheet.MDSBottomSheet
 import com.moneymong.moneymong.design_system.component.button.MDSButton
 import com.moneymong.moneymong.design_system.component.button.MDSButtonSize
 import com.moneymong.moneymong.design_system.component.button.MDSButtonType
 import com.moneymong.moneymong.design_system.component.snackbar.MDSSnackbarHost
-import com.moneymong.moneymong.design_system.theme.Black
 import com.moneymong.moneymong.design_system.theme.Blue04
 import com.moneymong.moneymong.design_system.theme.Body3
 import com.moneymong.moneymong.design_system.theme.Body4
@@ -89,12 +85,20 @@ fun MemberScreen(
             is MemberSideEffect.GetMyInfo -> {
                 viewModel.getMyInfo(it.data)
             }
+
+            is MemberSideEffect.UpdateMemberAuthor -> {
+                viewModel.updateMemberAuthor(it.agencyId, it.role, it.userId)
+            }
+
+            is MemberSideEffect.BlockMemberAuthor -> {
+                viewModel.blockMemberAuthor(it.agencyId, it.userId)
+            }
         }
     }
 
     LaunchedEffect(key1 = Unit) {
-        viewModel.eventEmit(MemberSideEffect.GetInvitationCode(5)) //TODO
-        viewModel.eventEmit(MemberSideEffect.GetMemberLists(5)) //TODO
+        viewModel.eventEmit(MemberSideEffect.GetInvitationCode(4)) //TODO - agency Id 연결
+        viewModel.eventEmit(MemberSideEffect.GetMemberLists(4)) //TODO - agencyId 연결
         viewModel.eventEmit(MemberSideEffect.GetMyInfo(Unit)) //TODO - 마이몽 유저 정보 조회 연결
     }
 
@@ -136,11 +140,14 @@ fun MemberScreen(
 
     LaunchedEffect(state.roleChanged) {
         if (state.roleChanged) {
-            snackbarHostState.showSnackbar(
+            val result = snackbarHostState.showSnackbar(
                 message = "역할이 성공적으로 변경됐습니다.",
                 withDismissAction = true
             )
-
+            // 스낵바가 닫히면 onClick 상태를 false로 변경
+            if (result == SnackbarResult.Dismissed) {
+                viewModel.isRoleChanged(false)
+            }
         }
     }
 
@@ -148,6 +155,7 @@ fun MemberScreen(
         MemberDialogView(
             onDismissRequest = {
                 viewModel.onShowDialogChanged(false)
+                viewModel.eventEmit(MemberSideEffect.BlockMemberAuthor(4, state.vertClickedUserId))
             },
             onConfirmation = {
                 viewModel.onShowDialogChanged(false)
@@ -156,47 +164,36 @@ fun MemberScreen(
     }
 
     if (state.vertClick) {
-        viewModel.isStaffCheckedChanged(false)
-        viewModel.isMemberCheckedChanged(false)
         viewModel.isRoleChanged(false)
 
-        ModalBottomSheet(
+        MDSBottomSheet(
             onDismissRequest = {
                 coroutineScope.launch {
                     sheetState.hide()
                     viewModel.onVertClickChanged(false)
+                    viewModel.isStaffCheckedChanged(false)
+                    viewModel.isMemberCheckedChanged(false)
                     bottomSheetType.value = BottomSheetType.ROLE_ASSIGNMENT_EXPORT
                 }
             },
             modifier = Modifier,
             sheetState = sheetState,
-            shape = MaterialTheme.shapes.large,
-            containerColor = White,
-            tonalElevation = 8.dp,
-            scrimColor = Black.copy(alpha = 0.5f),
-            dragHandle = null,
-            windowInsets = BottomSheetDefaults.windowInsets
         ) {
 
             if (bottomSheetType.value == BottomSheetType.ROLE_ASSIGNMENT_EXPORT) {
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 20.dp)
-                        .windowInsetsPadding(BottomSheetDefaults.windowInsets)
+                        .padding(horizontal = 20.dp, vertical = 24.dp),
+                    verticalArrangement = Arrangement.spacedBy(20.dp)
                 ) {
                     Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(24.dp)
-                            .clickable {
-                                bottomSheetType.value = BottomSheetType.ADMIN_GENERAL_MEMBER
-                            }
+                        modifier = Modifier.clickable {
+                            bottomSheetType.value = BottomSheetType.ADMIN_GENERAL_MEMBER
+                        }
                     ) {
                         Text(
-                            modifier = Modifier
-                                .weight(1f)
-                                .height(24.dp),
+                            modifier = Modifier.weight(1f),
                             text = "역할 지정",
                             style = Body4,
                             color = Gray08
@@ -208,7 +205,6 @@ fun MemberScreen(
                             contentDescription = null
                         )
                     }
-                    Spacer(modifier = Modifier.height(20.dp))
                     Text(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -220,20 +216,19 @@ fun MemberScreen(
                         style = Body4,
                         color = Red03
                     )
-                    Spacer(modifier = Modifier.height(24.dp))
                 }
             } else {
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(start = 20.dp, end = 20.dp, bottom = 24.dp)
-                        .windowInsetsPadding(BottomSheetDefaults.windowInsets)
+                        .padding(horizontal = 20.dp, vertical = 24.dp),
+                    verticalArrangement = Arrangement.spacedBy(20.dp)
                 ) {
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
                             .clickable {
-                                viewModel.isStaffCheckedChanged(!state.isStaffChecked)
+                                viewModel.isStaffCheckedChanged(true)
                                 viewModel.isMemberCheckedChanged(false)
                             }
                     ) {
@@ -252,13 +247,12 @@ fun MemberScreen(
                             tint = if (state.isStaffChecked) Blue04 else Gray03
                         )
                     }
-                    Spacer(modifier = Modifier.height(20.dp))
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
                             .clickable {
-                                viewModel.isMemberCheckedChanged(!state.isMemberChecked)
                                 viewModel.isStaffCheckedChanged(false)
+                                viewModel.isMemberCheckedChanged(true)
                             },
                     ) {
                         Text(
@@ -275,19 +269,39 @@ fun MemberScreen(
                             contentDescription = null,
                             tint = if (state.isMemberChecked) Blue04 else Gray03
                         )
-
                     }
-                    Spacer(modifier = Modifier.height(20.dp))
                     MDSButton(
                         modifier = Modifier.fillMaxWidth(),
                         onClick = {
                             coroutineScope.launch {
                                 sheetState.hide()
                             }
-                            val boolean = state.isStaffChecked || state.isMemberChecked
-                            viewModel.isRoleChanged(boolean)
+                            viewModel.isStaffCheckedChanged(false)
+                            viewModel.isMemberCheckedChanged(false)
                             bottomSheetType.value = BottomSheetType.ROLE_ASSIGNMENT_EXPORT
                             viewModel.onVertClickChanged(false)
+                            if (state.isStaffChecked && !state.isMemberChecked) {
+                                viewModel.eventEmit(
+                                    MemberSideEffect.UpdateMemberAuthor(
+                                        4,
+                                        "STAFF",
+                                        state.vertClickedUserId
+                                    )
+                                ) //TODO
+                                viewModel.isStaffCheckedChanged(false)
+
+                            } else if (!state.isStaffChecked && state.isMemberChecked) {
+                                viewModel.eventEmit(
+                                    MemberSideEffect.UpdateMemberAuthor(
+                                        4,
+                                        "MEMBER",
+                                        state.vertClickedUserId
+                                    )
+                                ) //TODO
+                                viewModel.isMemberCheckedChanged(false)
+
+                            }
+
                         },
                         text = "저장",
                         type = MDSButtonType.PRIMARY,
@@ -330,8 +344,7 @@ fun MemberScreen(
 
         MemberListView(
             modifier = Modifier.padding(top = 24.dp),
-            memberList = state.memberList,
-            memberMyInfoId = state.memberMyInfoId,
+            memberMyInfoList = state.memberMyInfoList,
             filteredMemberList = state.filteredMemberList,
             onIconClick = { vertClick -> viewModel.onVertClickChanged(vertClick) },
             updateFilteredMemberList = { memberMyInfoId ->
@@ -339,7 +352,9 @@ fun MemberScreen(
                     memberMyInfoId
                 )
             },
-            )
+            vertClickedUserIdChanged = { userId -> viewModel.vertClickedUserIdChanged(userId) },
+        )
+
 
         Box(
             modifier = Modifier
