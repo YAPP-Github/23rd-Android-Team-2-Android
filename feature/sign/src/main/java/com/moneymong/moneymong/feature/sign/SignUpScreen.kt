@@ -1,47 +1,54 @@
 package com.moneymong.moneymong.feature.sign
 
+import android.util.Log
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.moneymong.moneymong.design_system.R
-import com.moneymong.moneymong.design_system.theme.Black
 import com.moneymong.moneymong.design_system.theme.Gray07
 import com.moneymong.moneymong.design_system.theme.MMHorizontalSpacing
 import com.moneymong.moneymong.design_system.theme.White
+import com.moneymong.moneymong.feature.sign.sideeffect.SignUpSideEffect
+import com.moneymong.moneymong.feature.sign.state.SignUpState
 import com.moneymong.moneymong.feature.sign.view.SearchUnivView
 import com.moneymong.moneymong.feature.sign.view.SignCompleteCheckedView
 import com.moneymong.moneymong.feature.sign.view.SignUpButtonView
 import com.moneymong.moneymong.feature.sign.view.SignUpGradeView
 import com.moneymong.moneymong.feature.sign.view.SignUpTitleView
+import com.moneymong.moneymong.feature.sign.viewmodel.SignUpViewModel
+import org.orbitmvi.orbit.compose.collectAsState
+import org.orbitmvi.orbit.compose.collectSideEffect
 
 @Composable
-fun SignUpScreen() {
+fun SignUpScreen(
+    navigateToSignComplete: () -> Unit,
+    navigateUp: () -> Unit,
+    viewModel: SignUpViewModel = hiltViewModel()
+) {
+    val state = viewModel.collectAsState().value
+
+    BackHandler {
+        navigateUp()
+    }
+
     Scaffold(
         modifier = Modifier
             .fillMaxSize()
@@ -50,45 +57,63 @@ fun SignUpScreen() {
         topBar = {
             Row(
                 modifier = Modifier
-                .fillMaxWidth()
-                .height(44.dp)
-                .background(White),
+                    .fillMaxWidth()
+                    .height(44.dp)
+                    .background(White),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Start
-            ){
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_chevron_left),
-                        contentDescription = null,
-                        modifier = Modifier
-                            .size(24.dp)
-                            .background(White)
-                            .clickable { },
-                        tint = Gray07
-                    )
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_chevron_left),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(24.dp)
+                        .background(White)
+                        .clickable {
+                            navigateUp()
+                        },
+                    tint = Gray07
+                )
             }
         },
         content = { innerPadding ->
-            SignUpContent(modifier = Modifier.padding(innerPadding))
+            SignUpContent(
+                modifier = Modifier.padding(innerPadding),
+                navigateToSignComplete = navigateToSignComplete,
+                viewModel = viewModel,
+                state = state
+            )
         }
     )
 }
 
 
 @Composable
-fun SignUpContent (modifier : Modifier = Modifier ){
-    //대학교 선택 상태
-    var isSelected by remember{ mutableStateOf(false) }
-    //선택한 대학 정보
-    var selectedUniv by remember { mutableStateOf("") }
-    //가입하기 Button 상태
-    var isEnabled by remember { mutableStateOf(false) }
-    //대학교 검색 정보
-    var textValue by remember { mutableStateOf(TextFieldValue()) }
-    //subtitle enabled 상태
-    var subTitleState by remember { mutableStateOf(false) }
-    //선택한 학년 정보
-    var gradeInfor by remember { mutableStateOf("") }
+fun SignUpContent(
+    modifier: Modifier = Modifier,
+    navigateToSignComplete: () -> Unit,
+    viewModel: SignUpViewModel,
+    state : SignUpState
+) {
 
+    LaunchedEffect(key1 = state.isUnivCreated) {
+        Log.d("isUnivCreated", state.isUnivCreated.toString())
+        if (state.isUnivCreated) {
+            navigateToSignComplete()
+        }
+    }
+
+    viewModel.collectSideEffect {
+        when (it) {
+            is SignUpSideEffect.UniversitiesApi -> {
+                viewModel.searchUniv(it.univ)
+            }
+
+            is SignUpSideEffect.CreateUniversityApi -> {
+                viewModel.createUniv(it.universityName, it.grade)
+            }
+        }
+    }
 
     Box(
         modifier = modifier
@@ -103,40 +128,62 @@ fun SignUpContent (modifier : Modifier = Modifier ){
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 8.dp),
-                subTitleState = subTitleState
+                subTitleState = state.subTitleState
             )
 
             Box(
-                modifier= Modifier
+                modifier = Modifier
                     .padding(top = 40.dp)
                     .fillMaxWidth()
-            ){
-                if(!isSelected){
+            ) {
+                if (!state.isSelected) {
                     SearchUnivView(
-                        onClick = {
-                            isSelected = !isSelected
-                            selectedUniv = it
+                        isFilled = state.isFilled,
+                        isFilledChanged = { isFilled -> viewModel.isFilledChanged(isFilled) },
+                        isListVisible = state.isListVisible,
+                        isListVisibleChanged = { isListVisible ->
+                            viewModel.isListVisibleChanged(
+                                isListVisible
+                            )
                         },
-                        onChange = {textValue = it},
-                        value = textValue
+                        isItemSelectedChanged = { isItemSelected ->
+                            viewModel.isItemSelectedChanged(
+                                isItemSelected
+                            )
+                        },
+                        isItemSelected = state.isItemSelected,
+                        textValue = state.textValue,
+                        universityResponse = state.universityResponse,
+                        onClick = {
+                            viewModel.isSelectedChanged(true)
+                            viewModel.selectedUnivChanged(it)
+                        },
+                        onChange = { viewModel.textValueChanged(it) },
+                        onSearchIconClicked = {
+                            viewModel.eventEmit(SignUpSideEffect.UniversitiesApi(it))
+                        },
+                        value = state.textValue
                     )
                 } else {
                     Column(modifier = Modifier.fillMaxSize()) {
                         SignCompleteCheckedView(
                             modifier = Modifier.fillMaxWidth(),
-                            text = selectedUniv,
-                            onChanged = { isSelected = !isSelected
-                                isEnabled = false
-                            })
+                            text = state.selectedUniv,
+                            onChanged = {
+                                viewModel.isSelectedChanged(false)
+                            },
+                            onSelectedGrade = { viewModel.selectedGradeChange(null) },
+                            onItemSelectedChange = { viewModel.isItemSelectedChanged(it) },
+                        )
                         SignUpGradeView(
                             modifier = Modifier.fillMaxWidth(),
-                            onClick = { isEnabled = true  },
-                            gradeInfor = { gradeInfor = it }
+                            onClick = { viewModel.isEnabledChanged(true) },
+                            changeGradeInfor = { viewModel.gradeInforChanged(it) }
                         )
-                        }
                     }
                 }
             }
+        }
 
         Box(
             modifier = Modifier
@@ -145,16 +192,17 @@ fun SignUpContent (modifier : Modifier = Modifier ){
         ) {
             SignUpButtonView(
                 modifier = Modifier.fillMaxWidth(),
-                isEnabled = isEnabled
+                isEnabled = state.isEnabled,
+                onCreateUniversity = {
+                    viewModel.eventEmit(
+                        SignUpSideEffect.CreateUniversityApi(
+                            state.selectedUniv,
+                            state.gradeInfor
+                        )
+                    )
+                }
             )
         }
     }
 }
 
-
-
-@Preview
-@Composable
-fun Preview(){
-    SignUpScreen()
-}
