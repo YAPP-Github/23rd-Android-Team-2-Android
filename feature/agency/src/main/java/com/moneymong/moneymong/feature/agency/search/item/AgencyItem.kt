@@ -2,6 +2,7 @@ package com.moneymong.moneymong.feature.agency.search.item
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -14,6 +15,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -33,11 +35,14 @@ import com.moneymong.moneymong.feature.agency.AgencyType
 @Composable
 fun AgencyItem(
     modifier: Modifier = Modifier,
-    agency: Agency
+    agency: Agency,
+    onClick: () -> Unit
 ) {
     Surface(
-        modifier = modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(16.dp),
+        modifier = modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(16.dp))
+            .clickable { onClick() },
         color = White,
         border = BorderStroke(
             width = 1.dp,

@@ -15,9 +15,13 @@ fun getApiKey(propertyKey : String): String {
 android {
     namespace = "com.moneymong.moneymong.network"
 
-    defaultConfig{
-        buildConfigField("String", "BASE_URL", getApiKey("base_url"))
+    defaultConfig {
+        buildConfigField("String", "CLOVA_OCR_DOCUMENT_SECRET", fetchClovaProperties("CLOVA_OCR_DOCUMENT_SECRET"))
+        buildConfigField("String", "CLOVA_OCR_DOCUMENT_BASEURL", fetchClovaProperties("CLOVA_OCR_DOCUMENT_BASEURL"))
+
+        buildConfigField("String", "MONEYMONG_BASE_URL", "\"https://dev.moneymong.site/\"")
     }
+
     buildFeatures {
         buildConfig = true
     }
@@ -40,3 +44,6 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.test.espresso.core)
 }
+
+fun fetchClovaProperties(propertyKey: String) =
+    gradleLocalProperties(rootDir).getProperty(propertyKey)
