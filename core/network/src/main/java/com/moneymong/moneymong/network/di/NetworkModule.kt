@@ -8,6 +8,7 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.moneymong.moneymong.network.BuildConfig
 import com.moneymong.moneymong.network.adapter.ResultCallAdapterFactory
+import com.moneymong.moneymong.network.api.MoneyMongApi
 import com.moneymong.moneymong.network.api.AgencyApi
 import com.moneymong.moneymong.network.api.ClovaApi
 import com.moneymong.moneymong.network.api.LedgerApi
@@ -91,10 +92,9 @@ object NetworkModule {
         baseUrl(BuildConfig.MONEYMONG_BASE_URL)
         addConverterFactory(GsonConverterFactory.create(gson))
         addCallAdapterFactory(ResultCallAdapterFactory.create())
+        client(okHttpClient)
     }.build()
 
-    @Provides
-    @Singleton
     @ClovaRetrofit
     fun provideClovaClient(okHttpClient: OkHttpClient, gson: Gson): Retrofit =
         Retrofit.Builder().apply {

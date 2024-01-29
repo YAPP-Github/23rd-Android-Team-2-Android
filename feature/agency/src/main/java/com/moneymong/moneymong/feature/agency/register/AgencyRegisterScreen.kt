@@ -1,7 +1,6 @@
 package com.moneymong.moneymong.feature.agency.register
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,52 +11,64 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.moneymong.moneymong.common.ui.noRippleClickable
 import com.moneymong.moneymong.design_system.R
 import com.moneymong.moneymong.design_system.component.button.MDSButton
 import com.moneymong.moneymong.design_system.theme.Gray07
 import com.moneymong.moneymong.design_system.theme.MMHorizontalSpacing
 import com.moneymong.moneymong.design_system.theme.White
-import com.moneymong.moneymong.feature.agency.AgencyType
 import com.moneymong.moneymong.feature.agency.register.component.AgencyOutDialog
 import com.moneymong.moneymong.feature.agency.register.view.AgencyResisterContentView
+import org.orbitmvi.orbit.compose.collectAsState
+import org.orbitmvi.orbit.compose.collectSideEffect
 
 @Composable
 fun AgencyRegisterScreen(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    viewModel: AgencyRegisterViewModel = hiltViewModel(),
+    navigateToComplete: () -> Unit,
+    navigateUp: () -> Unit
 ) {
-    var agencyType by remember { mutableStateOf(AgencyType.CLUB) }
-    var agencyName by remember { mutableStateOf(TextFieldValue()) }
-    var nameTextFieldIsError by remember { mutableStateOf(false) }
-    var showOutDialog by remember { mutableStateOf(false) }
+    val state by viewModel.collectAsState()
 
-    if (showOutDialog) {
+    viewModel.collectSideEffect {
+        when (it) {
+            is AgencyRegisterSideEffect.NavigateToComplete -> {
+                navigateToComplete()
+            }
+
+            is AgencyRegisterSideEffect.NavigateUp -> {
+                navigateUp()
+            }
+        }
+    }
+
+    if (state.visibleOutDialog) {
         AgencyOutDialog(
-            onDismissRequest = { showOutDialog = false },
-            onPositive = { showOutDialog = false /* todo back home */ },
-            onNegative = { showOutDialog = false }
+            onDismissRequest = { viewModel.changeOutDialogVisibility(false) },
+            onPositive = viewModel::navigateUp,
+            onNegative = { viewModel.changeOutDialogVisibility(false) }
         )
     }
+
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(horizontal = MMHorizontalSpacing)
             .background(color = White)
+            .padding(horizontal = MMHorizontalSpacing)
     ) {
         Icon(
             modifier = Modifier
                 .align(Alignment.End)
                 .padding(vertical = 10.dp)
                 .size(24.dp)
-                .clickable { showOutDialog = true },
+                .noRippleClickable(onClick = { viewModel.changeOutDialogVisibility(true) }),
             painter = painterResource(id = R.drawable.ic_close_default),
             tint = Gray07,
             contentDescription = null
@@ -65,18 +76,18 @@ fun AgencyRegisterScreen(
         Spacer(modifier = Modifier.height(8.dp))
         AgencyResisterContentView(
             modifier = Modifier.weight(1f),
-            agencyType = agencyType,
-            onAgencyTypeChange = { agencyType = it },
-            agencyName = agencyName,
-            onAgencyNameChange = { agencyName = it },
-            changeNameTextFieldIsError = { nameTextFieldIsError = it },
+            agencyType = state.agencyType,
+            onAgencyTypeChange = viewModel::changeAgencyType,
+            agencyName = state.agencyName,
+            onAgencyNameChange = viewModel::changeAgencyName,
+            changeNameTextFieldIsError = viewModel::changeNameTextFieldIsError,
         )
-        val canRegister = agencyName.text.isNotEmpty() && nameTextFieldIsError.not()
+        val canRegister = state.agencyName.text.isNotEmpty() && state.nameTextFieldIsError.not()
         MDSButton(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 28.dp),
-            onClick = { /*TODO navigate to 소속 등록 성공*/ },
+            onClick = viewModel::registerAgency,
             text = "등록하기",
             enabled = canRegister
         )
@@ -87,5 +98,8 @@ fun AgencyRegisterScreen(
 @Preview(showBackground = true)
 @Composable
 fun AgencyRegisterScreenPreview() {
-    AgencyRegisterScreen()
+    AgencyRegisterScreen(
+        navigateToComplete = {},
+        navigateUp = {}
+    )
 }

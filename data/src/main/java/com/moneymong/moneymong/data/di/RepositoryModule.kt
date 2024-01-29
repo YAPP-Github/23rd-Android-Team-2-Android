@@ -1,5 +1,7 @@
 package com.moneymong.moneymong.data.di
 
+import com.moneymong.moneymong.data.repository.AgencyRepositoryImpl
+import com.moneymong.moneymong.domain.repository.AgencyRepository
 import com.moneymong.moneymong.data.repository.ledger.LedgerRepositoryImpl
 import com.moneymong.moneymong.data.repository.ledgerdetail.LedgerDetailRepositoryImpl
 import com.moneymong.moneymong.data.repository.member.MemberRepositoryImpl
@@ -18,6 +20,11 @@ import dagger.hilt.components.SingletonComponent
 @Module
 @InstallIn(SingletonComponent::class)
 interface RepositoryModule {
+
+    @Binds
+    fun bindAgencyRepository(
+        agencyRepositoryImpl: AgencyRepositoryImpl
+    ): AgencyRepository
 
     @Binds
     fun bindUserRepository(
