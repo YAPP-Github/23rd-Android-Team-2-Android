@@ -1,5 +1,7 @@
 package com.moneymong.moneymong.data.di
 
+import com.moneymong.moneymong.data.datasource.agency.AgencyRemoteDataSource
+import com.moneymong.moneymong.data.datasource.impl.AgencyRemoteDataSourceImpl
 import com.moneymong.moneymong.data.datasource.ledger.LedgerRemoteDataSource
 import com.moneymong.moneymong.data.datasource.ledger.LedgerRemoteDataSourceImpl
 import com.moneymong.moneymong.data.datasource.ledgerdetail.LedgerDetailRemoteDataSource
@@ -18,6 +20,11 @@ import dagger.hilt.components.SingletonComponent
 @Module
 @InstallIn(SingletonComponent::class)
 interface DataSourceModule {
+
+    @Binds
+    fun bindAgencyRemoteDataSource(
+        agencyRemoteDataSourceImpl: AgencyRemoteDataSourceImpl
+    ): AgencyRemoteDataSource
 
     @Binds
     fun bindUserRemoteDataSource(

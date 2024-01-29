@@ -19,7 +19,7 @@ internal fun AgencySearchBottomSheetContent(
     modifier: Modifier = Modifier,
     checkedType: AgencyBottomSheetType?,
     changeType: (AgencyBottomSheetType?) -> Unit,
-    hide: () -> Unit
+    onConfirm: () -> Unit
 ) {
 
     Column(modifier = modifier.padding(vertical = 24.dp, horizontal = 20.dp)) {
@@ -38,7 +38,7 @@ internal fun AgencySearchBottomSheetContent(
         Spacer(modifier = Modifier.height(20.dp))
         MDSButton(
             modifier = Modifier.fillMaxWidth(),
-            onClick = { hide() },
+            onClick = onConfirm,
             text = "확인",
             enabled = checkedType != null
         )
@@ -46,7 +46,7 @@ internal fun AgencySearchBottomSheetContent(
 }
 
 
-internal enum class AgencyBottomSheetType(
+enum class AgencyBottomSheetType(
     @DrawableRes val imgRes: Int,
     val message: String
 ) {
