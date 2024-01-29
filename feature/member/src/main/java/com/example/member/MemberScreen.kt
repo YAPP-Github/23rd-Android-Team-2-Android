@@ -37,6 +37,7 @@ import com.moneymong.moneymong.design_system.R
 import com.example.member.component.MemberCardView
 import com.example.member.component.MemberDialogView
 import com.example.member.component.MemberListView
+import com.moneymong.moneymong.design_system.component.bottomSheet.MDSBottomSheet
 import com.moneymong.moneymong.design_system.component.button.MDSButton
 import com.moneymong.moneymong.design_system.component.button.MDSButtonSize
 import com.moneymong.moneymong.design_system.component.button.MDSButtonType
@@ -171,7 +172,7 @@ fun MemberScreen(
     if (state.vertClick) {
         viewModel.isRoleChanged(false)
 
-        ModalBottomSheet(
+        MDSBottomSheet(
             onDismissRequest = {
                 coroutineScope.launch {
                     sheetState.hide()
@@ -183,12 +184,12 @@ fun MemberScreen(
             },
             modifier = Modifier,
             sheetState = sheetState,
-            shape = MaterialTheme.shapes.large,
-            containerColor = White,
-            tonalElevation = 8.dp,
-            scrimColor = Black.copy(alpha = 0.5f),
-            dragHandle = null,
-            windowInsets = BottomSheetDefaults.windowInsets
+//            shape = MaterialTheme.shapes.large,
+//            containerColor = White,
+//            tonalElevation = 8.dp,
+//            scrimColor = Black.copy(alpha = 0.5f),
+//            dragHandle = null,
+//            windowInsets = BottomSheetDefaults.windowInsets
         ) {
 
             if (bottomSheetType.value == BottomSheetType.ROLE_ASSIGNMENT_EXPORT) {
@@ -225,6 +226,7 @@ fun MemberScreen(
                     Text(
                         modifier = Modifier
                             .fillMaxWidth()
+                            .height(24.dp)
                             .clickable {
                                 viewModel.onVertClickChanged(false)
                                 viewModel.onShowDialogChanged(true)
@@ -233,7 +235,7 @@ fun MemberScreen(
                         style = Body4,
                         color = Red03
                     )
-                    Spacer(modifier = Modifier.height(24.dp))
+                    //Spacer(modifier = Modifier.height(24.dp))
                 }
             } else {
                 Column(
