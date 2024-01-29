@@ -15,10 +15,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -30,7 +28,6 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
 import com.moneymong.moneymong.design_system.R
-import com.moneymong.moneymong.design_system.component.bottomSheet.MDSBottomSheet
 import com.moneymong.moneymong.design_system.component.button.MDSFloatingActionButton
 import com.moneymong.moneymong.design_system.component.tooltip.MDSToolTip
 import com.moneymong.moneymong.design_system.component.tooltip.MDSToolTipPosition
@@ -41,13 +38,9 @@ import com.moneymong.moneymong.design_system.theme.MMHorizontalSpacing
 import com.moneymong.moneymong.design_system.theme.Red03
 import com.moneymong.moneymong.design_system.theme.White
 import com.moneymong.moneymong.feature.agency.Agency
-import com.moneymong.moneymong.feature.agency.search.component.AgencySearchBottomSheetContent
 import com.moneymong.moneymong.feature.agency.search.component.AgencySearchTopBar
 import com.moneymong.moneymong.feature.agency.search.item.AgencyItem
-import org.orbitmvi.orbit.compose.collectAsState
-import org.orbitmvi.orbit.compose.collectSideEffect
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AgencySearchScreen(
     modifier: Modifier = Modifier,
@@ -55,32 +48,7 @@ fun AgencySearchScreen(
     navigateToRegister: () -> Unit,
     navigateAgencyJoin: (agencyId: Long) -> Unit
 ) {
-    val state by viewModel.collectAsState()
     val pagingItems = viewModel.agencies.collectAsLazyPagingItems()
-
-    viewModel.collectSideEffect {
-        when (it) {
-            is AgencySearchSideEffect.NavigateToRegister -> {
-                navigateToRegister()
-            }
-
-            is AgencySearchSideEffect.NavigateToJoin -> {
-                navigateAgencyJoin(it.agencyId)
-            }
-        }
-    }
-
-    if (state.visibleBottomSheet) {
-        MDSBottomSheet(
-            onDismissRequest = viewModel::onDismissBottomSheet,
-        ) {
-            AgencySearchBottomSheetContent(
-                checkedType = state.registerType,
-                changeType = viewModel::changeRegisterType,
-                onConfirm = viewModel::onBottomSheetConfirmButtonClicked
-            )
-        }
-    }
 
     Box(
         modifier = modifier
@@ -96,7 +64,7 @@ fun AgencySearchScreen(
             AgencySearchContentView(
                 modifier = Modifier.weight(1f),
                 pagingItems = pagingItems,
-                onClickItem = viewModel::onAgencyItemClicked
+                onClickItem = navigateAgencyJoin
             )
         }
         Column(
