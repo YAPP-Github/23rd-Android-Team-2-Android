@@ -16,7 +16,7 @@ class MoneyMongTokenAuthenticator @Inject constructor(
     override fun authenticate(route: Route?, response: Response): Request? {
 
         val isPathRefresh =
-            response.request.url.toString() == BuildConfig.BASE_URL + "api/v1/tokens"
+            response.request.url.toString() == BuildConfig.MONEYMONG_BASE_URL + "api/v1/tokens"
 
         if (response.code == 401 && !isPathRefresh) {
             runBlocking {

@@ -1,22 +1,47 @@
 package com.moneymong.moneymong.network.api
 
+import com.moneymong.moneymong.network.request.agency.AgencyJoinRequest
+import com.moneymong.moneymong.network.request.agency.AgencyRegisterRequest
+import com.moneymong.moneymong.network.response.agency.AgenciesGetResponse
+import com.moneymong.moneymong.network.response.agency.AgencyJoinResponse
 import com.moneymong.moneymong.network.response.member.InvitationCodeResponse
+import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.PATCH
+import retrofit2.http.POST
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface AgencyApi {
 
+    // GET
     @GET("api/v1/agencies/{agencyId}/invitation-code")
     suspend fun getInvitationCode(
-        @Path("agencyId") agencyId: Long,
-        @Header("Authorization") header: String = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiUk9MRV9VU0VSIiwidXNlcklkIjozLCJpYXQiOjE3MDQ3MTU0NTEsImV4cCI6MTczNjI3MzA1MX0.2yYEy71Gz4YIz0DYzlx0glYMgZA0JAZs05jsVRvvQx4"
+        @Path("agencyId") agencyId: Long
     ): Result<InvitationCodeResponse>
 
+    @GET("api/v1/agencies")
+    suspend fun getAgencies(
+        @Query("page") page: Int,
+        @Query("size") size: Int
+    ): Result<AgenciesGetResponse>
+
+    // POST
+    @POST("/api/v1/agencies/{agencyId}/invitation-code")
+    suspend fun agencyCodeNumbers(
+        @Path("agencyId") agencyId: Long,
+        @Body body: AgencyJoinRequest
+    ): Result<AgencyJoinResponse>
+
+    @POST("api/v1/agencies")
+    suspend fun registerAgency(
+        @Body request: AgencyRegisterRequest
+    ): Result<Unit>
+
+    // PATCH
     @PATCH("api/v1/agencies/{agencyId}/invitation-code")
     suspend fun reInvitationCode(
-        @Path("agencyId") agencyId: Long,
-        @Header("Authorization") header: String = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiUk9MRV9VU0VSIiwidXNlcklkIjozLCJpYXQiOjE3MDQ3MTU0NTEsImV4cCI6MTczNjI3MzA1MX0.2yYEy71Gz4YIz0DYzlx0glYMgZA0JAZs05jsVRvvQx4"
+        @Path("agencyId") agencyId: Long
     ): Result<InvitationCodeResponse>
 }

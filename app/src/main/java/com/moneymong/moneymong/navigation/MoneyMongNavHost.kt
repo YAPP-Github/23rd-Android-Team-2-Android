@@ -5,6 +5,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
+import com.moneymong.moneymong.common.ui.noRippleClickable
 import com.moneymong.moneymong.feature.sign.navigation.loginRoute
 import com.moneymong.moneymong.feature.sign.navigation.loginScreen
 import com.moneymong.moneymong.feature.sign.navigation.signCompleteRoute
@@ -40,16 +41,8 @@ fun MoneyMongNavHost(
         navController = navController,
         startDestination = startDestination
     ) {
-       splashScreen(
-            navigateToHome = {
-                navController.navigate(
-                    route = homeRoute,
-                    navOptions = navOptions {
-                        popUpTo(splashRoute) { inclusive = true }
-
-                    }
-                )
-            },
+        splashScreen(
+            navigateToHome = { navController.topLevelNavigateToHome(homeLedgerPostSuccess = false) },
 
             navigateToLogin = {
                 navController.navigate(
@@ -60,13 +53,13 @@ fun MoneyMongNavHost(
                 )
             }
         )
-        
+
         loginScreen(
             navigateToHome = {
                 navController.navigate(
                     route = homeRoute,
                     navOptions = navOptions {
-                        popUpTo(loginRoute) {inclusive = true }
+                        popUpTo(loginRoute) { inclusive = true }
                     }
                 )
             },
@@ -81,7 +74,7 @@ fun MoneyMongNavHost(
                 )
             }
         )
-        
+
         signUpScreen(
             navigateToSignComplete = {
                 navController.navigate(
@@ -95,7 +88,7 @@ fun MoneyMongNavHost(
                 navController.navigateUp()
             }
         )
-        
+
         signCompleteScreen(
             navigateToHome = {
                 navController.navigate(
@@ -106,35 +99,35 @@ fun MoneyMongNavHost(
                 )
             }
         )
-      
+
         homeScreen(
             navigateToOCR = navController::navigateToOCR,
             navigateToLedgerDetail = navController::navigateToLedgerDetail,
             navigateToLedgerManual = navController::navigateToLedgerManual
         )
-        
+
         ocrScreen(
             navigateToOCRResult = navController::navigateToOCRResult,
             navigateToHome = navController::topLevelNavigateToHome,
             popBackStack = navController::popBackStack
         )
-        
+
         ocrResultScreen(
             navigateToHome = navController::topLevelNavigateToHome,
             navigateToOCRDetail = navController::navigateToOCRDetail,
             popBackStack = navController::popBackStack
         )
-        
+
         ocrDetailScreen(
             navigateToHome = navController::topLevelNavigateToHome,
             popBackStack = navController::popBackStack
         )
-        
+
         ledgerDetailScreen(
             navigateToHome = navController::topLevelNavigateToHome,
             popBackStack = navController::popBackStack
         )
-        
+
         ledgerManualScreen(
             popBackStack = navController::popBackStack,
             navigateToHome = navController::topLevelNavigateToHome

@@ -1,4 +1,4 @@
-package com.moneymong.moneymong.domain
+package com.moneymong.moneymong.domain.util
 
 interface LoginCallback {
     suspend fun onLoginSuccess()

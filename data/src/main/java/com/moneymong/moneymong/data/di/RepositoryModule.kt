@@ -6,7 +6,7 @@ import com.moneymong.moneymong.data.repository.signup.UnivRepositoryImpl
 import com.moneymong.moneymong.domain.repository.LoginRepository
 import com.moneymong.moneymong.domain.repository.TokenRepository
 import com.moneymong.moneymong.domain.repository.UnivRepository
-import com.moneymong.moneymong.data.repository.AgencyRepositoryImpl
+import com.moneymong.moneymong.data.repository.agency.AgencyRepositoryImpl
 import com.moneymong.moneymong.domain.repository.AgencyRepository
 import com.moneymong.moneymong.data.repository.ledger.LedgerRepositoryImpl
 import com.moneymong.moneymong.data.repository.ledgerdetail.LedgerDetailRepositoryImpl

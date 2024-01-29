@@ -2,7 +2,7 @@ package com.moneymong.moneymong.feature.sign.viewmodel
 
 import androidx.lifecycle.viewModelScope
 import com.moneymong.moneymong.common.base.BaseViewModel
-import com.moneymong.moneymong.domain.LoginCallback
+import com.moneymong.moneymong.domain.util.LoginCallback
 import com.moneymong.moneymong.domain.usecase.login.LoginUseCase
 import com.moneymong.moneymong.domain.usecase.login.TokenUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel

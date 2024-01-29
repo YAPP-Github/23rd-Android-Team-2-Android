@@ -1,6 +1,5 @@
-package com.moneymong.moneymong.data.datasource.mock
+package com.moneymong.moneymong.data.datasource.agency
 
-import com.moneymong.moneymong.data.datasource.agency.AgencyRemoteDataSource
 import com.moneymong.moneymong.network.request.agency.AgencyJoinRequest
 import com.moneymong.moneymong.network.request.agency.AgencyRegisterRequest
 import com.moneymong.moneymong.network.response.agency.AgenciesGetResponse

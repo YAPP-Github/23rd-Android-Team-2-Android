@@ -1,4 +1,4 @@
-package com.moneymong.moneymong.domain.usecase
+package com.moneymong.moneymong.domain.usecase.agency
 
 import androidx.paging.PagingData
 import com.moneymong.moneymong.domain.entity.agency.AgencyGetEntity
