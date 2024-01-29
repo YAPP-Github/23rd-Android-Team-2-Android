@@ -12,6 +12,7 @@ import com.moneymong.moneymong.network.api.AgencyApi
 import com.moneymong.moneymong.network.api.ClovaApi
 import com.moneymong.moneymong.network.api.LedgerApi
 import com.moneymong.moneymong.network.api.LedgerDetailApi
+import com.moneymong.moneymong.network.api.MemberApi
 import com.moneymong.moneymong.network.api.MoneyMongApi
 import com.moneymong.moneymong.network.api.UserApi
 import com.moneymong.moneymong.network.util.MoneyMongTokenAuthenticator
@@ -24,7 +25,6 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.create
 import javax.inject.Qualifier
 import javax.inject.Singleton
 
@@ -123,6 +123,10 @@ object NetworkModule {
     @Provides
     fun provideUserApi(@MoneyMongRetrofit retrofit: Retrofit): UserApi =
         retrofit.create(UserApi::class.java)
+
+    @Provides
+    fun provideMemberApi(@MoneyMongRetrofit retrofit: Retrofit): MemberApi =
+        retrofit.create(MemberApi::class.java)
 
     @Provides
     fun provideClovaApi(@ClovaRetrofit retrofit: Retrofit): ClovaApi =
