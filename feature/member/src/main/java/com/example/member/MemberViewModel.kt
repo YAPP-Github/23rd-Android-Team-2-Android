@@ -29,7 +29,7 @@ class MemberViewModel @Inject constructor(
     fun onVertClickChanged(vertClick: Boolean) = intent {
         reduce {
             state.copy(
-                vertClick = vertClick
+                visibleBottomSheet = vertClick
             )
         }
     }
@@ -113,10 +113,10 @@ class MemberViewModel @Inject constructor(
             .onSuccess {
                 reduce {
                     state.copy(
-                        isInvitationCode = it.code
+                        invitationCode = it.code
                     )
                 }
-                Log.d("invitationCode", state.isInvitationCode)
+                Log.d("invitationCode", state.invitationCode)
 
             }.onFailure {
                 //TODO - 에러화면
@@ -128,7 +128,7 @@ class MemberViewModel @Inject constructor(
             .onSuccess {
                 reduce {
                     state.copy(
-                        isInvitationCode = it.code,
+                        invitationCode = it.code,
                         onReissueChange = true
                     )
                 }
