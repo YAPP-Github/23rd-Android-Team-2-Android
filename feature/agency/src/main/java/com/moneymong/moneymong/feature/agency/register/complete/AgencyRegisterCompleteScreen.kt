@@ -72,7 +72,7 @@ fun AgencyRegisterCompleteScreen(
             .background(color = Gray08)
             .padding(horizontal = MMHorizontalSpacing)
     ) {
-        TitleView(onBackClick = viewModel::onBackButtonClicked)
+        TitleView(onBackClick = viewModel::navigateToAgencySearch)
         ContentView(
             modifier = Modifier
                 .weight(1f)
@@ -80,7 +80,7 @@ fun AgencyRegisterCompleteScreen(
         )
         MDSButton(
             modifier = Modifier.fillMaxWidth(),
-            onClick = viewModel::onNavigateLedgerButtonClicked,
+            onClick = viewModel::navigateToLedger,
             text = "소속 장부 확인하러 가기",
             type = MDSButtonType.SECONDARY
         )
