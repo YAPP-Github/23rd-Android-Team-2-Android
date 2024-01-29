@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.moneymong.android.library)
     alias(libs.plugins.moneymong.android.library.compose)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.moneymong.android.hilt)
 
 }
 
@@ -39,5 +40,13 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.testManifest)
 
-    implementation(project(":core:design-system"))
+    implementation(projects.core.common)
+    implementation(projects.core.designSystem)
+    implementation(projects.domain)
+
+    implementation(libs.orbit.compose)
+    implementation(libs.orbit.core)
+    implementation(libs.orbit.viewModel)
+
+
 }
