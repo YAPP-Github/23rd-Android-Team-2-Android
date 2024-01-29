@@ -6,22 +6,22 @@ import androidx.compose.ui.res.stringResource
 import com.moneymong.moneymong.design_system.component.navigation.MDSNavigationBar
 import com.moneymong.moneymong.design_system.component.navigation.MDSNavigationBarItem
 import com.moneymong.moneymong.home.HomeBottomTabs
-import com.moneymong.moneymong.home.navigation.HomeNavHostController
+import com.moneymong.moneymong.home.navigation.HomeNavigator
 
 @Composable
 internal fun HomeBottomBarView(
     modifier: Modifier = Modifier,
-    homeNavHostController: HomeNavHostController,
+    homeNavigator: HomeNavigator,
     tabs: List<HomeBottomTabs>
 ) {
-    if (homeNavHostController.includeCurrentRouteInTabs()) {
+    if (homeNavigator.includeCurrentRouteInTabs()) {
         MDSNavigationBar(modifier = modifier) {
             tabs.forEach { tab ->
                 MDSNavigationBarItem(
-                    selected = homeNavHostController.currentRoute == tab.route,
+                    selected = homeNavigator.currentRoute == tab.route,
                     labelText = stringResource(id = tab.labelText),
                     icon = tab.icon,
-                    onClick = { homeNavHostController.navigate(tab.route) }
+                    onClick = { homeNavigator.navigate(tab.route) }
                 )
             }
         }

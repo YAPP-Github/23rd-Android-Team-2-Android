@@ -39,14 +39,15 @@ import com.moneymong.moneymong.design_system.component.bottomSheet.MDSBottomShee
 import com.moneymong.moneymong.design_system.component.button.MDSFloatingActionButton
 import com.moneymong.moneymong.design_system.component.tooltip.MDSToolTip
 import com.moneymong.moneymong.design_system.component.tooltip.MDSToolTipPosition
+import com.moneymong.moneymong.design_system.error.ErrorScreen
 import com.moneymong.moneymong.design_system.theme.Mint02
 import com.moneymong.moneymong.design_system.theme.Mint03
 import com.moneymong.moneymong.design_system.theme.White
-import com.moneymong.moneymong.ledger.view.LedgerStaffEmptyView
 import com.moneymong.moneymong.ledger.view.LedgerAgencyEmptyView
-import com.moneymong.moneymong.ledger.view.LedgerDefaultView
 import com.moneymong.moneymong.ledger.view.LedgerAgencySelectBottomSheet
+import com.moneymong.moneymong.ledger.view.LedgerDefaultView
 import com.moneymong.moneymong.ledger.view.LedgerMemberEmptyView
+import com.moneymong.moneymong.ledger.view.LedgerStaffEmptyView
 import com.moneymong.moneymong.ledger.view.LedgerTab
 import com.moneymong.moneymong.ledger.view.LedgerTabRowView
 import com.moneymong.moneymong.ledger.view.LedgerTopbarView
@@ -64,7 +65,8 @@ fun LedgerScreen(
     viewModel: LedgerViewModel = hiltViewModel(),
     navigateToAgency: () -> Unit,
     navigateToOCR: (NavOptions?) -> Unit,
-    navigateToLedgerDetail: (NavOptions?, Int) -> Unit
+    navigateToLedgerDetail: (NavOptions?, Int) -> Unit,
+    navigateToLedgerManual: (NavOptions?) -> Unit
 ) {
     val state = viewModel.collectAsState().value
     var expandableFab by remember { mutableStateOf(false) }
@@ -87,6 +89,10 @@ fun LedgerScreen(
                 navigateToOCR(null)
             }
 
+            is LedgerSideEffect.LedgerNavigateToLedgerManual -> {
+                navigateToLedgerManual(null)
+            }
+
             is LedgerSideEffect.LedgerOpenSheet -> {
                 viewModel.onChangeSheetState(true)
             }
@@ -94,147 +100,159 @@ fun LedgerScreen(
             is LedgerSideEffect.LedgerCloseSheet -> {
                 viewModel.onChangeSheetState(false)
             }
+
+            is LedgerSideEffect.LedgerFetchRetry -> {
+                viewModel.fetchAgencyExistLedger()
+                viewModel.fetchLedgerTransactionList()
+            }
         }
     }
 
-    Scaffold(
-        topBar = {
-            LedgerTopbarView(
-                modifier = Modifier.background(White),
-                header = "장부",
-                icon = R.drawable.ic_chevron_bottom, // TODO
-                visibleArrow = true, // TODO 소속이 있을 때만
-                onClickDownArrow = { viewModel.eventEmit(LedgerSideEffect.LedgerOpenSheet) }
-            )
-        }
-    ) {
-        if (state.showBottomSheet) {
-            MDSBottomSheet(
-                onDismissRequest = { viewModel.eventEmit(LedgerSideEffect.LedgerCloseSheet) },
-                content = {
-                    LedgerAgencySelectBottomSheet(onClickItem = {})
-                }
-            )
-        }
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(it)
+    if (state.visibleError) {
+        ErrorScreen(
+            modifier = Modifier.fillMaxSize(),
+            message = "문제가 발생했습니다\n다시 시도해주세요",
+            onRetry = { viewModel.eventEmit(LedgerSideEffect.LedgerFetchRetry) })
+    } else {
+        Scaffold(
+            topBar = {
+                LedgerTopbarView(
+                    modifier = Modifier.background(White),
+                    header = "장부",
+                    icon = R.drawable.ic_chevron_bottom, // TODO
+                    visibleArrow = true, // TODO 소속이 있을 때만
+                    onClickDownArrow = { viewModel.eventEmit(LedgerSideEffect.LedgerOpenSheet) }
+                )
+            }
         ) {
-            if (false) {// TODO 소속이 없을 경우
-                LedgerAgencyEmptyView(onClickFindAgency = navigateToAgency)
-            } else {
-                LedgerTabRowView(
-                    tabs = tabs,
-                    selectedTabIndex = pagerState.currentPage,
-                    onScrollToPage = {
-                        coroutineScope.launch { pagerState.animateScrollToPage(it) }
+            if (state.showBottomSheet) {
+                MDSBottomSheet(
+                    onDismissRequest = { viewModel.eventEmit(LedgerSideEffect.LedgerCloseSheet) },
+                    content = {
+                        LedgerAgencySelectBottomSheet(onClickItem = {})
                     }
                 )
-                HorizontalPager(state = pagerState) { index ->
-                    if (tabs[index] == LedgerTab.Ledger) {
-                        Box(modifier = modifier.fillMaxSize()) {
-                            if (state.isExistLedger) { // 소속에 장부가 존재한다면
-                                LedgerDefaultView(
-                                    totalBalance = state.ledgerTransaction?.totalBalance ?: 0,
-                                    ledgerDetails = state.filterTransactionList,
-                                    transactionType = state.transactionType,
-                                    currentDate = state.currentDate,
-                                    hasTransaction = state.hasTransaction,
-                                    onChangeTransactionType = viewModel::onChangeTransactionType,
-                                    onAddMonthFromCurrentDate = viewModel::onAddMonthFromCurrentDate,
-                                    onClickTransactionItem = {
-                                        viewModel.eventEmit(
-                                            LedgerSideEffect.LedgerNavigateToLedgerDetail(
-                                                it
+            }
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(it)
+            ) {
+                if (false) {// TODO 소속이 없을 경우
+                    LedgerAgencyEmptyView(onClickFindAgency = navigateToAgency)
+                } else {
+                    LedgerTabRowView(
+                        tabs = tabs,
+                        selectedTabIndex = pagerState.currentPage,
+                        onScrollToPage = {
+                            coroutineScope.launch { pagerState.animateScrollToPage(it) }
+                        }
+                    )
+                    HorizontalPager(state = pagerState) { index ->
+                        if (tabs[index] == LedgerTab.Ledger) {
+                            Box(modifier = modifier.fillMaxSize()) {
+                                if (state.isExistLedger) { // 소속에 장부가 존재한다면
+                                    LedgerDefaultView(
+                                        totalBalance = state.ledgerTransaction?.totalBalance ?: 0,
+                                        ledgerDetails = state.filterTransactionList,
+                                        transactionType = state.transactionType,
+                                        currentDate = state.currentDate,
+                                        hasTransaction = state.hasTransaction,
+                                        onChangeTransactionType = viewModel::onChangeTransactionType,
+                                        onAddMonthFromCurrentDate = viewModel::onAddMonthFromCurrentDate,
+                                        onClickTransactionItem = {
+                                            viewModel.eventEmit(
+                                                LedgerSideEffect.LedgerNavigateToLedgerDetail(
+                                                    it
+                                                )
                                             )
-                                        )
-                                    }
-                                )
-                            } else {
-                                if (false) { // TODO 멤버일 경우
-                                    LedgerMemberEmptyView()
-                                } else {
-                                    LedgerStaffEmptyView()
-                                }
-                            }
-                            if (true) { // TODO 어드민일 경우
-                                Column(
-                                    modifier = Modifier
-                                        .align(Alignment.BottomEnd)
-                                        .padding(end = 20.dp, bottom = 20.dp),
-                                    horizontalAlignment = Alignment.End
-                                ) {
-                                    if (!state.isExistLedger && !expandableFab) {
-                                        MDSToolTip(
-                                            text = "해당 기능을 사용해보세요",
-                                            position = MDSToolTipPosition.Right
-                                        )
-                                        Spacer(modifier = Modifier.height(8.dp))
-                                    }
-                                    AnimatedVisibility(
-                                        visible = expandableFab,
-                                        enter = slideInVertically(
-                                            initialOffsetY = { fullHeight -> fullHeight },
-                                            animationSpec = tween(
-                                                durationMillis = 250,
-                                                easing = LinearOutSlowInEasing
-                                            )
-                                        ),
-                                        exit = slideOutVertically(
-                                            targetOffsetY = { fullHeight -> fullHeight },
-                                            animationSpec = tween(
-                                                durationMillis = 150,
-                                                easing = FastOutLinearInEasing
-                                            )
-                                        )
-                                    ) {
-                                        MDSFloatingActionButton(
-                                            iconResource = R.drawable.ic_scan,
-                                            containerColor = Mint03,
-                                            onClick = { viewModel.eventEmit(LedgerSideEffect.LedgerNavigateToOCR) }
-                                        )
-                                    }
-                                    if (expandableFab) Spacer(modifier = Modifier.height(10.dp))
-                                    AnimatedVisibility(
-                                        visible = expandableFab,
-                                        enter = slideInVertically(
-                                            initialOffsetY = { fullHeight -> fullHeight },
-                                            animationSpec = tween(
-                                                durationMillis = 150,
-                                                easing = LinearOutSlowInEasing
-                                            )
-                                        ),
-                                        exit = slideOutVertically(
-                                            targetOffsetY = { fullHeight -> fullHeight },
-                                            animationSpec = tween(
-                                                durationMillis = 250,
-                                                easing = FastOutLinearInEasing
-                                            )
-                                        )
-                                    ) {
-                                        MDSFloatingActionButton(
-                                            iconResource = R.drawable.ic_pencil,
-                                            containerColor = Mint03,
-                                            onClick = { /*TODO*/ }
-                                        )
-                                    }
-                                    if (expandableFab) Spacer(modifier = Modifier.height(10.dp))
-                                    val containerColor = if (expandableFab) Mint02 else Mint03
-                                    MDSFloatingActionButton(
-                                        modifier = Modifier.rotate(rotationAngle),
-                                        iconResource = R.drawable.ic_plus_default,
-                                        containerColor = containerColor,
-                                        onClick = {
-                                            expandableFab = !expandableFab
                                         }
                                     )
+                                } else {
+                                    if (false) { // TODO 멤버일 경우
+                                        LedgerMemberEmptyView()
+                                    } else {
+                                        LedgerStaffEmptyView()
+                                    }
+                                }
+                                if (true) { // TODO 어드민일 경우
+                                    Column(
+                                        modifier = Modifier
+                                            .align(Alignment.BottomEnd)
+                                            .padding(end = 20.dp, bottom = 20.dp),
+                                        horizontalAlignment = Alignment.End
+                                    ) {
+                                        if (!state.isExistLedger && !expandableFab) {
+                                            MDSToolTip(
+                                                text = "해당 기능을 사용해보세요",
+                                                position = MDSToolTipPosition.Right
+                                            )
+                                            Spacer(modifier = Modifier.height(8.dp))
+                                        }
+                                        AnimatedVisibility(
+                                            visible = expandableFab,
+                                            enter = slideInVertically(
+                                                initialOffsetY = { fullHeight -> fullHeight },
+                                                animationSpec = tween(
+                                                    durationMillis = 250,
+                                                    easing = LinearOutSlowInEasing
+                                                )
+                                            ),
+                                            exit = slideOutVertically(
+                                                targetOffsetY = { fullHeight -> fullHeight },
+                                                animationSpec = tween(
+                                                    durationMillis = 150,
+                                                    easing = FastOutLinearInEasing
+                                                )
+                                            )
+                                        ) {
+                                            MDSFloatingActionButton(
+                                                iconResource = R.drawable.ic_scan,
+                                                containerColor = Mint03,
+                                                onClick = { viewModel.eventEmit(LedgerSideEffect.LedgerNavigateToOCR) }
+                                            )
+                                        }
+                                        if (expandableFab) Spacer(modifier = Modifier.height(10.dp))
+                                        AnimatedVisibility(
+                                            visible = expandableFab,
+                                            enter = slideInVertically(
+                                                initialOffsetY = { fullHeight -> fullHeight },
+                                                animationSpec = tween(
+                                                    durationMillis = 150,
+                                                    easing = LinearOutSlowInEasing
+                                                )
+                                            ),
+                                            exit = slideOutVertically(
+                                                targetOffsetY = { fullHeight -> fullHeight },
+                                                animationSpec = tween(
+                                                    durationMillis = 250,
+                                                    easing = FastOutLinearInEasing
+                                                )
+                                            )
+                                        ) {
+                                            MDSFloatingActionButton(
+                                                iconResource = R.drawable.ic_pencil,
+                                                containerColor = Mint03,
+                                                onClick = { viewModel.eventEmit(LedgerSideEffect.LedgerNavigateToLedgerManual) }
+                                            )
+                                        }
+                                        if (expandableFab) Spacer(modifier = Modifier.height(10.dp))
+                                        val containerColor = if (expandableFab) Mint02 else Mint03
+                                        MDSFloatingActionButton(
+                                            modifier = Modifier.rotate(rotationAngle),
+                                            iconResource = R.drawable.ic_plus_default,
+                                            containerColor = containerColor,
+                                            onClick = {
+                                                expandableFab = !expandableFab
+                                            }
+                                        )
+                                    }
                                 }
                             }
-                        }
-                    } else {
-                        Box(modifier = modifier.fillMaxSize()) {
-                            MemberScreen()
+                        } else {
+                            Box(modifier = modifier.fillMaxSize()) {
+                                MemberScreen()
+                            }
                         }
                     }
                 }
@@ -249,6 +267,7 @@ fun LedgerScreenPreview() {
     LedgerScreen(
         navigateToAgency = {},
         navigateToOCR = {},
-        navigateToLedgerDetail = { navOptions, i -> }
+        navigateToLedgerDetail = { navOptions, i -> },
+        navigateToLedgerManual = {}
     )
 }

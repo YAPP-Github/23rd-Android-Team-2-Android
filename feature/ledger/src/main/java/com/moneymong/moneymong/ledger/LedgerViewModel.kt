@@ -22,11 +22,16 @@ class LedgerViewModel @Inject constructor(
     }
 
     fun fetchAgencyExistLedger() = intent {
-        fetchAgencyExistLedgerUseCase(4) // TODO agencyId
+        fetchAgencyExistLedgerUseCase(1) // TODO agencyId
             .onSuccess {
-                reduce { state.copy(isExistLedger = it) }
+                reduce {
+                    state.copy(
+                        isExistLedger = it,
+                        visibleError = false
+                    )
+                }
             }.onFailure {
-                // TODO
+                reduce { state.copy(visibleError = true) }
             }
     }
 
@@ -42,9 +47,14 @@ class LedgerViewModel @Inject constructor(
             )
             fetchLedgerTransactionListUseCase(param)
                 .onSuccess {
-                    reduce { state.copy(ledgerTransaction = it) }
+                    reduce {
+                        state.copy(
+                            ledgerTransaction = it,
+                            visibleError = false
+                        )
+                    }
                 }.onFailure {
-                    // TODO
+                    reduce { state.copy(visibleError = true) }
                 }.also { reduce { state.copy(isLoading = false) } }
         }
     }

@@ -26,9 +26,21 @@ fun NavController.navigateToHome(
     this.navigate("home_route/${homeLedgerPostSuccess}", navOptions)
 }
 
+fun NavController.topLevelNavigateToHome(homeLedgerPostSuccess: Boolean = false) {
+    this.navigateToHome(
+        navOptions = navOptions {
+            popUpTo(
+                graph.id
+            ) { inclusive = true }
+        },
+        homeLedgerPostSuccess = homeLedgerPostSuccess
+    )
+}
+
 fun NavGraphBuilder.homeScreen(
     navigateToOCR: (NavOptions?) -> Unit,
-    navigateToLedgerDetail: (NavOptions?, Int) -> Unit
+    navigateToLedgerDetail: (NavOptions?, Int) -> Unit,
+    navigateToLedgerManual: (NavOptions?) -> Unit
 ) {
     composable(
         route = homeRoute,
@@ -36,20 +48,22 @@ fun NavGraphBuilder.homeScreen(
             navArgument(HOME_LEDGER_POST_SUCCESS) { type = NavType.BoolType },
         )
     ) { backStackEntry ->
-        val homeLedgerPostSuccess = backStackEntry.arguments?.getBoolean(HOME_LEDGER_POST_SUCCESS) ?: false
+        val homeLedgerPostSuccess =
+            backStackEntry.arguments?.getBoolean(HOME_LEDGER_POST_SUCCESS) ?: false
         HomeScreen(
             homeLedgerPostSuccess = homeLedgerPostSuccess,
             navigateToOCR = navigateToOCR,
-            navigateToLedgerDetail = navigateToLedgerDetail
+            navigateToLedgerDetail = navigateToLedgerDetail,
+            navigateToLedgerManual = navigateToLedgerManual
         )
     }
 }
 
 @Composable
-internal fun rememberHomeNavController(navHostController: NavHostController = rememberNavController()) =
-    remember { HomeNavHostController(navHostController = navHostController) }
+internal fun rememberHomeNavigator(navHostController: NavHostController = rememberNavController()) =
+    remember { HomeNavigator(navHostController = navHostController) }
 
-internal class HomeNavHostController(
+internal class HomeNavigator(
     val navHostController: NavHostController
 ) {
     private val navBackStackEntry: NavBackStackEntry?

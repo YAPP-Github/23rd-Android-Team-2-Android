@@ -8,8 +8,11 @@ import androidx.navigation.navOptions
 import com.moneymong.moneymong.home.navigation.homeRoute
 import com.moneymong.moneymong.home.navigation.homeScreen
 import com.moneymong.moneymong.home.navigation.navigateToHome
+import com.moneymong.moneymong.home.navigation.topLevelNavigateToHome
 import com.moneymong.moneymong.ledgerdetail.navigation.ledgerDetailScreen
 import com.moneymong.moneymong.ledgerdetail.navigation.navigateToLedgerDetail
+import com.moneymong.moneymong.ledgermanual.navigation.ledgerManualScreen
+import com.moneymong.moneymong.ledgermanual.navigation.navigateToLedgerManual
 import com.moneymong.moneymong.ocr.navigation.navigateToOCR
 import com.moneymong.moneymong.ocr.navigation.ocrScreen
 import com.moneymong.moneymong.ocr_detail.navigation.navigateToOCRDetail
@@ -30,35 +33,30 @@ fun MoneyMongNavHost(
     ) {
         homeScreen(
             navigateToOCR = navController::navigateToOCR,
-            navigateToLedgerDetail = navController::navigateToLedgerDetail
+            navigateToLedgerDetail = navController::navigateToLedgerDetail,
+            navigateToLedgerManual = navController::navigateToLedgerManual
         )
         ocrScreen(
             navigateToOCRResult = navController::navigateToOCRResult,
+            navigateToHome = navController::topLevelNavigateToHome,
             popBackStack = navController::popBackStack
         )
         ocrResultScreen(
-            navigateToHome = { _, successOCR ->
-                navController.navigateToHome(navOptions {
-                    popUpTo(
-                        navController.graph.id
-                    ) { inclusive = true }
-                }, successOCR)
-            },
+            navigateToHome = navController::topLevelNavigateToHome,
             navigateToOCRDetail = navController::navigateToOCRDetail,
             popBackStack = navController::popBackStack
         )
         ocrDetailScreen(
-            navigateToHome = { _, successOCR ->
-                navController.navigateToHome(navOptions {
-                    popUpTo(
-                        navController.graph.id
-                    ) { inclusive = true }
-                }, successOCR)
-            },
+            navigateToHome = navController::topLevelNavigateToHome,
             popBackStack = navController::popBackStack
         )
         ledgerDetailScreen(
+            navigateToHome = navController::topLevelNavigateToHome,
             popBackStack = navController::popBackStack
+        )
+        ledgerManualScreen(
+            popBackStack = navController::popBackStack,
+            navigateToHome = navController::topLevelNavigateToHome
         )
     }
 }
