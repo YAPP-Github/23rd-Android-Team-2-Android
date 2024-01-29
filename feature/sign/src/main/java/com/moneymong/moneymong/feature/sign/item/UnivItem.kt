@@ -11,10 +11,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -24,22 +20,25 @@ import com.moneymong.moneymong.design_system.theme.Blue04
 import com.moneymong.moneymong.design_system.theme.Body4
 import com.moneymong.moneymong.design_system.theme.Gray03
 import com.moneymong.moneymong.design_system.theme.White
-import com.moneymong.moneymong.feature.sign.University
+import com.moneymong.moneymong.domain.entity.signup.University
 
 
 @Composable
 fun UnivItem(
+    isItemSelected: Boolean,
+    isItemSelectedChanged: (Boolean) -> Unit,
     univs: University,
-    onClick : (String) -> Unit
+    onClick: (String) -> Unit,
 ) {
-    var isSelected by remember{ mutableStateOf(false) }
+
 
     Row(
         modifier = Modifier
             .background(White)
             .fillMaxWidth()
             .clickable {
-                onClick(univs.univ)
+                isItemSelectedChanged(!isItemSelected)
+                onClick(univs.schoolName)
             }
             .padding(bottom = 20.dp)
 
@@ -50,8 +49,8 @@ fun UnivItem(
             contentDescription = null
         )
         Text(
-            text = univs.univ,
-            color = if(isSelected) Blue04 else Black,
+            text = univs.schoolName,
+            color = if (isItemSelected) Blue04 else Black,
             style = Body4,
             modifier = Modifier
                 .weight(1f)
@@ -63,7 +62,7 @@ fun UnivItem(
             painter = painterResource(id = R.drawable.ic_check),
             contentDescription = null,
             modifier = Modifier.size(24.dp),
-            tint = if(isSelected) Blue04 else Gray03
+            tint = if (isItemSelected) Blue04 else Gray03
         )
     }
 }

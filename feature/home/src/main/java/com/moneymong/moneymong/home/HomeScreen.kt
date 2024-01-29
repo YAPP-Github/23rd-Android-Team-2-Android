@@ -90,10 +90,12 @@ fun HomeScreen(
                     homeNavController.navigateAgencyJoin(agencyId = agencyId)
                 }
             )
+            
             agencyJoinScreen(
                 navigateToComplete = { homeNavController.navigateAgencyJoinComplete() },
                 navigateUp = { homeNavController.navigateUp() }
             )
+            
             agencyCompleteScreen(
                 navigateToLedger = {
                     homeNavController.navigate(
@@ -112,10 +114,12 @@ fun HomeScreen(
                     )
                 },
             )
+            
             agencyRegisterScreen(
                 navigateToComplete = { homeNavController.navigateAgencyRegisterComplete() },
                 navigateUp = { homeNavController.navigateUp() }
             )
+            
             agencyRegisterCompleteScreen(
                 navigateToSearch = {
                     homeNavController.navigateAgency(

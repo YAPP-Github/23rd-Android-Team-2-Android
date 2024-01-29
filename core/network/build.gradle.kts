@@ -4,6 +4,12 @@ import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 plugins {
     alias(libs.plugins.moneymong.android.library)
     alias(libs.plugins.moneymong.android.hilt)
+    alias(libs.plugins.secretsGradlePlugin)
+
+}
+
+fun getApiKey(propertyKey : String): String {
+    return gradleLocalProperties(rootDir).getProperty(propertyKey)
 }
 
 android {
@@ -23,7 +29,7 @@ android {
 
 dependencies {
     implementation(projects.core.common)
-
+    implementation(projects.domain)
     implementation(libs.androidx.core.ktx)
     implementation(libs.appcompat)
     implementation(libs.material)

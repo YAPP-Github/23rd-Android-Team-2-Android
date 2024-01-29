@@ -1,3 +1,5 @@
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+
 @Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     alias(libs.plugins.moneymong.android.application)
@@ -5,6 +7,12 @@ plugins {
     alias(libs.plugins.moneymong.android.application.flavors)
     alias(libs.plugins.moneymong.android.application.firebase)
     alias(libs.plugins.moneymong.android.hilt)
+    alias(libs.plugins.secretsGradlePlugin)
+
+}
+
+fun getApiKey(propertyKey : String): String {
+    return gradleLocalProperties(rootDir).getProperty(propertyKey)
 }
 
 android {
@@ -22,6 +30,10 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+        buildConfigField("String", "NATIVE_APP_KEY", getApiKey("native_app_key"))
+    }
+    buildFeatures{
+        buildConfig = true
     }
 
     buildTypes {
@@ -66,4 +78,6 @@ dependencies {
     implementation(libs.orbit.core)
     implementation(libs.orbit.compose)
     implementation(libs.orbit.viewModel)
+
+    implementation(libs.kakao.v2.user)
 }
