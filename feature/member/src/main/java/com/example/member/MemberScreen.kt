@@ -3,7 +3,6 @@ package com.example.member
 import BottomSheetType
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -103,9 +102,9 @@ fun MemberScreen(
     }
 
 
-    // vertClick 상태가 변경될 때 바텀 시트의 상태를 제어
-    LaunchedEffect(key1 = state.vertClick) {
-        if (state.vertClick) {
+    // visibleBottomSheet 상태가 변경될 때 바텀 시트의 상태를 제어
+    LaunchedEffect(key1 = state.visibleBottomSheet) {
+        if (state.visibleBottomSheet) {
             coroutineScope.launch {
                 sheetState.show()
             }
@@ -115,7 +114,7 @@ fun MemberScreen(
     LaunchedEffect(key1 = state.onCopyClick) {
         if (state.onCopyClick) {
             val result = snackbarHostState.showSnackbar(
-                message = "초대코드 ${state.isInvitationCode}이 복사되었습니다",
+                message = "초대코드 ${state.invitationCode}이 복사되었습니다",
                 withDismissAction = true
             )
             // 스낵바가 닫히면 onClick 상태를 false로 변경
@@ -163,7 +162,7 @@ fun MemberScreen(
         )
     }
 
-    if (state.vertClick) {
+    if (state.visibleBottomSheet) {
         viewModel.isRoleChanged(false)
 
         MDSBottomSheet(
@@ -299,9 +298,7 @@ fun MemberScreen(
                                     )
                                 ) //TODO
                                 viewModel.isMemberCheckedChanged(false)
-
                             }
-
                         },
                         text = "저장",
                         type = MDSButtonType.PRIMARY,
@@ -337,7 +334,7 @@ fun MemberScreen(
                     agencyUserRole
                 )
             },
-            invitationCode = state.isInvitationCode,
+            invitationCode = state.invitationCode,
             isReInvitationCode = { viewModel.eventEmit(MemberSideEffect.GetReInvitationCode(it)) }, //TODO
             onCopyChange = { onCopyClick -> viewModel.onCopyClickChanged(onCopyClick) },
         )
@@ -354,7 +351,6 @@ fun MemberScreen(
             },
             vertClickedUserIdChanged = { userId -> viewModel.vertClickedUserIdChanged(userId) },
         )
-
 
         Box(
             modifier = Modifier
