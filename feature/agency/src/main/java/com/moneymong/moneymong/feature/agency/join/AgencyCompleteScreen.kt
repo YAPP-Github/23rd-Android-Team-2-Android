@@ -1,5 +1,6 @@
 package com.moneymong.moneymong.feature.agency.join
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -18,25 +19,38 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
 import com.moneymong.moneymong.design_system.theme.Black
 import com.moneymong.moneymong.design_system.theme.Heading1
 import com.moneymong.moneymong.design_system.theme.MMHorizontalSpacing
 import com.moneymong.moneymong.design_system.theme.White
 import com.moneymong.moneymong.feature.agency.join.component.AgencyCompleteButtonView
 import com.moneymong.moneymong.feature.agency.join.component.AgencyCompleteView
+import org.orbitmvi.orbit.compose.collectAsState
 
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AgencyCompleteScreen() {
+fun AgencyCompleteScreen(
+    modifier : Modifier = Modifier,
+    navigateToLedger : () -> Unit,
+    navigateToJoin : () -> Unit,
+    viewModel: AgencyCompleteViewModel = hiltViewModel()
+) {
+    val state = viewModel.collectAsState().value
+
+    // 뒤로 가기 버튼 핸들러
+    BackHandler(enabled = true) {
+        navigateToJoin()
+    }
     Scaffold(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .background(White)
             .padding(horizontal = MMHorizontalSpacing),
@@ -61,20 +75,39 @@ fun AgencyCompleteScreen() {
                 Icon(
                     painterResource(id = R.drawable.ic_close_default),
                     modifier = Modifier
-                        .clickable { },
+                        .clickable {
+                            navigateToJoin()
+                        },
                     contentDescription = null
                 )
             }
         },
         content = { innerPadding ->
-            SignCompleteContent(modifier = Modifier.padding(innerPadding))
+            SignCompleteContent(
+                modifier = Modifier.padding(innerPadding),
+                navigateToLedger = navigateToLedger,
+                isBtnClicked = state.isBtnClicked,
+                isBtnClickChanged = { isBtnClicked ->  viewModel.isBtnClickChanged(isBtnClicked) }
+
+            )
         }
     )
 }
 
 
 @Composable
-fun SignCompleteContent(modifier: Modifier = Modifier) {
+fun SignCompleteContent(
+    modifier: Modifier = Modifier,
+    navigateToLedger: () -> Unit,
+    isBtnClicked : Boolean,
+    isBtnClickChanged : (Boolean) -> Unit,
+) {
+
+    LaunchedEffect(key1 = isBtnClicked){
+        if(isBtnClicked){
+            navigateToLedger()
+        }
+    }
     Box(
         modifier = modifier
             .fillMaxSize()
@@ -84,13 +117,11 @@ fun SignCompleteContent(modifier: Modifier = Modifier) {
         AgencyCompleteButtonView(
             modifier = Modifier
                 .fillMaxWidth()
-                .align(Alignment.BottomCenter)
+                .align(Alignment.BottomCenter),
+            isBtnClickChanged = isBtnClickChanged
+
         )
     }
 }
 
-@Preview
-@Composable
-fun CompletePreview() {
-    AgencyCompleteScreen()
-}
+

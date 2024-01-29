@@ -15,6 +15,18 @@ import com.moneymong.moneymong.feature.sign.navigation.splashRoute
 import com.moneymong.moneymong.feature.sign.navigation.splashScreen
 import com.moneymong.moneymong.home.navigation.homeRoute
 import com.moneymong.moneymong.home.navigation.homeScreen
+import com.moneymong.moneymong.home.navigation.navigateToHome
+import com.moneymong.moneymong.home.navigation.topLevelNavigateToHome
+import com.moneymong.moneymong.ledgerdetail.navigation.ledgerDetailScreen
+import com.moneymong.moneymong.ledgerdetail.navigation.navigateToLedgerDetail
+import com.moneymong.moneymong.ledgermanual.navigation.ledgerManualScreen
+import com.moneymong.moneymong.ledgermanual.navigation.navigateToLedgerManual
+import com.moneymong.moneymong.ocr.navigation.navigateToOCR
+import com.moneymong.moneymong.ocr.navigation.ocrScreen
+import com.moneymong.moneymong.ocr_detail.navigation.navigateToOCRDetail
+import com.moneymong.moneymong.ocr_detail.navigation.ocrDetailScreen
+import com.moneymong.moneymong.ocr_result.navigation.navigateToOCRResult
+import com.moneymong.moneymong.ocr_result.navigation.ocrResultScreen
 
 @Composable
 fun MoneyMongNavHost(
@@ -28,9 +40,7 @@ fun MoneyMongNavHost(
         navController = navController,
         startDestination = startDestination
     ) {
-        homeScreen()
-
-        splashScreen(
+       splashScreen(
             navigateToHome = {
                 navController.navigate(
                     route = homeRoute,
@@ -50,6 +60,7 @@ fun MoneyMongNavHost(
                 )
             }
         )
+        
         loginScreen(
             navigateToHome = {
                 navController.navigate(
@@ -70,6 +81,7 @@ fun MoneyMongNavHost(
                 )
             }
         )
+        
         signUpScreen(
             navigateToSignComplete = {
                 navController.navigate(
@@ -83,6 +95,7 @@ fun MoneyMongNavHost(
                 navController.navigateUp()
             }
         )
+        
         signCompleteScreen(
             navigateToHome = {
                 navController.navigate(
@@ -92,6 +105,39 @@ fun MoneyMongNavHost(
                     }
                 )
             }
+        )
+      
+        homeScreen(
+            navigateToOCR = navController::navigateToOCR,
+            navigateToLedgerDetail = navController::navigateToLedgerDetail,
+            navigateToLedgerManual = navController::navigateToLedgerManual
+        )
+        
+        ocrScreen(
+            navigateToOCRResult = navController::navigateToOCRResult,
+            navigateToHome = navController::topLevelNavigateToHome,
+            popBackStack = navController::popBackStack
+        )
+        
+        ocrResultScreen(
+            navigateToHome = navController::topLevelNavigateToHome,
+            navigateToOCRDetail = navController::navigateToOCRDetail,
+            popBackStack = navController::popBackStack
+        )
+        
+        ocrDetailScreen(
+            navigateToHome = navController::topLevelNavigateToHome,
+            popBackStack = navController::popBackStack
+        )
+        
+        ledgerDetailScreen(
+            navigateToHome = navController::topLevelNavigateToHome,
+            popBackStack = navController::popBackStack
+        )
+        
+        ledgerManualScreen(
+            popBackStack = navController::popBackStack,
+            navigateToHome = navController::topLevelNavigateToHome
         )
     }
 }
