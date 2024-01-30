@@ -39,7 +39,7 @@ class LedgerManualViewModel @Inject constructor(
             )
             postLedgerTransactionUseCase(ledgerTransactionParam)
                 .onSuccess {
-                    postSideEffect(LedgerManualSideEffect.LedgerManualNavigateToHome)
+                    postSideEffect(LedgerManualSideEffect.LedgerManualNavigateToLedger)
                 }.onFailure {
                     // TODO
                 }.also { reduce { state.copy(isLoading = false) } }

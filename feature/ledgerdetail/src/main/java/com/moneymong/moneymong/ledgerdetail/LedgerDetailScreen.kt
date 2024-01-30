@@ -46,7 +46,6 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavOptions
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.moneymong.moneymong.common.ext.base64ToFile
@@ -60,7 +59,6 @@ import com.moneymong.moneymong.design_system.component.button.MDSButtonType
 import com.moneymong.moneymong.design_system.component.modal.MDSModal
 import com.moneymong.moneymong.design_system.component.textfield.MDSTextField
 import com.moneymong.moneymong.design_system.component.textfield.util.MDSTextFieldIcons
-import com.moneymong.moneymong.design_system.component.textfield.util.PriceType
 import com.moneymong.moneymong.design_system.component.textfield.visualtransformation.DateVisualTransformation
 import com.moneymong.moneymong.design_system.component.textfield.visualtransformation.PriceVisualTransformation
 import com.moneymong.moneymong.design_system.component.textfield.visualtransformation.TimeVisualTransformation
@@ -85,7 +83,7 @@ fun LedgerDetailScreen(
     modifier: Modifier = Modifier,
     viewModel: LedgerDetailViewModel = hiltViewModel(),
     ledgerTransactionId: Int,
-    navigateToHome: (homeLedgerPostSuccess: Boolean) -> Unit,
+    navigateToLedger: (ledgerPostSuccess: Boolean) -> Unit,
     popBackStack: () -> Unit
 ) {
     val context = LocalContext.current
@@ -142,7 +140,7 @@ fun LedgerDetailScreen(
         }
     }
 
-    BackHandler(onBack = { navigateToHome(false) })
+    BackHandler(onBack = { navigateToLedger(false) })
 
     LaunchedEffect(Unit) {
         viewModel.eventEmit(
@@ -169,7 +167,7 @@ fun LedgerDetailScreen(
                 title = "${state.fundTypeText} 상세내역",
                 useEditMode = state.useEditMode,
                 enabledDone = state.enabledEdit,
-                onClickPrev = { navigateToHome(false) },
+                onClickPrev = { navigateToLedger(false) },
                 onClickDelete = { viewModel.onChangeVisibleConfirmModal(true) },
                 onClickDone = { viewModel.eventEmit(LedgerDetailSideEffect.LedgerDetailEditDone) }
             )
@@ -580,7 +578,7 @@ fun LedgerDetailScreen(
 fun LedgerDetailScreenPreview() {
     LedgerDetailScreen(
         ledgerTransactionId = 0,
-        navigateToHome = {},
+        navigateToLedger = {},
         popBackStack = {}
     )
 }

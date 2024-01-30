@@ -1,11 +1,8 @@
 package com.moneymong.moneymong.ocr_detail
 
 import android.content.SharedPreferences
-import android.net.Uri
 import androidx.compose.ui.text.input.TextFieldValue
-import androidx.core.net.toFile
 import com.moneymong.moneymong.common.base.BaseViewModel
-import com.moneymong.moneymong.common.ext.base64ToFile
 import com.moneymong.moneymong.domain.entity.ocr.DocumentEntity
 import com.moneymong.moneymong.domain.param.ledger.FundType
 import com.moneymong.moneymong.domain.param.ledger.LedgerTransactionParam
@@ -69,7 +66,7 @@ class OCRDetailViewModel @Inject constructor(
             )
             postLedgerTransactionUseCase(ledgerTransactionParam)
                 .onSuccess {
-                    postSideEffect(OCRDetailSideEffect.OCRDetailNavigateToHome)
+                    postSideEffect(OCRDetailSideEffect.OCRDetailNavigateToLedger)
                 }.onFailure {
                     // TODO
                 }.also { reduce { state.copy(isLoading = false) } }

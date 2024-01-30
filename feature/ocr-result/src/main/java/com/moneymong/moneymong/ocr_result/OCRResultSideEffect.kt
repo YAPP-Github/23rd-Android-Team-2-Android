@@ -5,6 +5,6 @@ import com.moneymong.moneymong.domain.entity.ocr.DocumentEntity
 
 sealed class OCRResultSideEffect : SideEffect {
     data object OCRResultShowSnackbar : OCRResultSideEffect()
-    data object OCRResultNavigateToHome : OCRResultSideEffect()
+    data object OCRResultNavigateToLedger : OCRResultSideEffect()
     data class OCRResultNavigateToOCRDetail(val document: DocumentEntity?) : OCRResultSideEffect()
 }

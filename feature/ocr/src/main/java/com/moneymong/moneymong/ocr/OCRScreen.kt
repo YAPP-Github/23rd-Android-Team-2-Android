@@ -49,14 +49,14 @@ fun OCRScreen(
     modifier: Modifier = Modifier,
     viewModel: OCRViewModel = hiltViewModel(),
     navigateToOCRResult: (navOptions: NavOptions?, document: String) -> Unit,
-    navigateToHome: (homeLedgerPostSuccess: Boolean) -> Unit,
+    navigateToLedger: (ledgerPostSuccess: Boolean) -> Unit,
     popBackStack: () -> Unit
 ) {
     val state = viewModel.collectAsState().value
     val context = LocalContext.current
     var hasCameraPermission by remember { mutableStateOf(context.hasPermission(CAMERA)) }
 
-    BackHandler(onBack = { navigateToHome(false) })
+    BackHandler(onBack = { navigateToLedger(false) })
 
     DisposableEffectWithLifeCycle(
         onResume = { hasCameraPermission = context.hasPermission(CAMERA) }
@@ -135,7 +135,7 @@ fun OCRScreen(
             OCRTopbarView(
                 modifier = Modifier.align(Alignment.TopCenter),
                 onClickHelp = viewModel::onClickHelper,
-                onClickClose = { navigateToHome(false) }
+                onClickClose = { navigateToLedger(false) }
             )
             if (state.isLoading) {
                 Box(
@@ -166,5 +166,5 @@ fun OCRScreenPreview() {
     OCRScreen(
         navigateToOCRResult = { navOptions, s -> },
         popBackStack = {},
-        navigateToHome = {})
+        navigateToLedger = {})
 }

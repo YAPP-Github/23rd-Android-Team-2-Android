@@ -30,7 +30,7 @@ import org.orbitmvi.orbit.compose.collectAsState
 @Composable
 fun SplashScreen(
     modifier: Modifier = Modifier,
-    navigateToHome: () -> Unit,
+    navigateToLedger: () -> Unit,
     navigateToLogin: () -> Unit,
     viewModel: SplashViewModel = hiltViewModel(),
 ) {
@@ -61,7 +61,7 @@ fun SplashScreen(
     LaunchedEffect(key1 = state.isTokenValid) {
         state.isTokenValid?.let { isValid ->
             if (isValid) {
-                navigateToHome()
+                navigateToLedger()
             } else {
                 navigateToLogin()
             }

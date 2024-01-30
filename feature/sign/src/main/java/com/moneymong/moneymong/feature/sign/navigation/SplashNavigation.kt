@@ -13,7 +13,7 @@ fun NavGraphBuilder.splashScreen(
 ) {
     composable(route = splashRoute) {
         SplashScreen(
-            navigateToHome = navigateToLedger,
+            navigateToLedger = navigateToLedger,
             navigateToLogin = navigateToLogin
         )
     }

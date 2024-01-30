@@ -56,7 +56,6 @@ import com.bumptech.glide.integration.compose.GlideImage
 import com.moneymong.moneymong.common.ext.base64ToFile
 import com.moneymong.moneymong.common.ext.encodingBase64
 import com.moneymong.moneymong.common.ui.noRippleClickable
-import com.moneymong.moneymong.design_system.R
 import com.moneymong.moneymong.design_system.R.*
 import com.moneymong.moneymong.design_system.component.button.MDSButton
 import com.moneymong.moneymong.design_system.component.button.MDSButtonSize
@@ -86,8 +85,8 @@ import org.orbitmvi.orbit.compose.collectSideEffect
 fun LedgerManualScreen(
     modifier: Modifier = Modifier,
     viewModel: LedgerManualViewModel = hiltViewModel(),
-    popBackStack: () -> Unit,
-    navigateToHome: (homeLedgerPostSuccess: Boolean) -> Unit
+    navigateToLedger: (ledgerPostSuccess: Boolean) -> Unit,
+    popBackStack: () -> Unit
 ) {
     val context = LocalContext.current
     val state = viewModel.collectAsState().value
@@ -112,8 +111,8 @@ fun LedgerManualScreen(
                 )
             }
 
-            is LedgerManualSideEffect.LedgerManualNavigateToHome -> {
-                navigateToHome(true)
+            is LedgerManualSideEffect.LedgerManualNavigateToLedger -> {
+                navigateToLedger(true)
             }
 
             is LedgerManualSideEffect.LedgerManualShowPopBackStackModal -> {
@@ -123,7 +122,7 @@ fun LedgerManualScreen(
             is LedgerManualSideEffect.LegerManualHidePopBackStackModal -> {
                 viewModel.visiblePopBackStackModal(false)
                 if (it.navigate) {
-                    navigateToHome(false)
+                    navigateToLedger(false)
                 }
             }
 
@@ -343,7 +342,7 @@ fun LedgerManualScreen(
                                     .align(Alignment.TopEnd)
                                     .noRippleClickable { viewModel.removeReceiptImage(item) }
                                     .padding(5.dp),
-                                painter = painterResource(id = R.drawable.ic_close_filled),
+                                painter = painterResource(id = drawable.ic_close_filled),
                                 contentDescription = null,
                                 tint = Color.Unspecified
                             )
@@ -468,6 +467,6 @@ fun LedgerManualScreen(
 fun LedgerManualScreenPreview() {
     LedgerManualScreen(
         popBackStack = {},
-        navigateToHome = {}
+        navigateToLedger = {}
     )
 }

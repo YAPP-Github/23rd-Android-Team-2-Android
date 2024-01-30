@@ -29,14 +29,14 @@ import com.moneymong.moneymong.feature.sign.view.SignCompleteView
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SignCompleteScreen(
-    navigateToHome : () -> Unit
+    navigateToLedger : () -> Unit
 ) {
 
     val isCompleteBtnClicked = remember { mutableStateOf(false) }
 
     LaunchedEffect(key1 = isCompleteBtnClicked.value) {
         if (isCompleteBtnClicked.value) {
-            navigateToHome()
+            navigateToLedger()
         }
     }
 
