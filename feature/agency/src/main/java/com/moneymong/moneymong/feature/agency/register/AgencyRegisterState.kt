@@ -7,6 +7,8 @@ import com.moneymong.moneymong.feature.agency.AgencyType
 data class AgencyRegisterState(
     val agencyName: TextFieldValue = TextFieldValue(),
     val agencyType: AgencyType = AgencyType.CLUB,
+    val errorMessage: String = "",
     val nameTextFieldIsError: Boolean = false,
     val visibleOutDialog: Boolean = false,
+    val visibleErrorDialog: Boolean = false,
 ) : State
