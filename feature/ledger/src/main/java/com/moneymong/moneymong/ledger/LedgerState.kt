@@ -1,6 +1,7 @@
 package com.moneymong.moneymong.ledger
 
 import com.moneymong.moneymong.common.base.State
+import com.moneymong.moneymong.domain.entity.agency.MyAgencyEntity
 import com.moneymong.moneymong.domain.entity.ledger.LedgerDetailEntity
 import com.moneymong.moneymong.domain.entity.ledger.LedgerTransactionListEntity
 import com.moneymong.moneymong.ledger.view.LedgerTransactionType
@@ -15,6 +16,7 @@ data class LedgerState(
     val currentDate: LocalDate = LocalDate.now(),
     val visibleError: Boolean = false,
     val visibleSnackbar: Boolean = false,
+    val agencyList: List<MyAgencyEntity> = emptyList()
 ) : State {
 
     val filterTransactionList: List<LedgerDetailEntity>

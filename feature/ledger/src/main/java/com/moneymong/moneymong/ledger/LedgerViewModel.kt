@@ -3,6 +3,7 @@ package com.moneymong.moneymong.ledger
 import androidx.lifecycle.SavedStateHandle
 import com.moneymong.moneymong.common.base.BaseViewModel
 import com.moneymong.moneymong.domain.param.ledger.LedgerTransactionListParam
+import com.moneymong.moneymong.domain.usecase.agency.FetchMyAgencyListUseCase
 import com.moneymong.moneymong.domain.usecase.ledger.FetchAgencyExistLedgerUseCase
 import com.moneymong.moneymong.domain.usecase.ledger.FetchLedgerTransactionListUseCase
 import com.moneymong.moneymong.ledger.navigation.LedgerArgs
@@ -16,17 +17,19 @@ import javax.inject.Inject
 class LedgerViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val fetchLedgerTransactionListUseCase: FetchLedgerTransactionListUseCase,
-    private val fetchAgencyExistLedgerUseCase: FetchAgencyExistLedgerUseCase
+    private val fetchAgencyExistLedgerUseCase: FetchAgencyExistLedgerUseCase,
+    private val fetchMyAgencyListUseCase: FetchMyAgencyListUseCase
 ) : BaseViewModel<LedgerState, LedgerSideEffect>(LedgerState()) {
 
     init {
+        fetchMyAgencyList()
         fetchAgencyExistLedger()
         fetchLedgerTransactionList()
         onChangeSnackbarState(visible = LedgerArgs(savedStateHandle).ledgerPostSuccess)
     }
 
     fun fetchAgencyExistLedger() = intent {
-        fetchAgencyExistLedgerUseCase(1) // TODO agencyId
+        fetchAgencyExistLedgerUseCase(81)
             .onSuccess {
                 reduce {
                     state.copy(
@@ -43,7 +46,7 @@ class LedgerViewModel @Inject constructor(
         if (!state.isLoading) {
             reduce { state.copy(isLoading = true) }
             val param = LedgerTransactionListParam(
-                id = 1,
+                id = 81,
                 year = state.currentDate.year,
                 month = state.currentDate.monthValue,
                 page = 0,
@@ -57,6 +60,18 @@ class LedgerViewModel @Inject constructor(
                             visibleError = false
                         )
                     }
+                }.onFailure {
+                    reduce { state.copy(visibleError = true) }
+                }.also { reduce { state.copy(isLoading = false) } }
+        }
+    }
+
+    fun fetchMyAgencyList() = intent {
+        if (!state.isLoading) {
+            reduce { state.copy(isLoading = true) }
+            fetchMyAgencyListUseCase(Unit)
+                .onSuccess {
+                    reduce { state.copy(agencyList = it) }
                 }.onFailure {
                     reduce { state.copy(visibleError = true) }
                 }.also { reduce { state.copy(isLoading = false) } }

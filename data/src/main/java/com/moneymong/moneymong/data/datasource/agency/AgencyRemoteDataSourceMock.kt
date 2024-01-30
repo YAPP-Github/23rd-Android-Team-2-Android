@@ -5,6 +5,7 @@ import com.moneymong.moneymong.network.request.agency.AgencyRegisterRequest
 import com.moneymong.moneymong.network.response.agency.AgenciesGetResponse
 import com.moneymong.moneymong.network.response.agency.AgencyGetResponse
 import com.moneymong.moneymong.network.response.agency.AgencyJoinResponse
+import com.moneymong.moneymong.network.response.agency.MyAgencyResponse
 import kotlinx.coroutines.delay
 
 class AgencyRemoteDataSourceMock : AgencyRemoteDataSource {
@@ -16,6 +17,10 @@ class AgencyRemoteDataSourceMock : AgencyRemoteDataSource {
     override suspend fun getAgencies(page: Int, size: Int): Result<AgenciesGetResponse> {
         delay(1000L)
         return agenciesMockOfSuccess[page]
+    }
+
+    override suspend fun fetchMyAgencyList(): Result<List<MyAgencyResponse>> {
+        return Result.success(emptyList())
     }
 
     override suspend fun agencyCodeNumbers(

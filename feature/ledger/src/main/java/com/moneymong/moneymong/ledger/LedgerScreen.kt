@@ -137,9 +137,9 @@ fun LedgerScreen(
             topBar = {
                 LedgerTopbarView(
                     modifier = Modifier.background(White),
-                    header = "장부",
-                    icon = R.drawable.ic_chevron_bottom, // TODO
-                    visibleArrow = true, // TODO 소속이 있을 때만
+                    header = "장부", // TODO
+                    icon = R.drawable.ic_chevron_bottom,
+                    visibleArrow = state.agencyList.isNotEmpty(),
                     onClickDownArrow = { viewModel.eventEmit(LedgerSideEffect.LedgerOpenSheet) }
                 )
             },

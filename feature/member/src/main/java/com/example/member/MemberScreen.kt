@@ -98,7 +98,7 @@ fun MemberScreen(
 
     LaunchedEffect(key1 = Unit) {
         viewModel.eventEmit(MemberSideEffect.GetInvitationCode(4)) //TODO - agency Id 연결
-        viewModel.eventEmit(MemberSideEffect.GetMemberLists(4)) //TODO - agencyId 연결
+        viewModel.eventEmit(MemberSideEffect.GetMemberLists(81)) //TODO - agencyId 연결
         viewModel.eventEmit(MemberSideEffect.GetMyInfo(Unit)) //TODO - 마이몽 유저 정보 조회 연결
     }
 
