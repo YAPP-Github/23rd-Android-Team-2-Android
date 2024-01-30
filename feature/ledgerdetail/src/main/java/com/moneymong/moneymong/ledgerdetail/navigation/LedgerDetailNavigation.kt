@@ -11,7 +11,7 @@ import com.moneymong.moneymong.ledgerdetail.LedgerDetailScreen
 const val LEDGER_TRANSACTION_ID = "ledgerTransactionId"
 const val ledgerDetailRoute = "ledgerDetail_route/{${LEDGER_TRANSACTION_ID}}"
 
-fun NavController.navigateToLedgerDetail(
+fun NavController.navigateLedgerDetail(
     navOptions: NavOptions? = null,
     ledgerTransactionId: Int
 ) {

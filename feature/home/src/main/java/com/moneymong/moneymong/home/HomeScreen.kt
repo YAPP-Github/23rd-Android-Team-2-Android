@@ -34,14 +34,14 @@ import com.moneymong.moneymong.home.view.HomeBottomBarView
 import com.moneymong.moneymong.ledger.navigation.ledgerScreen
 import com.moneymong.moneymong.ledger.navigation.navigateLedger
 import com.moneymong.moneymong.ledgerdetail.navigation.ledgerDetailScreen
-import com.moneymong.moneymong.ledgerdetail.navigation.navigateToLedgerDetail
+import com.moneymong.moneymong.ledgerdetail.navigation.navigateLedgerDetail
 import com.moneymong.moneymong.ledgermanual.navigation.ledgerManualScreen
-import com.moneymong.moneymong.ledgermanual.navigation.navigateToLedgerManual
-import com.moneymong.moneymong.ocr.navigation.navigateToOCR
+import com.moneymong.moneymong.ledgermanual.navigation.navigateLedgerManual
+import com.moneymong.moneymong.ocr.navigation.navigateOCR
 import com.moneymong.moneymong.ocr.navigation.ocrScreen
-import com.moneymong.moneymong.ocr_detail.navigation.navigateToOCRDetail
+import com.moneymong.moneymong.ocr_detail.navigation.navigateOCRDetail
 import com.moneymong.moneymong.ocr_detail.navigation.ocrDetailScreen
-import com.moneymong.moneymong.ocr_result.navigation.navigateToOCRResult
+import com.moneymong.moneymong.ocr_result.navigation.navigateOCRResult
 import com.moneymong.moneymong.ocr_result.navigation.ocrResultScreen
 
 @Composable
@@ -127,9 +127,9 @@ fun HomeScreen() {
             ledgerScreen(
                 padding = padding,
                 navigateToAgency = { homeNavController.navigate(agencyRoute) },
-                navigateToOCR = homeNavController::navigateToOCR,
-                navigateToLedgerDetail = homeNavController::navigateToLedgerDetail,
-                navigateToLedgerManual = homeNavController::navigateToLedgerManual
+                navigateToOCR = homeNavController::navigateOCR,
+                navigateToLedgerDetail = homeNavController::navigateLedgerDetail,
+                navigateToLedgerManual = homeNavController::navigateLedgerManual
             )
 
             ledgerDetailScreen(
@@ -144,14 +144,14 @@ fun HomeScreen() {
 
             // ocr
             ocrScreen(
-                navigateToOCRResult = homeNavController::navigateToOCRResult,
+                navigateToOCRResult = homeNavController::navigateOCRResult,
                 navigateToLedger = homeNavController::navigateLedger,
                 popBackStack = homeNavController::popBackStack
             )
 
             ocrResultScreen(
                 navigateToLedger = homeNavController::navigateLedger,
-                navigateToOCRDetail = homeNavController::navigateToOCRDetail,
+                navigateToOCRDetail = homeNavController::navigateOCRDetail,
                 popBackStack = homeNavController::popBackStack
             )
 
