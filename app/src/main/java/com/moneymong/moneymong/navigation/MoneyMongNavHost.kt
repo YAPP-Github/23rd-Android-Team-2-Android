@@ -5,7 +5,6 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
-import com.moneymong.moneymong.common.ui.noRippleClickable
 import com.moneymong.moneymong.feature.sign.navigation.loginRoute
 import com.moneymong.moneymong.feature.sign.navigation.loginScreen
 import com.moneymong.moneymong.feature.sign.navigation.signCompleteRoute
@@ -16,7 +15,6 @@ import com.moneymong.moneymong.feature.sign.navigation.splashRoute
 import com.moneymong.moneymong.feature.sign.navigation.splashScreen
 import com.moneymong.moneymong.home.navigation.homeRoute
 import com.moneymong.moneymong.home.navigation.homeScreen
-import com.moneymong.moneymong.home.navigation.navigateToHome
 import com.moneymong.moneymong.home.navigation.topLevelNavigateToHome
 import com.moneymong.moneymong.ledgerdetail.navigation.ledgerDetailScreen
 import com.moneymong.moneymong.ledgerdetail.navigation.navigateToLedgerDetail

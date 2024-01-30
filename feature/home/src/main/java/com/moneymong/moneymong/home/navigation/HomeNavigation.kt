@@ -48,10 +48,7 @@ fun NavGraphBuilder.homeScreen(
             navArgument(HOME_LEDGER_POST_SUCCESS) { type = NavType.BoolType },
         )
     ) { backStackEntry ->
-        val homeLedgerPostSuccess =
-            backStackEntry.arguments?.getBoolean(HOME_LEDGER_POST_SUCCESS) ?: false
         HomeScreen(
-            homeLedgerPostSuccess = homeLedgerPostSuccess,
             navigateToOCR = navigateToOCR,
             navigateToLedgerDetail = navigateToLedgerDetail,
             navigateToLedgerManual = navigateToLedgerManual

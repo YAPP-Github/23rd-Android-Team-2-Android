@@ -19,6 +19,7 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -37,6 +38,7 @@ import com.example.member.MemberScreen
 import com.moneymong.moneymong.design_system.R
 import com.moneymong.moneymong.design_system.component.bottomSheet.MDSBottomSheet
 import com.moneymong.moneymong.design_system.component.button.MDSFloatingActionButton
+import com.moneymong.moneymong.design_system.component.snackbar.MDSSnackbarHost
 import com.moneymong.moneymong.design_system.component.tooltip.MDSToolTip
 import com.moneymong.moneymong.design_system.component.tooltip.MDSToolTipPosition
 import com.moneymong.moneymong.design_system.error.ErrorScreen
@@ -63,6 +65,7 @@ import org.orbitmvi.orbit.compose.collectSideEffect
 fun LedgerScreen(
     modifier: Modifier = Modifier,
     viewModel: LedgerViewModel = hiltViewModel(),
+    ledgerPostSuccess: Boolean,
     navigateToAgency: () -> Unit,
     navigateToOCR: (NavOptions?) -> Unit,
     navigateToLedgerDetail: (NavOptions?, Int) -> Unit,
@@ -73,7 +76,20 @@ fun LedgerScreen(
     val rotationAngle by animateFloatAsState(if (expandableFab) 45f else 0f, label = "")
     val tabs = listOf(LedgerTab.Ledger, LedgerTab.Member)
     val coroutineScope = rememberCoroutineScope()
+    val snackbarHostState = remember { SnackbarHostState() }
     val pagerState = rememberPagerState(pageCount = { tabs.size })
+
+    LaunchedEffect(key1 = Unit) {
+        if (ledgerPostSuccess) {
+            coroutineScope.launch {
+                snackbarHostState.showSnackbar(
+                    message = "성공적으로 기록됐습니다",
+                    withDismissAction = true,
+                    actionLabel = ""
+                )
+            }
+        }
+    }
 
     LaunchedEffect(state.currentDate) {
         viewModel.fetchLedgerTransactionList()
@@ -122,6 +138,12 @@ fun LedgerScreen(
                     icon = R.drawable.ic_chevron_bottom, // TODO
                     visibleArrow = true, // TODO 소속이 있을 때만
                     onClickDownArrow = { viewModel.eventEmit(LedgerSideEffect.LedgerOpenSheet) }
+                )
+            },
+            snackbarHost = {
+                MDSSnackbarHost(
+                    modifier = Modifier.padding(start = 20.dp, bottom = 12.dp, end = 20.dp),
+                    hostState = snackbarHostState
                 )
             }
         ) {
@@ -265,6 +287,7 @@ fun LedgerScreen(
 @Composable
 fun LedgerScreenPreview() {
     LedgerScreen(
+        ledgerPostSuccess = false,
         navigateToAgency = {},
         navigateToOCR = {},
         navigateToLedgerDetail = { navOptions, i -> },
