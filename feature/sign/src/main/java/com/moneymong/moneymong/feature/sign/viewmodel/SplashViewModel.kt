@@ -5,6 +5,9 @@ import com.moneymong.moneymong.domain.usecase.login.TokenUseCase
 import com.moneymong.moneymong.feature.sign.sideeffect.SplashSideEffect
 import com.moneymong.moneymong.feature.sign.state.SplashState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.reduce
 import javax.inject.Inject
