@@ -1,5 +1,8 @@
 package com.moneymong.moneymong.ledger.navigation
 
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.padding
+import androidx.compose.ui.Modifier
 import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
@@ -31,6 +34,7 @@ fun NavController.navigateLedger(
 }
 
 fun NavGraphBuilder.ledgerScreen(
+    padding: PaddingValues,
     navigateToAgency: () -> Unit,
     navigateToOCR: (NavOptions?) -> Unit,
     navigateToLedgerDetail: (NavOptions?, Int) -> Unit,
@@ -41,6 +45,7 @@ fun NavGraphBuilder.ledgerScreen(
         arguments = arguments
     ) {
         LedgerScreen(
+            modifier = Modifier.padding(padding),
             navigateToAgency = navigateToAgency,
             navigateToOCR = navigateToOCR,
             navigateToLedgerDetail = navigateToLedgerDetail,

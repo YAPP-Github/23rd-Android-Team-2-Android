@@ -1,5 +1,8 @@
 package com.moneymong.moneymong.feature.mymong.navigation
 
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.padding
+import androidx.compose.ui.Modifier
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.moneymong.moneymong.feature.mymong.main.MyMongScreen
@@ -7,6 +10,7 @@ import com.moneymong.moneymong.feature.mymong.main.MyMongScreen
 const val mymongRoute = "mymong_route"
 
 internal fun NavGraphBuilder.myMongScreen(
+    padding: PaddingValues,
     navigateToTermsOfUse: () -> Unit,
     navigateToPrivacyPolicy: () -> Unit,
     navigateToWithdrawal: () -> Unit,
@@ -14,6 +18,7 @@ internal fun NavGraphBuilder.myMongScreen(
 ) {
     composable(route = mymongRoute) {
         MyMongScreen(
+            modifier = Modifier.padding(padding),
             navigateToTermsOfUse = navigateToTermsOfUse,
             navigateToPrivacyPolicy = navigateToPrivacyPolicy,
             navigateToWithdrawal = navigateToWithdrawal,
@@ -23,6 +28,7 @@ internal fun NavGraphBuilder.myMongScreen(
 }
 
 fun NavGraphBuilder.myMongNavGraph(
+    padding: PaddingValues,
     navigateToTermsOfUse: () -> Unit,
     navigateToPrivacyPolicy: () -> Unit,
     navigateToWithdrawal: () -> Unit,
@@ -30,6 +36,7 @@ fun NavGraphBuilder.myMongNavGraph(
     navigateUp: () -> Unit
 ) {
     myMongScreen(
+        padding = padding,
         navigateToTermsOfUse = navigateToTermsOfUse,
         navigateToPrivacyPolicy = navigateToPrivacyPolicy,
         navigateToWithdrawal = navigateToWithdrawal,
