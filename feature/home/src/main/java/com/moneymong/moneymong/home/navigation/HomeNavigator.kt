@@ -11,46 +11,6 @@ import com.moneymong.moneymong.home.HomeBottomTabs
 import com.moneymong.moneymong.ledger.navigation.ledgerRoute
 import com.moneymong.moneymong.ledger.navigation.ledgerRouteWithArgs
 
-//const val HOME_LEDGER_POST_SUCCESS = "homeLedgerPostSuccess"
-//const val homeRoute = "home_route/{${HOME_LEDGER_POST_SUCCESS}}"
-//
-//fun NavController.navigateToHome(
-//    navOptions: NavOptions? = null,
-//    homeLedgerPostSuccess: Boolean = false
-//) {
-//    this.navigate("home_route/${homeLedgerPostSuccess}", navOptions)
-//}
-
-//fun NavController.topLevelNavigateToHome(homeLedgerPostSuccess: Boolean = false) {
-//    this.navigateToHome(
-//        navOptions = navOptions {
-//            popUpTo(
-//                graph.id
-//            ) { inclusive = true }
-//        },
-//        homeLedgerPostSuccess = homeLedgerPostSuccess
-//    )
-//}
-
-//fun NavGraphBuilder.homeScreen(
-//    navigateToOCR: (NavOptions?) -> Unit,
-//    navigateToLedgerDetail: (NavOptions?, Int) -> Unit,
-//    navigateToLedgerManual: (NavOptions?) -> Unit
-//) {
-//    composable(
-//        route = homeRoute,
-//        arguments = listOf(
-//            navArgument(HOME_LEDGER_POST_SUCCESS) { type = NavType.BoolType },
-//        )
-//    ) { backStackEntry ->
-//        HomeScreen(
-//            navigateToOCR = navigateToOCR,
-//            navigateToLedgerDetail = navigateToLedgerDetail,
-//            navigateToLedgerManual = navigateToLedgerManual
-//        )
-//    }
-//}
-
 @Composable
 internal fun rememberHomeNavigator(navHostController: NavHostController = rememberNavController()) =
     remember { HomeNavigator(navHostController = navHostController) }
