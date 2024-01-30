@@ -9,8 +9,8 @@ import androidx.navigation.navArgument
 import androidx.navigation.navOptions
 import com.moneymong.moneymong.ledger.LedgerScreen
 
-const val LEDGER_POST_SUCCESS = "LedgerPostSuccess"
 const val ledgerRoute = "ledger_route"
+const val LEDGER_POST_SUCCESS = "LedgerPostSuccess"
 const val ledgerRouteWithArgs = "${ledgerRoute}/{${LEDGER_POST_SUCCESS}}"
 
 private val arguments = listOf(

@@ -8,6 +8,8 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import com.moneymong.moneymong.home.HomeBottomTabs
+import com.moneymong.moneymong.ledger.navigation.ledgerRoute
+import com.moneymong.moneymong.ledger.navigation.ledgerRouteWithArgs
 
 //const val HOME_LEDGER_POST_SUCCESS = "homeLedgerPostSuccess"
 //const val homeRoute = "home_route/{${HOME_LEDGER_POST_SUCCESS}}"
@@ -71,14 +73,18 @@ internal class HomeNavigator(
 
     fun navigate(route: String) {
         val navOptions = navOptions {
-            popUpTo(navHostController.graph.startDestinationId) {
+            popUpTo(ledgerRouteWithArgs) {
                 saveState = true
             }
             launchSingleTop = true
             restoreState = true
         }
         navHostController.navigate(
-            route = route,
+            route = if (route == ledgerRouteWithArgs) {
+                "$ledgerRoute/${false}"
+            } else {
+                route
+            },
             navOptions = navOptions
         )
     }

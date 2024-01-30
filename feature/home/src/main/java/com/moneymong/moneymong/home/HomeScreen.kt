@@ -7,6 +7,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
+import androidx.navigation.navOptions
 import com.moneymong.moneymong.feature.agency.join.navigation.agencyCompleteScreen
 import com.moneymong.moneymong.feature.agency.join.navigation.agencyJoinScreen
 import com.moneymong.moneymong.feature.agency.join.navigation.navigateAgencyJoin
@@ -98,8 +99,14 @@ fun HomeScreen() {
             )
 
             agencyCompleteScreen(
+                navigateToSearch = {
+                    homeNavController.navigateAgency(
+                        navOptions = navOptions {
+                            popUpTo(agencyRoute) { inclusive = true }
+                        }
+                    )
+                },
                 navigateToLedger = homeNavController::navigateLedger,
-                navigateToSearch = homeNavController::navigateAgency,
             )
 
             agencyRegisterScreen(
@@ -108,7 +115,13 @@ fun HomeScreen() {
             )
 
             agencyRegisterCompleteScreen(
-                navigateToSearch = homeNavController::navigateAgency,
+                navigateToSearch = {
+                    homeNavController.navigateAgency(
+                        navOptions = navOptions {
+                            popUpTo(agencyRoute) { inclusive = true }
+                        }
+                    )
+                },
                 navigateToLedger = homeNavController::navigateLedger
             )
 
