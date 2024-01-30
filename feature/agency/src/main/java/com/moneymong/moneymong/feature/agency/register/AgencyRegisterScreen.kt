@@ -20,6 +20,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.moneymong.moneymong.common.ui.noRippleClickable
 import com.moneymong.moneymong.design_system.R
 import com.moneymong.moneymong.design_system.component.button.MDSButton
+import com.moneymong.moneymong.design_system.error.ErrorDialog
 import com.moneymong.moneymong.design_system.theme.Gray07
 import com.moneymong.moneymong.design_system.theme.MMHorizontalSpacing
 import com.moneymong.moneymong.design_system.theme.White
@@ -54,6 +55,13 @@ fun AgencyRegisterScreen(
             onDismissRequest = { viewModel.changeOutDialogVisibility(false) },
             onPositive = viewModel::navigateUp,
             onNegative = { viewModel.changeOutDialogVisibility(false) }
+        )
+    }
+
+    if (state.visibleErrorDialog) {
+        ErrorDialog(
+            message = state.errorMessage,
+            onConfirm = { viewModel.changeErrorDialogVisibility(false) }
         )
     }
 
