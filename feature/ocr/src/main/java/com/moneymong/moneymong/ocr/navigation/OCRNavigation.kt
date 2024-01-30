@@ -14,13 +14,13 @@ fun NavController.navigateToOCR(navOptions: NavOptions? = null) {
 
 fun NavGraphBuilder.ocrScreen(
     navigateToOCRResult: (navOptions: NavOptions?, document: String) -> Unit,
-    navigateToHome: (homeLedgerPostSuccess: Boolean) -> Unit,
+    navigateToLedger: (homeLedgerPostSuccess: Boolean) -> Unit,
     popBackStack: () -> Unit
 ) {
     composable(route = ocrRoute) {
         OCRScreen(
             navigateToOCRResult = navigateToOCRResult,
-            navigateToHome = navigateToHome,
+            navigateToHome = navigateToLedger,
             popBackStack = popBackStack
         )
     }

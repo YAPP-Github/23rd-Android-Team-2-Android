@@ -20,7 +20,7 @@ private val arguments = listOf(
     }
 )
 
-fun NavController.navigateToLedger(
+fun NavController.navigateLedger(
     ledgerPostSuccess: Boolean = false,
     navOptions: NavOptions? = navOptions {
         popUpTo(graph.id) { inclusive = true }

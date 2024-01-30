@@ -11,13 +11,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import com.moneymong.moneymong.design_system.R
-import androidx.compose.material.icons.Icons
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
@@ -26,7 +22,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavHostController
 import com.moneymong.moneymong.design_system.theme.Black
 import com.moneymong.moneymong.design_system.theme.Heading1
 import com.moneymong.moneymong.design_system.theme.MMHorizontalSpacing
@@ -40,14 +35,14 @@ import org.orbitmvi.orbit.compose.collectAsState
 fun AgencyCompleteScreen(
     modifier : Modifier = Modifier,
     navigateToLedger : () -> Unit,
-    navigateToJoin : () -> Unit,
+    navigateToSearch : () -> Unit,
     viewModel: AgencyCompleteViewModel = hiltViewModel()
 ) {
     val state = viewModel.collectAsState().value
 
     // 뒤로 가기 버튼 핸들러
     BackHandler(enabled = true) {
-        navigateToJoin()
+        navigateToSearch()
     }
     Scaffold(
         modifier = modifier
@@ -76,7 +71,7 @@ fun AgencyCompleteScreen(
                     painterResource(id = R.drawable.ic_close_default),
                     modifier = Modifier
                         .clickable {
-                            navigateToJoin()
+                            navigateToSearch()
                         },
                     contentDescription = null
                 )

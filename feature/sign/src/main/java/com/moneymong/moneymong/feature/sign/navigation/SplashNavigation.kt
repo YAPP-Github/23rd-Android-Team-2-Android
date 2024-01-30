@@ -8,13 +8,12 @@ const val splashRoute = "splash_route"
 
 
 fun NavGraphBuilder.splashScreen(
-    navigateToHome: () -> Unit,
+    navigateToLedger: () -> Unit,
     navigateToLogin: () -> Unit
 ) {
     composable(route = splashRoute) {
         SplashScreen(
-            //modifier = Modifier.padding(padding),
-            navigateToHome = navigateToHome,
+            navigateToHome = navigateToLedger,
             navigateToLogin = navigateToLogin
         )
     }
