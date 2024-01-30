@@ -28,4 +28,6 @@ dependencies {
     testImplementation(libs.junit4)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.test.espresso.core)
+
+    implementation(libs.accompanist.systemuicontroller)
 }

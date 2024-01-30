@@ -1,6 +1,5 @@
 package com.moneymong.moneymong.feature.agency.register.complete
 
-import android.app.Activity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -16,15 +15,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.core.view.WindowCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.moneymong.moneymong.design_system.R
 import com.moneymong.moneymong.design_system.component.button.MDSButton
@@ -44,20 +39,6 @@ fun AgencyRegisterCompleteScreen(
     navigateToSearch: () -> Unit,
     navigateToLedger: () -> Unit
 ) {
-    val view = LocalView.current
-    val window = (view.context as Activity).window
-
-    DisposableEffect(key1 = Unit) {
-        fun changeStatusBarColor(color: Int, darkIcons: Boolean) {
-            window.statusBarColor = color
-            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = darkIcons
-        }
-        changeStatusBarColor(Gray08.toArgb(), false)
-
-        onDispose {
-            changeStatusBarColor(White.toArgb(), true)
-        }
-    }
 
     viewModel.collectSideEffect {
         when (it) {
