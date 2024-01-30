@@ -22,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.moneymong.moneymong.common.ui.noRippleClickable
 import com.moneymong.moneymong.design_system.R
 import com.moneymong.moneymong.design_system.error.ErrorDialog
 import com.moneymong.moneymong.design_system.error.ErrorScreen
@@ -89,7 +90,7 @@ fun SignUpScreen(
                         modifier = Modifier
                             .size(24.dp)
                             .background(White)
-                            .clickable {
+                            .noRippleClickable {
                                 navigateUp()
                             },
                         tint = Gray07
