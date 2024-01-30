@@ -7,9 +7,11 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
+import com.moneymong.moneymong.feature.agency.navigation.navigateAgency
+import com.moneymong.moneymong.feature.mymong.navigation.navigateMyMong
 import com.moneymong.moneymong.home.HomeBottomTabs
-import com.moneymong.moneymong.ledger.navigation.ledgerRoute
 import com.moneymong.moneymong.ledger.navigation.ledgerRouteWithArgs
+import com.moneymong.moneymong.ledger.navigation.navigateLedger
 
 @Composable
 internal fun rememberHomeNavigator(navHostController: NavHostController = rememberNavController()) =
@@ -39,13 +41,10 @@ internal class HomeNavigator(
             launchSingleTop = true
             restoreState = true
         }
-        navHostController.navigate(
-            route = if (route == ledgerRouteWithArgs) {
-                "$ledgerRoute/${false}"
-            } else {
-                route
-            },
-            navOptions = navOptions
-        )
+        when (route) {
+            HomeBottomTabs.AGENCY.route -> navHostController.navigateAgency(navOptions = navOptions)
+            HomeBottomTabs.LEDGER.route -> navHostController.navigateLedger(navOptions = navOptions)
+            HomeBottomTabs.MYMONG.route -> navHostController.navigateMyMong(navOptions = navOptions)
+        }
     }
 }
