@@ -27,12 +27,11 @@ import org.orbitmvi.orbit.compose.collectAsState
 @Composable
 fun SignUpGradeView(
     modifier: Modifier = Modifier,
+    selectedGrade : Grade?,
+    selectedGradeChange : (Grade) -> Unit,
     onClick: () -> Unit,
     changeGradeInfor: (Int) -> Unit,
-    viewModel: SignUpViewModel = hiltViewModel()
 ) {
-
-    val state = viewModel.collectAsState().value
 
     Column(
         modifier = modifier
@@ -59,9 +58,9 @@ fun SignUpGradeView(
                 MDSSelection(
                     modifier = Modifier.weight(1f),
                     text = grade.text,
-                    isSelected = grade == state.selectedGrade,
+                    isSelected = grade == selectedGrade,
                     onClick = {
-                        viewModel.selectedGradeChange(grade)
+                        selectedGradeChange(grade)
                         onClick()
                         changeGradeInfor(getGradeNumber(grade.text))
                     },
