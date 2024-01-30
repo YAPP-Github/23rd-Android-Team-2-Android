@@ -10,6 +10,7 @@ import com.moneymong.moneymong.data.mapper.agency.toRequest
 import com.moneymong.moneymong.data.pagingsource.AgencyPagingSource
 import com.moneymong.moneymong.domain.entity.agency.AgencyGetEntity
 import com.moneymong.moneymong.domain.entity.agency.AgencyJoinEntity
+import com.moneymong.moneymong.domain.entity.agency.MyAgencyEntity
 import com.moneymong.moneymong.domain.param.agency.AgencyJoinParam
 import com.moneymong.moneymong.domain.param.agency.AgencyRegisterParam
 import com.moneymong.moneymong.domain.repository.AgencyRepository
@@ -35,6 +36,9 @@ class AgencyRepositoryImpl @Inject constructor(
             }
         }
     }
+
+    override suspend fun fetchMyAgencyList(): Result<List<MyAgencyEntity>> =
+        agencyRemoteDataSource.fetchMyAgencyList().map { it.map { it.toEntity() } }
 
     override suspend fun agencyCodeNumbers(
         agencyId: Long,
