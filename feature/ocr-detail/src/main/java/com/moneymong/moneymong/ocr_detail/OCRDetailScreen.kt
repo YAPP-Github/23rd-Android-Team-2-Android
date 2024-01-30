@@ -50,7 +50,6 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavOptions
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.moneymong.moneymong.common.ext.base64ToFile
@@ -86,7 +85,7 @@ fun OCRDetailScreen(
     modifier: Modifier = Modifier,
     viewModel: OCRDetailViewModel = hiltViewModel(),
     document: DocumentEntity?,
-    navigateToHome: (homeLedgerPostSuccess: Boolean) -> Unit,
+    navigateToLedger: (ledgerPostSuccess: Boolean) -> Unit,
     popBackStack: () -> Unit
 ) {
     val context = LocalContext.current
@@ -114,8 +113,8 @@ fun OCRDetailScreen(
                     )
                 )
             }
-            is OCRDetailSideEffect.OCRDetailNavigateToHome -> {
-                navigateToHome(true)
+            is OCRDetailSideEffect.OCRDetailNavigateToLedger -> {
+                navigateToLedger(true)
             }
         }
     }
@@ -387,7 +386,7 @@ fun OCRDetailScreen(
 @Preview(showBackground = true)
 @Composable
 fun OCRDetailScreenPreview() {
-    OCRDetailScreen(document = null, navigateToHome = {}) {
+    OCRDetailScreen(document = null, navigateToLedger = {}) {
 
     }
 }

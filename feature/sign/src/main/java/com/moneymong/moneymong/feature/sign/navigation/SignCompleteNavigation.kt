@@ -18,7 +18,7 @@ fun NavGraphBuilder.signCompleteScreen(
 ) {
     composable(route = signCompleteRoute) {
         SignCompleteScreen(
-            navigateToHome = navigateToLedger
+            navigateToLedger = navigateToLedger
         )
     }
 }

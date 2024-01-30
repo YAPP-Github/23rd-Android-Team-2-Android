@@ -29,7 +29,7 @@ import org.orbitmvi.orbit.compose.collectAsState
 @Composable
 fun LoginScreen(
     navigateToSignup: () -> Unit,
-    navigateToHome: () -> Unit,
+    navigateToLedger: () -> Unit,
     navigateToLogin: () -> Unit,
     viewModel: LoginViewModel = hiltViewModel(),
 
@@ -39,7 +39,7 @@ fun LoginScreen(
     LaunchedEffect(key1 = state.isSchoolInfoExist) {
         Log.d("state3", state.isSchoolInfoExist.toString())
         if (state.isSchoolInfoExist == true) {
-            navigateToHome()
+            navigateToLedger()
         } else if (state.isSchoolInfoExist == false) {
             navigateToSignup()
         }

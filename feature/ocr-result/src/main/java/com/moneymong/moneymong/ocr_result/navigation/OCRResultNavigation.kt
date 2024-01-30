@@ -18,7 +18,7 @@ fun NavController.navigateToOCRResult(
 }
 
 fun NavGraphBuilder.ocrResultScreen(
-    navigateToLedger: (homeLedgerPostSuccess: Boolean) -> Unit,
+    navigateToLedger: (ledgerPostSuccess: Boolean) -> Unit,
     popBackStack: () -> Unit,
     navigateToOCRDetail: (navOptions: NavOptions?, document: String) -> Unit
 ) {
@@ -30,7 +30,7 @@ fun NavGraphBuilder.ocrResultScreen(
 
         OCRResultScreen(
             document = documentEntity,
-            navigateToHome = navigateToLedger,
+            navigateToLedger = navigateToLedger,
             navigateToOCRDetail = navigateToOCRDetail,
             popBackStack = popBackStack
         )

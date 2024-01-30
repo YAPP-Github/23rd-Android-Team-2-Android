@@ -25,7 +25,7 @@ fun NavGraphBuilder.loginScreen(
     composable(route = loginRoute) {
         LoginScreen(
             navigateToSignup = navigateToSignUp,
-            navigateToHome = navigateToLedger,
+            navigateToLedger = navigateToLedger,
             navigateToLogin = navigateToLogin
         )
     }

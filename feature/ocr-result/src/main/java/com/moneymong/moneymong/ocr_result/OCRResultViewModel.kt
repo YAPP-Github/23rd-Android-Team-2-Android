@@ -41,7 +41,7 @@ class OCRResultViewModel @Inject constructor(
             )
             postLedgerTransactionUseCase(ledgerTransactionParam)
                 .onSuccess {
-                    postSideEffect(OCRResultSideEffect.OCRResultNavigateToHome)
+                    postSideEffect(OCRResultSideEffect.OCRResultNavigateToLedger)
                 }.onFailure {
                     // TODO
                 }.also { reduce { state.copy(isLoading = false) } }

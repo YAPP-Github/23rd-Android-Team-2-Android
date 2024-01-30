@@ -18,7 +18,7 @@ fun NavController.navigateToOCRDetail(
 }
 
 fun NavGraphBuilder.ocrDetailScreen(
-    navigateToLedger: (homeLedgerPostSuccess: Boolean) -> Unit,
+    navigateToLedger: (ledgerPostSuccess: Boolean) -> Unit,
     popBackStack: () -> Unit,
 ) {
     composable(route = ocrDetailRoute) { backStackEntry ->
@@ -29,7 +29,7 @@ fun NavGraphBuilder.ocrDetailScreen(
 
         OCRDetailScreen(
             document = documentEntity,
-            navigateToHome = navigateToLedger,
+            navigateToLedger = navigateToLedger,
             popBackStack = popBackStack
         )
     }
