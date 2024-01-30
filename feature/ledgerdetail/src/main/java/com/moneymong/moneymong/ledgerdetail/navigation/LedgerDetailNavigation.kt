@@ -19,7 +19,7 @@ fun NavController.navigateToLedgerDetail(
 }
 
 fun NavGraphBuilder.ledgerDetailScreen(
-    navigateToHome: (homeLedgerPostSuccess: Boolean) -> Unit,
+    navigateToLedger: (homeLedgerPostSuccess: Boolean) -> Unit,
     popBackStack: () -> Unit
 ) {
     composable(
@@ -31,7 +31,7 @@ fun NavGraphBuilder.ledgerDetailScreen(
         val ledgerTransactionId = backStackEntry.arguments?.getInt(LEDGER_TRANSACTION_ID) ?: 0
         LedgerDetailScreen(
             ledgerTransactionId = ledgerTransactionId,
-            navigateToHome = navigateToHome,
+            navigateToHome = navigateToLedger,
             popBackStack = popBackStack
         )
     }
