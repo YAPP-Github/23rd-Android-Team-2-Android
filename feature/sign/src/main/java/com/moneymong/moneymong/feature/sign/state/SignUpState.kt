@@ -18,10 +18,15 @@ data class SignUpState(
     val isFilled: Boolean = false,
     val universityResponse: UniversitiesEntity? = null,
     val isUnivCreated : Boolean = false,
+    val textInput : Boolean = false,
     //item
     val isItemSelected : Boolean = false,
     val selectedGrade : Grade? = null,
+    //error
+    val visibleError : Boolean = false,
+    val errorMessage : String = "",
+    val visiblePopUpError : Boolean = false,
+    val popUpErrorMessage : String = ""
 
-    val isError : Boolean = false  //TODO 에러 페이지
 
 ) : State

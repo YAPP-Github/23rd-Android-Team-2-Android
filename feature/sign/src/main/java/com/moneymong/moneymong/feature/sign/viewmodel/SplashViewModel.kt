@@ -5,9 +5,6 @@ import com.moneymong.moneymong.domain.usecase.login.TokenUseCase
 import com.moneymong.moneymong.feature.sign.sideeffect.SplashSideEffect
 import com.moneymong.moneymong.feature.sign.state.SplashState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.reduce
 import javax.inject.Inject
@@ -45,7 +42,12 @@ class SplashViewModel @Inject constructor(
                 }
             }
             .onFailure {
-                //TODO - 에러 화면
+                //토큰 불러오기 실패 시 유저 정보가 없다고 간주하고 로그인화면으로 이동
+                reduce {
+                    state.copy(
+                        isTokenValid = false
+                    )
+                }
             }
     }
 
