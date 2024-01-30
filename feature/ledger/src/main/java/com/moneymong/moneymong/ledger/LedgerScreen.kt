@@ -65,7 +65,6 @@ import org.orbitmvi.orbit.compose.collectSideEffect
 fun LedgerScreen(
     modifier: Modifier = Modifier,
     viewModel: LedgerViewModel = hiltViewModel(),
-    ledgerPostSuccess: Boolean,
     navigateToAgency: () -> Unit,
     navigateToOCR: (NavOptions?) -> Unit,
     navigateToLedgerDetail: (NavOptions?, Int) -> Unit,
@@ -79,8 +78,8 @@ fun LedgerScreen(
     val snackbarHostState = remember { SnackbarHostState() }
     val pagerState = rememberPagerState(pageCount = { tabs.size })
 
-    LaunchedEffect(key1 = Unit) {
-        if (ledgerPostSuccess) {
+    LaunchedEffect(state.visibleSnackbar) {
+        if (state.visibleSnackbar) {
             coroutineScope.launch {
                 snackbarHostState.showSnackbar(
                     message = "성공적으로 기록됐습니다",
@@ -88,6 +87,7 @@ fun LedgerScreen(
                     actionLabel = ""
                 )
             }
+            viewModel.onChangeSnackbarState(visible = false)
         }
     }
 
@@ -287,7 +287,6 @@ fun LedgerScreen(
 @Composable
 fun LedgerScreenPreview() {
     LedgerScreen(
-        ledgerPostSuccess = false,
         navigateToAgency = {},
         navigateToOCR = {},
         navigateToLedgerDetail = { navOptions, i -> },

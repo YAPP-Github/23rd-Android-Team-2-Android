@@ -1,9 +1,11 @@
 package com.moneymong.moneymong.ledger
 
+import androidx.lifecycle.SavedStateHandle
 import com.moneymong.moneymong.common.base.BaseViewModel
 import com.moneymong.moneymong.domain.param.ledger.LedgerTransactionListParam
 import com.moneymong.moneymong.domain.usecase.ledger.FetchAgencyExistLedgerUseCase
 import com.moneymong.moneymong.domain.usecase.ledger.FetchLedgerTransactionListUseCase
+import com.moneymong.moneymong.ledger.navigation.LedgerArgs
 import com.moneymong.moneymong.ledger.view.LedgerTransactionType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import org.orbitmvi.orbit.syntax.simple.intent
@@ -12,6 +14,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LedgerViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle,
     private val fetchLedgerTransactionListUseCase: FetchLedgerTransactionListUseCase,
     private val fetchAgencyExistLedgerUseCase: FetchAgencyExistLedgerUseCase
 ) : BaseViewModel<LedgerState, LedgerSideEffect>(LedgerState()) {
@@ -19,6 +22,7 @@ class LedgerViewModel @Inject constructor(
     init {
         fetchAgencyExistLedger()
         fetchLedgerTransactionList()
+        onChangeSnackbarState(visible = LedgerArgs(savedStateHandle).ledgerPostSuccess)
     }
 
     fun fetchAgencyExistLedger() = intent {
@@ -70,5 +74,9 @@ class LedgerViewModel @Inject constructor(
 
     fun onChangeSheetState(visible: Boolean) = intent {
         reduce { state.copy(showBottomSheet = visible) }
+    }
+
+    fun onChangeSnackbarState(visible: Boolean) = intent {
+        reduce { state.copy(visibleSnackbar = visible) }
     }
 }
