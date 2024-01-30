@@ -2,10 +2,8 @@ package com.moneymong.moneymong.home
 
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.navOptions
 import com.moneymong.moneymong.feature.agency.join.navigation.agencyCompleteScreen
@@ -58,9 +56,8 @@ fun HomeScreen() {
                 tabs = HomeBottomTabs.entries.toList()
             )
         }
-    ) {
+    ) { padding ->
         NavHost(
-            modifier = Modifier.padding(it),
             navController = homeNavController,
             startDestination = splashRoute,
             enterTransition = { EnterTransition.None },
@@ -89,6 +86,7 @@ fun HomeScreen() {
 
             // agency
             agencyScreen(
+                padding = padding,
                 navigateToRegister = homeNavController::navigateAgencyRegister,
                 navigateAgencyJoin = homeNavController::navigateAgencyJoin
             )
@@ -127,6 +125,7 @@ fun HomeScreen() {
 
             // ledger
             ledgerScreen(
+                padding = padding,
                 navigateToAgency = { homeNavController.navigate(agencyRoute) },
                 navigateToOCR = homeNavController::navigateToOCR,
                 navigateToLedgerDetail = homeNavController::navigateToLedgerDetail,
@@ -163,6 +162,7 @@ fun HomeScreen() {
 
             // mymong
             myMongNavGraph(
+                padding = padding,
                 navigateToTermsOfUse = homeNavController::navigateTermsOfUse,
                 navigateToPrivacyPolicy = homeNavController::navigatePrivacyPolicy,
                 navigateToWithdrawal = homeNavController::navigateWithdrawal,
