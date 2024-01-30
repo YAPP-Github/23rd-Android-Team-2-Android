@@ -4,7 +4,7 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import com.moneymong.moneymong.feature.agency.navigation.agencyRoute
 import com.moneymong.moneymong.feature.mymong.navigation.mymongRoute
-import com.moneymong.moneymong.ledger.navigation.ledgerRoute
+import com.moneymong.moneymong.ledger.navigation.ledgerRouteWithArgs
 
 enum class HomeBottomTabs(
     @StringRes val labelText: Int,
@@ -19,7 +19,7 @@ enum class HomeBottomTabs(
     LEDGER(
         labelText = R.string.home_bottom_tabs_label_ledger,
         icon = com.moneymong.moneymong.design_system.R.drawable.ic_record,
-        route = ledgerRoute
+        route = ledgerRouteWithArgs
     ),
     MYMONG(
         labelText = R.string.home_bottom_tabs_label_mymong,
