@@ -201,6 +201,8 @@ fun SignUpContent(
                         )
                         SignUpGradeView(
                             modifier = Modifier.fillMaxWidth(),
+                            selectedGrade = state.selectedGrade,
+                            selectedGradeChange = {selectedGrade -> viewModel.selectedGradeChange(selectedGrade)},
                             onClick = { viewModel.isEnabledChanged(true) },
                             changeGradeInfor = { viewModel.gradeInforChanged(it) }
                         )
