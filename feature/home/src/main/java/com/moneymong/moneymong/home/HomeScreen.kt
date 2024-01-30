@@ -6,6 +6,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.navOptions
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.moneymong.moneymong.feature.agency.join.navigation.agencyCompleteScreen
 import com.moneymong.moneymong.feature.agency.join.navigation.agencyJoinScreen
 import com.moneymong.moneymong.feature.agency.join.navigation.navigateAgencyJoin
@@ -48,6 +49,12 @@ import com.moneymong.moneymong.ocr_result.navigation.ocrResultScreen
 fun HomeScreen() {
     val homeNavigator = rememberHomeNavigator()
     val homeNavController = homeNavigator.navHostController
+
+    val systemUiController = rememberSystemUiController()
+    systemUiController.setStatusBarColor(
+        color = homeNavigator.statusBarColor,
+        darkIcons = homeNavigator.darkIcons
+    )
 
     Scaffold(
         bottomBar = {
