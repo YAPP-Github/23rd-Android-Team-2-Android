@@ -6,4 +6,6 @@ data class LoginState(
     val isClickable: Boolean = false,
     val isSchoolInfoExist: Boolean? = null,
     val isLoginRequired: Boolean? = null,
+    val visibleError : Boolean? = null,
+    val errorMessage : String = ""
 ) : State

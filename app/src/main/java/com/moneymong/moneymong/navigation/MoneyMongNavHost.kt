@@ -56,12 +56,7 @@ fun MoneyMongNavHost(
 
         loginScreen(
             navigateToHome = {
-                navController.navigate(
-                    route = homeRoute,
-                    navOptions = navOptions {
-                        popUpTo(loginRoute) { inclusive = true }
-                    }
-                )
+                navController.topLevelNavigateToHome(homeLedgerPostSuccess = false)
             },
             navigateToSignUp = {
                 navController.navigate(
@@ -91,12 +86,7 @@ fun MoneyMongNavHost(
 
         signCompleteScreen(
             navigateToHome = {
-                navController.navigate(
-                    route = homeRoute,
-                    navOptions = navOptions {
-                        popUpTo(signCompleteRoute) { inclusive = true }
-                    }
-                )
+                navController.topLevelNavigateToHome(homeLedgerPostSuccess = false)
             }
         )
 
