@@ -1,5 +1,6 @@
 package com.moneymong.moneymong.ledger.navigation
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
@@ -38,14 +39,18 @@ fun NavGraphBuilder.ledgerScreen(
     composable(
         route = ledgerRouteWithArgs,
         arguments = arguments
-    ) { backStackEntry ->
-        val ledgerPostSuccess = backStackEntry.arguments?.getBoolean(LEDGER_POST_SUCCESS) ?: false
+    ) {
         LedgerScreen(
-            ledgerPostSuccess = ledgerPostSuccess,
             navigateToAgency = navigateToAgency,
             navigateToOCR = navigateToOCR,
             navigateToLedgerDetail = navigateToLedgerDetail,
             navigateToLedgerManual = navigateToLedgerManual
         )
     }
+}
+
+internal class LedgerArgs(val ledgerPostSuccess: Boolean) {
+    constructor(savedStateHandle: SavedStateHandle) : this(
+        ledgerPostSuccess = checkNotNull(savedStateHandle[LEDGER_POST_SUCCESS])
+    )
 }

@@ -13,7 +13,8 @@ data class LedgerState(
     val ledgerTransaction: LedgerTransactionListEntity? = null,
     val transactionType: LedgerTransactionType = LedgerTransactionType.전체,
     val currentDate: LocalDate = LocalDate.now(),
-    val visibleError: Boolean = false
+    val visibleError: Boolean = false,
+    val visibleSnackbar: Boolean = false,
 ) : State {
 
     val filterTransactionList: List<LedgerDetailEntity>
