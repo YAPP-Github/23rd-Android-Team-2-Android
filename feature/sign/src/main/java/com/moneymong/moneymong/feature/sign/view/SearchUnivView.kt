@@ -46,7 +46,9 @@ fun SearchUnivView(
     isItemSelected: Boolean,
     textValue: TextFieldValue,
     universityResponse: UniversitiesEntity?,
-    value: TextFieldValue
+    value: TextFieldValue,
+    textInput : Boolean,
+    textValueChanged : (Boolean) -> Unit
 ) {
 
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -55,15 +57,16 @@ fun SearchUnivView(
     val debouncePeriod = 300L
     val queryState = remember { MutableStateFlow("") }
 
-
-    LaunchedEffect(Unit) {
-        queryState
-            .debounce(debouncePeriod)
-            .collect { query ->
-                onSearchIconClicked(query)
-                isListVisibleChanged(query.isNotEmpty())
-                isFilledChanged(false)
-            }
+    LaunchedEffect(textInput) {
+        if(textInput){
+            queryState
+                .debounce(debouncePeriod)
+                .collect { query ->
+                    onSearchIconClicked(query)
+                    isListVisibleChanged(query.isNotEmpty())
+                    isFilledChanged(false)
+                }
+        }
     }
 
 
@@ -74,6 +77,7 @@ fun SearchUnivView(
             modifier = Modifier.fillMaxWidth(),
             value = value,
             onValueChange = {
+                textValueChanged(true)
                 onChange(it)
                 queryState.value = it.text
             },
