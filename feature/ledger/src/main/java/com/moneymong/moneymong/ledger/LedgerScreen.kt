@@ -11,6 +11,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -35,6 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavOptions
 import com.example.member.MemberScreen
+import com.moneymong.moneymong.common.ui.plus
 import com.moneymong.moneymong.design_system.R
 import com.moneymong.moneymong.design_system.component.bottomSheet.MDSBottomSheet
 import com.moneymong.moneymong.design_system.component.button.MDSFloatingActionButton
@@ -65,6 +67,7 @@ import org.orbitmvi.orbit.compose.collectSideEffect
 fun LedgerScreen(
     modifier: Modifier = Modifier,
     viewModel: LedgerViewModel = hiltViewModel(),
+    padding: PaddingValues,
     navigateToAgency: () -> Unit,
     navigateToOCR: (NavOptions?) -> Unit,
     navigateToLedgerDetail: (NavOptions?, Int) -> Unit,
@@ -142,7 +145,11 @@ fun LedgerScreen(
             },
             snackbarHost = {
                 MDSSnackbarHost(
-                    modifier = Modifier.padding(start = 20.dp, bottom = 12.dp, end = 20.dp),
+                    modifier = Modifier.padding(
+                        start = 20.dp,
+                        bottom = 12.dp + padding.calculateBottomPadding(),
+                        end = 20.dp
+                    ),
                     hostState = snackbarHostState
                 )
             }
@@ -158,7 +165,7 @@ fun LedgerScreen(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(it)
+                    .padding(it + padding)
             ) {
                 if (false) {// TODO 소속이 없을 경우
                     LedgerAgencyEmptyView(onClickFindAgency = navigateToAgency)
@@ -287,6 +294,7 @@ fun LedgerScreen(
 @Composable
 fun LedgerScreenPreview() {
     LedgerScreen(
+        padding = PaddingValues(),
         navigateToAgency = {},
         navigateToOCR = {},
         navigateToLedgerDetail = { navOptions, i -> },
