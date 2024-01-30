@@ -8,7 +8,7 @@ import com.moneymong.moneymong.ocr.OCRScreen
 
 const val ocrRoute = "ocr_route"
 
-fun NavController.navigateToOCR(navOptions: NavOptions? = null) {
+fun NavController.navigateOCR(navOptions: NavOptions? = null) {
     this.navigate(ocrRoute, navOptions)
 }
 

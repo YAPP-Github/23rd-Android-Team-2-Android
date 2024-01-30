@@ -10,7 +10,7 @@ import com.moneymong.moneymong.ocr_result.OCRResultScreen
 
 const val ocrResultRoute = "ocrresult_route?document={document}"
 
-fun NavController.navigateToOCRResult(
+fun NavController.navigateOCRResult(
     navOptions: NavOptions? = null,
     document: String
 ) {

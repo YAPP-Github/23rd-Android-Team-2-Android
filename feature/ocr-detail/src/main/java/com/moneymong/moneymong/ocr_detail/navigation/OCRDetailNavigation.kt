@@ -10,7 +10,7 @@ import com.moneymong.moneymong.ocr_detail.OCRDetailScreen
 
 const val ocrDetailRoute = "ocrdetail_route?document={document}"
 
-fun NavController.navigateToOCRDetail(
+fun NavController.navigateOCRDetail(
     navOptions: NavOptions? = null,
     document: String
 ) {
