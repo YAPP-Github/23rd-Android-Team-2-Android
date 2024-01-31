@@ -38,7 +38,6 @@ import com.moneymong.moneymong.design_system.theme.Gray01
 import com.moneymong.moneymong.design_system.theme.Gray08
 import com.moneymong.moneymong.design_system.theme.MMHorizontalSpacing
 import com.moneymong.moneymong.design_system.theme.Red03
-import com.moneymong.moneymong.design_system.theme.White
 import com.moneymong.moneymong.feature.agency.Agency
 import com.moneymong.moneymong.feature.agency.search.component.AgencySearchTopBar
 import com.moneymong.moneymong.feature.agency.search.item.AgencyItem
@@ -55,7 +54,7 @@ fun AgencySearchScreen(
     Box(
         modifier = modifier
             .fillMaxSize()
-            .background(color = if (pagingItems.itemCount == 0) White else Gray01)
+            .background(color = Gray01)
             .padding(horizontal = MMHorizontalSpacing)
     ) {
         Column(
@@ -75,7 +74,7 @@ fun AgencySearchScreen(
                 .padding(bottom = 20.dp),
             horizontalAlignment = Alignment.End
         ) {
-            if (pagingItems.itemCount == 0) {
+            if (pagingItems.itemCount == 0 && pagingItems.loadState.refresh is LoadState.NotLoading) {
                 MDSToolTip(
                     text = "소속이 없다면 등록해보세요",
                     position = MDSToolTipPosition.Right
