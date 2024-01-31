@@ -5,6 +5,7 @@ import com.moneymong.moneymong.data.datasource.login.TokenRemoteDataSource
 import com.moneymong.moneymong.data.mapper.login.toEntity
 import com.moneymong.moneymong.data.mapper.login.toRequest
 import com.moneymong.moneymong.domain.entity.login.RefreshTokenEntity
+import com.moneymong.moneymong.domain.entity.login.UserDataStoreInfoEntity
 import com.moneymong.moneymong.domain.param.login.RefreshTokenParam
 import com.moneymong.moneymong.domain.repository.TokenRepository
 import javax.inject.Inject
@@ -20,6 +21,10 @@ class TokenRepositoryImpl @Inject constructor(
 
     override suspend fun getAccessToken(): Result<String> {
         return localDataSource.getAccessToken()
+    }
+
+    override suspend fun getDataStoreInfo(): Result<UserDataStoreInfoEntity> {
+        return localDataSource.getDataStoreInfo().map { it.toEntity() }
     }
 
     override suspend fun getUpdateToken(refreshToken: String): Result<RefreshTokenEntity> {
