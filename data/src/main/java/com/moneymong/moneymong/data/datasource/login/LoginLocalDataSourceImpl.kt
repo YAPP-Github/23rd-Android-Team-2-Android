@@ -5,6 +5,7 @@ import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import com.moneymong.moneymong.network.response.login.UserDataStoreInfoResponse
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.first
 import javax.inject.Inject
@@ -29,6 +30,11 @@ class LoginLocalDataSourceImpl @Inject constructor(
         val preferences = context.dataStore.data.first()
         return preferences[accessToken]?.let { Result.success(it) }
             ?: Result.failure(Exception("accessToken is null"))
+    }
+
+    override suspend fun getDataStoreInfo(): Result<UserDataStoreInfoResponse> {
+        val preferences = context.dataStore.data.first()
+        return Result.success(UserDataStoreInfoResponse(preferences[accessToken] ?: "",preferences[schoolInfoExist] ?: false))
     }
 
     override suspend fun updateTokens(aToken: String, rToken: String) {
