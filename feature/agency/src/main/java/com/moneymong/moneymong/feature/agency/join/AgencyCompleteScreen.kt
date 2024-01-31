@@ -22,6 +22,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.moneymong.moneymong.common.ui.noRippleClickable
 import com.moneymong.moneymong.design_system.theme.Black
 import com.moneymong.moneymong.design_system.theme.Heading1
 import com.moneymong.moneymong.design_system.theme.MMHorizontalSpacing
@@ -70,7 +71,7 @@ fun AgencyCompleteScreen(
                 Icon(
                     painterResource(id = R.drawable.ic_close_default),
                     modifier = Modifier
-                        .clickable {
+                        .noRippleClickable {
                             navigateToSearch()
                         },
                     contentDescription = null
