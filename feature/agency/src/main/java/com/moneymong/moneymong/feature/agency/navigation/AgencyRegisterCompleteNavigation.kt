@@ -1,8 +1,5 @@
 package com.moneymong.moneymong.feature.agency.navigation
 
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.padding
-import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
@@ -17,12 +14,14 @@ fun NavController.navigateAgencyRegisterComplete(navOptions: NavOptions? = null)
 
 fun NavGraphBuilder.agencyRegisterCompleteScreen(
     navigateToSearch: () -> Unit,
-    navigateToLedger: () -> Unit
+    navigateToLedger: () -> Unit,
+    navigateToLedgerManual: () -> Unit
 ) {
     composable(route = agencyRegisterCompleteRoute) {
         AgencyRegisterCompleteScreen(
             navigateToSearch = navigateToSearch,
-            navigateToLedger = navigateToLedger
+            navigateToLedger = navigateToLedger,
+            navigateToLedgerManual = navigateToLedgerManual
         )
     }
 }

@@ -127,13 +127,14 @@ fun HomeScreen() {
                         }
                     )
                 },
-                navigateToLedger = homeNavController::navigateLedger
+                navigateToLedger = homeNavController::navigateLedger,
+                navigateToLedgerManual = homeNavController::navigateLedgerManual
             )
 
             // ledger
             ledgerScreen(
                 padding = padding,
-                navigateToAgency = { homeNavController.navigate(agencyRoute) },
+                navigateToAgency = { homeNavigator.navigate(agencyRoute) },
                 navigateToOCR = homeNavController::navigateOCR,
                 navigateToLedgerDetail = homeNavController::navigateLedgerDetail,
                 navigateToLedgerManual = homeNavController::navigateLedgerManual
