@@ -7,7 +7,7 @@ import javax.inject.Inject
 class UserRemoteDataSourceMock @Inject constructor() : UserRemoteDataSource {
 
     override suspend fun getMyInfo(): Result<UserResponse> {
-        delay(2000)  // for test
+        delay(2000)
         return Result.success(
             UserResponse(
                 id = 1,
@@ -17,16 +17,13 @@ class UserRemoteDataSourceMock @Inject constructor() : UserRemoteDataSource {
                 grade = 4
             )
         )
-//        return Result.failure(Throwable("테스트 에러"))
     }
 
     override suspend fun withdrawal(): Result<Unit> {
         return Result.success(Unit)
-//        return Result.failure(Throwable("테스트 에러"))
     }
 
     override suspend fun logout(refreshToken: String): Result<Unit> {
         return Result.success(Unit)
-//        return Result.failure(Throwable("테스트 에러"))
     }
 }
