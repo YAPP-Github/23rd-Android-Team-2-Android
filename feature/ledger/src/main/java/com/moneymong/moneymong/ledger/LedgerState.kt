@@ -31,7 +31,7 @@ data class LedgerState(
         get() = filterTransactionList.isNotEmpty()
 
     val existAgency: Boolean
-        get() = agencyId != 0
+        get() = agencyList.isNotEmpty()
 
     val currentAgency: MyAgencyEntity?
         get() = agencyList.find { it.id == agencyId }

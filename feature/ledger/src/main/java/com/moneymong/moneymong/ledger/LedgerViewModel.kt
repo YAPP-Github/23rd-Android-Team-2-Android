@@ -50,12 +50,10 @@ class LedgerViewModel @Inject constructor(
     }
 
     fun fetchAgencyExistLedger() = intent {
-        if (state.existAgency) {
-            fetchAgencyExistLedgerUseCase(state.agencyId)
-                .onSuccess {
-                    reduce { state.copy(isExistLedger = it) }
-                }
-        }
+        fetchAgencyExistLedgerUseCase(state.agencyId)
+            .onSuccess {
+                reduce { state.copy(isExistLedger = it) }
+            }
     }
 
     fun fetchLedgerTransactionList() = intent {
@@ -81,15 +79,16 @@ class LedgerViewModel @Inject constructor(
         }
     }
 
-    fun fetchMyAgencyList() = intent {
-        if (state.existAgency) {
-            fetchMyAgencyListUseCase(Unit)
-                .onSuccess {
-                    reduce { state.copy(agencyList = it) }
-                }.onFailure {
-                    reduce { state.copy(visibleError = true) }
+    fun fetchMyAgencyList() = blockingIntent {
+        fetchMyAgencyListUseCase(Unit)
+            .onSuccess {
+                reduce { state.copy(agencyList = it) }
+                if (it.isNotEmpty() && state.agencyId == 0) {
+                    saveAgencyId(it.first().id)
                 }
-        }
+            }.onFailure {
+                reduce { state.copy(visibleError = true) }
+            }
     }
 
     fun reFetchLedgerData(agencyId: Int) {
