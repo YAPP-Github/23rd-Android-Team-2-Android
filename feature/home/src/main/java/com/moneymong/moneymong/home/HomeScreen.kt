@@ -127,7 +127,8 @@ fun HomeScreen() {
                         }
                     )
                 },
-                navigateToLedger = homeNavController::navigateLedger
+                navigateToLedger = homeNavController::navigateLedger,
+                navigateToLedgerManual = homeNavController::navigateLedgerManual
             )
 
             // ledger

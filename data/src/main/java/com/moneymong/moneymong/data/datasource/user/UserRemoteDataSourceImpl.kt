@@ -13,12 +13,10 @@ class UserRemoteDataSourceImpl @Inject constructor(
     }
 
     override suspend fun withdrawal(): Result<Unit> {
-        // todo: change
-        return Result.success(Unit)
+        return userApi.withdrawal()
     }
 
-    override suspend fun logout(): Result<Unit> {
-        // todo: change
-        return Result.success(Unit)
+    override suspend fun logout(refreshToken: String): Result<Unit> {
+        return userApi.logout(refreshToken)
     }
 }

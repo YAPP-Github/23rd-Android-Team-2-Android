@@ -29,9 +29,12 @@ class MyMongViewModel @Inject constructor(
         getInfo()
     }
 
-    private fun getInfo() = intent {
+    fun getInfo() = intent {
         reduce {
-            state.copy(isInfoLoading = true)
+            state.copy(
+                isInfoLoading = true,
+                isInfoError = false,
+            )
         }
         getMyInfoUseCase(data = Unit)
             .also {
