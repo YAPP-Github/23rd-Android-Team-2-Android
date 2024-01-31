@@ -23,5 +23,13 @@ data class MemberState(
         agencyUserRole = ""
     ),
     val filteredMemberList: List<AgencyUserEntity> = emptyList(),
-    val isUserAuthor: String = ""
-) : State
+    val isUserAuthor: String = "",
+    val visibleError : Boolean = false,
+    val errorMessage : String = "",
+    val visiblePopUpError : Boolean = false,
+    val errorPopUpMessage : String = "",
+    val inviteCodeError : Boolean = false,
+    val reInviteCodeError : Boolean = false,
+    val memberListError : Boolean = false,
+    val myInfoError : Boolean = false,
+    ) : State
