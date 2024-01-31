@@ -3,6 +3,9 @@ package com.moneymong.moneymong.ocr_detail
 import android.content.SharedPreferences
 import androidx.compose.ui.text.input.TextFieldValue
 import com.moneymong.moneymong.common.base.BaseViewModel
+import com.moneymong.moneymong.common.ui.isValidPaymentDate
+import com.moneymong.moneymong.common.ui.isValidPaymentTime
+import com.moneymong.moneymong.common.ui.validateValue
 import com.moneymong.moneymong.domain.entity.ocr.DocumentEntity
 import com.moneymong.moneymong.domain.param.ledger.FundType
 import com.moneymong.moneymong.domain.param.ledger.LedgerTransactionParam
@@ -134,42 +137,74 @@ class OCRDetailViewModel @Inject constructor(
     }
 
     fun onChangeStoreNameValue(value: TextFieldValue) = blockingIntent {
-        if (value.text.length <= 20) {
-            reduce {
-                state.copy(storeNameValue = value)
-            }
+        val validate = value.text.validateValue(length = 20)
+        if (!validate) {
+            reduce { state.copy(isStoreNameError = true) }
+        } else {
+            reduce { state.copy(isStoreNameError = false) }
         }
+        reduce { state.copy(storeNameValue = value) }
     }
 
     fun onChangeTotalPriceValue(value: TextFieldValue) = blockingIntent {
-        if (value.text.length <= 9) {
-            reduce {
-                state.copy(totalPriceValue = value)
+        val trimValue = trimStartWithZero(value)
+        val validate = trimValue.text.validateValue(length = 12, isDigit = true)
+        if (validate) {
+            val elvisValue = value.text.ifEmpty { "0" }
+            if (elvisValue.toLong() > MAX_TOTAL_PRICE) {
+                reduce { state.copy(isTotalPriceError = true) }
+            } else {
+                reduce { state.copy(isTotalPriceError = false) }
             }
+
+            reduce { state.copy(totalPriceValue = trimValue) }
         }
     }
 
     fun onChangePaymentDateValue(value: TextFieldValue) = blockingIntent {
-        if (value.text.length <= 8) {
+        val validate = value.text.validateValue(length = 8, isDigit = true)
+        if (validate) {
+            val isPaymentDateError = !value.text.isValidPaymentDate()
             reduce {
-                state.copy(paymentDateValue = value)
+                state.copy(
+                    paymentDateValue = value,
+                    isPaymentDateError = isPaymentDateError
+                )
             }
         }
     }
 
     fun onChangePaymentTimeValue(value: TextFieldValue) = blockingIntent {
-        if (value.text.length <= 6) {
+        val validate = value.text.validateValue(length = 6, isDigit = true)
+        if (validate) {
+            val isPaymentTimeError = !value.text.isValidPaymentTime()
             reduce {
-                state.copy(paymentTimeValue = value)
+                state.copy(
+                    paymentTimeValue = value,
+                    isPaymentTimeError = isPaymentTimeError
+                )
             }
         }
     }
 
     fun onChangeMemoValue(value: TextFieldValue) = blockingIntent {
-        if (value.text.length <= 300) {
-            reduce {
-                state.copy(memoValue = value)
-            }
+        val validate = value.text.validateValue(length = 300)
+        reduce {
+            state.copy(
+                memoValue = value,
+                isMemoError = !validate
+            )
         }
+    }
+
+    private fun trimStartWithZero(value: TextFieldValue) =
+        if (value.text.isNotEmpty() && value.text.all { it == '0' }) {
+            value.copy(text = "0")
+        } else {
+            value.copy(text = value.text.trimStart('0'))
+        }
+
+    companion object {
+        const val MAX_TOTAL_PRICE = 999999999
     }
 }
