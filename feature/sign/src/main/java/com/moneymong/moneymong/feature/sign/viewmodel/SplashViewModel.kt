@@ -5,9 +5,6 @@ import com.moneymong.moneymong.domain.usecase.login.TokenUseCase
 import com.moneymong.moneymong.feature.sign.sideeffect.SplashSideEffect
 import com.moneymong.moneymong.feature.sign.state.SplashState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.reduce
 import javax.inject.Inject
@@ -30,23 +27,18 @@ class SplashViewModel @Inject constructor(
     fun checkTokenValidity() = intent {
         tokenUseCase.getAccessToken()
             .onSuccess {
-                if (it.isNotEmpty()) {
-                    reduce {
-                        state.copy(
-                            isTokenValid = true
-                        )
-                    }
-                } else {
-                    reduce {
-                        state.copy(
-                            isTokenValid = false
-                        )
-                    }
+                reduce {
+                    state.copy(
+                        isTokenValid = true
+                    )
                 }
             }
             .onFailure {
-                //TODO - 에러 화면
+                reduce {
+                    state.copy(
+                        isTokenValid = false
+                    )
+                }
             }
     }
-
 }

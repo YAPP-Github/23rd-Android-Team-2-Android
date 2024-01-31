@@ -33,12 +33,10 @@ fun SplashScreen(
     val state = viewModel.collectAsState().value
 
     LaunchedEffect(key1 = state.isTokenValid) {
-        state.isTokenValid?.let { isValid ->
-            if (isValid) {
-                navigateToLedger()
-            } else {
-                navigateToLogin()
-            }
+        if (state.isTokenValid) {
+            navigateToLedger()
+        } else {
+            navigateToLogin()
         }
     }
 

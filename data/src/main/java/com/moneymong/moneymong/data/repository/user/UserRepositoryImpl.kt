@@ -10,8 +10,8 @@ import javax.inject.Inject
 
 class UserRepositoryImpl @Inject constructor(
     private val userRemoteDataSource: UserRemoteDataSource,
+    private val userLocalDataSource: UserLocalDataSource,
     private val loginLocalDataSource: LoginLocalDataSource
-    private val userLocalDataSource: UserLocalDataSource
 ) : UserRepository {
 
     override suspend fun getMyInfo(): Result<UserEntity> {
