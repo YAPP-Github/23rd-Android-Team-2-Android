@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.moneymong.moneymong.common.base.BaseViewModel
 import com.moneymong.moneymong.domain.usecase.agency.AgencyJoinUseCase
 import com.moneymong.moneymong.domain.param.agency.AgencyJoinParam
+import com.moneymong.moneymong.domain.usecase.agency.SaveAgencyIdUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.syntax.simple.intent
@@ -13,7 +14,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AgencyJoinViewModel @Inject constructor(
-    private val useCase: AgencyJoinUseCase
+    private val useCase: AgencyJoinUseCase,
+    private val saveAgencyIdUseCase: SaveAgencyIdUseCase
 ) : BaseViewModel<AgencyJoinState, AgencyJoinSideEffect>(AgencyJoinState()) {
 
     fun agencyCodeNumbers(agencyId: Long) = intent {
@@ -22,13 +24,13 @@ class AgencyJoinViewModel @Inject constructor(
             useCase.invoke(agencyId, AgencyJoinParam(codeNumbers))
                 .onSuccess {
                     if (it.certified) {
+                        saveAgencyIdUseCase(agencyId.toInt())
                         reduce {
                             state.copy(
                                 isError = false,
                                 codeAccess = true
                             )
                         }
-
                     } else {
                         reduce {
                             state.copy(
