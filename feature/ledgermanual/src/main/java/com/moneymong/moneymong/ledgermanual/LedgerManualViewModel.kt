@@ -8,9 +8,11 @@ import com.moneymong.moneymong.common.ui.validateValue
 import com.moneymong.moneymong.domain.param.ledger.FundType
 import com.moneymong.moneymong.domain.param.ledger.LedgerTransactionParam
 import com.moneymong.moneymong.domain.param.ocr.FileUploadParam
+import com.moneymong.moneymong.domain.usecase.agency.FetchAgencyIdUseCase
 import com.moneymong.moneymong.domain.usecase.ledger.PostLedgerTransactionUseCase
 import com.moneymong.moneymong.domain.usecase.ocr.PostFileUploadUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import org.orbitmvi.orbit.annotation.OrbitExperimental
 import org.orbitmvi.orbit.syntax.simple.blockingIntent
 import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.postSideEffect
@@ -21,14 +23,25 @@ import javax.inject.Inject
 @HiltViewModel
 class LedgerManualViewModel @Inject constructor(
     private val postLedgerTransactionUseCase: PostLedgerTransactionUseCase,
-    private val postFileUploadUseCase: PostFileUploadUseCase
+    private val postFileUploadUseCase: PostFileUploadUseCase,
+    private val fetchAgencyIdUseCase: FetchAgencyIdUseCase
 ) : BaseViewModel<LedgerManualState, LedgerManualSideEffect>(LedgerManualState()) {
+
+    init {
+        fetchAgencyId()
+    }
+
+    @OptIn(OrbitExperimental::class)
+    fun fetchAgencyId() = blockingIntent {
+        val agencyId = fetchAgencyIdUseCase(Unit)
+        reduce { state.copy(agencyId = agencyId) }
+    }
 
     fun postLedgerTransaction() = intent {
         if (!state.isLoading) {
             reduce { state.copy(isLoading = true) }
             val ledgerTransactionParam = LedgerTransactionParam(
-                id = 1, // TODO
+                id = state.agencyId,
                 storeInfo = state.storeNameValue.text,
                 fundType = state.fundType,
                 amount = state.totalPriceValue.text.toInt(),
