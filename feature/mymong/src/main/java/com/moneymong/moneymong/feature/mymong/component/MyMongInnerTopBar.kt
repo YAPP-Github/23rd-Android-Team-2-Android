@@ -1,6 +1,5 @@
 package com.moneymong.moneymong.feature.mymong.component
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -14,6 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.moneymong.moneymong.common.ui.noRippleClickable
 import com.moneymong.moneymong.design_system.R
 import com.moneymong.moneymong.design_system.theme.Gray07
 import com.moneymong.moneymong.design_system.theme.Gray10
@@ -34,7 +34,7 @@ internal fun MyMongInnerTopBar(
             modifier = Modifier
                 .padding(vertical = 18.dp)
                 .size(24.dp)
-                .clickable { onBackClick() },
+                .noRippleClickable { onBackClick() },
             painter = painterResource(id = R.drawable.ic_chevron_left),
             contentDescription = "back button",
             tint = Gray07

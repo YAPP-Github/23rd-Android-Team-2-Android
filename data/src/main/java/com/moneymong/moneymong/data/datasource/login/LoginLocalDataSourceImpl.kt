@@ -21,12 +21,14 @@ class LoginLocalDataSourceImpl @Inject constructor(
 
     override suspend fun getRefreshToken(): Result<String> {
         val preferences = context.dataStore.data.first()
-        return Result.success(preferences[refreshToken] ?: "")
+        return preferences[refreshToken]?.let { Result.success(it) }
+            ?: Result.failure(Exception("refreshToken is null"))
     }
 
     override suspend fun getAccessToken(): Result<String> {
         val preferences = context.dataStore.data.first()
-        return Result.success(preferences[accessToken] ?: "")
+        return preferences[accessToken]?.let { Result.success(it) }
+            ?: Result.failure(Exception("accessToken is null"))
     }
 
     override suspend fun updateTokens(aToken: String, rToken: String) {
@@ -44,7 +46,8 @@ class LoginLocalDataSourceImpl @Inject constructor(
 
     override suspend fun getSchoolInfo(): Result<Boolean> {
         val preferences = context.dataStore.data.first()
-        return Result.success(preferences[schoolInfoExist] ?: false)
+        return preferences[schoolInfoExist]?.let { Result.success(it) }
+            ?: Result.failure(Exception("schoolInfoExist is null"))
     }
 
     override suspend fun deleteToken() {
