@@ -17,7 +17,7 @@ class AgencyJoinViewModel @Inject constructor(
 ) : BaseViewModel<AgencyJoinState, AgencyJoinSideEffect>(AgencyJoinState()) {
 
     fun agencyCodeNumbers(agencyId: Long) = intent {
-        val codeNumbers =  state.numbers.joinToString(separator = "")
+        val codeNumbers = state.numbers.joinToString(separator = "")
         viewModelScope.launch {
             useCase.invoke(agencyId, AgencyJoinParam(codeNumbers))
                 .onSuccess {
@@ -38,7 +38,12 @@ class AgencyJoinViewModel @Inject constructor(
                     }
                 }
                 .onFailure {
-                    //TODO - 에러화면
+                    reduce {
+                        state.copy(
+                            visiblePopUpError = true,
+                            errorPopUpMessage = it.message.toString()
+                        )
+                    }
 
                 }
         }
@@ -58,19 +63,26 @@ class AgencyJoinViewModel @Inject constructor(
         val newNumbers = state.numbers.toMutableList().apply {
             this[index] = value
         }
-        Log.d("newNumbers", newNumbers.toString())
         reduce {
             state.copy(
                 numbers = newNumbers
             )
         }
-        Log.d("numbers", state.numbers.joinToString(separator = ""))
     }
 
     fun resetNumbers() = intent {
         reduce {
             state.copy(
                 numbers = List(6) { "" }
+            )
+        }
+    }
+
+    fun visiblePopUpErrorChanged(visibleError: Boolean) = intent {
+        reduce {
+            state.copy(
+                visiblePopUpError = visibleError,
+                errorPopUpMessage = ""
             )
         }
     }
