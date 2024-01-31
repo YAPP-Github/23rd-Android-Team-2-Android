@@ -14,12 +14,12 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.moneymong.moneymong.design_system.R
 import com.moneymong.moneymong.design_system.component.modal.MDSModal
+import com.moneymong.moneymong.design_system.error.ErrorDialog
 import com.moneymong.moneymong.design_system.theme.Gray01
 import com.moneymong.moneymong.design_system.theme.MMHorizontalSpacing
 import com.moneymong.moneymong.feature.mymong.main.component.MyMongTopBar
 import com.moneymong.moneymong.feature.mymong.main.view.MyMongInfoView
 import com.moneymong.moneymong.feature.mymong.main.view.MyMongSettingView
-import com.moneymong.moneymong.feature.mymong.withdrawal.component.WithdrawalErrorDialog
 import org.orbitmvi.orbit.compose.collectAsState
 import org.orbitmvi.orbit.compose.collectSideEffect
 
@@ -67,7 +67,7 @@ fun MyMongScreen(
     }
 
     if (state.visibleErrorDialog) {
-        WithdrawalErrorDialog(
+        ErrorDialog(
             message = state.logoutErrorMessage,
             onConfirm = { viewModel.changeErrorDialogVisibility(false) }
         )
@@ -88,7 +88,8 @@ fun MyMongScreen(
             name = state.name,
             email = state.email,
             university = state.university,
-            grade = state.grade
+            grade = state.grade,
+            getInfo = viewModel::getInfo
         )
         Spacer(modifier = Modifier.height(24.dp))
         MyMongSettingView(

@@ -8,5 +8,5 @@ interface UserRemoteDataSource {
 
     suspend fun withdrawal(): Result<Unit>
 
-    suspend fun logout(): Result<Unit>
+    suspend fun logout(refreshToken: String): Result<Unit>
 }

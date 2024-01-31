@@ -367,18 +367,9 @@ class AgencyRemoteDataSourceMock : AgencyRemoteDataSource {
                     )
                 )
             ),
-//            Result.success(
-//                AgenciesGetResponse(
-//                    emptyList()
-//                )
-//            )
             Result.failure(
                 Throwable("Mock Failure Message")
             )
-        )
-
-        val agenciesMockOfFailure = Result.failure<AgenciesGetResponse>(
-            Throwable("Mock Failure Message")
         )
     }
 }

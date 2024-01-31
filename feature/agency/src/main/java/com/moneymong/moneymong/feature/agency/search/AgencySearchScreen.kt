@@ -13,8 +13,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.Button
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -31,12 +29,15 @@ import com.moneymong.moneymong.design_system.R
 import com.moneymong.moneymong.design_system.component.button.MDSFloatingActionButton
 import com.moneymong.moneymong.design_system.component.tooltip.MDSToolTip
 import com.moneymong.moneymong.design_system.component.tooltip.MDSToolTipPosition
+import com.moneymong.moneymong.design_system.error.ErrorItem
+import com.moneymong.moneymong.design_system.error.ErrorScreen
+import com.moneymong.moneymong.design_system.loading.LoadingItem
+import com.moneymong.moneymong.design_system.loading.LoadingScreen
 import com.moneymong.moneymong.design_system.theme.Body4
 import com.moneymong.moneymong.design_system.theme.Gray01
 import com.moneymong.moneymong.design_system.theme.Gray08
 import com.moneymong.moneymong.design_system.theme.MMHorizontalSpacing
 import com.moneymong.moneymong.design_system.theme.Red03
-import com.moneymong.moneymong.design_system.theme.White
 import com.moneymong.moneymong.feature.agency.Agency
 import com.moneymong.moneymong.feature.agency.search.component.AgencySearchTopBar
 import com.moneymong.moneymong.feature.agency.search.item.AgencyItem
@@ -53,7 +54,7 @@ fun AgencySearchScreen(
     Box(
         modifier = modifier
             .fillMaxSize()
-            .background(color = if (pagingItems.itemCount == 0) White else Gray01)
+            .background(color = Gray01)
             .padding(horizontal = MMHorizontalSpacing)
     ) {
         Column(
@@ -73,7 +74,7 @@ fun AgencySearchScreen(
                 .padding(bottom = 20.dp),
             horizontalAlignment = Alignment.End
         ) {
-            if (pagingItems.itemCount == 0) {
+            if (pagingItems.itemCount == 0 && pagingItems.loadState.refresh is LoadState.NotLoading) {
                 MDSToolTip(
                     text = "소속이 없다면 등록해보세요",
                     position = MDSToolTipPosition.Right
@@ -134,35 +135,19 @@ private fun ContentViewWithAgencies(
 
         when (pagingItems.loadState.source.append) {
             is LoadState.Loading -> {
-                // todo: loading item
                 item {
-                    Box(
-                        modifier = Modifier
-                            .height(80.dp)
-                            .fillMaxWidth(),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        CircularProgressIndicator()
-                    }
+                    LoadingItem(modifier = Modifier.fillMaxWidth())
                 }
             }
 
             is LoadState.Error -> {
                 val e = pagingItems.loadState.source.append as LoadState.Error
-                // todo: error item
                 item {
-                    Column(
-                        modifier = Modifier
-                            .height(80.dp)
-                            .fillMaxWidth(),
-                        verticalArrangement = Arrangement.spacedBy(8.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Text(text = "${e.error.message}")
-                        Button(onClick = pagingItems::retry) {
-                            Text(text = "retry")
-                        }
-                    }
+                    ErrorItem(
+                        modifier = Modifier.fillMaxWidth(),
+                        message = "${e.error.message}",
+                        onRetry = pagingItems::retry
+                    )
                 }
             }
 
@@ -179,28 +164,16 @@ private fun ContentViewWithoutAgencies(
 
     when (pagingItems.loadState.refresh) {
         is LoadState.Loading -> {
-            // todo: loading screen
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                CircularProgressIndicator()
-            }
+            LoadingScreen(modifier = modifier.fillMaxSize())
         }
 
         is LoadState.Error -> {
             val e = pagingItems.loadState.refresh as LoadState.Error
-            // todo: error screen
-            Column(
-                modifier = Modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text(text = "${e.error.message}")
-                Button(onClick = pagingItems::retry) {
-                    Text(text = "retry")
-                }
-            }
+            ErrorScreen(
+                modifier = modifier.fillMaxSize(),
+                message = "${e.error.message}",
+                onRetry = pagingItems::retry
+            )
         }
 
         is LoadState.NotLoading -> {

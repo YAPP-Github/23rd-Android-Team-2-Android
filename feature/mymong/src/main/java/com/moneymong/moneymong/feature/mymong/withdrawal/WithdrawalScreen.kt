@@ -23,6 +23,7 @@ import com.moneymong.moneymong.common.ui.noRippleClickable
 import com.moneymong.moneymong.design_system.R
 import com.moneymong.moneymong.design_system.component.button.MDSButton
 import com.moneymong.moneymong.design_system.component.modal.MDSModal
+import com.moneymong.moneymong.design_system.error.ErrorDialog
 import com.moneymong.moneymong.design_system.theme.Body3
 import com.moneymong.moneymong.design_system.theme.Body4
 import com.moneymong.moneymong.design_system.theme.Gray02
@@ -34,7 +35,6 @@ import com.moneymong.moneymong.design_system.theme.Red03
 import com.moneymong.moneymong.design_system.theme.White
 import com.moneymong.moneymong.feature.mymong.component.MyMongInnerTopBar
 import com.moneymong.moneymong.feature.mymong.withdrawal.component.WithdrawalCheckBox
-import com.moneymong.moneymong.feature.mymong.withdrawal.component.WithdrawalErrorDialog
 import org.orbitmvi.orbit.compose.collectAsState
 import org.orbitmvi.orbit.compose.collectSideEffect
 
@@ -67,7 +67,7 @@ fun WithdrawalScreen(
     }
 
     if (state.visibleErrorDialog) {
-        WithdrawalErrorDialog(
+        ErrorDialog(
             message = state.errorMessage,
             onConfirm = { viewModel.changeErrorDialogVisibility(false) }
         )
