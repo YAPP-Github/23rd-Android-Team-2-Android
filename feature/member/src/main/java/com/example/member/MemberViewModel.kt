@@ -12,6 +12,7 @@ import com.moneymong.moneymong.domain.usecase.member.MemberInvitationCodeUseCase
 import com.moneymong.moneymong.domain.usecase.member.MemberListUseCase
 import com.moneymong.moneymong.domain.usecase.member.MemberReInvitationCodeUseCase
 import com.moneymong.moneymong.domain.usecase.member.UpdateMemberAuthorUseCase
+import com.moneymong.moneymong.domain.usecase.user.GetMyInfoUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import org.orbitmvi.orbit.annotation.OrbitExperimental
 import org.orbitmvi.orbit.syntax.simple.blockingIntent
@@ -122,6 +123,24 @@ class MemberViewModel @Inject constructor(
         }
     }
 
+    fun visibleErrorChanged(visibleError : Boolean) = intent{
+        reduce {
+            state.copy(
+                visibleError = visibleError,
+                errorMessage = ""
+            )
+        }
+    }
+
+    fun visiblePopUpErrorChanged(visiblePopUpError : Boolean) = intent{
+        reduce {
+            state.copy(
+                visiblePopUpError = visiblePopUpError,
+                errorPopUpMessage = ""
+            )
+        }
+    }
+
     fun getInvitationCode(agencyId: Long) = intent {
         memberInvitationCodeUseCase.invoke(agencyId)
             .onSuccess {
@@ -130,10 +149,14 @@ class MemberViewModel @Inject constructor(
                         invitationCode = it.code
                     )
                 }
-                Log.d("invitationCode", state.invitationCode)
-
             }.onFailure {
-                //TODO - 에러화면
+                reduce{
+                    state.copy(
+                        visibleError = true,
+                        errorMessage = it.message.toString(),
+                        inviteCodeError = true
+                    )
+                }
             }
     }
 
@@ -143,12 +166,19 @@ class MemberViewModel @Inject constructor(
                 reduce {
                     state.copy(
                         invitationCode = it.code,
-                        onReissueChange = true
+                        onReissueChange = true,
                     )
                 }
             }
             .onFailure {
-                //TODO - 에러화면
+                reduce{
+                    state.copy(
+                        visibleError = true,
+                        errorMessage = it.message.toString(),
+                        reInviteCodeError = true
+
+                    )
+                }
             }
     }
 
@@ -162,7 +192,13 @@ class MemberViewModel @Inject constructor(
                 }
             }
             .onFailure {
-                //TODO - 에러화면
+                reduce{
+                    state.copy(
+                        visibleError = true,
+                        errorMessage = it.message.toString(),
+                        memberListError = true
+                    )
+                }
             }
     }
 
@@ -176,7 +212,13 @@ class MemberViewModel @Inject constructor(
                 }
             }
             .onFailure {
-                //TODO - 에러화면
+                reduce{
+                    state.copy(
+                        visibleError = true,
+                        errorMessage = it.message.toString(),
+                        myInfoError = true
+                    )
+                }
             }
     }
 
@@ -187,7 +229,12 @@ class MemberViewModel @Inject constructor(
                 updateMemberList(userId, role)
             }
             .onFailure {
-                //TODO - 에러 화면
+                reduce{
+                    state.copy(
+                        visiblePopUpError = true,
+                        errorPopUpMessage = it.message.toString()
+                    )
+                }
             }
     }
 
@@ -198,7 +245,12 @@ class MemberViewModel @Inject constructor(
                 updateMemberListByBlock(userId)
             }
             .onFailure {
-                //TODO - 에러화면
+                reduce{
+                    state.copy(
+                        visiblePopUpError = true,
+                        errorPopUpMessage = it.message.toString()
+                    )
+                }
             }
     }
 
@@ -258,6 +310,4 @@ class MemberViewModel @Inject constructor(
             )
         }
     }
-
-
 }
