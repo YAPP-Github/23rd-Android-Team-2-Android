@@ -1,5 +1,5 @@
 package com.moneymong.moneymong.domain.entity.agency
 
-data class RegisterAgencyEntity(
+data class AgencyRegisterEntity(
     val id: Int
 )
