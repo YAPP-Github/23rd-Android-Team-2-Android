@@ -5,6 +5,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.intPreferencesKey
+import androidx.datastore.preferences.core.stringPreferencesKey
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
@@ -36,8 +37,29 @@ class UserLocalDataSourceImpl @Inject constructor(
         return flow.firstOrNull() ?: 0
     }
 
+    override suspend fun saveUserNickName(nickname: String) {
+        userDataStorePreferences.edit { preferences ->
+            preferences[USER_NICKNAME] = nickname
+        }
+    }
+
+    override suspend fun fetchUserNickName(): String {
+        val flow = userDataStorePreferences.data
+            .catch { exception ->
+                when (exception) {
+                    is IOException -> emit(emptyPreferences())
+                    else -> throw exception
+                }
+            }
+            .map { preferences ->
+                preferences[USER_NICKNAME]
+            }
+        return flow.firstOrNull().orEmpty()
+    }
+
 
     companion object {
         val USER_ID = intPreferencesKey("userId")
+        val USER_NICKNAME = stringPreferencesKey("userNickanme")
     }
 }

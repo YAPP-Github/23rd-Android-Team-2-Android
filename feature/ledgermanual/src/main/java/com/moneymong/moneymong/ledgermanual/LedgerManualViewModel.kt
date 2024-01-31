@@ -11,6 +11,7 @@ import com.moneymong.moneymong.domain.param.ocr.FileUploadParam
 import com.moneymong.moneymong.domain.usecase.agency.FetchAgencyIdUseCase
 import com.moneymong.moneymong.domain.usecase.ledger.PostLedgerTransactionUseCase
 import com.moneymong.moneymong.domain.usecase.ocr.PostFileUploadUseCase
+import com.moneymong.moneymong.domain.usecase.user.FetchUserNicknameUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import org.orbitmvi.orbit.annotation.OrbitExperimental
 import org.orbitmvi.orbit.syntax.simple.blockingIntent
@@ -24,17 +25,24 @@ import javax.inject.Inject
 class LedgerManualViewModel @Inject constructor(
     private val postLedgerTransactionUseCase: PostLedgerTransactionUseCase,
     private val postFileUploadUseCase: PostFileUploadUseCase,
-    private val fetchAgencyIdUseCase: FetchAgencyIdUseCase
+    private val fetchAgencyIdUseCase: FetchAgencyIdUseCase,
+    private val fetchUserNicknameUseCase: FetchUserNicknameUseCase
 ) : BaseViewModel<LedgerManualState, LedgerManualSideEffect>(LedgerManualState()) {
 
     init {
-        fetchAgencyId()
+        fetchUserInfo()
     }
 
     @OptIn(OrbitExperimental::class)
-    fun fetchAgencyId() = blockingIntent {
+    fun fetchUserInfo() = blockingIntent {
         val agencyId = fetchAgencyIdUseCase(Unit)
-        reduce { state.copy(agencyId = agencyId) }
+        val userNickname = fetchUserNicknameUseCase(Unit)
+        reduce {
+            state.copy(
+                agencyId = agencyId,
+                authorName = userNickname
+            )
+        }
     }
 
     fun postLedgerTransaction() = intent {
