@@ -33,7 +33,12 @@ class UserRepositoryImpl @Inject constructor(
     override suspend fun saveUserId(userId: Int) =
         userLocalDataSource.saveUserId(userId = userId)
 
-    override suspend fun fetchUserId(): Int {
-        return userLocalDataSource.fetchUserId()
-    }
+    override suspend fun fetchUserId(): Int =
+        userLocalDataSource.fetchUserId()
+
+    override suspend fun saveUserNickName(nickname: String) =
+        userLocalDataSource.saveUserNickName(nickname = nickname)
+
+    override suspend fun fetchUserNickName(): String =
+        userLocalDataSource.fetchUserNickName()
 }

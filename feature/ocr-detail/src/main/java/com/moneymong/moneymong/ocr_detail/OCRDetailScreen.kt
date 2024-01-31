@@ -93,7 +93,8 @@ fun OCRDetailScreen(
     val lazyGridState = rememberLazyGridState()
     val verticalScrollState = rememberScrollState()
     val focusManager = LocalFocusManager.current
-    val receiptImage = remember { mutableStateOf(Base64.decode(state.receiptImage, Base64.DEFAULT)) }
+    val receiptImage =
+        remember { mutableStateOf(Base64.decode(state.receiptImage, Base64.DEFAULT)) }
 
     val singlePhotoPickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia(),
@@ -113,6 +114,7 @@ fun OCRDetailScreen(
                     )
                 )
             }
+
             is OCRDetailSideEffect.OCRDetailNavigateToLedger -> {
                 navigateToLedger(true)
             }
@@ -361,7 +363,7 @@ fun OCRDetailScreen(
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
                         modifier = Modifier.fillMaxWidth(),
-                        text = "안병헌", // TODO
+                        text = state.authorName,
                         style = Body3,
                         color = Gray10
                     )

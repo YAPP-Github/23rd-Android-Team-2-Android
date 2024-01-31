@@ -441,7 +441,7 @@ fun LedgerManualScreen(
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                    text = "안병헌", // TODO
+                    text = state.authorName,
                     style = Body3,
                     color = Gray10
                 )

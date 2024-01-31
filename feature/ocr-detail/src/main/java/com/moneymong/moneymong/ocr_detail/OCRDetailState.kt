@@ -26,6 +26,7 @@ data class OCRDetailState(
     val receiptImageUrls: List<String> = emptyList(),
     val documentImageUrls: List<String> = listOf(""),
     val agencyId: Int = 0,
+    val authorName: String = "",
     val isStoreNameError: Boolean = false,
     val isTotalPriceError: Boolean = false,
     val isPaymentDateError: Boolean = false,
