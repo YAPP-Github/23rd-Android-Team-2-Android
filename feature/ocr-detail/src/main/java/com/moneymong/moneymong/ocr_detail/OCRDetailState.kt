@@ -25,6 +25,13 @@ data class OCRDetailState(
     val fundType: FundType = FundType.EXPENSE,
     val receiptImageUrls: List<String> = emptyList(),
     val documentImageUrls: List<String> = listOf(""),
+    val agencyId: Int = 0,
+    val authorName: String = "",
+    val isStoreNameError: Boolean = false,
+    val isTotalPriceError: Boolean = false,
+    val isPaymentDateError: Boolean = false,
+    val isPaymentTimeError: Boolean = false,
+    val isMemoError: Boolean = false
 ) : State {
 
     val receipt: DocumentResultEntity?
@@ -34,7 +41,8 @@ data class OCRDetailState(
         get() {
             val inputDateString = "${
                 paymentDateValue.text.ifEmpty {
-                    LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd", Locale.KOREAN))
+                    LocalDateTime.now()
+                        .format(DateTimeFormatter.ofPattern("yyyyMMdd", Locale.KOREAN))
                 }
             }${paymentTimeValue.text.ifEmpty { "000000" }}"
             val formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss", Locale.KOREAN)
@@ -44,4 +52,13 @@ data class OCRDetailState(
 
             return offsetDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSSXXX"))
         }
+
+    val enabled: Boolean
+        get() = storeNameValue.text.isNotEmpty() &&
+                totalPriceValue.text.isNotEmpty() &&
+                !isStoreNameError &&
+                !isTotalPriceError &&
+                !isPaymentDateError &&
+                !isPaymentTimeError &&
+                !isMemoError
 }

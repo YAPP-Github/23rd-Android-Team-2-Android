@@ -9,6 +9,8 @@ import java.text.SimpleDateFormat
 
 data class LedgerManualState(
     val isLoading: Boolean = false,
+    val agencyId: Int = 0,
+    val authorName: String = "",
     val storeNameValue: TextFieldValue = TextFieldValue(),
     val totalPriceValue: TextFieldValue = TextFieldValue(),
     val paymentDateValue: TextFieldValue = TextFieldValue(),
