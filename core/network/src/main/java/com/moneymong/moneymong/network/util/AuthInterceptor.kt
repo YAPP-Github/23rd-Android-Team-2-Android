@@ -2,6 +2,7 @@ package com.moneymong.moneymong.network.util
 
 import com.moneymong.moneymong.domain.repository.LoginRepository
 import com.moneymong.moneymong.domain.repository.TokenRepository
+import com.moneymong.moneymong.network.BuildConfig
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.Response
@@ -14,15 +15,14 @@ class AuthInterceptor @Inject constructor(
         val originalRequest = chain.request()
 
         // refreshTokenApi 호출
-        if (originalRequest.url.toString()
-                .contains("api/v1/tokens") || originalRequest.url.toString()
-                .contains("api/v1/users")
+        if (originalRequest.url.toString() == BuildConfig.MONEYMONG_BASE_URL + "api/v1/tokens"
+            || originalRequest.url.toString() == BuildConfig.MONEYMONG_BASE_URL + "api/v1/users"
         ) { //TODO 로그아웃 url이 똑같음
             // Authorization 헤더를 제외하고 요청
             return chain.proceed(originalRequest)
         }
 
-        val accessToken= runBlocking {
+        val accessToken = runBlocking {
             tokenRepository.getAccessToken()
         }
 

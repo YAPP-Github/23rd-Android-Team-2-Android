@@ -18,7 +18,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.material.rememberBottomSheetState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
@@ -212,13 +211,13 @@ fun LedgerScreen(
                                         }
                                     )
                                 } else {
-                                    if (false) { // TODO 멤버일 경우
-                                        LedgerMemberEmptyView()
-                                    } else {
+                                    if (state.isStaff) {
                                         LedgerStaffEmptyView()
+                                    } else {
+                                        LedgerMemberEmptyView()
                                     }
                                 }
-                                if (true) { // TODO 어드민일 경우
+                                if (state.isStaff) {
                                     Column(
                                         modifier = Modifier
                                             .align(Alignment.BottomEnd)

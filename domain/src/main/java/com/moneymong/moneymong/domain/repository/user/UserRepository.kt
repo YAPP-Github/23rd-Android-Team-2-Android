@@ -9,4 +9,8 @@ interface UserRepository {
     suspend fun withdrawal(): Result<Unit>
 
     suspend fun logout(): Result<Unit>
+
+    suspend fun saveUserId(userId: Int)
+
+    suspend fun fetchUserId(): Int
 }

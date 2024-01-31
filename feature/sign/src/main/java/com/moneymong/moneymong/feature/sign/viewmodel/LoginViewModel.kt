@@ -5,6 +5,8 @@ import com.moneymong.moneymong.common.base.BaseViewModel
 import com.moneymong.moneymong.domain.util.LoginCallback
 import com.moneymong.moneymong.domain.usecase.login.LoginUseCase
 import com.moneymong.moneymong.domain.usecase.login.TokenUseCase
+import com.moneymong.moneymong.domain.usecase.user.GetMyInfoUseCase
+import com.moneymong.moneymong.domain.usecase.user.SaveUserIdUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import com.moneymong.moneymong.feature.sign.sideeffect.LoginSideEffect
 import com.moneymong.moneymong.feature.sign.state.LoginState
@@ -17,13 +19,16 @@ import javax.inject.Inject
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val loginUseCase: LoginUseCase,
-    private val tokenUseCase: TokenUseCase
+    private val tokenUseCase: TokenUseCase,
+    private val getMyInfoUseCase: GetMyInfoUseCase,
+    private val saveUserIdUseCase: SaveUserIdUseCase
 ) : BaseViewModel<LoginState, LoginSideEffect>(LoginState()), TokenCallback {
 
     fun onLoginButtonClicked() = intent {
         viewModelScope.launch {
             loginUseCase.invoke(object : LoginCallback {
                 override suspend fun onLoginSuccess() {
+                    fetchMyInfo()
                     tokenUseCase.getSchoolInfo()
                         .onSuccess {
                             if(it) {
@@ -62,6 +67,16 @@ class LoginViewModel @Inject constructor(
                 )
             }
         }
+    }
+
+    fun fetchMyInfo() = intent {
+        getMyInfoUseCase(Unit)
+            .onSuccess {
+                saveUserIdUseCase(it.id.toInt())
+            }
+            .onFailure {
+                saveUserIdUseCase(0)
+            }
     }
 
     fun isLoginRequiredChanged(boolean: Boolean) = intent {
