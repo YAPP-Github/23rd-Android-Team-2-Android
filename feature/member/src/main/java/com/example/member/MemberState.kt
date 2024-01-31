@@ -23,5 +23,6 @@ data class MemberState(
         agencyUserRole = ""
     ),
     val filteredMemberList: List<AgencyUserEntity> = emptyList(),
-    val isUserAuthor: String = ""
+    val isUserAuthor: String = "",
+    val agencyId: Int = 0
 ) : State

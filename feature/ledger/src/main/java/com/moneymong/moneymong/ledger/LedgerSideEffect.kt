@@ -9,4 +9,5 @@ sealed class LedgerSideEffect : SideEffect {
     data object LedgerNavigateToLedgerManual : LedgerSideEffect()
     data object LedgerFetchRetry : LedgerSideEffect()
     data class LedgerNavigateToLedgerDetail(val id: Int): LedgerSideEffect()
+    data class LedgerSelectedAgencyChange(val agencyId: Int): LedgerSideEffect()
 }

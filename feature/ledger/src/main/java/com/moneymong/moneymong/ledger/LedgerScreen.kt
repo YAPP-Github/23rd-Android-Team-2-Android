@@ -21,6 +21,7 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -80,6 +81,7 @@ fun LedgerScreen(
     val coroutineScope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
     val pagerState = rememberPagerState(pageCount = { tabs.size })
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
     LaunchedEffect(state.visibleSnackbar) {
         if (state.visibleSnackbar) {
@@ -117,12 +119,18 @@ fun LedgerScreen(
             }
 
             is LedgerSideEffect.LedgerCloseSheet -> {
+                sheetState.hide()
                 viewModel.onChangeSheetState(false)
             }
 
             is LedgerSideEffect.LedgerFetchRetry -> {
                 viewModel.fetchAgencyExistLedger()
                 viewModel.fetchLedgerTransactionList()
+            }
+
+            is LedgerSideEffect.LedgerSelectedAgencyChange -> {
+                viewModel.reFetchLedgerData(it.agencyId)
+                viewModel.eventEmit(LedgerSideEffect.LedgerCloseSheet)
             }
         }
     }
@@ -137,9 +145,9 @@ fun LedgerScreen(
             topBar = {
                 LedgerTopbarView(
                     modifier = Modifier.background(White),
-                    header = "장부",
-                    icon = R.drawable.ic_chevron_bottom, // TODO
-                    visibleArrow = true, // TODO 소속이 있을 때만
+                    header = state.currentAgency?.name ?: "장부",
+                    icon = R.drawable.ic_chevron_bottom,
+                    visibleArrow = state.agencyList.isNotEmpty(),
                     onClickDownArrow = { viewModel.eventEmit(LedgerSideEffect.LedgerOpenSheet) }
                 )
             },
@@ -156,9 +164,14 @@ fun LedgerScreen(
         ) {
             if (state.showBottomSheet) {
                 MDSBottomSheet(
+                    sheetState = sheetState,
                     onDismissRequest = { viewModel.eventEmit(LedgerSideEffect.LedgerCloseSheet) },
                     content = {
-                        LedgerAgencySelectBottomSheet(onClickItem = {})
+                        LedgerAgencySelectBottomSheet(
+                            currentAgencyId = state.agencyId,
+                            agencyList = state.agencyList,
+                            onClickItem = { viewModel.eventEmit(LedgerSideEffect.LedgerSelectedAgencyChange(it)) }
+                        )
                     }
                 )
             }
@@ -167,7 +180,7 @@ fun LedgerScreen(
                     .fillMaxSize()
                     .padding(it + padding)
             ) {
-                if (false) {// TODO 소속이 없을 경우
+                if (!state.existAgency) {
                     LedgerAgencyEmptyView(onClickFindAgency = navigateToAgency)
                 } else {
                     LedgerTabRowView(
@@ -198,13 +211,13 @@ fun LedgerScreen(
                                         }
                                     )
                                 } else {
-                                    if (false) { // TODO 멤버일 경우
-                                        LedgerMemberEmptyView()
-                                    } else {
+                                    if (state.isStaff) {
                                         LedgerStaffEmptyView()
+                                    } else {
+                                        LedgerMemberEmptyView()
                                     }
                                 }
-                                if (true) { // TODO 어드민일 경우
+                                if (state.isStaff) {
                                     Column(
                                         modifier = Modifier
                                             .align(Alignment.BottomEnd)
