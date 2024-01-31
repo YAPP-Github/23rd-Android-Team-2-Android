@@ -51,7 +51,7 @@ class LoginViewModel @Inject constructor(
                             reduce {
                                 state.copy(
                                     visibleError = true,
-                                    errorMessage = "회원의 정보를 가져올 수 없습니다."
+                                    errorMessage = "문제가 발생했습니다.\n다시 시도해주세요"
                                 )
                             }
                         }
