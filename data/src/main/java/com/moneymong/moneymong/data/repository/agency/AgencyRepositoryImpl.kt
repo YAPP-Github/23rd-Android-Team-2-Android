@@ -12,7 +12,7 @@ import com.moneymong.moneymong.data.pagingsource.AgencyPagingSource
 import com.moneymong.moneymong.domain.entity.agency.AgencyGetEntity
 import com.moneymong.moneymong.domain.entity.agency.AgencyJoinEntity
 import com.moneymong.moneymong.domain.entity.agency.MyAgencyEntity
-import com.moneymong.moneymong.domain.entity.agency.RegisterAgencyEntity
+import com.moneymong.moneymong.domain.entity.agency.AgencyRegisterEntity
 import com.moneymong.moneymong.domain.param.agency.AgencyJoinParam
 import com.moneymong.moneymong.domain.param.agency.AgencyRegisterParam
 import com.moneymong.moneymong.domain.repository.AgencyRepository
@@ -25,7 +25,7 @@ class AgencyRepositoryImpl @Inject constructor(
     private val agencyLocalDataSource: AgencyLocalDataSource
 ) : AgencyRepository {
 
-    override suspend fun registerAgency(param: AgencyRegisterParam): Result<RegisterAgencyEntity> {
+    override suspend fun registerAgency(param: AgencyRegisterParam): Result<AgencyRegisterEntity> {
         return agencyRemoteDataSource.registerAgency(param.toRequest()).map { it.toEntity() }
     }
 
