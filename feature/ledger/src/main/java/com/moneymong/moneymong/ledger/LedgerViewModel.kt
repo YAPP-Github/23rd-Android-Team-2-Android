@@ -109,7 +109,7 @@ class LedgerViewModel @Inject constructor(
             }
     }
 
-    fun fetchAgencyMemberList() = intent {
+    fun fetchAgencyMemberList() = blockingIntent {
         fetchMemberListUseCase(state.agencyId.toLong())
             .onSuccess {
                 reduce {
