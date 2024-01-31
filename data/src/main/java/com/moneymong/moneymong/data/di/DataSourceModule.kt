@@ -1,5 +1,7 @@
 package com.moneymong.moneymong.data.di
 
+import com.moneymong.moneymong.data.datasource.agency.AgencyLocalDataSource
+import com.moneymong.moneymong.data.datasource.agency.AgencyLocalDataSourceImpl
 import com.moneymong.moneymong.data.datasource.login.LoginLocalDataSource
 import com.moneymong.moneymong.data.datasource.login.LoginLocalDataSourceImpl
 import com.moneymong.moneymong.data.datasource.login.LoginRemoteDataSource
@@ -18,6 +20,8 @@ import com.moneymong.moneymong.data.datasource.member.MemberRemoteDataSource
 import com.moneymong.moneymong.data.datasource.member.MemberRemoteDataSourceImpl
 import com.moneymong.moneymong.data.datasource.ocr.OCRRemoteDataSource
 import com.moneymong.moneymong.data.datasource.ocr.OCRRemoteDataSourceImpl
+import com.moneymong.moneymong.data.datasource.user.UserLocalDataSource
+import com.moneymong.moneymong.data.datasource.user.UserLocalDataSourceImpl
 import com.moneymong.moneymong.data.datasource.user.UserRemoteDataSource
 import com.moneymong.moneymong.data.datasource.user.UserRemoteDataSourceImpl
 import dagger.Binds
@@ -55,9 +59,19 @@ interface DataSourceModule {
     ): AgencyRemoteDataSource
 
     @Binds
+    fun bindAgencyLocalDataSource(
+        agencyLocalDataSourceImpl: AgencyLocalDataSourceImpl
+    ): AgencyLocalDataSource
+
+    @Binds
     fun bindUserRemoteDataSource(
         userRemoteDataSourceImpl: UserRemoteDataSourceImpl
     ): UserRemoteDataSource
+
+    @Binds
+    fun bindUserLocalDataSource(
+        userLocalDataSourceImpl: UserLocalDataSourceImpl
+    ): UserLocalDataSource
 
     @Binds
     fun provideOCRRemoteDataSource(

@@ -5,6 +5,7 @@ import com.moneymong.moneymong.common.base.BaseViewModel
 import com.moneymong.moneymong.domain.entity.member.AgencyUserEntity
 import com.moneymong.moneymong.domain.param.member.MemberBlockParam
 import com.moneymong.moneymong.domain.param.member.UpdateAuthorParam
+import com.moneymong.moneymong.domain.usecase.agency.FetchAgencyIdUseCase
 import com.moneymong.moneymong.domain.usecase.member.GetMyInfoUseCase
 import com.moneymong.moneymong.domain.usecase.member.MemberBlockUseCase
 import com.moneymong.moneymong.domain.usecase.member.MemberInvitationCodeUseCase
@@ -12,6 +13,8 @@ import com.moneymong.moneymong.domain.usecase.member.MemberListUseCase
 import com.moneymong.moneymong.domain.usecase.member.MemberReInvitationCodeUseCase
 import com.moneymong.moneymong.domain.usecase.member.UpdateMemberAuthorUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import org.orbitmvi.orbit.annotation.OrbitExperimental
+import org.orbitmvi.orbit.syntax.simple.blockingIntent
 import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.reduce
 import javax.inject.Inject
@@ -23,8 +26,19 @@ class MemberViewModel @Inject constructor(
     private val memberListUseCase: MemberListUseCase,
     private val getMyInfoUseCase: GetMyInfoUseCase,
     private val updateMemberAuthorUseCase: UpdateMemberAuthorUseCase,
-    private val memberBlockUseCase: MemberBlockUseCase
+    private val memberBlockUseCase: MemberBlockUseCase,
+    private val fetchAgencyIdUseCase: FetchAgencyIdUseCase
 ) : BaseViewModel<MemberState, MemberSideEffect>(MemberState()) {
+
+    init {
+        fetchAgencyId()
+    }
+
+    @OptIn(OrbitExperimental::class)
+    fun fetchAgencyId() = blockingIntent {
+        val agencyId = fetchAgencyIdUseCase(Unit)
+        reduce { state.copy(agencyId = agencyId) }
+    }
 
     fun onVertClickChanged(vertClick: Boolean) = intent {
         reduce {

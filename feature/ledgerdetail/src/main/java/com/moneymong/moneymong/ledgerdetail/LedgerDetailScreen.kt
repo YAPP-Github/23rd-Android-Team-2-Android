@@ -140,8 +140,6 @@ fun LedgerDetailScreen(
         }
     }
 
-    BackHandler(onBack = { navigateToLedger(false) })
-
     LaunchedEffect(Unit) {
         viewModel.eventEmit(
             LedgerDetailSideEffect.LedgerDetailFetchTransactionDetail(
@@ -167,7 +165,7 @@ fun LedgerDetailScreen(
                 title = "${state.fundTypeText} 상세내역",
                 useEditMode = state.useEditMode,
                 enabledDone = state.enabledEdit,
-                onClickPrev = { navigateToLedger(false) },
+                onClickPrev = popBackStack,
                 onClickDelete = { viewModel.onChangeVisibleConfirmModal(true) },
                 onClickDone = { viewModel.eventEmit(LedgerDetailSideEffect.LedgerDetailEditDone) }
             )

@@ -93,7 +93,8 @@ fun OCRDetailScreen(
     val lazyGridState = rememberLazyGridState()
     val verticalScrollState = rememberScrollState()
     val focusManager = LocalFocusManager.current
-    val receiptImage = remember { mutableStateOf(Base64.decode(state.receiptImage, Base64.DEFAULT)) }
+    val receiptImage =
+        remember { mutableStateOf(Base64.decode(state.receiptImage, Base64.DEFAULT)) }
 
     val singlePhotoPickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia(),
@@ -113,6 +114,7 @@ fun OCRDetailScreen(
                     )
                 )
             }
+
             is OCRDetailSideEffect.OCRDetailNavigateToLedger -> {
                 navigateToLedger(true)
             }
@@ -128,6 +130,7 @@ fun OCRDetailScreen(
         topBar = {
             OCRDetailTopbarView(
                 onClickPrev = popBackStack,
+                enabled = state.enabled,
                 onClickRegister = viewModel::onClickPostLedger
             )
         }
@@ -165,7 +168,7 @@ fun OCRDetailScreen(
                         title = "수입·지출 출처",
                         placeholder = "",
                         isFilled = isStoreNameFilled,
-                        isError = false,
+                        isError = state.isStoreNameError,
                         helperText = "20자 이내로 입력해주세요",
                         maxCount = 20,
                         singleLine = true,
@@ -175,19 +178,23 @@ fun OCRDetailScreen(
                     )
                     Spacer(modifier = Modifier.height(24.dp))
                     var isTotalPriceFilled by remember { mutableStateOf(false) }
-                    MDSNumberTextField(
+                    MDSTextField(
                         modifier = Modifier
                             .fillMaxWidth()
                             .onFocusChanged { isTotalPriceFilled = !it.isFocused },
                         value = state.totalPriceValue,
-                        onValueChange = { viewModel.onChangeTotalPriceValue(it) },
+                        onValueChange = viewModel::onChangeTotalPriceValue,
                         title = "금액",
-                        placeholder = "",
+                        placeholder = "거래 금액을 입력해주세요",
+                        helperText = "999,999,999,999원 이하로 입력해주세요",
                         isFilled = isTotalPriceFilled,
+                        isError = state.isTotalPriceError,
                         singleLine = true,
+                        icon = MDSTextFieldIcons.Clear,
                         onIconClick = { viewModel.onChangeTotalPriceValue(TextFieldValue()) },
                         visualTransformation = PriceVisualTransformation(type = PriceType.Expense),
-                        keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() })
+                        keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
                     )
                     Spacer(modifier = Modifier.height(24.dp))
                     Text(
@@ -227,18 +234,18 @@ fun OCRDetailScreen(
                             .fillMaxWidth()
                             .onFocusChanged { isPaymentDateFilled = !it.isFocused },
                         value = state.paymentDateValue,
-                        onValueChange = { viewModel.onChangePaymentDateValue(it) },
+                        onValueChange = viewModel::onChangePaymentDateValue,
                         title = "날짜",
-                        placeholder = "0000/00/00",
-                        isFilled = isPaymentDateFilled,
-                        isError = false,
+                        placeholder = "YYYY/MM/DD",
                         helperText = "올바른 날짜를 입력해주세요",
+                        isFilled = isPaymentDateFilled,
+                        isError = state.isPaymentDateError,
                         singleLine = true,
-                        icon = MDSTextFieldIcons.Clear,
                         onIconClick = { viewModel.onChangePaymentDateValue(TextFieldValue()) },
+                        icon = MDSTextFieldIcons.Clear,
                         visualTransformation = DateVisualTransformation(),
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                        keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() })
+                        keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
                     )
                     Spacer(modifier = Modifier.height(24.dp))
                     var isPaymentTimeFilled by remember { mutableStateOf(false) }
@@ -247,18 +254,18 @@ fun OCRDetailScreen(
                             .fillMaxWidth()
                             .onFocusChanged { isPaymentTimeFilled = !it.isFocused },
                         value = state.paymentTimeValue,
-                        onValueChange = { viewModel.onChangePaymentTimeValue(it) },
+                        onValueChange = viewModel::onChangePaymentTimeValue,
                         title = "시간",
                         placeholder = "00:00:00 (24시 단위)",
-                        isFilled = isPaymentTimeFilled,
-                        isError = false,
                         helperText = "올바른 시간을 입력해주세요",
+                        isFilled = isPaymentTimeFilled,
+                        isError = state.isPaymentTimeError,
                         singleLine = true,
-                        icon = MDSTextFieldIcons.Clear,
                         onIconClick = { viewModel.onChangePaymentTimeValue(TextFieldValue()) },
+                        icon = MDSTextFieldIcons.Clear,
                         visualTransformation = TimeVisualTransformation(),
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                        keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() })
+                        keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
                     )
                     Spacer(modifier = Modifier.height(24.dp))
                     var isMemoFilled by remember { mutableStateOf(false) }
@@ -267,16 +274,16 @@ fun OCRDetailScreen(
                             .fillMaxWidth()
                             .onFocusChanged { isMemoFilled = !it.isFocused },
                         value = state.memoValue,
-                        onValueChange = { viewModel.onChangeMemoValue(it) },
-                        title = "메모",
-                        placeholder = "",
-                        isFilled = isMemoFilled,
-                        isError = false,
-                        helperText = "300자 이내로 입력해주세요",
+                        onValueChange = viewModel::onChangeMemoValue,
+                        title = "메모 (선택)",
+                        placeholder = "메모할 내용을 입력하세요",
+                        helperText = "300자 이하로 입력해주세요",
                         maxCount = 300,
                         singleLine = false,
-                        icon = MDSTextFieldIcons.Clear,
+                        isFilled = isMemoFilled,
+                        isError = state.isMemoError,
                         onIconClick = { viewModel.onChangeMemoValue(TextFieldValue()) },
+                        icon = MDSTextFieldIcons.Clear,
                         keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() })
                     )
                     Spacer(modifier = Modifier.height(24.dp))
@@ -356,7 +363,7 @@ fun OCRDetailScreen(
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
                         modifier = Modifier.fillMaxWidth(),
-                        text = "안병헌",
+                        text = state.authorName,
                         style = Body3,
                         color = Gray10
                     )
@@ -364,6 +371,7 @@ fun OCRDetailScreen(
                     MDSButton(
                         modifier = Modifier.fillMaxWidth(),
                         text = "등록하기",
+                        enabled = state.enabled,
                         onClick = viewModel::onClickPostLedger
                     )
                     Spacer(modifier = Modifier.height(34.dp))
