@@ -3,30 +3,62 @@ package com.moneymong.moneymong.ledger
 import androidx.lifecycle.SavedStateHandle
 import com.moneymong.moneymong.common.base.BaseViewModel
 import com.moneymong.moneymong.domain.param.ledger.LedgerTransactionListParam
+import com.moneymong.moneymong.domain.usecase.agency.FetchAgencyIdUseCase
+import com.moneymong.moneymong.domain.usecase.agency.FetchMyAgencyListUseCase
+import com.moneymong.moneymong.domain.usecase.agency.SaveAgencyIdUseCase
 import com.moneymong.moneymong.domain.usecase.ledger.FetchAgencyExistLedgerUseCase
 import com.moneymong.moneymong.domain.usecase.ledger.FetchLedgerTransactionListUseCase
+import com.moneymong.moneymong.domain.usecase.member.MemberListUseCase
+import com.moneymong.moneymong.domain.usecase.user.FetchUserIdUseCase
 import com.moneymong.moneymong.ledger.navigation.LedgerArgs
 import com.moneymong.moneymong.ledger.view.LedgerTransactionType
 import dagger.hilt.android.lifecycle.HiltViewModel
+import org.orbitmvi.orbit.annotation.OrbitExperimental
+import org.orbitmvi.orbit.syntax.simple.blockingIntent
 import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.reduce
 import javax.inject.Inject
 
+@OptIn(OrbitExperimental::class)
 @HiltViewModel
 class LedgerViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val fetchLedgerTransactionListUseCase: FetchLedgerTransactionListUseCase,
-    private val fetchAgencyExistLedgerUseCase: FetchAgencyExistLedgerUseCase
+    private val fetchAgencyExistLedgerUseCase: FetchAgencyExistLedgerUseCase,
+    private val fetchMyAgencyListUseCase: FetchMyAgencyListUseCase,
+    private val fetchAgencyIdUseCase: FetchAgencyIdUseCase,
+    private val fetchUserIdUseCase: FetchUserIdUseCase,
+    private val saveAgencyIdUseCase: SaveAgencyIdUseCase,
+    private val fetchMemberListUseCase: MemberListUseCase
 ) : BaseViewModel<LedgerState, LedgerSideEffect>(LedgerState()) {
 
     init {
+        onChangeSnackbarState(visible = LedgerArgs(savedStateHandle).ledgerPostSuccess)
+        fetchDefaultInfo()
+        fetchMyAgencyList()
+        fetchAgencyMemberList()
         fetchAgencyExistLedger()
         fetchLedgerTransactionList()
-        onChangeSnackbarState(visible = LedgerArgs(savedStateHandle).ledgerPostSuccess)
+    }
+
+    fun fetchDefaultInfo() = blockingIntent {
+        val agencyId = fetchAgencyIdUseCase(Unit)
+        val userId = fetchUserIdUseCase(Unit)
+        reduce {
+            state.copy(
+                agencyId = agencyId,
+                userId = userId
+            )
+        }
+    }
+
+    fun saveAgencyId(agencyId: Int) = blockingIntent {
+        reduce { state.copy(agencyId = agencyId) }
+        saveAgencyIdUseCase(agencyId)
     }
 
     fun fetchAgencyExistLedger() = intent {
-        fetchAgencyExistLedgerUseCase(1) // TODO agencyId
+        fetchAgencyExistLedgerUseCase(state.agencyId)
             .onSuccess {
                 reduce {
                     state.copy(
@@ -34,16 +66,13 @@ class LedgerViewModel @Inject constructor(
                         visibleError = false
                     )
                 }
-            }.onFailure {
-                reduce { state.copy(visibleError = true) }
             }
     }
 
     fun fetchLedgerTransactionList() = intent {
-        if (!state.isLoading) {
-            reduce { state.copy(isLoading = true) }
+        if (state.existAgency) {
             val param = LedgerTransactionListParam(
-                id = 1,
+                id = state.agencyId,
                 year = state.currentDate.year,
                 month = state.currentDate.monthValue,
                 page = 0,
@@ -59,8 +88,46 @@ class LedgerViewModel @Inject constructor(
                     }
                 }.onFailure {
                     reduce { state.copy(visibleError = true) }
-                }.also { reduce { state.copy(isLoading = false) } }
+                }
         }
+    }
+
+    fun fetchMyAgencyList() = blockingIntent {
+        fetchMyAgencyListUseCase(Unit)
+            .onSuccess {
+                reduce {
+                    state.copy(
+                        agencyList = it,
+                        visibleError = false
+                    )
+                }
+                if (it.isNotEmpty() && state.agencyId == 0) {
+                    saveAgencyId(it.first().id)
+                }
+            }.onFailure {
+                reduce { state.copy(visibleError = true) }
+            }
+    }
+
+    fun fetchAgencyMemberList() = intent {
+        fetchMemberListUseCase(state.agencyId.toLong())
+            .onSuccess {
+                reduce {
+                    state.copy(
+                        memberList = it.agencyUsers,
+                        visibleError = false
+                    )
+                }
+            }.onFailure {
+                reduce { state.copy(visibleError = true) }
+            }
+    }
+
+    fun reFetchLedgerData(agencyId: Int) {
+        saveAgencyId(agencyId)
+        fetchAgencyExistLedger()
+        fetchAgencyMemberList()
+        fetchLedgerTransactionList()
     }
 
     fun onChangeTransactionType(transactionType: LedgerTransactionType) = intent {

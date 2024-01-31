@@ -17,6 +17,7 @@ import com.moneymong.moneymong.common.ui.noRippleClickable
 import com.moneymong.moneymong.design_system.R.*
 import com.moneymong.moneymong.design_system.theme.Blue04
 import com.moneymong.moneymong.design_system.theme.Body2
+import com.moneymong.moneymong.design_system.theme.Gray04
 import com.moneymong.moneymong.design_system.theme.Gray10
 import com.moneymong.moneymong.design_system.theme.Heading1
 import com.moneymong.moneymong.design_system.theme.White
@@ -24,9 +25,11 @@ import com.moneymong.moneymong.design_system.theme.White
 @Composable
 fun OCRDetailTopbarView(
     modifier: Modifier = Modifier,
+    enabled: Boolean,
     onClickPrev: () -> Unit,
     onClickRegister: () -> Unit
 ) {
+    val textColor = if (enabled) Blue04 else Gray04
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -50,11 +53,15 @@ fun OCRDetailTopbarView(
         )
         Text(
             modifier = Modifier
-                .noRippleClickable { onClickRegister() }
+                .noRippleClickable {
+                    if (enabled) {
+                        onClickRegister()
+                    }
+                }
                 .padding(end = 20.dp),
             text = "등록하기",
             style = Body2,
-            color = Blue04
+            color = textColor
         )
     }
 }
@@ -62,7 +69,9 @@ fun OCRDetailTopbarView(
 @Preview(showBackground = true)
 @Composable
 fun OCRDetailTopbarPreview() {
-    OCRDetailTopbarView(onClickPrev = { /*TODO*/ }) {
+    OCRDetailTopbarView(
+        enabled = true,
+        onClickPrev = { /*TODO*/ }) {
 
     }
 }

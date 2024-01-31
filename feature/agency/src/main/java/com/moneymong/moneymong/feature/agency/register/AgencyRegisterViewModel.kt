@@ -5,6 +5,7 @@ import com.moneymong.moneymong.common.base.BaseViewModel
 import com.moneymong.moneymong.common.error.MoneyMongError
 import com.moneymong.moneymong.domain.param.agency.AgencyRegisterParam
 import com.moneymong.moneymong.domain.usecase.agency.RegisterAgencyUseCase
+import com.moneymong.moneymong.domain.usecase.agency.SaveAgencyIdUseCase
 import com.moneymong.moneymong.feature.agency.AgencyType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import org.orbitmvi.orbit.annotation.OrbitExperimental
@@ -16,7 +17,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AgencyRegisterViewModel @Inject constructor(
-    private val registerAgencyUseCase: RegisterAgencyUseCase
+    private val registerAgencyUseCase: RegisterAgencyUseCase,
+    private val saveAgencyIdUseCase: SaveAgencyIdUseCase
 ) : BaseViewModel<AgencyRegisterState, AgencyRegisterSideEffect>(AgencyRegisterState()) {
 
     fun navigateUp() = eventEmit(sideEffect = AgencyRegisterSideEffect.NavigateUp)
@@ -28,6 +30,7 @@ class AgencyRegisterViewModel @Inject constructor(
                 type = state.agencyType.toParam()
             )
         ).onSuccess {
+            saveAgencyIdUseCase(it.id)
             postSideEffect(AgencyRegisterSideEffect.NavigateToComplete)
         }.onFailure {
             reduce {
