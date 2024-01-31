@@ -20,6 +20,8 @@ import com.moneymong.moneymong.data.datasource.member.MemberRemoteDataSource
 import com.moneymong.moneymong.data.datasource.member.MemberRemoteDataSourceImpl
 import com.moneymong.moneymong.data.datasource.ocr.OCRRemoteDataSource
 import com.moneymong.moneymong.data.datasource.ocr.OCRRemoteDataSourceImpl
+import com.moneymong.moneymong.data.datasource.user.UserLocalDataSource
+import com.moneymong.moneymong.data.datasource.user.UserLocalDataSourceImpl
 import com.moneymong.moneymong.data.datasource.user.UserRemoteDataSource
 import com.moneymong.moneymong.data.datasource.user.UserRemoteDataSourceImpl
 import dagger.Binds
@@ -65,6 +67,11 @@ interface DataSourceModule {
     fun bindUserRemoteDataSource(
         userRemoteDataSourceImpl: UserRemoteDataSourceImpl
     ): UserRemoteDataSource
+
+    @Binds
+    fun bindUserLocalDataSource(
+        userLocalDataSourceImpl: UserLocalDataSourceImpl
+    ): UserLocalDataSource
 
     @Binds
     fun provideOCRRemoteDataSource(
