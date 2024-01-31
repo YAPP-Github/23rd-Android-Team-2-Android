@@ -17,8 +17,7 @@ class AuthInterceptor @Inject constructor(
         // refreshTokenApi 호출
         if (originalRequest.url.toString() == BuildConfig.MONEYMONG_BASE_URL + "api/v1/tokens"
             || originalRequest.url.toString() == BuildConfig.MONEYMONG_BASE_URL + "api/v1/users"
-        ) { //TODO 로그아웃 url이 똑같음
-            // Authorization 헤더를 제외하고 요청
+        ) {
             return chain.proceed(originalRequest)
         }
 
