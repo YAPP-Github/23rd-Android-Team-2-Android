@@ -137,7 +137,7 @@ fun LedgerScreen(
             topBar = {
                 LedgerTopbarView(
                     modifier = Modifier.background(White),
-                    header = "장부", // TODO
+                    header = state.currentAgency?.name ?: "장부",
                     icon = R.drawable.ic_chevron_bottom,
                     visibleArrow = state.agencyList.isNotEmpty(),
                     onClickDownArrow = { viewModel.eventEmit(LedgerSideEffect.LedgerOpenSheet) }
@@ -167,7 +167,7 @@ fun LedgerScreen(
                     .fillMaxSize()
                     .padding(it + padding)
             ) {
-                if (false) {// TODO 소속이 없을 경우
+                if (!state.existAgency) {
                     LedgerAgencyEmptyView(onClickFindAgency = navigateToAgency)
                 } else {
                     LedgerTabRowView(

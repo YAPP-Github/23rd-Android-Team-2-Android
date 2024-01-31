@@ -9,6 +9,7 @@ import java.time.LocalDate
 
 data class LedgerState(
     val isLoading: Boolean = false,
+    val agencyId: Int = 0,
     val isExistLedger: Boolean = false,
     val showBottomSheet: Boolean = false,
     val ledgerTransaction: LedgerTransactionListEntity? = null,
@@ -29,4 +30,9 @@ data class LedgerState(
     val hasTransaction: Boolean
         get() = filterTransactionList.isNotEmpty()
 
+    val existAgency: Boolean
+        get() = agencyId != 0
+
+    val currentAgency: MyAgencyEntity?
+        get() = agencyList.find { it.id == agencyId }
 }

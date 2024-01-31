@@ -1,7 +1,9 @@
 package com.moneymong.moneymong.data.mapper.agency
 
+import com.moneymong.moneymong.domain.entity.agency.RegisterAgencyEntity
 import com.moneymong.moneymong.domain.param.agency.AgencyRegisterParam
 import com.moneymong.moneymong.network.request.agency.AgencyRegisterRequest
+import com.moneymong.moneymong.network.response.agency.RegisterAgencyResponse
 
 fun AgencyRegisterParam.toRequest(): AgencyRegisterRequest {
     fun typeParamToTypeRequest(type: AgencyRegisterParam.AgencyRegisterType) = when (type) {
@@ -14,3 +16,8 @@ fun AgencyRegisterParam.toRequest(): AgencyRegisterRequest {
         type = typeParamToTypeRequest(type)
     )
 }
+
+fun RegisterAgencyResponse.toEntity() =
+        RegisterAgencyEntity(
+            id = this.id
+        )
