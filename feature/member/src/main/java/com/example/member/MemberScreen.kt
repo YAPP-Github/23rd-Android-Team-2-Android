@@ -150,12 +150,22 @@ fun MemberScreen(
             }
         }
     }
-
+    if (state.visiblePopUpError) {
+        ErrorDialog(
+            message = state.errorPopUpMessage,
+            onConfirm = {
+                viewModel.eventEmit(MemberSideEffect.GetInvitationCode(88)) //TODO - agencyId 연결
+                viewModel.eventEmit(MemberSideEffect.GetMemberLists(88)) //TODO - agencyId 연결
+                viewModel.eventEmit(MemberSideEffect.GetMyInfo(Unit)) //TODO - 마이몽 유저 정보 조회 연결
+                viewModel.visiblePopUpErrorChanged(false)
+            }
+        )
+    }
     if (state.showDialog) {
         MemberDialogView(
             onDismissRequest = {
                 viewModel.onShowDialogChanged(false)
-                viewModel.eventEmit(MemberSideEffect.BlockMemberAuthor(4, state.vertClickedUserId))
+                viewModel.eventEmit(MemberSideEffect.BlockMemberAuthor(88, state.vertClickedUserId))
             },
             onConfirmation = {
                 viewModel.onShowDialogChanged(false)
@@ -165,7 +175,6 @@ fun MemberScreen(
 
     if (state.visibleBottomSheet) {
         viewModel.isRoleChanged(false)
-
         MDSBottomSheet(
             onDismissRequest = {
                 coroutineScope.launch {
@@ -283,7 +292,7 @@ fun MemberScreen(
                             if (state.isStaffChecked && !state.isMemberChecked) {
                                 viewModel.eventEmit(
                                     MemberSideEffect.UpdateMemberAuthor(
-                                        4,
+                                        88,
                                         "STAFF",
                                         state.vertClickedUserId
                                     )
@@ -293,7 +302,7 @@ fun MemberScreen(
                             } else if (!state.isStaffChecked && state.isMemberChecked) {
                                 viewModel.eventEmit(
                                     MemberSideEffect.UpdateMemberAuthor(
-                                        4,
+                                        88,
                                         "MEMBER",
                                         state.vertClickedUserId
                                     )
@@ -310,60 +319,74 @@ fun MemberScreen(
         }
     }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(White)
-            .padding(horizontal = MMHorizontalSpacing)
-    ) {
-        Text(
-            modifier = Modifier.padding(top = 24.dp, bottom = 8.dp),
-            text = "나",
-            style = Body3,
-            color = Gray07
+    if (state.visibleError) {
+        ErrorScreen(
+            modifier = Modifier.fillMaxSize(),
+            message = state.errorMessage,
+            onRetry = {
+                viewModel.eventEmit(MemberSideEffect.GetInvitationCode(88)) //TODO - agencyId 연결
+                viewModel.eventEmit(MemberSideEffect.GetMemberLists(88)) //TODO - agencyId 연결
+                viewModel.eventEmit(MemberSideEffect.GetMyInfo(Unit)) //TODO - 마이몽 유저 정보 조회 연결
+                viewModel.visibleErrorChanged(false)
+            }
         )
-        MemberCardView(
-            modifier = Modifier,
-            memberList = state.memberList,
-            memberMyInfoId = state.memberMyInfoId,
-            memberMyInfo = state.memberMyInfo,
-            memberMyInfoChanged = { id, userId, nickname, agencyUserRole ->
-                viewModel.memberMyInfoChanged(
-                    id,
-                    userId,
-                    nickname,
-                    agencyUserRole
-                )
-            },
-            invitationCode = state.invitationCode,
-            isReInvitationCode = { viewModel.eventEmit(MemberSideEffect.GetReInvitationCode(it)) }, //TODO
-            onCopyChange = { onCopyClick -> viewModel.onCopyClickChanged(onCopyClick) },
-        )
+    }else {
 
-        MemberListView(
-            modifier = Modifier.padding(top = 24.dp),
-            memberMyInfo = state.memberMyInfo,
-            filteredMemberList = state.filteredMemberList,
-            onIconClick = { vertClick -> viewModel.onVertClickChanged(vertClick) },
-            updateFilteredMemberList = { memberMyInfoId ->
-                viewModel.updateFilteredMemberList(
-                    memberMyInfoId
-                )
-            },
-            vertClickedUserIdChanged = { userId -> viewModel.vertClickedUserIdChanged(userId) },
-        )
-
-        Box(
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .weight(1f)
+                .fillMaxSize()
+                .background(White)
+                .padding(horizontal = MMHorizontalSpacing)
         ) {
-            MDSSnackbarHost(
-                hostState = snackbarHostState,
-                modifier = Modifier
-                    .align(BottomCenter)
-                    .padding(bottom = 12.dp)
+            Text(
+                modifier = Modifier.padding(top = 24.dp, bottom = 8.dp),
+                text = "나",
+                style = Body3,
+                color = Gray07
             )
+            MemberCardView(
+                modifier = Modifier,
+                memberList = state.memberList,
+                memberMyInfoId = state.memberMyInfoId,
+                memberMyInfo = state.memberMyInfo,
+                memberMyInfoChanged = { id, userId, nickname, agencyUserRole ->
+                    viewModel.memberMyInfoChanged(
+                        id,
+                        userId,
+                        nickname,
+                        agencyUserRole
+                    )
+                },
+                invitationCode = state.invitationCode,
+                isReInvitationCode = { viewModel.eventEmit(MemberSideEffect.GetReInvitationCode(it)) }, //TODO
+                onCopyChange = { onCopyClick -> viewModel.onCopyClickChanged(onCopyClick) },
+            )
+
+            MemberListView(
+                modifier = Modifier.padding(top = 24.dp),
+                memberMyInfo = state.memberMyInfo,
+                filteredMemberList = state.filteredMemberList,
+                onIconClick = { vertClick -> viewModel.onVertClickChanged(vertClick) },
+                updateFilteredMemberList = { memberMyInfoId ->
+                    viewModel.updateFilteredMemberList(
+                        memberMyInfoId
+                    )
+                },
+                vertClickedUserIdChanged = { userId -> viewModel.vertClickedUserIdChanged(userId) },
+            )
+
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f)
+            ) {
+                MDSSnackbarHost(
+                    hostState = snackbarHostState,
+                    modifier = Modifier
+                        .align(BottomCenter)
+                        .padding(bottom = 12.dp)
+                )
+            }
         }
     }
 }
