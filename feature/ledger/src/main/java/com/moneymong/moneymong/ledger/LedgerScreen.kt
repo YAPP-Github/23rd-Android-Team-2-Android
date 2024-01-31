@@ -18,9 +18,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.material.rememberBottomSheetState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -80,6 +82,7 @@ fun LedgerScreen(
     val coroutineScope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
     val pagerState = rememberPagerState(pageCount = { tabs.size })
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
     LaunchedEffect(state.visibleSnackbar) {
         if (state.visibleSnackbar) {
@@ -117,12 +120,18 @@ fun LedgerScreen(
             }
 
             is LedgerSideEffect.LedgerCloseSheet -> {
+                sheetState.hide()
                 viewModel.onChangeSheetState(false)
             }
 
             is LedgerSideEffect.LedgerFetchRetry -> {
                 viewModel.fetchAgencyExistLedger()
                 viewModel.fetchLedgerTransactionList()
+            }
+
+            is LedgerSideEffect.LedgerSelectedAgencyChange -> {
+                viewModel.reFetchLedgerData(it.agencyId)
+                viewModel.eventEmit(LedgerSideEffect.LedgerCloseSheet)
             }
         }
     }
@@ -156,9 +165,14 @@ fun LedgerScreen(
         ) {
             if (state.showBottomSheet) {
                 MDSBottomSheet(
+                    sheetState = sheetState,
                     onDismissRequest = { viewModel.eventEmit(LedgerSideEffect.LedgerCloseSheet) },
                     content = {
-                        LedgerAgencySelectBottomSheet(onClickItem = {})
+                        LedgerAgencySelectBottomSheet(
+                            currentAgencyId = state.agencyId,
+                            agencyList = state.agencyList,
+                            onClickItem = { viewModel.eventEmit(LedgerSideEffect.LedgerSelectedAgencyChange(it)) }
+                        )
                     }
                 )
             }
