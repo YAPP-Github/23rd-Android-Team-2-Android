@@ -26,7 +26,7 @@ class LedgerViewModel @Inject constructor(
     }
 
     fun fetchAgencyExistLedger() = intent {
-        fetchAgencyExistLedgerUseCase(1) // TODO agencyId
+        fetchAgencyExistLedgerUseCase(81) // TODO agencyId
             .onSuccess {
                 reduce {
                     state.copy(
@@ -43,7 +43,7 @@ class LedgerViewModel @Inject constructor(
         if (!state.isLoading) {
             reduce { state.copy(isLoading = true) }
             val param = LedgerTransactionListParam(
-                id = 1,
+                id = 81,
                 year = state.currentDate.year,
                 month = state.currentDate.monthValue,
                 page = 0,
