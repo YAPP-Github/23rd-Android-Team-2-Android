@@ -1,20 +1,19 @@
 package com.moneymong.moneymong.data.datasource.agency
 
-import com.moneymong.moneymong.data.datasource.agency.AgencyRemoteDataSource
 import com.moneymong.moneymong.network.api.AgencyApi
-import com.moneymong.moneymong.network.api.MoneyMongApi
 import com.moneymong.moneymong.network.request.agency.AgencyJoinRequest
 import com.moneymong.moneymong.network.request.agency.AgencyRegisterRequest
 import com.moneymong.moneymong.network.response.agency.AgenciesGetResponse
 import com.moneymong.moneymong.network.response.agency.AgencyJoinResponse
 import com.moneymong.moneymong.network.response.agency.MyAgencyResponse
+import com.moneymong.moneymong.network.response.agency.RegisterAgencyResponse
 import javax.inject.Inject
 
 class AgencyRemoteDataSourceImpl @Inject constructor(
     private val agencyApi: AgencyApi
 ) : AgencyRemoteDataSource {
 
-    override suspend fun registerAgency(request: AgencyRegisterRequest): Result<Unit> {
+    override suspend fun registerAgency(request: AgencyRegisterRequest): Result<RegisterAgencyResponse> {
         return agencyApi.registerAgency(request = request)
     }
 

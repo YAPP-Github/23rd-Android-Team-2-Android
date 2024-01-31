@@ -5,6 +5,7 @@ import com.moneymong.moneymong.network.request.agency.AgencyRegisterRequest
 import com.moneymong.moneymong.network.response.agency.AgenciesGetResponse
 import com.moneymong.moneymong.network.response.agency.AgencyJoinResponse
 import com.moneymong.moneymong.network.response.agency.MyAgencyResponse
+import com.moneymong.moneymong.network.response.agency.RegisterAgencyResponse
 import com.moneymong.moneymong.network.response.member.InvitationCodeResponse
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -41,7 +42,7 @@ interface AgencyApi {
     @POST("api/v1/agencies")
     suspend fun registerAgency(
         @Body request: AgencyRegisterRequest
-    ): Result<Unit>
+    ): Result<RegisterAgencyResponse>
 
     // PATCH
     @PATCH("api/v1/agencies/{agencyId}/invitation-code")

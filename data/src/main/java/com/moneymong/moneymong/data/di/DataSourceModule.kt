@@ -1,5 +1,7 @@
 package com.moneymong.moneymong.data.di
 
+import com.moneymong.moneymong.data.datasource.agency.AgencyLocalDataSource
+import com.moneymong.moneymong.data.datasource.agency.AgencyLocalDataSourceImpl
 import com.moneymong.moneymong.data.datasource.login.LoginLocalDataSource
 import com.moneymong.moneymong.data.datasource.login.LoginLocalDataSourceImpl
 import com.moneymong.moneymong.data.datasource.login.LoginRemoteDataSource
@@ -53,6 +55,11 @@ interface DataSourceModule {
     fun bindAgencyRemoteDataSource(
         agencyRemoteDataSourceImpl: AgencyRemoteDataSourceImpl
     ): AgencyRemoteDataSource
+
+    @Binds
+    fun bindAgencyLocalDataSource(
+        agencyLocalDataSourceImpl: AgencyLocalDataSourceImpl
+    ): AgencyLocalDataSource
 
     @Binds
     fun bindUserRemoteDataSource(
