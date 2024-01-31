@@ -101,8 +101,8 @@ fun MemberScreen(
     }
 
     LaunchedEffect(key1 = Unit) {
-        viewModel.eventEmit(MemberSideEffect.GetInvitationCode(88)) //TODO - agency Id 연결
-        viewModel.eventEmit(MemberSideEffect.GetMemberLists(88)) //TODO - agencyId 연결
+        viewModel.eventEmit(MemberSideEffect.GetInvitationCode(81)) //TODO - agency Id 연결
+        viewModel.eventEmit(MemberSideEffect.GetMemberLists(81)) //TODO - agencyId 연결
         viewModel.eventEmit(MemberSideEffect.GetMyInfo(Unit)) //TODO - 마이몽 유저 정보 조회 연결
     }
 
@@ -155,8 +155,8 @@ fun MemberScreen(
         ErrorDialog(
             message = state.errorPopUpMessage,
             onConfirm = {
-                viewModel.eventEmit(MemberSideEffect.GetInvitationCode(88)) //TODO - agencyId 연결
-                viewModel.eventEmit(MemberSideEffect.GetMemberLists(88)) //TODO - agencyId 연결
+                viewModel.eventEmit(MemberSideEffect.GetInvitationCode(81)) //TODO - agencyId 연결
+                viewModel.eventEmit(MemberSideEffect.GetMemberLists(81)) //TODO - agencyId 연결
                 viewModel.eventEmit(MemberSideEffect.GetMyInfo(Unit)) //TODO - 마이몽 유저 정보 조회 연결
                 viewModel.visiblePopUpErrorChanged(false)
             }
@@ -166,7 +166,7 @@ fun MemberScreen(
         MemberDialogView(
             onDismissRequest = {
                 viewModel.onShowDialogChanged(false)
-                viewModel.eventEmit(MemberSideEffect.BlockMemberAuthor(88, state.vertClickedUserId))
+                viewModel.eventEmit(MemberSideEffect.BlockMemberAuthor(81, state.vertClickedUserId))
             },
             onConfirmation = {
                 viewModel.onShowDialogChanged(false)
@@ -293,7 +293,7 @@ fun MemberScreen(
                             if (state.isStaffChecked && !state.isMemberChecked) {
                                 viewModel.eventEmit(
                                     MemberSideEffect.UpdateMemberAuthor(
-                                        88,
+                                        81,
                                         "STAFF",
                                         state.vertClickedUserId
                                     )
@@ -303,7 +303,7 @@ fun MemberScreen(
                             } else if (!state.isStaffChecked && state.isMemberChecked) {
                                 viewModel.eventEmit(
                                     MemberSideEffect.UpdateMemberAuthor(
-                                        88,
+                                        81,
                                         "MEMBER",
                                         state.vertClickedUserId
                                     )
@@ -325,8 +325,8 @@ fun MemberScreen(
             modifier = Modifier.fillMaxSize(),
             message = state.errorMessage,
             onRetry = {
-                viewModel.eventEmit(MemberSideEffect.GetInvitationCode(88)) //TODO - agencyId 연결
-                viewModel.eventEmit(MemberSideEffect.GetMemberLists(88)) //TODO - agencyId 연결
+                viewModel.eventEmit(MemberSideEffect.GetInvitationCode(81)) //TODO - agencyId 연결
+                viewModel.eventEmit(MemberSideEffect.GetMemberLists(81)) //TODO - agencyId 연결
                 viewModel.eventEmit(MemberSideEffect.GetMyInfo(Unit)) //TODO - 마이몽 유저 정보 조회 연결
                 viewModel.visibleErrorChanged(false)
             }
