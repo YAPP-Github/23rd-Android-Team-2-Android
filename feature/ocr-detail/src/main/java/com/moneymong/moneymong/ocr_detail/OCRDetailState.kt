@@ -25,6 +25,7 @@ data class OCRDetailState(
     val fundType: FundType = FundType.EXPENSE,
     val receiptImageUrls: List<String> = emptyList(),
     val documentImageUrls: List<String> = listOf(""),
+    val agencyId: Int = 0
 ) : State {
 
     val receipt: DocumentResultEntity?
