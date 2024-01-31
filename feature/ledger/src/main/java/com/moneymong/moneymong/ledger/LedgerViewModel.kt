@@ -7,6 +7,7 @@ import com.moneymong.moneymong.common.error.HttpError
 import com.moneymong.moneymong.domain.param.ledger.LedgerTransactionListParam
 import com.moneymong.moneymong.domain.usecase.agency.FetchAgencyIdUseCase
 import com.moneymong.moneymong.domain.usecase.agency.FetchMyAgencyListUseCase
+import com.moneymong.moneymong.domain.usecase.agency.SaveAgencyIdUseCase
 import com.moneymong.moneymong.domain.usecase.ledger.FetchAgencyExistLedgerUseCase
 import com.moneymong.moneymong.domain.usecase.ledger.FetchLedgerTransactionListUseCase
 import com.moneymong.moneymong.ledger.navigation.LedgerArgs
@@ -19,13 +20,15 @@ import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.reduce
 import javax.inject.Inject
 
+@OptIn(OrbitExperimental::class)
 @HiltViewModel
 class LedgerViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val fetchLedgerTransactionListUseCase: FetchLedgerTransactionListUseCase,
     private val fetchAgencyExistLedgerUseCase: FetchAgencyExistLedgerUseCase,
     private val fetchMyAgencyListUseCase: FetchMyAgencyListUseCase,
-    private val fetchAgencyIdUseCase: FetchAgencyIdUseCase
+    private val fetchAgencyIdUseCase: FetchAgencyIdUseCase,
+    private val saveAgencyIdUseCase: SaveAgencyIdUseCase
 ) : BaseViewModel<LedgerState, LedgerSideEffect>(LedgerState()) {
 
     init {
@@ -36,10 +39,14 @@ class LedgerViewModel @Inject constructor(
         onChangeSnackbarState(visible = LedgerArgs(savedStateHandle).ledgerPostSuccess)
     }
 
-    @OptIn(OrbitExperimental::class)
     fun fetchAgencyId() = blockingIntent {
         val agencyId = fetchAgencyIdUseCase(Unit)
         reduce { state.copy(agencyId = agencyId) }
+    }
+
+    fun saveAgencyId(agencyId: Int) = blockingIntent {
+        reduce { state.copy(agencyId = agencyId) }
+        saveAgencyIdUseCase(agencyId)
     }
 
     fun fetchAgencyExistLedger() = intent {
@@ -90,6 +97,13 @@ class LedgerViewModel @Inject constructor(
                     reduce { state.copy(visibleError = true) }
                 }.also { reduce { state.copy(isLoading = false) } }
         }
+    }
+
+    fun reFetchLedgerData(agencyId: Int) {
+        saveAgencyId(agencyId)
+        fetchMyAgencyList()
+        fetchAgencyExistLedger()
+        fetchLedgerTransactionList()
     }
 
     fun onChangeTransactionType(transactionType: LedgerTransactionType) = intent {

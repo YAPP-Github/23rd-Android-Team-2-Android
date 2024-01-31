@@ -27,21 +27,33 @@ import com.moneymong.moneymong.design_system.theme.Blue01
 import com.moneymong.moneymong.design_system.theme.Blue04
 import com.moneymong.moneymong.design_system.theme.Body2
 import com.moneymong.moneymong.design_system.theme.Body3
+import com.moneymong.moneymong.design_system.theme.Gray02
+import com.moneymong.moneymong.design_system.theme.Gray03
 import com.moneymong.moneymong.design_system.theme.Gray05
+import com.moneymong.moneymong.design_system.theme.Gray09
 import com.moneymong.moneymong.design_system.theme.SkyBlue01
+import com.moneymong.moneymong.design_system.theme.White
+import com.moneymong.moneymong.domain.entity.agency.MyAgencyEntity
 
 @Composable
 fun LedgerAgencySelectItem(
     modifier: Modifier = Modifier,
-    onClick: () -> Unit
+    agencyEntity: MyAgencyEntity,
+    currentAgency: Boolean,
+    onClick: (agencyId: Int) -> Unit
 ) {
+    val backgroundColor = if (currentAgency) Blue01 else White
+    val borderColor = if (currentAgency) Blue04 else Gray02
+    val textColor = if (currentAgency) Blue04 else Gray09
+    val iconColor = if (currentAgency) Blue04 else Gray03
+
     Row(
         modifier = modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(16.dp))
-            .clickable { onClick() }
-            .border(width = 1.dp, color = Blue04, shape = RoundedCornerShape(16.dp)) // TODO
-            .background(color = Blue01) // TODO
+            .clickable { onClick(agencyEntity.id) }
+            .border(width = 1.dp, color = borderColor, shape = RoundedCornerShape(16.dp)) // TODO
+            .background(color = backgroundColor)
             .padding(16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -49,7 +61,7 @@ fun LedgerAgencySelectItem(
             modifier = Modifier
                 .size(48.dp)
                 .clip(RoundedCornerShape(100))
-                .background(SkyBlue01), // TODO
+                .background(SkyBlue01),
             contentAlignment = Alignment.Center
         ) {
             Image(
@@ -61,13 +73,13 @@ fun LedgerAgencySelectItem(
         Spacer(modifier = Modifier.width(12.dp))
         Column {
             Text(
-                text = "Yapp", // TODO
+                text = agencyEntity.name,
                 style = Body3,
-                color = Blue04 // TODO
+                color = textColor
             )
             Spacer(modifier = Modifier.width(4.dp))
             Text(
-                text = "멤버수 10", // TODO
+                text = "멤버수 ${agencyEntity.headCount}",
                 style = Body2,
                 color = Gray05
             )
@@ -78,7 +90,7 @@ fun LedgerAgencySelectItem(
         Icon(
             painter = painterResource(id = drawable.ic_check),
             contentDescription = null,
-            tint = Blue04 // TODO
+            tint = iconColor
         )
     }
 }
@@ -86,5 +98,8 @@ fun LedgerAgencySelectItem(
 @Preview(showBackground = true)
 @Composable
 fun LedgerStaffSelectItemPreview() {
-    LedgerAgencySelectItem() {}
+    LedgerAgencySelectItem(
+        currentAgency = false,
+        agencyEntity = MyAgencyEntity(0, "", 0, "")
+    ) {}
 }
