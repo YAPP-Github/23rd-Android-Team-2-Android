@@ -91,24 +91,25 @@ fun OCRCaptureView(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Box(
-                        modifier = Modifier
-                            .padding(start = 36.dp)
-                            .size(40.dp)
-                            .clip(RoundedCornerShape(8.dp))
-                            .border(width = 1.dp, color = Gray02, shape = RoundedCornerShape(8.dp))
-                            .background(Gray05),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        if (false) { // TODO 갤러리 접근 권한이 있다면
-                            Image(
-                                modifier = Modifier.size(40.dp),
-                                painter = painterResource(id = 0), // TODO
-                                contentDescription = null
-                            )
-                        }
-
-                    }
+                    // TODO MVP 에서는 제외되는 기능입니다.
+//                    Box(
+//                        modifier = Modifier
+//                            .padding(start = 36.dp)
+//                            .size(40.dp)
+//                            .clip(RoundedCornerShape(8.dp))
+//                            .border(width = 1.dp, color = Gray02, shape = RoundedCornerShape(8.dp))
+//                            .background(Gray05),
+//                        contentAlignment = Alignment.Center
+//                    ) {
+//                        if (false) { // TODO 갤러리 접근 권한이 있다면
+//                            Image(
+//                                modifier = Modifier.size(40.dp),
+//                                painter = painterResource(id = 0), // TODO
+//                                contentDescription = null
+//                            )
+//                        }
+//
+//                    }
                     Icon(
                         modifier = Modifier
                             .padding(vertical = 24.dp)

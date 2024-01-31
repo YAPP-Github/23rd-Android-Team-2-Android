@@ -12,7 +12,8 @@ data class OCRResultState(
     val receiptImage: String = "",
     val receiptFile: File? = null,
     val document: DocumentEntity? = null,
-    val memo: String = "내용 없음"
+    val memo: String = "내용 없음",
+    val agencyId: Int = 0
 ) : State {
 
     val receipt: DocumentResultEntity?
