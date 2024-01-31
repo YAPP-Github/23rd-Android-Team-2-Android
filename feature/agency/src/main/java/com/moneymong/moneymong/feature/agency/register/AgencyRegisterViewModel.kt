@@ -2,6 +2,7 @@ package com.moneymong.moneymong.feature.agency.register
 
 import androidx.compose.ui.text.input.TextFieldValue
 import com.moneymong.moneymong.common.base.BaseViewModel
+import com.moneymong.moneymong.common.error.MoneyMongError
 import com.moneymong.moneymong.domain.param.agency.AgencyRegisterParam
 import com.moneymong.moneymong.domain.usecase.agency.RegisterAgencyUseCase
 import com.moneymong.moneymong.feature.agency.AgencyType
@@ -29,7 +30,12 @@ class AgencyRegisterViewModel @Inject constructor(
         ).onSuccess {
             postSideEffect(AgencyRegisterSideEffect.NavigateToComplete)
         }.onFailure {
-            // TODO: 에러 처라
+            reduce {
+                state.copy(
+                    visibleErrorDialog = true,
+                    errorMessage = it.message ?: MoneyMongError.UnExpectedError.message
+                )
+            }
         }
     }
 
@@ -63,6 +69,12 @@ class AgencyRegisterViewModel @Inject constructor(
             state.copy(
                 visibleOutDialog = visible
             )
+        }
+    }
+
+    fun changeErrorDialogVisibility(visible: Boolean) = intent {
+        reduce {
+            state.copy(visibleErrorDialog = visible)
         }
     }
 }

@@ -37,13 +37,15 @@ fun AgencyRegisterCompleteScreen(
     modifier: Modifier = Modifier,
     viewModel: AgencyRegisterCompleteViewModel = hiltViewModel(),
     navigateToSearch: () -> Unit,
-    navigateToLedger: () -> Unit
+    navigateToLedger: () -> Unit,
+    navigateToLedgerManual: () -> Unit
 ) {
 
     viewModel.collectSideEffect {
         when (it) {
             is AgencyRegisterCompleteSideEffect.NavigateToAgencySearch -> navigateToSearch()
             is AgencyRegisterCompleteSideEffect.NavigateToLedger -> navigateToLedger()
+            is AgencyRegisterCompleteSideEffect.NavigateToLedgerManual -> navigateToLedgerManual()
         }
     }
 
@@ -70,7 +72,7 @@ fun AgencyRegisterCompleteScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 28.dp),
-            onClick = { /*TODO*/ },
+            onClick = viewModel::navigateToLedgerManual,
             text = "동아리 운영비 등록하러 가기"
         )
     }
@@ -136,6 +138,7 @@ private fun ContentView(
 fun AgencyRegisterCompleteScreenPreview() {
     AgencyRegisterCompleteScreen(
         navigateToSearch = {},
-        navigateToLedger = {}
+        navigateToLedger = {},
+        navigateToLedgerManual = {}
     )
 }

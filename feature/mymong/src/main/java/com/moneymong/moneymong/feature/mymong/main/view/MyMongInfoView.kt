@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -22,6 +21,8 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.moneymong.moneymong.design_system.R
+import com.moneymong.moneymong.design_system.error.ErrorItem
+import com.moneymong.moneymong.design_system.loading.LoadingItem
 import com.moneymong.moneymong.design_system.theme.Blue04
 import com.moneymong.moneymong.design_system.theme.Body2
 import com.moneymong.moneymong.design_system.theme.Body3
@@ -42,19 +43,21 @@ internal fun MyMongInfoView(
     name: String,
     email: String,
     university: String,
-    grade: Int
+    grade: Int,
+    getInfo: () -> Unit
 ) {
     Box(
         modifier = modifier,
         contentAlignment = Alignment.Center
     ) {
         if (isLoading) {
-            // todo change to LoadingItem
-            CircularProgressIndicator()
+            LoadingItem()
         }
         if (isError) {
-            // todo change to ErrorItem
-            Text(text = errorMessage)
+            ErrorItem(
+                message = errorMessage,
+                onRetry = getInfo
+            )
         }
         val showContent = isLoading.not() && isError.not()
         Column(modifier = if (showContent) Modifier else Modifier.alpha(alpha = 0f)) {

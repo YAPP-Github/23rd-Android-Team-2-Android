@@ -96,7 +96,6 @@ object NetworkModule {
         baseUrl(BuildConfig.MONEYMONG_BASE_URL)
         addConverterFactory(GsonConverterFactory.create(gson))
         addCallAdapterFactory(ResultCallAdapterFactory.create())
-        client(okHttpClient)
     }.build()
     
     @Provides
