@@ -32,11 +32,11 @@ class LedgerViewModel @Inject constructor(
 ) : BaseViewModel<LedgerState, LedgerSideEffect>(LedgerState()) {
 
     init {
+        onChangeSnackbarState(visible = LedgerArgs(savedStateHandle).ledgerPostSuccess)
         fetchAgencyId()
         fetchMyAgencyList()
         fetchAgencyExistLedger()
         fetchLedgerTransactionList()
-        onChangeSnackbarState(visible = LedgerArgs(savedStateHandle).ledgerPostSuccess)
     }
 
     fun fetchAgencyId() = blockingIntent {
@@ -53,19 +53,13 @@ class LedgerViewModel @Inject constructor(
         if (state.existAgency) {
             fetchAgencyExistLedgerUseCase(state.agencyId)
                 .onSuccess {
-                    reduce {
-                        state.copy(
-                            isExistLedger = it,
-                            visibleError = false
-                        )
-                    }
+                    reduce { state.copy(isExistLedger = it) }
                 }
         }
     }
 
     fun fetchLedgerTransactionList() = intent {
-        if (!state.isLoading && state.existAgency) {
-            reduce { state.copy(isLoading = true) }
+        if (state.existAgency) {
             val param = LedgerTransactionListParam(
                 id = state.agencyId,
                 year = state.currentDate.year,
@@ -83,25 +77,23 @@ class LedgerViewModel @Inject constructor(
                     }
                 }.onFailure {
                     reduce { state.copy(visibleError = true) }
-                }.also { reduce { state.copy(isLoading = false) } }
+                }
         }
     }
 
     fun fetchMyAgencyList() = intent {
-        if (!state.isLoading && state.existAgency) {
-            reduce { state.copy(isLoading = true) }
+        if (state.existAgency) {
             fetchMyAgencyListUseCase(Unit)
                 .onSuccess {
                     reduce { state.copy(agencyList = it) }
                 }.onFailure {
                     reduce { state.copy(visibleError = true) }
-                }.also { reduce { state.copy(isLoading = false) } }
+                }
         }
     }
 
     fun reFetchLedgerData(agencyId: Int) {
         saveAgencyId(agencyId)
-        fetchMyAgencyList()
         fetchAgencyExistLedger()
         fetchLedgerTransactionList()
     }
