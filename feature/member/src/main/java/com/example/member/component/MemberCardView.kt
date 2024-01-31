@@ -142,7 +142,7 @@ fun MemberCardView(
                         modifier = Modifier
                             .padding(start = 10.dp)
                             .noRippleClickable {
-                                isReInvitationCode(88) //TODO
+                                isReInvitationCode(81) //TODO
                             }
 
                     ) {
