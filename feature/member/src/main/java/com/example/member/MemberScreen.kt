@@ -31,6 +31,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.member.component.MemberCardView
 import com.example.member.component.MemberDialogView
 import com.example.member.component.MemberListView
+import com.moneymong.moneymong.common.ui.noRippleClickable
 import com.moneymong.moneymong.design_system.R
 import com.moneymong.moneymong.design_system.component.bottomSheet.MDSBottomSheet
 import com.moneymong.moneymong.design_system.component.button.MDSButton
@@ -197,7 +198,7 @@ fun MemberScreen(
                     verticalArrangement = Arrangement.spacedBy(20.dp)
                 ) {
                     Row(
-                        modifier = Modifier.clickable {
+                        modifier = Modifier.noRippleClickable {
                             bottomSheetType.value = BottomSheetType.ADMIN_GENERAL_MEMBER
                         }
                     ) {
@@ -217,7 +218,7 @@ fun MemberScreen(
                     Text(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .clickable {
+                            .noRippleClickable {
                                 viewModel.onVertClickChanged(false)
                                 viewModel.onShowDialogChanged(true)
                             },
@@ -236,7 +237,7 @@ fun MemberScreen(
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .clickable {
+                            .noRippleClickable {
                                 viewModel.isStaffCheckedChanged(true)
                                 viewModel.isMemberCheckedChanged(false)
                             }
@@ -259,7 +260,7 @@ fun MemberScreen(
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .clickable {
+                            .noRippleClickable {
                                 viewModel.isStaffCheckedChanged(false)
                                 viewModel.isMemberCheckedChanged(true)
                             },
