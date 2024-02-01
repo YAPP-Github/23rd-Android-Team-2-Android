@@ -23,6 +23,11 @@ data class MemberState(
         agencyUserRole = ""
     ),
     val filteredMemberList: List<AgencyUserEntity> = emptyList(),
+    val visibleError : Boolean = false,
+    val errorMessage : String = "",
+    val visiblePopUpError : Boolean = false,
+    val errorPopUpMessage : String = "",
+    val inviteCodeError : Boolean = false,
     val isUserAuthor: String = "",
     val agencyId: Int = 0
 ) : State

@@ -31,12 +31,15 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.member.component.MemberCardView
 import com.example.member.component.MemberDialogView
 import com.example.member.component.MemberListView
+import com.moneymong.moneymong.common.ui.noRippleClickable
 import com.moneymong.moneymong.design_system.R
 import com.moneymong.moneymong.design_system.component.bottomSheet.MDSBottomSheet
 import com.moneymong.moneymong.design_system.component.button.MDSButton
 import com.moneymong.moneymong.design_system.component.button.MDSButtonSize
 import com.moneymong.moneymong.design_system.component.button.MDSButtonType
 import com.moneymong.moneymong.design_system.component.snackbar.MDSSnackbarHost
+import com.moneymong.moneymong.design_system.error.ErrorDialog
+import com.moneymong.moneymong.design_system.error.ErrorScreen
 import com.moneymong.moneymong.design_system.theme.Blue04
 import com.moneymong.moneymong.design_system.theme.Body3
 import com.moneymong.moneymong.design_system.theme.Body4
@@ -99,7 +102,7 @@ fun MemberScreen(
     LaunchedEffect(key1 = Unit) {
         viewModel.eventEmit(MemberSideEffect.GetInvitationCode(state.agencyId.toLong()))
         viewModel.eventEmit(MemberSideEffect.GetMemberLists(state.agencyId.toLong()))
-        viewModel.eventEmit(MemberSideEffect.GetMyInfo(Unit)) //TODO - 마이몽 유저 정보 조회 연결
+        viewModel.eventEmit(MemberSideEffect.GetMyInfo(Unit))
     }
 
 
@@ -150,7 +153,17 @@ fun MemberScreen(
             }
         }
     }
-
+    if (state.visiblePopUpError) {
+        ErrorDialog(
+            message = state.errorPopUpMessage,
+            onConfirm = {
+                viewModel.eventEmit(MemberSideEffect.GetInvitationCode(state.agencyId.toLong()))
+                viewModel.eventEmit(MemberSideEffect.GetMemberLists(state.agencyId.toLong()))
+                viewModel.eventEmit(MemberSideEffect.GetMyInfo(Unit))
+                viewModel.visiblePopUpErrorChanged(false)
+            }
+        )
+    }
     if (state.showDialog) {
         MemberDialogView(
             onDismissRequest = {
@@ -165,7 +178,6 @@ fun MemberScreen(
 
     if (state.visibleBottomSheet) {
         viewModel.isRoleChanged(false)
-
         MDSBottomSheet(
             onDismissRequest = {
                 coroutineScope.launch {
@@ -188,7 +200,7 @@ fun MemberScreen(
                     verticalArrangement = Arrangement.spacedBy(20.dp)
                 ) {
                     Row(
-                        modifier = Modifier.clickable {
+                        modifier = Modifier.noRippleClickable {
                             bottomSheetType.value = BottomSheetType.ADMIN_GENERAL_MEMBER
                         }
                     ) {
@@ -208,7 +220,7 @@ fun MemberScreen(
                     Text(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .clickable {
+                            .noRippleClickable {
                                 viewModel.onVertClickChanged(false)
                                 viewModel.onShowDialogChanged(true)
                             },
@@ -227,7 +239,7 @@ fun MemberScreen(
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .clickable {
+                            .noRippleClickable {
                                 viewModel.isStaffCheckedChanged(true)
                                 viewModel.isMemberCheckedChanged(false)
                             }
@@ -250,7 +262,7 @@ fun MemberScreen(
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .clickable {
+                            .noRippleClickable {
                                 viewModel.isStaffCheckedChanged(false)
                                 viewModel.isMemberCheckedChanged(true)
                             },
@@ -287,7 +299,8 @@ fun MemberScreen(
                                         "STAFF",
                                         state.vertClickedUserId
                                     )
-                                ) //TODO
+                                )
+
                                 viewModel.isStaffCheckedChanged(false)
 
                             } else if (!state.isStaffChecked && state.isMemberChecked) {
@@ -297,7 +310,7 @@ fun MemberScreen(
                                         "MEMBER",
                                         state.vertClickedUserId
                                     )
-                                ) //TODO
+                                )
                                 viewModel.isMemberCheckedChanged(false)
                             }
                         },
@@ -310,6 +323,16 @@ fun MemberScreen(
         }
     }
 
+    if (state.visibleError) {
+        ErrorScreen(
+            modifier = Modifier.fillMaxSize(),
+            message = state.errorMessage,
+            onRetry = {
+                viewModel.visibleErrorChanged(false)
+                viewModel.eventEmit(MemberSideEffect.GetInvitationCode(state.agencyId.toLong()))
+                viewModel.eventEmit(MemberSideEffect.GetMemberLists(state.agencyId.toLong()))
+                viewModel.eventEmit(MemberSideEffect.GetMyInfo(Unit))
+            }
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -353,18 +376,63 @@ fun MemberScreen(
             },
             vertClickedUserIdChanged = { userId -> viewModel.vertClickedUserIdChanged(userId) },
         )
-
-        Box(
+    } else {
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .weight(1f)
+                .fillMaxSize()
+                .background(White)
+                .padding(horizontal = MMHorizontalSpacing)
         ) {
-            MDSSnackbarHost(
-                hostState = snackbarHostState,
-                modifier = Modifier
-                    .align(BottomCenter)
-                    .padding(bottom = 12.dp)
+            Text(
+                modifier = Modifier.padding(top = 24.dp, bottom = 8.dp),
+                text = "나",
+                style = Body3,
+                color = Gray07
             )
+            MemberCardView(
+                modifier = Modifier,
+                agencyId = state.agencyId,
+                memberList = state.memberList,
+                memberMyInfoId = state.memberMyInfoId,
+                memberMyInfo = state.memberMyInfo,
+                memberMyInfoChanged = { id, userId, nickname, agencyUserRole ->
+                    viewModel.memberMyInfoChanged(
+                        id,
+                        userId,
+                        nickname,
+                        agencyUserRole
+                    )
+                },
+                invitationCode = state.invitationCode,
+                isReInvitationCode = { viewModel.eventEmit(MemberSideEffect.GetReInvitationCode(it)) },
+                onCopyChange = { onCopyClick -> viewModel.onCopyClickChanged(onCopyClick) },
+            )
+
+            MemberListView(
+                modifier = Modifier.padding(top = 24.dp),
+                memberMyInfo = state.memberMyInfo,
+                filteredMemberList = state.filteredMemberList,
+                onIconClick = { vertClick -> viewModel.onVertClickChanged(vertClick) },
+                updateFilteredMemberList = { memberMyInfoId ->
+                    viewModel.updateFilteredMemberList(
+                        memberMyInfoId
+                    )
+                },
+                vertClickedUserIdChanged = { userId -> viewModel.vertClickedUserIdChanged(userId) },
+            )
+
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f)
+            ) {
+                MDSSnackbarHost(
+                    hostState = snackbarHostState,
+                    modifier = Modifier
+                        .align(BottomCenter)
+                        .padding(bottom = 12.dp)
+                )
+            }
         }
     }
 }

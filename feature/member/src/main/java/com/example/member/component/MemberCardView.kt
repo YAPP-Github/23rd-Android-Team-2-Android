@@ -23,6 +23,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.member.util.MemberRoundRectShadow
+import com.moneymong.moneymong.common.ui.noRippleClickable
 import com.moneymong.moneymong.design_system.R
 import com.moneymong.moneymong.design_system.component.tag.MDSTag
 import com.moneymong.moneymong.design_system.theme.Blue04
@@ -37,7 +38,7 @@ import com.moneymong.moneymong.domain.entity.member.AgencyUserEntity
 @Composable
 fun MemberCardView(
     modifier: Modifier = Modifier,
-    agencyId : Int,
+    agencyId: Int,
     memberList: List<AgencyUserEntity>,
     memberMyInfoId: Long,
     memberMyInfo: AgencyUserEntity,
@@ -118,7 +119,7 @@ fun MemberCardView(
                     Row(
                         modifier = Modifier
                             .padding(start = 63.dp)
-                            .clickable {
+                            .noRippleClickable {
                                 onCopyChange(true)
                                 copyToClipboard(invitationCode)
                             },
@@ -141,10 +142,9 @@ fun MemberCardView(
                     Row(
                         modifier = Modifier
                             .padding(start = 10.dp)
-                            .clickable {
-                                isReInvitationCode(agencyId.toLong()) //TODO
+                            .noRippleClickable {
+                                isReInvitationCode(agencyId.toLong())
                             }
-
                     ) {
                         Text(
                             text = "재발급",
