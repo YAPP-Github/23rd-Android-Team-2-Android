@@ -37,6 +37,7 @@ import com.moneymong.moneymong.domain.entity.member.AgencyUserEntity
 @Composable
 fun MemberCardView(
     modifier: Modifier = Modifier,
+    agencyId : Int,
     memberList: List<AgencyUserEntity>,
     memberMyInfoId: Long,
     memberMyInfo: AgencyUserEntity,
@@ -141,7 +142,7 @@ fun MemberCardView(
                         modifier = Modifier
                             .padding(start = 10.dp)
                             .clickable {
-                                isReInvitationCode(4) //TODO
+                                isReInvitationCode(agencyId.toLong()) //TODO
                             }
 
                     ) {

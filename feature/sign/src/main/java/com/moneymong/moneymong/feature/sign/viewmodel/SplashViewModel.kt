@@ -42,7 +42,6 @@ class SplashViewModel @Inject constructor(
                 }
             }
             .onFailure {
-                //토큰 불러오기 실패 시 유저 정보가 없다고 간주하고 로그인화면으로 이동
                 reduce {
                     state.copy(
                         isTokenValid = false
