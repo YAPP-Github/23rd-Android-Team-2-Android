@@ -149,6 +149,8 @@ class MemberViewModel @Inject constructor(
                         invitationCode = it.code
                     )
                 }
+                Log.d("invitationCode", state.invitationCode)
+
             }.onFailure {
                 reduce{
                     state.copy(
