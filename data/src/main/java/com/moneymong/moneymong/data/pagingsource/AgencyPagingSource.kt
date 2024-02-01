@@ -18,13 +18,13 @@ class AgencyPagingSource(
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, AgencyGetResponse> {
         val page = params.key ?: START_PAGE
-        val size = params.loadSize
-        return dataSource.getAgencies(page = page, size = size).fold(
+        val loadSize = params.loadSize
+        return dataSource.getAgencies(page = page, size = loadSize).fold(
             onSuccess = {
                 LoadResult.Page(
                     data = it.agencies,
                     prevKey = null,
-                    nextKey = if (it.agencies.isEmpty()) null else page + 1
+                    nextKey = if (it.agencies.size < loadSize) null else page + 1
                 )
             },
             onFailure = {

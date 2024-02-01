@@ -1,5 +1,6 @@
 package com.moneymong.moneymong.feature.agency.register.complete
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -48,6 +49,8 @@ fun AgencyRegisterCompleteScreen(
             is AgencyRegisterCompleteSideEffect.NavigateToLedgerManual -> navigateToLedgerManual()
         }
     }
+
+    BackHandler { viewModel.navigateToAgencySearch() }
 
     Column(
         modifier = modifier

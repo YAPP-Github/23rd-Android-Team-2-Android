@@ -1,6 +1,7 @@
-package com.moneymong.moneymong.feature.agency
+package com.moneymong.moneymong.feature.agency.search
 
 import com.moneymong.moneymong.domain.entity.agency.AgencyGetEntity
+import com.moneymong.moneymong.domain.entity.agency.MyAgencyEntity
 import com.moneymong.moneymong.domain.param.agency.AgencyRegisterParam
 
 data class Agency(
@@ -16,6 +17,19 @@ fun AgencyGetEntity.toAgency(): Agency {
         type = when (this.type) {
             AgencyGetEntity.AgencyType.CLUB -> AgencyType.CLUB
             AgencyGetEntity.AgencyType.COUNCIL -> AgencyType.COUNCIL
+        },
+        name = this.name,
+        memberCount = this.headCount
+    )
+}
+
+fun MyAgencyEntity.toAgency(): Agency {
+    return Agency(
+        id = this.id.toLong(),
+        type = when (this.type) {
+            "IN_SCHOOL_CLUB" -> AgencyType.CLUB
+            "STUDENT_COUNCIL" -> AgencyType.COUNCIL
+            else -> throw IllegalArgumentException("Unknown type: $type")
         },
         name = this.name,
         memberCount = this.headCount
