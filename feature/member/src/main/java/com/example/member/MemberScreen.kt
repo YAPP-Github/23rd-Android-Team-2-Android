@@ -329,10 +329,10 @@ fun MemberScreen(
             modifier = Modifier.fillMaxSize(),
             message = state.errorMessage,
             onRetry = {
+                viewModel.visibleErrorChanged(false)
                 viewModel.eventEmit(MemberSideEffect.GetInvitationCode(state.agencyId.toLong()))
                 viewModel.eventEmit(MemberSideEffect.GetMemberLists(state.agencyId.toLong()))
                 viewModel.eventEmit(MemberSideEffect.GetMyInfo(Unit))
-                viewModel.visibleErrorChanged(false)
             }
         )
     }else {
