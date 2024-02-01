@@ -23,7 +23,6 @@ class SignUpViewModel @Inject constructor(
         val body = UnivParam(universityName, grade)
         univUseCase.createUniv(body)
             .onSuccess {
-                Log.d("success", it.toString())
                 reduce {
                     state.copy(
                         isUnivCreated = true
@@ -31,32 +30,28 @@ class SignUpViewModel @Inject constructor(
                 }
             }
             .onFailure {
-                Log.d("failure", it.message.toString())
-                //TODO 에러화면
                 reduce {
                     state.copy(
-                        isError = true
+                        visiblePopUpError = true,
+                        popUpErrorMessage = it.message.toString()
                     )
                 }
-
             }
     }
 
     fun searchUniv(searchQuery: String) = intent {
         univUseCase.searchUniv(searchQuery)
             .onSuccess {
-                Log.d("Success", it.universities.toString())
                 reduce {
                     state.copy(
                         universityResponse = it
                     )
                 }
             }.onFailure {
-                Log.d("failure", it.message.toString())
-                //TODO 에러화면
                 reduce {
                     state.copy(
-                        isError = true
+                        visibleError = true,
+                        errorMessage = it.message.toString()
                     )
                 }
             }
@@ -140,6 +135,30 @@ class SignUpViewModel @Inject constructor(
         reduce {
             state.copy(
                 selectedGrade = selectedGrade
+            )
+        }
+    }
+
+    fun visiblePopUpErrorChanged(visiblePopUpError : Boolean) = intent{
+        reduce{
+            state.copy(
+                visiblePopUpError = visiblePopUpError,
+            )
+        }
+    }
+
+    fun visibleErrorChanged(visibleError : Boolean) = intent{
+        reduce{
+            state.copy(
+                visibleError = visibleError,
+            )
+        }
+    }
+
+    fun textInputChanged(isTextInput : Boolean) = intent{
+        reduce {
+            state.copy(
+                textInput = isTextInput
             )
         }
     }

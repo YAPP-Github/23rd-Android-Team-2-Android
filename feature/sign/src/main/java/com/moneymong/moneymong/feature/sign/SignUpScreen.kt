@@ -22,7 +22,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.moneymong.moneymong.common.ui.noRippleClickable
 import com.moneymong.moneymong.design_system.R
+import com.moneymong.moneymong.design_system.error.ErrorDialog
+import com.moneymong.moneymong.design_system.error.ErrorScreen
 import com.moneymong.moneymong.design_system.theme.Gray07
 import com.moneymong.moneymong.design_system.theme.MMHorizontalSpacing
 import com.moneymong.moneymong.design_system.theme.White
@@ -49,42 +52,61 @@ fun SignUpScreen(
         navigateUp()
     }
 
-    Scaffold(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(White)
-            .padding(MMHorizontalSpacing),
-        topBar = {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(44.dp)
-                    .background(White),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Start
-            ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_chevron_left),
-                    contentDescription = null,
+    if(state.visibleError){
+        ErrorScreen(
+            modifier = Modifier.fillMaxSize(),
+            message = state.errorMessage,
+            onRetry = {
+                viewModel.visibleErrorChanged(false)
+            }
+        )
+    }
+    else if(state.visiblePopUpError){
+        ErrorDialog(
+            message = state.popUpErrorMessage,
+            onConfirm = {
+                viewModel.visiblePopUpErrorChanged(false)
+            }
+        )
+    }
+    else{
+        Scaffold(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(White)
+                .padding(MMHorizontalSpacing),
+            topBar = {
+                Row(
                     modifier = Modifier
-                        .size(24.dp)
-                        .background(White)
-                        .clickable {
-                            navigateUp()
-                        },
-                    tint = Gray07
+                        .fillMaxWidth()
+                        .height(44.dp)
+                        .background(White),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Start
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_chevron_left),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .size(24.dp)
+                            .background(White)
+                            .noRippleClickable {
+                                navigateUp()
+                            },
+                        tint = Gray07
+                    )
+                }
+            },
+            content = { innerPadding ->
+                SignUpContent(
+                    modifier = Modifier.padding(innerPadding),
+                    navigateToSignComplete = navigateToSignComplete,
+                    viewModel = viewModel,
+                    state = state
                 )
             }
-        },
-        content = { innerPadding ->
-            SignUpContent(
-                modifier = Modifier.padding(innerPadding),
-                navigateToSignComplete = navigateToSignComplete,
-                viewModel = viewModel,
-                state = state
-            )
-        }
-    )
+        )
+    }
 }
 
 
@@ -93,7 +115,7 @@ fun SignUpContent(
     modifier: Modifier = Modifier,
     navigateToSignComplete: () -> Unit,
     viewModel: SignUpViewModel,
-    state : SignUpState
+    state: SignUpState
 ) {
 
     LaunchedEffect(key1 = state.isUnivCreated) {
@@ -162,7 +184,9 @@ fun SignUpContent(
                         onSearchIconClicked = {
                             viewModel.eventEmit(SignUpSideEffect.UniversitiesApi(it))
                         },
-                        value = state.textValue
+                        value = state.textValue,
+                        textInput = state.textInput,
+                        textValueChanged = { isTextInput -> viewModel.textInputChanged(isTextInput)}
                     )
                 } else {
                     Column(modifier = Modifier.fillMaxSize()) {
@@ -177,6 +201,8 @@ fun SignUpContent(
                         )
                         SignUpGradeView(
                             modifier = Modifier.fillMaxWidth(),
+                            selectedGrade = state.selectedGrade,
+                            selectedGradeChange = {selectedGrade -> viewModel.selectedGradeChange(selectedGrade)},
                             onClick = { viewModel.isEnabledChanged(true) },
                             changeGradeInfor = { viewModel.gradeInforChanged(it) }
                         )
@@ -193,6 +219,11 @@ fun SignUpContent(
             SignUpButtonView(
                 modifier = Modifier.fillMaxWidth(),
                 isEnabled = state.isEnabled,
+                visiblePopUpError = state.visiblePopUpError,
+                popUpErrorMessage = state.popUpErrorMessage,
+                visiblePopUpErrorChanged = { visiblePopUpError ->
+                    viewModel.visiblePopUpErrorChanged(visiblePopUpError)
+                },
                 onCreateUniversity = {
                     viewModel.eventEmit(
                         SignUpSideEffect.CreateUniversityApi(

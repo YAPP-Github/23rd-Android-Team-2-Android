@@ -145,7 +145,6 @@ fun MemberCardView(
                             .noRippleClickable {
                                 isReInvitationCode(agencyId.toLong())
                             }
-
                     ) {
                         Text(
                             text = "재발급",

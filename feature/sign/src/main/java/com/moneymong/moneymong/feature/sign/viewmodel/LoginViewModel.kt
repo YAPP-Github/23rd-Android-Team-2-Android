@@ -48,14 +48,23 @@ class LoginViewModel @Inject constructor(
                                 }
                             }
                         }.onFailure {
-                            //TODO - 에러처리
+                            reduce {
+                                state.copy(
+                                    visibleError = true,
+                                    errorMessage = "문제가 발생했습니다.\n다시 시도해주세요"
+                                )
+                            }
                         }
                 }
 
                 override suspend fun onLoginFailure(exception: Exception) {
-                    //TODO 에러 화면
-                    // 로그인 실패 처리
-                    // 예: 상태 업데이트, 오류 메시지 표시 등
+                    // 로그인 실패
+                    reduce {
+                        state.copy(
+                            visibleError = true,
+                            errorMessage = "문제가 발생했습니다.\n다시 시도해주세요"
+                        )
+                    }
                 }
             })
         }
@@ -86,6 +95,14 @@ class LoginViewModel @Inject constructor(
         reduce {
             state.copy(
                 isLoginRequired = boolean
+            )
+        }
+    }
+
+    fun visibleErrorChanged(isVisibleError: Boolean) = intent{
+        reduce {
+            state.copy(
+                visibleError = isVisibleError,
             )
         }
     }
