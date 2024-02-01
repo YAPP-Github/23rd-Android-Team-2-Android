@@ -2,7 +2,7 @@ package com.moneymong.moneymong.feature.agency.register
 
 import androidx.compose.ui.text.input.TextFieldValue
 import com.moneymong.moneymong.common.base.State
-import com.moneymong.moneymong.feature.agency.AgencyType
+import com.moneymong.moneymong.feature.agency.search.AgencyType
 
 data class AgencyRegisterState(
     val agencyName: TextFieldValue = TextFieldValue(),
