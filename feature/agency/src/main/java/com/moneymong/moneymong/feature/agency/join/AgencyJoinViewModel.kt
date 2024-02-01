@@ -82,7 +82,6 @@ class AgencyJoinViewModel @Inject constructor(
         reduce {
             state.copy(
                 visiblePopUpError = visibleError,
-                errorPopUpMessage = ""
             )
         }
     }
