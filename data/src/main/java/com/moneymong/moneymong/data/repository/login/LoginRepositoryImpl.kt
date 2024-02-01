@@ -13,10 +13,10 @@ class LoginRepositoryImpl @Inject constructor(
     @ApplicationContext private val context: Context
 ) : LoginRepository {
     override suspend fun kakaoLogin(callback: LoginCallback) {
-        if (UserApiClient.instance.isKakaoTalkLoginAvailable(context)) {
-            remoteDataSource.loginWithKakaoTalk(callback)
-        } else {
+//        if (UserApiClient.instance.isKakaoTalkLoginAvailable(context)) {
+//            remoteDataSource.loginWithKakaoTalk(callback)
+//        } else {
             remoteDataSource.loginWithKakaoAccount(callback)
-        }
+//        }
     }
 }

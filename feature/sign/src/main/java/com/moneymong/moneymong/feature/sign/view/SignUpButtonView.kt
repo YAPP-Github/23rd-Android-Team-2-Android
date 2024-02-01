@@ -10,27 +10,41 @@ import androidx.compose.ui.unit.dp
 import com.moneymong.moneymong.design_system.component.button.MDSButton
 import com.moneymong.moneymong.design_system.component.button.MDSButtonSize
 import com.moneymong.moneymong.design_system.component.button.MDSButtonType
+import com.moneymong.moneymong.design_system.error.ErrorDialog
 
 @Composable
 fun SignUpButtonView(
     modifier: Modifier = Modifier ,
     isEnabled : Boolean,
+    visiblePopUpError : Boolean,
+    popUpErrorMessage : String,
+    visiblePopUpErrorChanged : (Boolean) -> Unit,
     onCreateUniversity : () -> Unit
 ) {
-    Column(
-        modifier = modifier
-    ) {
-        MDSButton(
-            modifier = Modifier.fillMaxWidth(),
-            onClick = {
-                onCreateUniversity()
-            },
-            text = "가입하기",
-            type = MDSButtonType.PRIMARY,
-            size = MDSButtonSize.LARGE,
-            enabled = isEnabled
+    if(visiblePopUpError){
+        ErrorDialog(
+            message = popUpErrorMessage,
+            onConfirm = {
+                visiblePopUpErrorChanged(false)
+            }
         )
-        Spacer(modifier = Modifier.height(8.dp))
+    }
+    else{
+        Column(
+            modifier = modifier
+        ) {
+            MDSButton(
+                modifier = Modifier.fillMaxWidth(),
+                onClick = {
+                    onCreateUniversity()
+                },
+                text = "가입하기",
+                type = MDSButtonType.PRIMARY,
+                size = MDSButtonSize.LARGE,
+                enabled = isEnabled
+            )
+            Spacer(modifier = Modifier.height(8.dp))
 
+        }
     }
 }
