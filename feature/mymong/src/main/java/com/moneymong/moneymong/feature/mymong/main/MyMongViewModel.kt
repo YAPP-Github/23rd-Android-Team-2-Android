@@ -2,8 +2,10 @@ package com.moneymong.moneymong.feature.mymong.main
 
 import com.moneymong.moneymong.common.base.BaseViewModel
 import com.moneymong.moneymong.common.error.MoneyMongError
+import com.moneymong.moneymong.domain.usecase.agency.SaveAgencyIdUseCase
 import com.moneymong.moneymong.domain.usecase.user.GetMyInfoUseCase
 import com.moneymong.moneymong.domain.usecase.user.LogoutUseCase
+import com.moneymong.moneymong.domain.usecase.user.SaveUserIdUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.postSideEffect
@@ -13,7 +15,9 @@ import javax.inject.Inject
 @HiltViewModel
 class MyMongViewModel @Inject constructor(
     private val getMyInfoUseCase: GetMyInfoUseCase,
-    private val logoutUseCase: LogoutUseCase
+    private val logoutUseCase: LogoutUseCase,
+    private val saveAgencyIdUseCase: SaveAgencyIdUseCase,
+    private val saveUserIdUseCase: SaveUserIdUseCase
 ) : BaseViewModel<MyMongState, MyMongSideEffect>(MyMongState()) {
 
     fun navigateToTermsOfUse() =
@@ -63,6 +67,7 @@ class MyMongViewModel @Inject constructor(
     fun logout() = intent {
         logoutUseCase(data = Unit)
             .onSuccess {
+                clearLocalData()
                 postSideEffect(sideEffect = MyMongSideEffect.NavigateToLogin)
             }.onFailure {
                 reduce {
@@ -85,5 +90,10 @@ class MyMongViewModel @Inject constructor(
         reduce {
             state.copy(visibleErrorDialog = visible)
         }
+    }
+
+    private fun clearLocalData() = intent {
+        saveAgencyIdUseCase(0)
+        saveUserIdUseCase(0)
     }
 }
