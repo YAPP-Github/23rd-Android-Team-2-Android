@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -25,10 +26,12 @@ import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
+import com.moneymong.moneymong.common.error.MoneyMongError
 import com.moneymong.moneymong.design_system.R
 import com.moneymong.moneymong.design_system.component.button.MDSFloatingActionButton
 import com.moneymong.moneymong.design_system.component.tooltip.MDSToolTip
 import com.moneymong.moneymong.design_system.component.tooltip.MDSToolTipPosition
+import com.moneymong.moneymong.design_system.error.ErrorDialog
 import com.moneymong.moneymong.design_system.error.ErrorItem
 import com.moneymong.moneymong.design_system.error.ErrorScreen
 import com.moneymong.moneymong.design_system.loading.LoadingItem
@@ -40,6 +43,8 @@ import com.moneymong.moneymong.design_system.theme.MMHorizontalSpacing
 import com.moneymong.moneymong.design_system.theme.Red03
 import com.moneymong.moneymong.feature.agency.search.component.AgencySearchTopBar
 import com.moneymong.moneymong.feature.agency.search.item.AgencyItem
+import org.orbitmvi.orbit.compose.collectAsState
+import org.orbitmvi.orbit.compose.collectSideEffect
 
 @Composable
 fun AgencySearchScreen(
@@ -48,7 +53,26 @@ fun AgencySearchScreen(
     navigateToRegister: () -> Unit,
     navigateAgencyJoin: (agencyId: Long) -> Unit
 ) {
+    val state by viewModel.collectAsState()
     val pagingItems = viewModel.agencies.collectAsLazyPagingItems()
+
+    viewModel.collectSideEffect {
+        when (it) {
+            is AgencySearchSideEffect.NavigateToRegister -> {
+                navigateToRegister()
+            }
+
+            is AgencySearchSideEffect.NavigateToAgencyJoin -> {
+                navigateAgencyJoin(it.agencyId)
+            }
+        }
+    }
+
+    if (state.visibleWarningDialog) {
+        ErrorDialog(message = "이미 가입된 소속입니다") {
+            viewModel.changeVisibleWarningDialog(false)
+        }
+    }
 
     Box(
         modifier = modifier
@@ -64,7 +88,17 @@ fun AgencySearchScreen(
             AgencySearchContentView(
                 modifier = Modifier.weight(1f),
                 pagingItems = pagingItems,
-                onClickItem = navigateAgencyJoin
+                onClickItem = { agencyId ->
+                    if (agencyId in state.joinedAgenciesIds) {
+                        viewModel.changeVisibleWarningDialog(true)
+                    } else {
+                        viewModel.navigateToJoin(agencyId)
+                    }
+                },
+                isLoading = state.isLoading,
+                isError = state.isError,
+                errorMessage = state.errorMessage,
+                fetchMyAgencyList = viewModel::fetchMyAgencyList
             )
         }
         Column(
@@ -81,7 +115,7 @@ fun AgencySearchScreen(
                 Spacer(modifier = Modifier.height(8.dp))
             }
             MDSFloatingActionButton(
-                onClick = navigateToRegister,
+                onClick = viewModel::navigateToRegister,
                 iconResource = R.drawable.ic_plus_default,
                 containerColor = Red03
             )
@@ -93,19 +127,43 @@ fun AgencySearchScreen(
 private fun AgencySearchContentView(
     modifier: Modifier = Modifier,
     pagingItems: LazyPagingItems<Agency>,
-    onClickItem: (agencyId: Long) -> Unit
+    onClickItem: (agencyId: Long) -> Unit,
+    isLoading: Boolean,
+    isError: Boolean,
+    errorMessage: String,
+    fetchMyAgencyList: () -> Unit
 ) {
-    if (pagingItems.itemCount == 0) {
-        ContentViewWithoutAgencies(
-            modifier = modifier,
-            pagingItems = pagingItems
+    val contentLoading = pagingItems.loadState.refresh is LoadState.Loading || isLoading
+    val contentError = pagingItems.loadState.refresh is LoadState.Error || isError
+    val contentErrorMessage = errorMessage.ifEmpty {
+        (pagingItems.loadState.refresh as? LoadState.Error)?.error?.message
+            ?: MoneyMongError.UnExpectedError.message
+    }
+
+    if (contentLoading) {
+        LoadingScreen(modifier = modifier.fillMaxSize())
+    } else if (contentError) {
+        ErrorScreen(
+            modifier = modifier.fillMaxSize(),
+            message = contentErrorMessage,
+            onRetry = {
+                pagingItems.retry()
+                fetchMyAgencyList()
+            },
         )
     } else {
-        ContentViewWithAgencies(
-            modifier = modifier,
-            pagingItems = pagingItems,
-            onClickItem = onClickItem
-        )
+        if (pagingItems.itemCount == 0) {
+            ContentViewWithoutAgencies(
+                modifier = modifier,
+                pagingItems = pagingItems
+            )
+        } else {
+            ContentViewWithAgencies(
+                modifier = modifier,
+                pagingItems = pagingItems,
+                onClickItem = onClickItem
+            )
+        }
     }
 }
 
@@ -150,7 +208,7 @@ private fun ContentViewWithAgencies(
                 }
             }
 
-            else -> Unit
+            is LoadState.NotLoading -> Unit
         }
     }
 }
