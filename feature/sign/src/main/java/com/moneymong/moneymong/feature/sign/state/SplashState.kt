@@ -4,5 +4,5 @@ import com.moneymong.moneymong.common.base.State
 
 data class SplashState(
     val startAnimation: Boolean = false,
-    val isTokenValid: Boolean = false
+    val isTokenValid: Boolean? = null
 ) : State
