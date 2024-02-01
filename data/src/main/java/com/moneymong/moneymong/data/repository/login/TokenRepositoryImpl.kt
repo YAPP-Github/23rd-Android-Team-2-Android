@@ -22,8 +22,6 @@ class TokenRepositoryImpl @Inject constructor(
         tokenUpdateFailed.emit(failed)
     }
 
-    override val tokenUpdateFailed = MutableSharedFlow<Boolean>(replay = 1)
-
     override suspend fun getRefreshToken(): Result<String> {
         return localDataSource.getRefreshToken()
     }

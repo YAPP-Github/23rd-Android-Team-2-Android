@@ -168,7 +168,12 @@ fun MemberScreen(
         MemberDialogView(
             onDismissRequest = {
                 viewModel.onShowDialogChanged(false)
-                viewModel.eventEmit(MemberSideEffect.BlockMemberAuthor(state.agencyId.toLong(), state.vertClickedUserId))
+                viewModel.eventEmit(
+                    MemberSideEffect.BlockMemberAuthor(
+                        state.agencyId.toLong(),
+                        state.vertClickedUserId
+                    )
+                )
             },
             onConfirmation = {
                 viewModel.onShowDialogChanged(false)
@@ -333,49 +338,51 @@ fun MemberScreen(
                 viewModel.eventEmit(MemberSideEffect.GetMemberLists(state.agencyId.toLong()))
                 viewModel.eventEmit(MemberSideEffect.GetMyInfo(Unit))
             }
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(White)
-            .padding(horizontal = MMHorizontalSpacing)
-    ) {
-        Text(
-            modifier = Modifier.padding(top = 24.dp, bottom = 8.dp),
-            text = "나",
-            style = Body3,
-            color = Gray07
         )
-        MemberCardView(
-            modifier = Modifier,
-            agencyId = state.agencyId,
-            memberList = state.memberList,
-            memberMyInfoId = state.memberMyInfoId,
-            memberMyInfo = state.memberMyInfo,
-            memberMyInfoChanged = { id, userId, nickname, agencyUserRole ->
-                viewModel.memberMyInfoChanged(
-                    id,
-                    userId,
-                    nickname,
-                    agencyUserRole
-                )
-            },
-            invitationCode = state.invitationCode,
-            isReInvitationCode = { viewModel.eventEmit(MemberSideEffect.GetReInvitationCode(it)) }, //TODO
-            onCopyChange = { onCopyClick -> viewModel.onCopyClickChanged(onCopyClick) },
-        )
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(White)
+                .padding(horizontal = MMHorizontalSpacing)
+        ) {
+            Text(
+                modifier = Modifier.padding(top = 24.dp, bottom = 8.dp),
+                text = "나",
+                style = Body3,
+                color = Gray07
+            )
+            MemberCardView(
+                modifier = Modifier,
+                agencyId = state.agencyId,
+                memberList = state.memberList,
+                memberMyInfoId = state.memberMyInfoId,
+                memberMyInfo = state.memberMyInfo,
+                memberMyInfoChanged = { id, userId, nickname, agencyUserRole ->
+                    viewModel.memberMyInfoChanged(
+                        id,
+                        userId,
+                        nickname,
+                        agencyUserRole
+                    )
+                },
+                invitationCode = state.invitationCode,
+                isReInvitationCode = { viewModel.eventEmit(MemberSideEffect.GetReInvitationCode(it)) }, //TODO
+                onCopyChange = { onCopyClick -> viewModel.onCopyClickChanged(onCopyClick) },
+            )
 
-        MemberListView(
-            modifier = Modifier.padding(top = 24.dp),
-            memberMyInfo = state.memberMyInfo,
-            filteredMemberList = state.filteredMemberList,
-            onIconClick = { vertClick -> viewModel.onVertClickChanged(vertClick) },
-            updateFilteredMemberList = { memberMyInfoId ->
-                viewModel.updateFilteredMemberList(
-                    memberMyInfoId
-                )
-            },
-            vertClickedUserIdChanged = { userId -> viewModel.vertClickedUserIdChanged(userId) },
-        )
+            MemberListView(
+                modifier = Modifier.padding(top = 24.dp),
+                memberMyInfo = state.memberMyInfo,
+                filteredMemberList = state.filteredMemberList,
+                onIconClick = { vertClick -> viewModel.onVertClickChanged(vertClick) },
+                updateFilteredMemberList = { memberMyInfoId ->
+                    viewModel.updateFilteredMemberList(
+                        memberMyInfoId
+                    )
+                },
+                vertClickedUserIdChanged = { userId -> viewModel.vertClickedUserIdChanged(userId) },
+            )
+        }
     } else {
         Column(
             modifier = Modifier
