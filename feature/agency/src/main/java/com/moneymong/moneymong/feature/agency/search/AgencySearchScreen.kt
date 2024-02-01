@@ -38,7 +38,6 @@ import com.moneymong.moneymong.design_system.theme.Gray01
 import com.moneymong.moneymong.design_system.theme.Gray08
 import com.moneymong.moneymong.design_system.theme.MMHorizontalSpacing
 import com.moneymong.moneymong.design_system.theme.Red03
-import com.moneymong.moneymong.feature.agency.Agency
 import com.moneymong.moneymong.feature.agency.search.component.AgencySearchTopBar
 import com.moneymong.moneymong.feature.agency.search.item.AgencyItem
 
