@@ -39,15 +39,11 @@ class MoneyMongTokenAuthenticator @Inject constructor(
                         .onFailure {
                             runBlocking {
                                 tokenRepository.notifyTokenUpdateFailed(true)
-                                tokenRepository.deleteToken()
-                                tokenCallback.onTokenFailure()
                             }
                         }
                 }.onFailure {
                         runBlocking {
                             tokenRepository.notifyTokenUpdateFailed(true)
-                            tokenRepository.deleteToken()
-                            tokenCallback.onTokenFailure()
                         }
                     }
                 newRequest
