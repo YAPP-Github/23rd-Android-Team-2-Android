@@ -29,8 +29,8 @@ import com.moneymong.moneymong.design_system.theme.Gray02
 import com.moneymong.moneymong.design_system.theme.Gray05
 import com.moneymong.moneymong.design_system.theme.Gray09
 import com.moneymong.moneymong.design_system.theme.White
-import com.moneymong.moneymong.feature.agency.Agency
-import com.moneymong.moneymong.feature.agency.AgencyType
+import com.moneymong.moneymong.feature.agency.search.Agency
+import com.moneymong.moneymong.feature.agency.search.AgencyType
 
 @Composable
 fun AgencyItem(

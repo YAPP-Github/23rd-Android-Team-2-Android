@@ -12,8 +12,7 @@ fun AgencyGetResponse.toEntity() = AgencyGetEntity(
     type = when (type) {
         "IN_SCHOOL_CLUB" -> AgencyGetEntity.AgencyType.CLUB
         "STUDENT_COUNCIL" -> AgencyGetEntity.AgencyType.COUNCIL
-//        else -> throw IllegalArgumentException("Unknown type: $type")
-        else -> AgencyGetEntity.AgencyType.CLUB
+        else -> throw IllegalArgumentException("Unknown type: $type")
     }
 )
 
