@@ -6,7 +6,7 @@ import com.moneymong.moneymong.common.error.MoneyMongError
 import com.moneymong.moneymong.domain.param.agency.AgencyRegisterParam
 import com.moneymong.moneymong.domain.usecase.agency.RegisterAgencyUseCase
 import com.moneymong.moneymong.domain.usecase.agency.SaveAgencyIdUseCase
-import com.moneymong.moneymong.feature.agency.AgencyType
+import com.moneymong.moneymong.feature.agency.search.AgencyType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import org.orbitmvi.orbit.annotation.OrbitExperimental
 import org.orbitmvi.orbit.syntax.simple.blockingIntent
