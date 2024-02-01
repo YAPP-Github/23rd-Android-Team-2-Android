@@ -4,6 +4,7 @@ import com.moneymong.moneymong.domain.entity.login.RefreshTokenEntity
 import com.moneymong.moneymong.domain.entity.login.UserDataStoreInfoEntity
 import com.moneymong.moneymong.domain.param.login.RefreshTokenParam
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
 
 interface TokenRepository {
     val tokenUpdateFailed: MutableSharedFlow<Boolean>

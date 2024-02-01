@@ -50,7 +50,6 @@ import com.moneymong.moneymong.ocr_result.navigation.ocrResultScreen
 fun HomeScreen(
     expired: Boolean,
     onChangeExpired: (Boolean) -> Unit
-
 ) {
     val homeNavigator = rememberHomeNavigator()
     val homeNavController = homeNavigator.navHostController

@@ -15,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.moneymong.moneymong.common.ui.noRippleClickable
 import com.moneymong.moneymong.design_system.R
 import com.moneymong.moneymong.design_system.component.tag.MDSTag
 import com.moneymong.moneymong.design_system.theme.Blue04
@@ -60,7 +61,7 @@ fun MemberListItem(
         Spacer(Modifier.weight(1f))
 
         Icon(
-            modifier = Modifier.clickable {
+            modifier = Modifier.noRippleClickable {
                 onIconClick()
                 vertClickedUserIdChanged(userId)
             },
