@@ -126,7 +126,6 @@ class MemberViewModel @Inject constructor(
         reduce {
             state.copy(
                 visibleError = visibleError,
-                errorMessage = ""
             )
         }
     }
@@ -135,7 +134,6 @@ class MemberViewModel @Inject constructor(
         reduce {
             state.copy(
                 visiblePopUpError = visiblePopUpError,
-                errorPopUpMessage = ""
             )
         }
     }
@@ -176,7 +174,7 @@ class MemberViewModel @Inject constructor(
                     state.copy(
                         visibleError = true,
                         errorMessage = it.message.toString(),
-                        reInviteCodeError = true
+                        //reInviteCodeError = true
 
                     )
                 }
@@ -197,7 +195,7 @@ class MemberViewModel @Inject constructor(
                     state.copy(
                         visibleError = true,
                         errorMessage = it.message.toString(),
-                        memberListError = true
+                        //memberListError = true
                     )
                 }
             }
@@ -217,7 +215,7 @@ class MemberViewModel @Inject constructor(
                     state.copy(
                         visibleError = true,
                         errorMessage = it.message.toString(),
-                        myInfoError = true
+                        //myInfoError = true
                     )
                 }
             }
