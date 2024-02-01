@@ -99,11 +99,10 @@ class LoginViewModel @Inject constructor(
         }
     }
 
-    fun visibleErrorChanged(isVisibleError: Boolean, errorMessage : String) = intent{
+    fun visibleErrorChanged(isVisibleError: Boolean) = intent{
         reduce {
             state.copy(
                 visibleError = isVisibleError,
-                errorMessage = errorMessage
             )
         }
     }

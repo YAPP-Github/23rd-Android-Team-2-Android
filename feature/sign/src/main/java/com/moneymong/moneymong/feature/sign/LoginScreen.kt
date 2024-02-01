@@ -57,7 +57,7 @@ fun LoginScreen(
         ErrorScreen(
             modifier = Modifier.fillMaxSize(),
             message = state.errorMessage,
-            onRetry = { viewModel.visibleErrorChanged(false, "") }
+            onRetry = { viewModel.visibleErrorChanged(false) }
         )
     } else if(state.visibleError == false ){
         Scaffold(
