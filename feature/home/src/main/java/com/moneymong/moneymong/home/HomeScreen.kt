@@ -4,6 +4,7 @@ import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.navigation.compose.NavHost
 import androidx.navigation.navOptions
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
@@ -46,7 +47,11 @@ import com.moneymong.moneymong.ocr_result.navigation.navigateOCRResult
 import com.moneymong.moneymong.ocr_result.navigation.ocrResultScreen
 
 @Composable
-fun HomeScreen() {
+fun HomeScreen(
+    expired: Boolean,
+    onChangeExpired: (Boolean) -> Unit
+
+) {
     val homeNavigator = rememberHomeNavigator()
     val homeNavController = homeNavigator.navHostController
 
@@ -55,6 +60,13 @@ fun HomeScreen() {
         color = homeNavigator.statusBarColor,
         darkIcons = homeNavigator.darkIcons
     )
+
+    LaunchedEffect(expired) {
+        if (expired) run {
+            homeNavController.navigateLogin()
+            onChangeExpired(false)
+        }
+    }
 
     Scaffold(
         bottomBar = {

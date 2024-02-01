@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.moneymong.moneymong.design_system.error.ErrorScreen
 import com.moneymong.moneymong.design_system.theme.Blue04
 import com.moneymong.moneymong.design_system.theme.MMHorizontalSpacing
 import com.moneymong.moneymong.feature.sign.view.KakaoLoginView
@@ -37,7 +38,6 @@ fun LoginScreen(
     val state = viewModel.collectAsState().value
 
     LaunchedEffect(key1 = state.isSchoolInfoExist) {
-        Log.d("state3", state.isSchoolInfoExist.toString())
         if (state.isSchoolInfoExist == true) {
             navigateToLedger()
         } else if (state.isSchoolInfoExist == false) {
@@ -47,20 +47,28 @@ fun LoginScreen(
 
     LaunchedEffect(key1 = state.isLoginRequired)
     {
-        if (state.isLoginRequired == true) {
+        if (state.isLoginRequired == true ) {
             navigateToLogin()
             viewModel.isLoginRequiredChanged(false)
         }
     }
 
-    Scaffold(
-        content = { innerPadding ->
-            LoginContent(
-                modifier = Modifier.padding(innerPadding),
-                onLoginButtonClicked = { viewModel.onLoginButtonClicked() },
-            )
-        }
-    )
+    if (state.visibleError == true ) {
+        ErrorScreen(
+            modifier = Modifier.fillMaxSize(),
+            message = state.errorMessage,
+            onRetry = { viewModel.visibleErrorChanged(false) }
+        )
+    } else if(state.visibleError == false ){
+        Scaffold(
+            content = { innerPadding ->
+                LoginContent(
+                    modifier = Modifier.padding(innerPadding),
+                    onLoginButtonClicked = { viewModel.onLoginButtonClicked() },
+                )
+            }
+        )
+    }
 }
 
 

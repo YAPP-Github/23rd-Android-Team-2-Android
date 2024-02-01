@@ -155,7 +155,7 @@ fun MemberScreen(
         MemberDialogView(
             onDismissRequest = {
                 viewModel.onShowDialogChanged(false)
-                viewModel.eventEmit(MemberSideEffect.BlockMemberAuthor(4, state.vertClickedUserId))
+                viewModel.eventEmit(MemberSideEffect.BlockMemberAuthor(state.agencyId.toLong(), state.vertClickedUserId))
             },
             onConfirmation = {
                 viewModel.onShowDialogChanged(false)
@@ -283,7 +283,7 @@ fun MemberScreen(
                             if (state.isStaffChecked && !state.isMemberChecked) {
                                 viewModel.eventEmit(
                                     MemberSideEffect.UpdateMemberAuthor(
-                                        4,
+                                        state.agencyId.toLong(),
                                         "STAFF",
                                         state.vertClickedUserId
                                     )
@@ -293,7 +293,7 @@ fun MemberScreen(
                             } else if (!state.isStaffChecked && state.isMemberChecked) {
                                 viewModel.eventEmit(
                                     MemberSideEffect.UpdateMemberAuthor(
-                                        4,
+                                        state.agencyId.toLong(),
                                         "MEMBER",
                                         state.vertClickedUserId
                                     )
@@ -324,6 +324,7 @@ fun MemberScreen(
         )
         MemberCardView(
             modifier = Modifier,
+            agencyId = state.agencyId,
             memberList = state.memberList,
             memberMyInfoId = state.memberMyInfoId,
             memberMyInfo = state.memberMyInfo,
