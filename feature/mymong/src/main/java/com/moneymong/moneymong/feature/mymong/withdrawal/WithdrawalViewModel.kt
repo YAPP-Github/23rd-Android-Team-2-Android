@@ -6,6 +6,8 @@ import com.moneymong.moneymong.domain.usecase.agency.SaveAgencyIdUseCase
 import com.moneymong.moneymong.domain.usecase.user.SaveUserIdUseCase
 import com.moneymong.moneymong.domain.usecase.user.WithdrawalUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import org.orbitmvi.orbit.annotation.OrbitExperimental
+import org.orbitmvi.orbit.syntax.simple.blockingIntent
 import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.postSideEffect
 import org.orbitmvi.orbit.syntax.simple.reduce
@@ -52,7 +54,8 @@ class WithdrawalViewModel @Inject constructor(
         }
     }
 
-    private fun clearLocalData() = intent {
+    @OptIn(OrbitExperimental::class)
+    private fun clearLocalData() = blockingIntent {
         saveAgencyIdUseCase(0)
         saveUserIdUseCase(0)
     }
