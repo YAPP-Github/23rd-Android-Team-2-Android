@@ -40,6 +40,10 @@ class MemberViewModel @Inject constructor(
         reduce { state.copy(agencyId = agencyId) }
     }
 
+    fun updateAgencyId(agencyId: Int) = intent {
+        reduce { state.copy(agencyId = agencyId) }
+    }
+
     fun onVertClickChanged(vertClick: Boolean) = intent {
         reduce {
             state.copy(

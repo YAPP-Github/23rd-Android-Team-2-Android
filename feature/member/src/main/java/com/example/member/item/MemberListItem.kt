@@ -31,6 +31,7 @@ fun MemberListItem(
     agencyUser: AgencyUserEntity,
     userId : Long,
     onIconClick: () -> Unit,
+    memberMyInfo: AgencyUserEntity,
     vertClickedUserIdChanged: (Long) -> Unit,
 ) {
     Row(
@@ -60,15 +61,18 @@ fun MemberListItem(
 
         Spacer(Modifier.weight(1f))
 
-        Icon(
-            modifier = Modifier.noRippleClickable {
-                onIconClick()
-                vertClickedUserIdChanged(userId)
-            },
-            painter = painterResource(id = R.drawable.ic_more_vert),
-            contentDescription = null,
-            tint = Gray05
-        )
+        if (memberMyInfo.agencyUserRole == "STAFF"){
+            Icon(
+                modifier = Modifier.noRippleClickable {
+                    onIconClick()
+                    vertClickedUserIdChanged(userId)
+                },
+                painter = painterResource(id = R.drawable.ic_more_vert),
+                contentDescription = null,
+                tint = Gray05
+            )
+
+        }
     }
 }
 

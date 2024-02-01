@@ -35,7 +35,6 @@ class TokenRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getUpdateToken(refreshToken: String): Result<RefreshTokenEntity> {
-        tokenUpdateFailed.emit(true)
         return tokenRemoteDataSource.getUpdateToken(refreshToken).map { it.toEntity() }
     }
 

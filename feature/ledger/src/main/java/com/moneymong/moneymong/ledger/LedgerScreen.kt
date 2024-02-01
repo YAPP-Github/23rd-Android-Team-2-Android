@@ -96,6 +96,12 @@ fun LedgerScreen(
         }
     }
 
+    LaunchedEffect(Unit) {
+        viewModel.fetchMyAgencyList()
+        viewModel.fetchAgencyMemberList()
+        viewModel.fetchAgencyExistLedger()
+    }
+
     LaunchedEffect(state.currentDate) {
         viewModel.fetchLedgerTransactionList()
     }
@@ -293,7 +299,7 @@ fun LedgerScreen(
                             }
                         } else {
                             Box(modifier = modifier.fillMaxSize()) {
-                                MemberScreen()
+                                MemberScreen(agencyId = state.agencyId)
                             }
                         }
                     }

@@ -52,7 +52,7 @@ object NetworkModule {
         val okhttpLoggingClient = if (BuildConfig.DEBUG) {
             HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
         } else {
-            HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.NONE)
+            HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
         }
 
         return OkHttpClient.Builder()

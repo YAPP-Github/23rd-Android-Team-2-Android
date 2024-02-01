@@ -110,17 +110,19 @@ class LedgerViewModel @Inject constructor(
     }
 
     fun fetchAgencyMemberList() = blockingIntent {
-        fetchMemberListUseCase(state.agencyId.toLong())
-            .onSuccess {
-                reduce {
-                    state.copy(
-                        memberList = it.agencyUsers,
-                        visibleError = false
-                    )
+        if (state.existAgency) {
+            fetchMemberListUseCase(state.agencyId.toLong())
+                .onSuccess {
+                    reduce {
+                        state.copy(
+                            memberList = it.agencyUsers,
+                            visibleError = false
+                        )
+                    }
+                }.onFailure {
+                    reduce { state.copy(visibleError = true) }
                 }
-            }.onFailure {
-                reduce { state.copy(visibleError = true) }
-            }
+        }
     }
 
     fun reFetchLedgerData(agencyId: Int) {
