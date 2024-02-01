@@ -6,7 +6,6 @@ import com.moneymong.moneymong.domain.entity.member.AgencyUserEntity
 import com.moneymong.moneymong.domain.param.member.MemberBlockParam
 import com.moneymong.moneymong.domain.param.member.UpdateAuthorParam
 import com.moneymong.moneymong.domain.usecase.agency.FetchAgencyIdUseCase
-import com.moneymong.moneymong.domain.usecase.member.GetMyInfoUseCase
 import com.moneymong.moneymong.domain.usecase.member.MemberBlockUseCase
 import com.moneymong.moneymong.domain.usecase.member.MemberInvitationCodeUseCase
 import com.moneymong.moneymong.domain.usecase.member.MemberListUseCase
