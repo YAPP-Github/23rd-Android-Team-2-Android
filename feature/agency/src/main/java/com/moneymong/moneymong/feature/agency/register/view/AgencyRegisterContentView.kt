@@ -28,7 +28,7 @@ import com.moneymong.moneymong.design_system.theme.Body2
 import com.moneymong.moneymong.design_system.theme.Gray06
 import com.moneymong.moneymong.design_system.theme.Gray10
 import com.moneymong.moneymong.design_system.theme.Heading2
-import com.moneymong.moneymong.feature.agency.AgencyType
+import com.moneymong.moneymong.feature.agency.search.AgencyType
 
 @Composable
 internal fun AgencyResisterContentView(
