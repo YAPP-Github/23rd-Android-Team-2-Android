@@ -143,7 +143,6 @@ class SignUpViewModel @Inject constructor(
         reduce{
             state.copy(
                 visiblePopUpError = visiblePopUpError,
-                popUpErrorMessage = ""
             )
         }
     }
@@ -152,7 +151,6 @@ class SignUpViewModel @Inject constructor(
         reduce{
             state.copy(
                 visibleError = visibleError,
-                errorMessage = ""
             )
         }
     }
