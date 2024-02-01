@@ -8,12 +8,18 @@ import com.moneymong.moneymong.domain.entity.login.RefreshTokenEntity
 import com.moneymong.moneymong.domain.entity.login.UserDataStoreInfoEntity
 import com.moneymong.moneymong.domain.param.login.RefreshTokenParam
 import com.moneymong.moneymong.domain.repository.TokenRepository
+import kotlinx.coroutines.flow.MutableSharedFlow
 import javax.inject.Inject
 
 class TokenRepositoryImpl @Inject constructor(
     private val localDataSource: LoginLocalDataSource,
     private val tokenRemoteDataSource: TokenRemoteDataSource
 ) : TokenRepository {
+    override val tokenUpdateFailed = MutableSharedFlow<Boolean>(replay = 1)
+
+    override suspend fun notifyTokenUpdateFailed(failed: Boolean) {
+        tokenUpdateFailed.emit(failed)
+    }
 
     override suspend fun getRefreshToken(): Result<String> {
         return localDataSource.getRefreshToken()

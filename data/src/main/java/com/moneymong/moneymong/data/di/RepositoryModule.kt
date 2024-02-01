@@ -22,6 +22,7 @@ import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -37,6 +38,7 @@ interface RepositoryModule {
         univRepositoryImpl: UnivRepositoryImpl
     ): UnivRepository
 
+    @Singleton
     @Binds
     fun bindTokenRepository(
         tokenRepositoryImpl: TokenRepositoryImpl
