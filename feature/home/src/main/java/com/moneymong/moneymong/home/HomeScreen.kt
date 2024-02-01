@@ -174,7 +174,10 @@ fun HomeScreen() {
                 navigateToTermsOfUse = homeNavController::navigateTermsOfUse,
                 navigateToPrivacyPolicy = homeNavController::navigatePrivacyPolicy,
                 navigateToWithdrawal = homeNavController::navigateWithdrawal,
-                navigateToLogin = homeNavController::navigateLogin,
+                navigateToLogin = {
+                    homeNavController.clearBackStack(agencyRoute)
+                    homeNavController.navigateLogin()
+                },
                 navigateUp = homeNavController::navigateUp
             )
         }
