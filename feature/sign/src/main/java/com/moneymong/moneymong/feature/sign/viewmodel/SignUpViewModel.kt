@@ -155,10 +155,10 @@ class SignUpViewModel @Inject constructor(
         }
     }
 
-    fun textInputChanged(textInput : Boolean) = intent{
+    fun textInputChanged(isTextInput : Boolean) = intent{
         reduce {
             state.copy(
-                textInput = textInput
+                textInput = isTextInput
             )
         }
     }

@@ -186,7 +186,7 @@ fun SignUpContent(
                         },
                         value = state.textValue,
                         textInput = state.textInput,
-                        textValueChanged = { textInput -> viewModel.textInputChanged(textInput)}
+                        textValueChanged = { isTextInput -> viewModel.textInputChanged(isTextInput)}
                     )
                 } else {
                     Column(modifier = Modifier.fillMaxSize()) {
