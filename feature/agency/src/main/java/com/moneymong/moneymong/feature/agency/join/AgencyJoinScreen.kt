@@ -27,8 +27,10 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.moneymong.moneymong.common.ui.noRippleClickable
 import com.moneymong.moneymong.design_system.R
 import com.moneymong.moneymong.design_system.component.snackbar.MDSSnackbarHost
+import com.moneymong.moneymong.design_system.error.ErrorDialog
 import com.moneymong.moneymong.design_system.theme.Black
 import com.moneymong.moneymong.design_system.theme.Gray10
 import com.moneymong.moneymong.design_system.theme.Heading3
@@ -47,6 +49,7 @@ fun AgencyJoinScreen(
     agencyId: Long
 ) {
     val state = viewModel.collectAsState().value
+
     Scaffold(
         modifier = modifier
             .fillMaxSize()
@@ -64,7 +67,7 @@ fun AgencyJoinScreen(
                 Icon(
                     modifier = Modifier
                         .size(24.dp)
-                        .clickable {
+                        .noRippleClickable {
                             navigateUp()
                         },
                     painter = painterResource(id = R.drawable.ic_close_default),
@@ -79,7 +82,8 @@ fun AgencyJoinScreen(
                 agencyId = agencyId,
                 state = state,
                 viewModel = viewModel,
-                navigateToComplete = navigateToComplete
+                navigateToComplete = navigateToComplete,
+                navigateUp = navigateUp
             )
         }
     )
@@ -91,10 +95,23 @@ private fun JoinContent(
     agencyId: Long,
     state: AgencyJoinState,
     viewModel: AgencyJoinViewModel,
-    navigateToComplete: () -> Unit
+    navigateToComplete: () -> Unit,
+    navigateUp: () -> Unit
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
     val focusRequesters = remember { List(6) { FocusRequester() } }
+
+    if (state.visiblePopUpError) {
+        ErrorDialog(
+            message = state.errorPopUpMessage,
+            onConfirm = {
+                viewModel.visiblePopUpErrorChanged(false)
+                viewModel.onIsErrorChanged(false)
+                viewModel.resetNumbers()
+                navigateUp()
+            }
+        )
+    }
 
     LaunchedEffect(key1 = state.isError) {
         Log.d("launch", state.isError.toString())
