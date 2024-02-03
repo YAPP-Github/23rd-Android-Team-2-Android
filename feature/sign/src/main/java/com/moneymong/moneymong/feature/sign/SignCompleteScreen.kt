@@ -43,7 +43,7 @@ fun SignCompleteScreen(
         modifier = modifier
             .fillMaxSize()
             .background(White)
-            .padding(MMHorizontalSpacing)
+            .padding(horizontal = MMHorizontalSpacing)
     ) {
         Text(
             modifier = Modifier
