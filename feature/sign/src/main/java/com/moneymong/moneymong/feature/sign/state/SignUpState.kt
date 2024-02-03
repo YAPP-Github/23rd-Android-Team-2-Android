@@ -26,7 +26,8 @@ data class SignUpState(
     val visibleError : Boolean = false,
     val errorMessage : String = "",
     val visiblePopUpError : Boolean = false,
-    val popUpErrorMessage : String = ""
+    val popUpErrorMessage : String = "",
+    val isButtonVisible : Boolean = true,
 
 
 ) : State
