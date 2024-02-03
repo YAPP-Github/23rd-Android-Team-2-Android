@@ -90,7 +90,7 @@ private fun TitleView(
         Text(
             modifier = Modifier
                 .align(Alignment.Center)
-                .padding(vertical = 8.dp),
+                .padding(vertical = 16.dp),
             text = "등록완료",
             color = White,
             style = Heading1
