@@ -29,9 +29,8 @@ fun UnivItem(
     isItemSelectedChanged: (Boolean) -> Unit,
     univs: University,
     onClick: (String) -> Unit,
+    isButtonVisibleChanged : (Boolean) -> Unit
 ) {
-
-
     Row(
         modifier = Modifier
             .background(White)
@@ -39,6 +38,7 @@ fun UnivItem(
             .clickable {
                 isItemSelectedChanged(!isItemSelected)
                 onClick(univs.schoolName)
+                isButtonVisibleChanged(true)
             }
             .padding(bottom = 20.dp)
 

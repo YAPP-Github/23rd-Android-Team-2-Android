@@ -162,4 +162,12 @@ class SignUpViewModel @Inject constructor(
             )
         }
     }
+
+    fun isButtonVisibleChanged(isButtonVisible : Boolean) = intent{
+        reduce{
+            state.copy(
+                isButtonVisible = isButtonVisible
+            )
+        }
+    }
 }
