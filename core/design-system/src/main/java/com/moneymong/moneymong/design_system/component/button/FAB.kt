@@ -14,6 +14,7 @@ import androidx.compose.ui.graphics.Paint
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.moneymong.moneymong.design_system.theme.Black
 
@@ -22,6 +23,7 @@ fun MDSFloatingActionButton(
     modifier: Modifier = Modifier,
     onClick: () -> Unit,
     iconResource: Int,
+    iconSize: FABIconSize = FABIconSize(width = 24.dp, height = 24.dp),
     containerColor: Color,
     contentColor: Color = Color.Unspecified
 ) {
@@ -62,9 +64,14 @@ fun MDSFloatingActionButton(
         )
     ) {
         Icon(
-            modifier = Modifier.size(24.dp),
+            modifier = Modifier.size(iconSize.width, iconSize.height),
             painter = painterResource(id = iconResource),
             contentDescription = "Floating Action Button",
         )
     }
 }
+
+data class FABIconSize(
+    val width: Dp,
+    val height: Dp
+)
