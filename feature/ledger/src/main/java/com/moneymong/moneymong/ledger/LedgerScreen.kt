@@ -40,6 +40,7 @@ import com.example.member.MemberScreen
 import com.moneymong.moneymong.common.ui.plus
 import com.moneymong.moneymong.design_system.R
 import com.moneymong.moneymong.design_system.component.bottomSheet.MDSBottomSheet
+import com.moneymong.moneymong.design_system.component.button.FABIconSize
 import com.moneymong.moneymong.design_system.component.button.MDSFloatingActionButton
 import com.moneymong.moneymong.design_system.component.snackbar.MDSSnackbarHost
 import com.moneymong.moneymong.design_system.component.tooltip.MDSToolTip
@@ -256,6 +257,7 @@ fun LedgerScreen(
                                         ) {
                                             MDSFloatingActionButton(
                                                 iconResource = R.drawable.ic_scan,
+                                                iconSize = FABIconSize(width = 30.dp, height = 24.dp),
                                                 containerColor = Mint03,
                                                 onClick = { viewModel.eventEmit(LedgerSideEffect.LedgerNavigateToOCR) }
                                             )
