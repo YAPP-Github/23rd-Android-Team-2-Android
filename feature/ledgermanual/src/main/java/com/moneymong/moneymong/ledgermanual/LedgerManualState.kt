@@ -30,12 +30,11 @@ data class LedgerManualState(
 
     val enabled: Boolean
         get() {
-            val isExpense = if (fundType == FundType.EXPENSE) receiptList.isNotEmpty() else true
             val hasStoreName = !isStoreNameError && storeNameValue.text.isNotEmpty()
             val hasTotalPrice = !isTotalPriceError && totalPriceValue.text.isNotEmpty()
             val hasPaymentDate = !isPaymentDateError && paymentDateValue.text.isNotEmpty()
             val hasPaymentTime = !isPaymentTimeError && paymentTimeValue.text.isNotEmpty()
-            return hasStoreName && hasTotalPrice && hasPaymentDate && hasPaymentTime && !isMemoError && isExpense && fundType != FundType.NONE
+            return hasStoreName && hasTotalPrice && hasPaymentDate && hasPaymentTime && !isMemoError && fundType != FundType.NONE
         }
 
     val priceType: PriceType
