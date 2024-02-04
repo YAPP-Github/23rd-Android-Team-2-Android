@@ -35,6 +35,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.onFocusChanged
@@ -42,6 +43,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -80,7 +82,7 @@ import com.moneymong.moneymong.ledgermanual.view.LedgerManualTopbarView
 import org.orbitmvi.orbit.compose.collectAsState
 import org.orbitmvi.orbit.compose.collectSideEffect
 
-@OptIn(ExperimentalGlideComposeApi::class)
+@OptIn(ExperimentalGlideComposeApi::class, ExperimentalComposeUiApi::class)
 @Composable
 fun LedgerManualScreen(
     modifier: Modifier = Modifier,
@@ -92,6 +94,7 @@ fun LedgerManualScreen(
     val state = viewModel.collectAsState().value
     val verticalScrollState = rememberScrollState()
     val focusManager = LocalFocusManager.current
+    val keyboardController = LocalSoftwareKeyboardController.current
     val singlePhotoPickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia(),
         onResult = { uri ->
@@ -128,6 +131,11 @@ fun LedgerManualScreen(
 
             is LedgerManualSideEffect.LedgerManualPostTransaction -> {
                 viewModel.postLedgerTransaction()
+            }
+
+            is LedgerManualSideEffect.LedgerManualHideKeyboard -> {
+                keyboardController?.hide()
+                focusManager.clearFocus()
             }
         }
     }
@@ -171,6 +179,9 @@ fun LedgerManualScreen(
                 .verticalScroll(verticalScrollState)
                 .background(White)
                 .padding(it)
+                .noRippleClickable {
+                    viewModel.eventEmit(LedgerManualSideEffect.LedgerManualHideKeyboard)
+                }
         ) {
             Spacer(modifier = Modifier.height(12.dp))
             Column(
