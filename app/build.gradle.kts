@@ -80,4 +80,8 @@ dependencies {
     implementation(libs.orbit.viewModel)
 
     implementation(libs.kakao.v2.user)
+
+    testImplementation(libs.junit4)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.test.espresso.core)
 }

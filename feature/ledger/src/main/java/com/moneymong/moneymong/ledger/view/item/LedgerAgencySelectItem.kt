@@ -20,6 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.moneymong.moneymong.design_system.R.*
@@ -71,11 +72,13 @@ fun LedgerAgencySelectItem(
             )
         }
         Spacer(modifier = Modifier.width(12.dp))
-        Column {
+        Column(modifier = Modifier.weight(1f)) {
             Text(
                 text = agencyEntity.name,
                 style = Body3,
-                color = textColor
+                color = textColor,
+                overflow = TextOverflow.Ellipsis,
+                maxLines = 1
             )
             Spacer(modifier = Modifier.width(4.dp))
             Text(
@@ -84,9 +87,7 @@ fun LedgerAgencySelectItem(
                 color = Gray05
             )
         }
-        Spacer(modifier = Modifier
-            .fillMaxWidth()
-            .weight(1f))
+        Spacer(modifier = Modifier.width(9.dp))
         Icon(
             painter = painterResource(id = drawable.ic_check),
             contentDescription = null,
@@ -100,6 +101,11 @@ fun LedgerAgencySelectItem(
 fun LedgerStaffSelectItemPreview() {
     LedgerAgencySelectItem(
         currentAgency = false,
-        agencyEntity = MyAgencyEntity(0, "", 0, "")
+        agencyEntity = MyAgencyEntity(
+            0,
+            "dasfakjdsfhasdlkjfhsadlkfsahdlfkashflkjadsfkjfsdsfgs",
+            0,
+            ""
+        )
     ) {}
 }
