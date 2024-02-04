@@ -1,6 +1,5 @@
 package com.moneymong.moneymong.ledgerdetail
 
-import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -28,14 +27,9 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -198,22 +192,20 @@ fun LedgerDetailScreen(
                             .padding(vertical = 28.dp, horizontal = 16.dp)
                     ) {
                         if (state.useEditMode) {
-                            var isStoreNameFilled by remember { mutableStateOf(false) }
                             MDSTextField(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .onFocusChanged { isStoreNameFilled = !it.isFocused },
+                                modifier = Modifier.fillMaxWidth(),
                                 value = state.storeNameValue,
                                 onValueChange = viewModel::onChangeStoreNameValue,
                                 title = "수입·지출 출처",
                                 placeholder = "",
-                                isFilled = isStoreNameFilled,
+                                isFilled = false,
                                 isError = state.isStoreNameError,
                                 helperText = "20자 이내로 입력해주세요",
                                 maxCount = 20,
                                 icon = MDSTextFieldIcons.Clear,
                                 singleLine = true,
-                                onIconClick = { viewModel.onChangeStoreNameValue(TextFieldValue()) }
+                                onIconClick = { viewModel.onChangeStoreNameValue(TextFieldValue()) },
+                                keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
                             )
                         } else {
                             Text(
@@ -236,16 +228,13 @@ fun LedgerDetailScreen(
                                 .background(Gray03, shape = DottedShape(8.dp))
                         )
                         if (state.useEditMode) {
-                            var isTotalPriceFilled by remember { mutableStateOf(false) }
                             MDSTextField(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .onFocusChanged { isTotalPriceFilled = !it.isFocused },
+                                modifier = Modifier.fillMaxWidth(),
                                 value = state.totalPriceValue,
                                 onValueChange = viewModel::onChangeTotalPriceValue,
                                 title = "${state.fundTypeText} 금액",
                                 placeholder = "",
-                                isFilled = isTotalPriceFilled,
+                                isFilled = false,
                                 isError = state.isTotalPriceError,
                                 helperText = "999,999,999원 이내로 입력해주세요",
                                 onIconClick = { viewModel.onChangeTotalPriceValue(TextFieldValue()) },
@@ -276,16 +265,13 @@ fun LedgerDetailScreen(
                                 .background(Gray03, shape = DottedShape(8.dp))
                         )
                         if (state.useEditMode) {
-                            var isPaymentDateFilled by remember { mutableStateOf(false) }
                             MDSTextField(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .onFocusChanged { isPaymentDateFilled = !it.isFocused },
+                                modifier = Modifier.fillMaxWidth(),
                                 value = state.paymentDateValue,
                                 onValueChange = viewModel::onChangePaymentDateValue,
                                 title = "날짜",
                                 placeholder = "2024/01/01",
-                                isFilled = isPaymentDateFilled,
+                                isFilled = false,
                                 isError = state.isPaymentDateError,
                                 helperText = "올바른 날짜를 입력해주세요",
                                 onIconClick = { viewModel.onChangePaymentDateValue(TextFieldValue()) },
@@ -316,16 +302,13 @@ fun LedgerDetailScreen(
                                 .background(Gray03, shape = DottedShape(8.dp))
                         )
                         if (state.useEditMode) {
-                            var isPaymentTimeFilled by remember { mutableStateOf(false) }
                             MDSTextField(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .onFocusChanged { isPaymentTimeFilled = !it.isFocused },
+                                modifier = Modifier.fillMaxWidth(),
                                 value = state.paymentTimeValue,
                                 onValueChange = viewModel::onChangePaymentTimeValue,
                                 title = "시간",
                                 placeholder = "00:00:00",
-                                isFilled = isPaymentTimeFilled,
+                                isFilled = false,
                                 isError = state.isPaymentTimeError,
                                 helperText = "올바른 시간을 입력해주세요",
                                 onIconClick = { viewModel.onChangePaymentTimeValue(TextFieldValue()) },
@@ -356,16 +339,13 @@ fun LedgerDetailScreen(
                                 .background(Gray03, shape = DottedShape(8.dp))
                         )
                         if (state.useEditMode) {
-                            var isMemoFilled by remember { mutableStateOf(false) }
                             MDSTextField(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .onFocusChanged { isMemoFilled = !it.isFocused },
+                                modifier = Modifier.fillMaxWidth(),
                                 value = state.memoValue,
                                 onValueChange = { viewModel.onChangeMemoValue(it) },
                                 title = "메모",
                                 placeholder = "",
-                                isFilled = isMemoFilled,
+                                isFilled = false,
                                 isError = state.isMemoError,
                                 helperText = "300자 이내로 입력해주세요",
                                 maxCount = 300,
