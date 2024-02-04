@@ -5,6 +5,7 @@ import com.moneymong.moneymong.common.error.MoneyMongError
 import com.moneymong.moneymong.domain.usecase.agency.SaveAgencyIdUseCase
 import com.moneymong.moneymong.domain.usecase.user.GetMyInfoUseCase
 import com.moneymong.moneymong.domain.usecase.user.LogoutUseCase
+import com.moneymong.moneymong.domain.usecase.user.SaveDeniedCameraPermissionUseCase
 import com.moneymong.moneymong.domain.usecase.user.SaveUserIdUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import org.orbitmvi.orbit.syntax.simple.intent
@@ -17,7 +18,8 @@ class MyMongViewModel @Inject constructor(
     private val getMyInfoUseCase: GetMyInfoUseCase,
     private val logoutUseCase: LogoutUseCase,
     private val saveAgencyIdUseCase: SaveAgencyIdUseCase,
-    private val saveUserIdUseCase: SaveUserIdUseCase
+    private val saveUserIdUseCase: SaveUserIdUseCase,
+    private val saveDeniedCameraPermissionUseCase: SaveDeniedCameraPermissionUseCase
 ) : BaseViewModel<MyMongState, MyMongSideEffect>(MyMongState()) {
 
     fun navigateToTermsOfUse() =
@@ -95,5 +97,6 @@ class MyMongViewModel @Inject constructor(
     private suspend fun clearLocalData() {
         saveAgencyIdUseCase(0)
         saveUserIdUseCase(0)
+        saveDeniedCameraPermissionUseCase(false)
     }
 }

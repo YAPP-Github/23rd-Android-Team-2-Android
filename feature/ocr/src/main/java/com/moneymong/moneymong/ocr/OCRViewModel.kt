@@ -5,8 +5,11 @@ import androidx.core.content.edit
 import com.moneymong.moneymong.common.base.BaseViewModel
 import com.moneymong.moneymong.domain.param.ocr.DocumentParam
 import com.moneymong.moneymong.domain.usecase.ocr.DocumentOCRUseCase
+import com.moneymong.moneymong.domain.usecase.user.FetchDeniedCameraPermissionUseCase
+import com.moneymong.moneymong.domain.usecase.user.SaveDeniedCameraPermissionUseCase
 import com.moneymong.moneymong.ocr.util.ModalType
 import dagger.hilt.android.lifecycle.HiltViewModel
+import org.orbitmvi.orbit.annotation.OrbitExperimental
 import org.orbitmvi.orbit.syntax.simple.blockingIntent
 import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.postSideEffect
@@ -16,8 +19,14 @@ import javax.inject.Inject
 @HiltViewModel
 class OCRViewModel @Inject constructor(
     private val documentOCRUseCase: DocumentOCRUseCase,
+    private val saveDeniedCameraPermissionUseCase: SaveDeniedCameraPermissionUseCase,
+    private val fetchDeniedCameraPermissionUseCase: FetchDeniedCameraPermissionUseCase,
     private val prefs: SharedPreferences
 ) : BaseViewModel<OCRState, OCRSideEffect>(OCRState()) {
+
+    init {
+        fetchDeniedCameraPermission()
+    }
 
     fun postDocumentOCR(receiptImage: String) = intent {
         if (!state.isLoading) {
@@ -44,6 +53,17 @@ class OCRViewModel @Inject constructor(
         }
     }
 
+    @OptIn(OrbitExperimental::class)
+    fun saveDeniedCameraPermission(isDenied: Boolean) = blockingIntent {
+        saveDeniedCameraPermissionUseCase(isDenied)
+    }
+
+    @OptIn(OrbitExperimental::class)
+    fun fetchDeniedCameraPermission() = blockingIntent {
+        val isDeniedCamera = fetchDeniedCameraPermissionUseCase(Unit)
+        reduce { state.copy(isDeniedCamera = isDeniedCamera) }
+    }
+
     private fun possibleNavigateToOCRResult(message: String) = intent {
         val receiptSuccess = message == "SUCCESS" && state.isReceipt
         if (receiptSuccess) {
@@ -59,24 +79,30 @@ class OCRViewModel @Inject constructor(
 
     // onClick
     fun visiblePermissionDialog(hasPermission: Boolean) = intent {
-        reduce { state.copy(showPermissionDialog = !hasPermission) }
+        reduce { state.copy(permissionDialogStatus = !hasPermission) }
     }
 
     fun onClickDialogPositive() = intent {
         eventEmit(OCRSideEffect.OCRMoveToPermissionSetting)
         reduce {
-            state.copy(showPermissionDialog = false)
+            state.copy(permissionDialogStatus = false)
         }
     }
 
     fun onClickDialogNegative() = intent {
         when (state.modalType) {
             ModalType.CameraPermission -> {
-                reduce { state.copy(showPermissionDialog = false) }
+                saveDeniedCameraPermission(true)
+                reduce {
+                    state.copy(
+                        permissionDialogStatus = false,
+                        isDeniedCamera = true
+                    )
+                }
             }
 
             ModalType.GalleryPermission -> {
-                reduce { state.copy(showPermissionDialog = false) }
+                reduce { state.copy(permissionDialogStatus = false) }
             }
         }
     }

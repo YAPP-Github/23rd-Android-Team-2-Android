@@ -46,4 +46,10 @@ class UserRepositoryImpl @Inject constructor(
 
     override suspend fun fetchUserNickName(): String =
         userLocalDataSource.fetchUserNickName()
+
+    override suspend fun saveDeniedCameraPermission(isDenied: Boolean) =
+        userLocalDataSource.saveDeniedCameraPermission(isDenied = isDenied)
+
+    override suspend fun fetchDeniedCameraPermission(): Boolean =
+        userLocalDataSource.fetchDeniedCameraPermission()
 }
