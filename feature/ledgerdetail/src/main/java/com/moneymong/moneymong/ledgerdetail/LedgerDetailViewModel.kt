@@ -43,29 +43,26 @@ class LedgerDetailViewModel @Inject constructor(
 ) : BaseViewModel<LedgerDetailState, LedgerDetailSideEffect>(LedgerDetailState()) {
 
     fun ledgerTransactionEdit(detailId: Int) = intent {
-        if (!state.isLoading) {
-            reduce { state.copy(isLoading = true) }
-            postLedgerReceiptTransaction(detailId)
-            deleteLedgerReceiptTransaction(detailId)
-            postLedgerDocumentTransaction(detailId)
-            deleteLedgerDocumentTransaction(detailId)
-            updateLedgerTransactionDetail(detailId)
-        }
-
-        reduce { state.copy(isLoading = false) }
+        postLedgerReceiptTransaction(detailId)
+        deleteLedgerReceiptTransaction(detailId)
+        postLedgerDocumentTransaction(detailId)
+        deleteLedgerDocumentTransaction(detailId)
+        updateLedgerTransactionDetail(detailId)
     }
 
     fun fetchLedgerTransactionDetail(detailId: Int) = intent {
+        reduce { state.copy(isLoading = true) }
         fetchLedgerTransactionDetailUseCase(detailId)
             .onSuccess {
                 reduce { state.copy(ledgerTransactionDetail = it) }
                 initTextValue(it)
             }.onFailure {
                 // TODO
-            }
+            }.also { reduce { state.copy(isLoading = false) } }
     }
 
     fun updateLedgerTransactionDetail(detailId: Int) = intent {
+        reduce { state.copy(isLoading = true) }
         delay(1000) // 사진 수정 내용이 DB 반영되기 까지 걸리는 시간을 대응하기 위해 delay 설정
         val param = LedgerTransactionDetailParam(
             detailId = detailId,
@@ -80,11 +77,12 @@ class LedgerDetailViewModel @Inject constructor(
                 initTextValue(it)
             }.onFailure {
                 // TODO
-            }
+            }.also { reduce { state.copy(isLoading = false) } }
     }
 
     fun postLedgerReceiptTransaction(detailId: Int) = intent {
         if (state.receiptList.isNotEmpty()) {
+            reduce { state.copy(isLoading = true) }
             val mapToOriginalUrl =
                 state.ledgerTransactionDetail?.receiptImageUrls?.map { it.receiptImageUrl }
                     .orEmpty()
@@ -95,12 +93,13 @@ class LedgerDetailViewModel @Inject constructor(
             postLedgerReceiptTransactionUseCase(param)
                 .onFailure {
                     // TODO
-                }
+                }.also { reduce { state.copy(isLoading = false) } }
         }
     }
 
     fun postLedgerDocumentTransaction(detailId: Int) = intent {
         if (state.documentList.isNotEmpty()) {
+            reduce { state.copy(isLoading = true) }
             val mapToOriginalUrl =
                 state.ledgerTransactionDetail?.documentImageUrls?.map { it.documentImageUrl }
                     .orEmpty()
@@ -111,44 +110,44 @@ class LedgerDetailViewModel @Inject constructor(
             postLedgerDocumentTransactionUseCase(param)
                 .onFailure {
                     // TODO
-                }
+                }.also { reduce { state.copy(isLoading = false) } }
         }
     }
 
     fun deleteLedgerReceiptTransaction(detailId: Int) = intent {
         if (state.receiptIdList.isNotEmpty()) {
+            reduce { state.copy(isLoading = true) }
             state.receiptIdList.forEach { receiptId ->
                 val param = DeleteLedgerReceiptParam(detailId = detailId, receiptId = receiptId)
                 deleteLedgerReceiptTransactionUseCase(param)
                     .onFailure {
                         // TODO
-                    }
+                    }.also { reduce { state.copy(isLoading = false) } }
             }
         }
     }
 
     fun deleteLedgerDocumentTransaction(detailId: Int) = intent {
         if (state.documentIdList.isNotEmpty()) {
+            reduce { state.copy(isLoading = true) }
             state.documentIdList.forEach { documentId ->
                 val param = DeleteLedgerDocumentParam(detailId = detailId, documentId = documentId)
                 deleteLedgerDocumentTransactionUseCase(param)
                     .onFailure {
                         // TODO
-                    }
+                    }.also { reduce { state.copy(isLoading = false) } }
             }
         }
     }
 
     fun deleteLedgerDetail(detailId: Int) = intent {
-        if (!state.isLoading) {
-            reduce { state.copy(isLoading = true) }
-            deleteLedgerDetailUseCase(detailId)
-                .onSuccess {
-                    postSideEffect(LedgerDetailSideEffect.LedgerDetailNavigateToLedger)
-                }.onFailure {
-                    // TODO
-                }.also { reduce { state.copy(isLoading = false) } }
-        }
+        reduce { state.copy(isLoading = true) }
+        deleteLedgerDetailUseCase(detailId)
+            .onSuccess {
+                postSideEffect(LedgerDetailSideEffect.LedgerDetailNavigateToLedger)
+            }.onFailure {
+                // TODO
+            }.also { reduce { state.copy(isLoading = false) } }
     }
 
     fun postS3URLImage(imageFile: File?) = intent {
