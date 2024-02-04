@@ -75,6 +75,7 @@ import com.moneymong.moneymong.design_system.theme.Gray06
 import com.moneymong.moneymong.design_system.theme.Gray10
 import com.moneymong.moneymong.design_system.theme.White
 import com.moneymong.moneymong.domain.entity.ocr.DocumentEntity
+import com.moneymong.moneymong.domain.param.ledger.FundType
 import com.moneymong.moneymong.ocr_detail.view.OCRDetailTopbarView
 import org.orbitmvi.orbit.compose.collectAsState
 import org.orbitmvi.orbit.compose.collectSideEffect
@@ -192,7 +193,7 @@ fun OCRDetailScreen(
                         singleLine = true,
                         icon = MDSTextFieldIcons.Clear,
                         onIconClick = { viewModel.onChangeTotalPriceValue(TextFieldValue()) },
-                        visualTransformation = PriceVisualTransformation(type = PriceType.Expense),
+                        visualTransformation = PriceVisualTransformation(type = state.priceType),
                         keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
                     )
@@ -214,8 +215,8 @@ fun OCRDetailScreen(
                                 .height(40.dp)
                                 .weight(1f),
                             text = "지출",
-                            isSelected = true,
-                            onClick = {}
+                            isSelected = state.fundType == FundType.EXPENSE,
+                            onClick = { viewModel.onChangeFundType(FundType.EXPENSE) }
                         )
                         MDSSelection(
                             modifier = Modifier
@@ -223,8 +224,8 @@ fun OCRDetailScreen(
                                 .height(40.dp)
                                 .weight(1f),
                             text = "수입",
-                            isSelected = false,
-                            onClick = {}
+                            isSelected = state.fundType == FundType.INCOME,
+                            onClick = { viewModel.onChangeFundType(FundType.INCOME) }
                         )
                     }
                     Spacer(modifier = Modifier.height(24.dp))
