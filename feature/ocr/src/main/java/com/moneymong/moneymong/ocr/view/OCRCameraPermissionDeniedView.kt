@@ -32,7 +32,6 @@ fun OCRCameraPermissionDeniedView(
 ) {
     Column(
         modifier = modifier
-            .fillMaxSize()
             .background(Gray10),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
