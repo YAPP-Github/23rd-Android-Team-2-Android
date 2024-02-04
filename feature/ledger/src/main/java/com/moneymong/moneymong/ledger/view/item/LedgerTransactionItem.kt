@@ -71,7 +71,7 @@ fun LedgerTransactionItem(
             )
             Spacer(modifier = Modifier.height(2.dp))
             Text(
-                text = ledgerDetail.paymentDate.toDateFormat("yyyy.MM.dd HH.mm.ss"),
+                text = ledgerDetail.paymentDate.toDateFormat("yyyy.MM.dd  HH:mm:ss"),
                 style = Body1,
                 color = Gray04
             )
