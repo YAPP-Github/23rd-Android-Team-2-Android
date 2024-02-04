@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -459,8 +458,7 @@ fun LedgerManualScreen(
                 Spacer(modifier = Modifier.height(64.dp))
                 MDSButton(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .imePadding(),
+                        .fillMaxWidth(),
                     text = "작성하기",
                     enabled = state.enabled,
                     type = MDSButtonType.PRIMARY,
