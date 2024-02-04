@@ -59,7 +59,9 @@ fun OCRScreen(
     BackHandler(onBack = { navigateToLedger(false) })
 
     DisposableEffectWithLifeCycle(
-        onResume = { hasCameraPermission = context.hasPermission(CAMERA) }
+        onResume = {
+            hasCameraPermission = context.hasPermission(CAMERA)
+        }
     )
 
     LaunchedEffect(Unit) {
@@ -134,6 +136,7 @@ fun OCRScreen(
             }
             OCRTopbarView(
                 modifier = Modifier.align(Alignment.TopCenter),
+                visibleHelp = hasCameraPermission,
                 onClickHelp = viewModel::onClickHelper,
                 onClickClose = { navigateToLedger(false) }
             )
