@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -28,6 +29,7 @@ import com.moneymong.moneymong.design_system.theme.Mint03
 @Composable
 fun OCRTopbarView(
     modifier: Modifier = Modifier,
+    visibleHelp: Boolean,
     onClickHelp: () -> Unit,
     onClickClose: () -> Unit
 ) {
@@ -41,14 +43,18 @@ fun OCRTopbarView(
                 .background(Color.Black.copy(alpha = 0.6f)),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Icon(
-                modifier = Modifier
-                    .padding(vertical = 10.dp, horizontal = 20.dp)
-                    .noRippleClickable { onClickHelp() },
-                painter = painterResource(id = drawable.ic_warning_outline),
-                contentDescription = null,
-                tint = Color.White
-            )
+            if (visibleHelp) {
+                Icon(
+                    modifier = Modifier
+                        .padding(vertical = 10.dp, horizontal = 20.dp)
+                        .noRippleClickable { onClickHelp() },
+                    painter = painterResource(id = drawable.ic_warning_outline),
+                    contentDescription = null,
+                    tint = Color.White
+                )
+            } else {
+                Spacer(modifier = Modifier)
+            }
             Icon(
                 modifier = Modifier
                     .padding(vertical = 10.dp, horizontal = 20.dp)
@@ -90,7 +96,7 @@ fun OCRTopbarView(
 @Preview(showBackground = true)
 @Composable
 fun OCRTopbarPreview() {
-    OCRTopbarView(onClickHelp = { /*TODO*/ }) {
+    OCRTopbarView(visibleHelp = false, onClickHelp = { /*TODO*/ }) {
 
     }
 }
