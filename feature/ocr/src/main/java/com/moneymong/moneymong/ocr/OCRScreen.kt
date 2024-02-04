@@ -39,6 +39,7 @@ import com.moneymong.moneymong.common.util.DisposableEffectWithLifeCycle
 import com.moneymong.moneymong.design_system.theme.Black
 import com.moneymong.moneymong.ocr.view.OCRCameraPermissionDeniedView
 import com.moneymong.moneymong.ocr.view.OCRCaptureView
+import com.moneymong.moneymong.ocr.view.OCRDeniedBottomBar
 import com.moneymong.moneymong.ocr.view.OCRHelperView
 import com.moneymong.moneymong.ocr.view.OCRTopbarView
 import org.orbitmvi.orbit.compose.collectAsState
@@ -113,11 +114,16 @@ fun OCRScreen(
             contentAlignment = Alignment.Center
         ) {
             if (!hasCameraPermission) {
-                OCRCameraPermissionDeniedView(onClickRequestPermission = {
-                    viewModel.eventEmit(
-                        OCRSideEffect.OCRMoveToPermissionSetting
-                    )
-                })
+                OCRCameraPermissionDeniedView(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .align(Alignment.Center),
+                    onClickRequestPermission = {
+                        viewModel.eventEmit(
+                            OCRSideEffect.OCRMoveToPermissionSetting
+                        )
+                    })
+                OCRDeniedBottomBar(modifier = Modifier.align(Alignment.BottomCenter))
             } else {
                 OCRCaptureView(
                     onClickCapture = {
