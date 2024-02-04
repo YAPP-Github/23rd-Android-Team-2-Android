@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Icon
@@ -13,11 +14,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.moneymong.moneymong.common.ui.noRippleClickable
 import com.moneymong.moneymong.design_system.theme.Gray10
 import com.moneymong.moneymong.design_system.theme.Heading1
+import com.moneymong.moneymong.design_system.R
 
 @Composable
 fun LedgerTopbarView(
@@ -30,14 +33,18 @@ fun LedgerTopbarView(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .height(44.dp),
+            .height(44.dp)
+            .padding(horizontal = 25.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
         Text(
+            modifier = Modifier.weight(1f),
             text = header,
             style = Heading1,
-            color = Gray10
+            color = Gray10,
+            overflow = TextOverflow.Ellipsis,
+            maxLines = 1
         )
         Spacer(modifier = Modifier.width(4.dp))
         if (visibleArrow) {
@@ -45,8 +52,8 @@ fun LedgerTopbarView(
                 modifier = Modifier
                     .size(20.dp)
                     .noRippleClickable {
-                    onClickDownArrow()
-                },
+                        onClickDownArrow()
+                    },
                 painter = painterResource(id = icon),
                 contentDescription = null,
                 tint = Gray10
@@ -58,5 +65,9 @@ fun LedgerTopbarView(
 @Preview(showBackground = true)
 @Composable
 fun LedgerTopbarPreview() {
-    LedgerTopbarView(header = "장부", icon = 0) {}
+    LedgerTopbarView(
+        header = "장부asdasdasdasdasdasdaasdaasdasdsadddadasdadasd",
+        icon = R.drawable.ic_chevron_bottom,
+        visibleArrow = true
+    ) {}
 }

@@ -36,6 +36,6 @@ fun LedgerAgencySelectBottomSheet(
 fun LedgerAgencySelectBottomSheetPreview() {
     LedgerAgencySelectBottomSheet(
         currentAgencyId = 0,
-        agencyList = emptyList()
+        agencyList = listOf(MyAgencyEntity(0, "asddfkjfdsafhadskfjahdfkjldashfkdaslsdahfjk", 1, ""))
     ) {}
 }
