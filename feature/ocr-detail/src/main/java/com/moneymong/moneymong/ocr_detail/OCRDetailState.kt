@@ -2,6 +2,7 @@ package com.moneymong.moneymong.ocr_detail
 
 import androidx.compose.ui.text.input.TextFieldValue
 import com.moneymong.moneymong.common.base.State
+import com.moneymong.moneymong.design_system.component.textfield.util.PriceType
 import com.moneymong.moneymong.domain.entity.ocr.DocumentEntity
 import com.moneymong.moneymong.domain.entity.ocr.DocumentResultEntity
 import com.moneymong.moneymong.domain.param.ledger.FundType
@@ -61,4 +62,11 @@ data class OCRDetailState(
                 !isPaymentDateError &&
                 !isPaymentTimeError &&
                 !isMemoError
+
+    val priceType: PriceType =
+        when (fundType) {
+            FundType.EXPENSE -> PriceType.Expense
+            FundType.INCOME -> PriceType.Income
+            FundType.NONE -> PriceType.None
+        }
 }

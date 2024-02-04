@@ -76,7 +76,7 @@ class OCRDetailViewModel @Inject constructor(
             val ledgerTransactionParam = LedgerTransactionParam(
                 id = state.agencyId,
                 storeInfo = state.storeNameValue.text,
-                fundType = FundType.EXPENSE,
+                fundType = state.fundType,
                 amount = state.totalPriceValue.text.toInt(),
                 description = state.memoValue.text,
                 paymentDate = state.postPaymentDate,
@@ -203,6 +203,10 @@ class OCRDetailViewModel @Inject constructor(
                 isMemoError = !validate
             )
         }
+    }
+
+    fun onChangeFundType(fundType: FundType) = intent {
+        reduce { state.copy(fundType = fundType) }
     }
 
     private fun trimStartWithZero(value: TextFieldValue) =
