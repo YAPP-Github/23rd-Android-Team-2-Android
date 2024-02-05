@@ -1,6 +1,7 @@
 package com.moneymong.moneymong.data.datasource.login
 
 import android.content.Context
+import android.util.Log
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
@@ -71,7 +72,15 @@ class LoginLocalDataSourceImpl @Inject constructor(
             preferences[refreshToken] = rToken
             preferences[loginSuccess] = success
             preferences[schoolInfoExist] = infoExist
+            Log.d("schoolInfoExist", preferences[schoolInfoExist]!!.toString())
         }
+    }
+
+    override suspend fun setSchoolInfoExist(infoExist: Boolean) {
+        context.dataStore.edit { preferences ->
+            preferences[schoolInfoExist] = infoExist
+        }
+
     }
 }
 
