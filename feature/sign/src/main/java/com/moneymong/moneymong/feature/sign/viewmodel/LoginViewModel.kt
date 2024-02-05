@@ -109,4 +109,12 @@ class LoginViewModel @Inject constructor(
             )
         }
     }
+
+    fun isSchoolInfoExistChanged(isSchoolInfoExist : Boolean?) = intent{
+        reduce {
+            state.copy(
+                isSchoolInfoExist = isSchoolInfoExist
+            )
+        }
+    }
 }
