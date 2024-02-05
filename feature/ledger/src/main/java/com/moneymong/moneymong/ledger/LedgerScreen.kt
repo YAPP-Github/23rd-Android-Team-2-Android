@@ -46,6 +46,7 @@ import com.moneymong.moneymong.design_system.component.snackbar.MDSSnackbarHost
 import com.moneymong.moneymong.design_system.component.tooltip.MDSToolTip
 import com.moneymong.moneymong.design_system.component.tooltip.MDSToolTipPosition
 import com.moneymong.moneymong.design_system.error.ErrorScreen
+import com.moneymong.moneymong.design_system.loading.LoadingScreen
 import com.moneymong.moneymong.design_system.theme.Mint02
 import com.moneymong.moneymong.design_system.theme.Mint03
 import com.moneymong.moneymong.design_system.theme.White
@@ -131,6 +132,9 @@ fun LedgerScreen(
             }
 
             is LedgerSideEffect.LedgerFetchRetry -> {
+                viewModel.fetchDefaultInfo()
+                viewModel.fetchMyAgencyList()
+                viewModel.fetchAgencyMemberList()
                 viewModel.fetchAgencyExistLedger()
                 viewModel.fetchLedgerTransactionList()
             }
@@ -177,7 +181,13 @@ fun LedgerScreen(
                         LedgerAgencySelectBottomSheet(
                             currentAgencyId = state.agencyId,
                             agencyList = state.agencyList,
-                            onClickItem = { viewModel.eventEmit(LedgerSideEffect.LedgerSelectedAgencyChange(it)) }
+                            onClickItem = {
+                                viewModel.eventEmit(
+                                    LedgerSideEffect.LedgerSelectedAgencyChange(
+                                        it
+                                    )
+                                )
+                            }
                         )
                     }
                 )
@@ -202,11 +212,13 @@ fun LedgerScreen(
                             Box(modifier = modifier.fillMaxSize()) {
                                 if (state.isExistLedger) { // 소속에 장부가 존재한다면
                                     LedgerDefaultView(
-                                        totalBalance = state.ledgerTransaction?.totalBalance ?: 0,
+                                        totalBalance = state.ledgerTransaction?.totalBalance
+                                            ?: 0,
                                         ledgerDetails = state.filterTransactionList,
                                         transactionType = state.transactionType,
                                         currentDate = state.currentDate,
                                         hasTransaction = state.hasTransaction,
+                                        isLoading = state.isLoading,
                                         onChangeTransactionType = viewModel::onChangeTransactionType,
                                         onAddMonthFromCurrentDate = viewModel::onAddMonthFromCurrentDate,
                                         onClickTransactionItem = {
@@ -218,10 +230,14 @@ fun LedgerScreen(
                                         }
                                     )
                                 } else {
-                                    if (state.isStaff) {
-                                        LedgerStaffEmptyView()
+                                    if (state.isLoading) {
+                                        LoadingScreen(modifier = Modifier.fillMaxSize())
                                     } else {
-                                        LedgerMemberEmptyView()
+                                        if (state.isStaff) {
+                                            LedgerStaffEmptyView()
+                                        } else {
+                                            LedgerMemberEmptyView()
+                                        }
                                     }
                                 }
                                 if (state.isStaff) {
@@ -257,7 +273,10 @@ fun LedgerScreen(
                                         ) {
                                             MDSFloatingActionButton(
                                                 iconResource = R.drawable.ic_scan,
-                                                iconSize = FABIconSize(width = 30.dp, height = 24.dp),
+                                                iconSize = FABIconSize(
+                                                    width = 30.dp,
+                                                    height = 24.dp
+                                                ),
                                                 containerColor = Mint03,
                                                 onClick = { viewModel.eventEmit(LedgerSideEffect.LedgerNavigateToOCR) }
                                             )
@@ -287,7 +306,8 @@ fun LedgerScreen(
                                             )
                                         }
                                         if (expandableFab) Spacer(modifier = Modifier.height(10.dp))
-                                        val containerColor = if (expandableFab) Mint02 else Mint03
+                                        val containerColor =
+                                            if (expandableFab) Mint02 else Mint03
                                         MDSFloatingActionButton(
                                             modifier = Modifier.rotate(rotationAngle),
                                             iconResource = R.drawable.ic_plus_default,

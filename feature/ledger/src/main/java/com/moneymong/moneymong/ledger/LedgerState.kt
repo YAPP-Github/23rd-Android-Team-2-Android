@@ -10,7 +10,10 @@ import com.moneymong.moneymong.ledger.view.LedgerTransactionType
 import java.time.LocalDate
 
 data class LedgerState(
-    val isLoading: Boolean = false,
+    val isAgencyExistLoading: Boolean = true,
+    val isLedgerTransactionLoading: Boolean = true,
+    val isMyAgencyLoading: Boolean = true,
+    val isAgencyMemberLoading: Boolean = true,
     val agencyId: Int = 0,
     val userId: Int = 0,
     val isExistLedger: Boolean = false,
@@ -42,4 +45,7 @@ data class LedgerState(
 
     val isStaff: Boolean
         get() = memberList.find { it.userId.toInt() == userId }?.agencyUserRole.orEmpty() == "STAFF"
+
+    val isLoading: Boolean
+        get() = isAgencyExistLoading || isLedgerTransactionLoading || isMyAgencyLoading || isAgencyMemberLoading
 }
