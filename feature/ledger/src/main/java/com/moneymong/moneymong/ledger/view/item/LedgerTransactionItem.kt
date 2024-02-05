@@ -78,7 +78,15 @@ fun LedgerTransactionItem(
         }
         Column(horizontalAlignment = Alignment.End) {
             val amountColor = if (ledgerDetail.fundType == FundType.INCOME.name) Gray10 else Red03
-            val sign = if (ledgerDetail.fundType == FundType.INCOME.name) FundType.INCOME.sign else FundType.EXPENSE.sign
+            val sign = if (ledgerDetail.amount == 0) {
+                FundType.NONE.sign
+            } else {
+                when (ledgerDetail.fundType) {
+                    FundType.INCOME.name -> FundType.INCOME.sign
+                    FundType.EXPENSE.name -> FundType.EXPENSE.sign
+                    else -> FundType.NONE.sign
+                }
+            }
             Text(
                 text = "${sign}${ledgerDetail.amount.toString().toWonFormat()}원",
                 style = Body4,
