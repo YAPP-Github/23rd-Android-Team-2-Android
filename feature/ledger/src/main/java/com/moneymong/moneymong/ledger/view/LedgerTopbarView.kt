@@ -41,7 +41,9 @@ fun LedgerTopbarView(
         horizontalArrangement = Arrangement.Center
     ) {
         Text(
-            modifier = Modifier.widthIn(max = 290.dp),
+            modifier = Modifier
+                .widthIn(max = 290.dp)
+                .padding(vertical = 8.dp),
             text = header,
             style = Heading1,
             color = Gray10,
