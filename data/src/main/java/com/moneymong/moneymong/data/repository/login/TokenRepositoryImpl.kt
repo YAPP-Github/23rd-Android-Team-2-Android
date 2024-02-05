@@ -58,5 +58,8 @@ class TokenRepositoryImpl @Inject constructor(
         return localDataSource.getSchoolInfo()
     }
 
+    override suspend fun setSchoolInfoExist(infoExist : Boolean) {
+        return localDataSource.setSchoolInfoExist(infoExist)
+    }
 
 }

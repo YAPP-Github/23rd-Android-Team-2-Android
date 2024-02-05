@@ -232,7 +232,8 @@ fun SignUpContent(
                                 state.gradeInfor
                             )
                         )
-                    }
+                    },
+                    storeSchoolInfoExist = { viewModel.storeSchoolInfoExist(it) }
                 )
             }
         }
