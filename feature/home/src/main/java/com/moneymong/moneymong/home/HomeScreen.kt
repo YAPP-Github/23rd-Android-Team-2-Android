@@ -70,8 +70,10 @@ fun HomeScreen(
     Scaffold(
         bottomBar = {
             HomeBottomBarView(
-                homeNavigator = homeNavigator,
-                tabs = HomeBottomTabs.entries.toList()
+                visible = homeNavigator.includeCurrentRouteInTabs(),
+                tabs = HomeBottomTabs.entries.toList(),
+                currentRoute = homeNavigator.currentRoute,
+                navigateToTab = { homeNavigator.navigate(it.route) }
             )
         }
     ) { padding ->
