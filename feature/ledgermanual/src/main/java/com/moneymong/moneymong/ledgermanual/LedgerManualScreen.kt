@@ -7,6 +7,7 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -39,10 +40,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -81,7 +82,7 @@ import com.moneymong.moneymong.ledgermanual.view.LedgerManualTopbarView
 import org.orbitmvi.orbit.compose.collectAsState
 import org.orbitmvi.orbit.compose.collectSideEffect
 
-@OptIn(ExperimentalGlideComposeApi::class, ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun LedgerManualScreen(
     modifier: Modifier = Modifier,
@@ -93,7 +94,6 @@ fun LedgerManualScreen(
     val state = viewModel.collectAsState().value
     val verticalScrollState = rememberScrollState()
     val focusManager = LocalFocusManager.current
-    val keyboardController = LocalSoftwareKeyboardController.current
     val singlePhotoPickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia(),
         onResult = { uri ->
@@ -130,11 +130,6 @@ fun LedgerManualScreen(
 
             is LedgerManualSideEffect.LedgerManualPostTransaction -> {
                 viewModel.postLedgerTransaction()
-            }
-
-            is LedgerManualSideEffect.LedgerManualHideKeyboard -> {
-                keyboardController?.hide()
-                focusManager.clearFocus()
             }
         }
     }
@@ -177,10 +172,10 @@ fun LedgerManualScreen(
                 .fillMaxSize()
                 .verticalScroll(verticalScrollState)
                 .background(White)
-                .padding(it)
-                .noRippleClickable {
-                    viewModel.eventEmit(LedgerManualSideEffect.LedgerManualHideKeyboard)
+                .pointerInput(key1 = Unit) {
+                    detectTapGestures(onTap = { focusManager.clearFocus() })
                 }
+                .padding(it)
         ) {
             Spacer(modifier = Modifier.height(12.dp))
             Column(
@@ -439,8 +434,6 @@ fun LedgerManualScreen(
                     singleLine = false,
                     isFilled = isMemoFilled,
                     isError = state.isMemoError,
-                    onIconClick = { viewModel.onChangeMemoValue(TextFieldValue()) },
-                    icon = MDSTextFieldIcons.Clear,
                     keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() })
                 )
                 Spacer(modifier = Modifier.height(28.dp))
