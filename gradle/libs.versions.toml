@@ -11,11 +11,11 @@ androidxComposeBom = "2023.10.01"
 androidxComposeCompiler = "1.5.3"
 androidxComposeMaterial = "1.3.1"
 androidxComposeMaterial3 = "1.1.0-alpha07"
-androidxComposeNavigation = "2.7.4"
 androidxJunit = "1.1.5"
 androidxDatastore = "1.0.0"
 androidxEspresso = "3.5.1"
 androidHiltNavigationCompose = "1.0.0"
+navigation = "2.7.0"
 cameraX = "1.2.1"
 chucker-android = "4.0.0"
 desugaring = "1.2.2"
@@ -38,8 +38,6 @@ appcompat = "1.6.1"
 material = "1.10.0"
 lifecycle-runtime-ktx = "2.6.2"
 constraintlayout = "2.1.4"
-navigation-fragment-ktx = "2.7.5"
-navigation-ui-ktx = "2.7.5"
 paging = "3.2.1"
 [libraries]
 accompanist-systemuicontroller = { group = "com.google.accompanist", name = "accompanist-systemuicontroller", version.ref = "accompanist" }
@@ -63,7 +61,7 @@ androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = 
 androidx-datastore = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "androidxDatastore" }
 androidx-datastore-core = { group = "androidx.datastore", name = "datastore-preferences-core", version.ref = "androidxDatastore" }
 androidx-lifecycle-livedata-ktx = { group = "androidx.lifecycle", name = "lifecycle-livedata-ktx", version.ref = "androidxLifecycle" }
-androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "androidxComposeNavigation" }
+androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigation" }
 androidx-test-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "androidxEspresso" }
 chucker-debug = { group = "com.github.chuckerteam.chucker", name = "library", version.ref = "chucker-android" }
 chucker-release = { group = "com.github.chuckerteam.chucker", name = "library-no-op", version.ref = "chucker-android" }
@@ -98,8 +96,8 @@ lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtim
 ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
 ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
-navigation-fragment-ktx = { group = "androidx.navigation", name = "navigation-fragment-ktx", version.ref = "navigation-fragment-ktx" }
-navigation-ui-ktx = { group = "androidx.navigation", name = "navigation-ui-ktx", version.ref = "navigation-ui-ktx" }
+navigation-fragment-ktx = { group = "androidx.navigation", name = "navigation-fragment-ktx", version.ref = "navigation" }
+navigation-ui-ktx = { group = "androidx.navigation", name = "navigation-ui-ktx", version.ref = "navigation" }
 kakao-kakaolink = { group = "com.kakao.sdk", name = "kakaolink", version = "1.30.5" }
 kakao-v2-user = { group = "com.kakao.sdk", name = "v2-user", version = "2.5.0" }
 
