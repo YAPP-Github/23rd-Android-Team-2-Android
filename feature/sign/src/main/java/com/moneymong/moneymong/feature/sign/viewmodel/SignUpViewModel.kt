@@ -155,13 +155,6 @@ class SignUpViewModel @Inject constructor(
         }
     }
 
-    fun textInputChanged(isTextInput : Boolean) = intent{
-        reduce {
-            state.copy(
-                textInput = isTextInput
-            )
-        }
-    }
 
     fun isButtonVisibleChanged(isButtonVisible : Boolean) = intent{
         reduce{
@@ -170,4 +163,5 @@ class SignUpViewModel @Inject constructor(
             )
         }
     }
+
 }
