@@ -1,5 +1,6 @@
 package com.moneymong.moneymong.feature.sign.view
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,6 +16,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
@@ -47,27 +50,27 @@ fun SearchUnivView(
     textValue: TextFieldValue,
     universityResponse: UniversitiesEntity?,
     value: TextFieldValue,
-    textInput : Boolean,
-    textValueChanged : (Boolean) -> Unit,
-    isButtonVisibleChanged : (Boolean) -> Unit,
+    isButtonVisibleChanged: (Boolean) -> Unit,
 ) {
 
     val keyboardController = LocalSoftwareKeyboardController.current
-    val scope = rememberCoroutineScope()
 
     val debouncePeriod = 300L
     val queryState = remember { MutableStateFlow("") }
 
-    LaunchedEffect(textInput) {
-        if(textInput){
-            queryState
-                .debounce(debouncePeriod)
-                .collect { query ->
-                    onSearchIconClicked(query)
-                    isListVisibleChanged(query.isNotEmpty())
-                    isFilledChanged(false)
+    LaunchedEffect(Unit) {
+        queryState
+            .debounce(debouncePeriod)
+            .collect { query ->
+                Log.d("query", query)
+                if(query.isEmpty() && value.text.isNotEmpty()){
+                    onSearchIconClicked(value.text)
                 }
-        }
+                else{
+                    onSearchIconClicked(query)
+                }
+                isFilledChanged(false)
+            }
     }
 
 
@@ -75,10 +78,16 @@ fun SearchUnivView(
         modifier = modifier.background(White)
     ) {
         MDSTextField(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .onFocusChanged { focusState ->
+                    if (focusState.isFocused) {
+                        isButtonVisibleChanged(false)
+                    }
+                },
             value = value,
             onValueChange = {
-                textValueChanged(true)
+                isListVisibleChanged(true)
                 onChange(it)
                 queryState.value = it.text
             },
@@ -141,7 +150,7 @@ fun UnivList(
     isItemSelectedChanged: (Boolean) -> Unit,
     univs: List<University>,
     onClick: (String) -> Unit,
-    isButtonVisibleChanged : (Boolean) -> Unit
+    isButtonVisibleChanged: (Boolean) -> Unit
 ) {
     LazyColumn {
         items(univs) { univ ->
@@ -155,4 +164,3 @@ fun UnivList(
         }
     }
 }
-
