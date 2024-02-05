@@ -33,10 +33,12 @@ internal class HomeNavigator(
 ) {
     private val navBackStackEntry: NavBackStackEntry?
         @Composable get() = navHostController.currentBackStackEntryAsState().value
-    val currentRoute: String
-        @Composable get() = navBackStackEntry?.destination?.route ?: HomeBottomTabs.AGENCY.route
-    val routes: List<String>
+
+    private val routes: List<String>
         @Composable get() = remember { HomeBottomTabs.values().map { it.route } }
+
+    val currentRoute: String?
+        @Composable get() = navBackStackEntry?.destination?.route
 
     val statusBarColor: Color
         @Composable
@@ -70,10 +72,7 @@ internal class HomeNavigator(
         }
 
     @Composable
-    fun includeCurrentRouteInTabs() =
-        navBackStackEntry?.destination?.route?.let {
-            it in routes
-        } ?: false
+    fun includeCurrentRouteInTabs() = currentRoute in routes
 
     fun navigate(route: String) {
         val navOptions = navOptions {
