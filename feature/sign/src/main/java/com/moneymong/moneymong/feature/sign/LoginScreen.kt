@@ -42,6 +42,7 @@ fun LoginScreen(
             navigateToLedger()
         } else if (state.isSchoolInfoExist == false) {
             navigateToSignup()
+            viewModel.isSchoolInfoExistChanged(null)
         }
     }
 

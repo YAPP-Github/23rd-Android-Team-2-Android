@@ -120,7 +120,6 @@ fun SignUpContent(
 ) {
 
     LaunchedEffect(key1 = state.isUnivCreated) {
-        Log.d("isUnivCreated", state.isUnivCreated.toString())
         if (state.isUnivCreated) {
             navigateToSignComplete()
         }
@@ -186,8 +185,6 @@ fun SignUpContent(
                             viewModel.eventEmit(SignUpSideEffect.UniversitiesApi(it))
                         },
                         value = state.textValue,
-                        textInput = state.textInput,
-                        textValueChanged = { isTextInput -> viewModel.textInputChanged(isTextInput)},
                         isButtonVisibleChanged = { isButtonVisible -> viewModel.isButtonVisibleChanged(isButtonVisible)}
                     )
                 } else {
@@ -199,7 +196,8 @@ fun SignUpContent(
                                 viewModel.isSelectedChanged(false)
                             },
                             onSelectedGrade = { viewModel.selectedGradeChange(null) },
-                            onItemSelectedChange = { viewModel.isItemSelectedChanged(it) },
+                            onItemSelectedChanged = { viewModel.isItemSelectedChanged(it) },
+                            isEnableChanged = { viewModel.isEnabledChanged(it) }
                         )
                         SignUpGradeView(
                             modifier = Modifier.fillMaxWidth(),
