@@ -40,7 +40,7 @@ fun OCRResultTopbarView(
             tint = Color.White
         )
         Text(
-            modifier = Modifier.padding(vertical = 8.dp),
+            modifier = Modifier.padding(vertical = 16.dp),
             text = "스캔결과",
             style = Heading1,
             color = White

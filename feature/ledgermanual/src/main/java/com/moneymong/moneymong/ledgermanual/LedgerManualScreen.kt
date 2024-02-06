@@ -287,7 +287,7 @@ fun LedgerManualScreen(
                 )
                 Text(
                     text = buildAnnotatedString {
-                        append("영수증 (최대 12장)\n")
+                        append("영수증 (선택/최대 12장)\n")
                         withStyle(SpanStyle(color = Blue04)) {
                             append("*지출일 경우 영수증을 꼭 제출해주세요")
                         }
@@ -356,7 +356,7 @@ fun LedgerManualScreen(
                 }
                 Spacer(modifier = Modifier.height(24.dp))
                 Text(
-                    text = "증빙 자료 (최대 12장)",
+                    text = "증빙 자료 (선택/최대 12장)",
                     style = Body2,
                     color = Gray06
                 )
