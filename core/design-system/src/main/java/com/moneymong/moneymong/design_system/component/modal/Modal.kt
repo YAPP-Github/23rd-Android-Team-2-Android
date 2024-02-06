@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -49,17 +48,21 @@ fun MDSModal(
     onClickPositive: () -> Unit,
     onDismissRequest: () -> Unit = onClickNegative
 ) {
+    val horizontalPadding = 22.dp
+    val buttonWidth = 132.dp
+    val buttonSpacing = 12.dp
+
     Dialog(
         onDismissRequest = onDismissRequest,
         properties = DialogProperties(usePlatformDefaultWidth = false)
     ) {
         Column(
             modifier = modifier
-                .fillMaxWidth()
                 .padding(horizontal = MMHorizontalSpacing)
+                .widthIn(max = horizontalPadding * 2 + buttonWidth * 2 + buttonSpacing)
                 .clip(RoundedCornerShape(20.dp))
                 .background(Color.White)
-                .padding(horizontal = 22.dp),
+                .padding(horizontal = horizontalPadding),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Spacer(modifier = Modifier.height(24.dp))
@@ -90,7 +93,7 @@ fun MDSModal(
                 MDSButton(
                     modifier = Modifier
                         .weight(weight = 1f, fill = false)
-                        .widthIn(min = 132.dp),
+                        .widthIn(min = buttonWidth),
                     text = negativeBtnText,
                     size = MDSButtonSize.LARGE,
                     type = MDSButtonType.NEGATIVE,
@@ -100,7 +103,7 @@ fun MDSModal(
                 MDSButton(
                     modifier = Modifier
                         .weight(weight = 1f, fill = false)
-                        .widthIn(min = 132.dp),
+                        .widthIn(min = buttonWidth),
                     text = positiveBtnText,
                     size = MDSButtonSize.LARGE,
                     type = MDSButtonType.PRIMARY,
@@ -114,7 +117,7 @@ fun MDSModal(
 
 @Preview(
     showBackground = true,
-    device = "spec:shape=Normal,width=220,height=640, unit=dp, dpi= 480"
+    device = "spec:shape=Normal,width=240,height=640, unit=dp, dpi= 480"
 )
 @Composable
 fun MDSModalPreview() {
@@ -123,7 +126,7 @@ fun MDSModalPreview() {
     ) {
         MDSModal(
             icon = R.drawable.ic_camera_modal,
-            title = "카메라 접근을 허용하시겠습니까?",
+            title = "ddddddddddddddddddddddddddddddddddddddddddddddddddd?",
             description = "영수증 스캔을 위해 필요합니다",
             negativeBtnText = "허용 안함",
             positiveBtnText = "허용",
