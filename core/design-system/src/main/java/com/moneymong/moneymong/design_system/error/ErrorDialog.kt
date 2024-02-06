@@ -5,10 +5,11 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -42,6 +43,9 @@ fun ErrorDialog(
     message: String,
     onConfirm: () -> Unit
 ) {
+    val horizontalPadding = 22.dp
+    val buttonWidth = 276.dp
+
     Dialog(
         onDismissRequest = {},
         properties = DialogProperties(
@@ -52,13 +56,14 @@ fun ErrorDialog(
     ) {
         Column(
             modifier = modifier
-                .fillMaxWidth()
                 .padding(horizontal = MMHorizontalSpacing)
+                .widthIn(max = horizontalPadding * 2 + buttonWidth)
                 .clip(RoundedCornerShape(20.dp))
                 .background(color = White)
-                .padding(start = 22.dp, end = 22.dp, top = 24.dp, bottom = 20.dp),
+                .padding(horizontal = horizontalPadding),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            Spacer(modifier = Modifier.height(24.dp))
             Icon(
                 modifier = Modifier.size(60.dp),
                 painter = painterResource(id = R.drawable.ic_warning_filled),
@@ -74,19 +79,20 @@ fun ErrorDialog(
             )
             Spacer(modifier = Modifier.height(16.dp))
             MDSButton(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.width(buttonWidth),
                 onClick = onConfirm,
                 text = "확인",
                 type = MDSButtonType.PRIMARY,
                 size = MDSButtonSize.LARGE,
             )
+            Spacer(modifier = Modifier.height(20.dp))
         }
     }
 }
 
 @Preview(
     showBackground = true,
-    device = "spec:shape=Normal,width=220,height=640, unit=dp, dpi= 480"
+    device = "spec:shape=Normal,width=240,height=640, unit=dp, dpi= 480"
 )
 @Composable
 fun ErrorDialogPreview() {
@@ -97,7 +103,7 @@ fun ErrorDialogPreview() {
             modifier = Modifier.fillMaxSize()
         ) {
             ErrorDialog(
-                message = "네트워크 연결을 확인해주세요",
+                message = "ddddddddddddddddddddddddddddddddddddddddddddddddddd",
                 onConfirm = { visibleDialog = false }
             )
         }
