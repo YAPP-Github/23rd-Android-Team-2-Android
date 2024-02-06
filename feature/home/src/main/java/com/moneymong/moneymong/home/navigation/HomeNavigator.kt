@@ -80,7 +80,7 @@ internal class HomeNavigator(
                 saveState = true
             }
             launchSingleTop = true
-            restoreState = true
+            restoreState = route != agencyRoute
         }
         when (route) {
             HomeBottomTabs.AGENCY.route -> navHostController.navigateAgency(navOptions = navOptions)
