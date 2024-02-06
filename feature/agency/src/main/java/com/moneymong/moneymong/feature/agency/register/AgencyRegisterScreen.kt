@@ -23,11 +23,11 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.moneymong.moneymong.common.ui.noRippleClickable
 import com.moneymong.moneymong.design_system.R
 import com.moneymong.moneymong.design_system.component.button.MDSButton
+import com.moneymong.moneymong.design_system.component.modal.MDSModal
 import com.moneymong.moneymong.design_system.error.ErrorDialog
 import com.moneymong.moneymong.design_system.theme.Gray07
 import com.moneymong.moneymong.design_system.theme.MMHorizontalSpacing
 import com.moneymong.moneymong.design_system.theme.White
-import com.moneymong.moneymong.feature.agency.register.component.AgencyOutDialog
 import com.moneymong.moneymong.feature.agency.register.view.AgencyResisterContentView
 import org.orbitmvi.orbit.compose.collectAsState
 import org.orbitmvi.orbit.compose.collectSideEffect
@@ -55,10 +55,14 @@ fun AgencyRegisterScreen(
     }
 
     if (state.visibleOutDialog) {
-        AgencyOutDialog(
-            onDismissRequest = { viewModel.changeOutDialogVisibility(false) },
-            onPositive = viewModel::navigateUp,
-            onNegative = { viewModel.changeOutDialogVisibility(false) }
+        MDSModal(
+            icon = R.drawable.ic_warning_filled,
+            title = "정말 나가시겠습니까?",
+            description = "입력하신 내용은 저장되지 않습니다.",
+            negativeBtnText = "취소",
+            positiveBtnText = "확인",
+            onClickNegative = { viewModel.changeOutDialogVisibility(false) },
+            onClickPositive = viewModel::navigateUp
         )
     }
 
