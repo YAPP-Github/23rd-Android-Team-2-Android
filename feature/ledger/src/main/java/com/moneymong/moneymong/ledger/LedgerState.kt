@@ -5,7 +5,6 @@ import com.moneymong.moneymong.domain.entity.agency.MyAgencyEntity
 import com.moneymong.moneymong.domain.entity.ledger.LedgerDetailEntity
 import com.moneymong.moneymong.domain.entity.ledger.LedgerTransactionListEntity
 import com.moneymong.moneymong.domain.entity.member.AgencyUserEntity
-import com.moneymong.moneymong.domain.entity.member.MemberListEntity
 import com.moneymong.moneymong.ledger.view.LedgerTransactionType
 import java.time.LocalDate
 
@@ -29,9 +28,9 @@ data class LedgerState(
 
     val filterTransactionList: List<LedgerDetailEntity>
         get() = if (transactionType == LedgerTransactionType.전체) {
-            ledgerTransaction?.ledgerDetails.orEmpty()
+            ledgerTransaction?.ledgerInfoViewDetails.orEmpty()
         } else {
-            ledgerTransaction?.ledgerDetails?.filter { it.fundType == transactionType.type }.orEmpty()
+            ledgerTransaction?.ledgerInfoViewDetails?.filter { it.fundType == transactionType.type }.orEmpty()
         }
 
     val hasTransaction: Boolean

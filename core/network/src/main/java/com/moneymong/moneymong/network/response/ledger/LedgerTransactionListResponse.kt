@@ -3,7 +3,7 @@ package com.moneymong.moneymong.network.response.ledger
 data class LedgerTransactionListResponse(
     val id: Int,
     val totalBalance: Int,
-    val ledgerDetails: List<LedgerDetail>
+    val ledgerInfoViewDetails: List<LedgerDetail>
 )
 
 data class LedgerDetail(
@@ -12,5 +12,6 @@ data class LedgerDetail(
     val fundType: String,
     val amount: Int,
     val balance: Int,
+    val order: Int,
     val paymentDate: String
 )

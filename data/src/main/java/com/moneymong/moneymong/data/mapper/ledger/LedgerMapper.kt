@@ -51,5 +51,5 @@ fun LedgerTransactionListResponse.toEntity() =
     LedgerTransactionListEntity(
         id = this.id,
         totalBalance = this.totalBalance,
-        ledgerDetails = this.ledgerDetails.map { it.toEntity() }
+        ledgerInfoViewDetails = this.ledgerInfoViewDetails.map { it.toEntity() }
     )
