@@ -57,7 +57,7 @@ fun LedgerTransactionItem(
                 tint = Blue01
             )
             Text(
-                text = ledgerDetail.id.toString(),
+                text = ledgerDetail.order.toString(),
                 style = Body3,
                 color = Blue04
             )
