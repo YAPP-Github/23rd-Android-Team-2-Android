@@ -142,6 +142,15 @@ class MemberViewModel @Inject constructor(
         }
     }
 
+    fun isBlockedUser(isBlockedUser : Boolean) = intent{
+        reduce{
+            state.copy(
+                isBlockedUser = isBlockedUser
+            )
+        }
+    }
+
+
     fun getInvitationCode(agencyId: Long) = intent {
         memberInvitationCodeUseCase.invoke(agencyId)
             .onSuccess {
@@ -195,11 +204,17 @@ class MemberViewModel @Inject constructor(
                 }
             }
             .onFailure {
+                if(it.message == "소속에서 강제퇴장된 유저입니다."){
+                    reduce{
+                        state.copy(
+                           isBlockedUser = true
+                        )
+                    }
+                }
                 reduce{
                     state.copy(
                         visibleError = true,
                         errorMessage = it.message.toString(),
-                        //memberListError = true
                     )
                 }
             }

@@ -78,6 +78,14 @@ fun MemberScreen(
         viewModel.eventEmit(MemberSideEffect.GetMyInfo(Unit))
     }
 
+    if(state.isBlockedUser){
+        ErrorDialog(
+            message = "강퇴당한 소속입니다.",
+            onConfirm = {
+                viewModel.isBlockedUser(false)
+            })
+    }
+
     viewModel.collectSideEffect {
         when (it) {
             is MemberSideEffect.GetInvitationCode -> {
