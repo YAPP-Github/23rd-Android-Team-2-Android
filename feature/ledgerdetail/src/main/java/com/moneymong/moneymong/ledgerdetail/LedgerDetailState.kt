@@ -14,7 +14,7 @@ import java.time.format.DateTimeFormatter
 import java.util.Locale
 
 data class LedgerDetailState(
-    val isLoading: Boolean = false,
+    val isLoading: Boolean = true,
     val useEditMode: Boolean = false,
     val storeNameValue: TextFieldValue = TextFieldValue(),
     val totalPriceValue: TextFieldValue = TextFieldValue(),
@@ -33,6 +33,9 @@ data class LedgerDetailState(
     val receiptIdList: List<Int> = emptyList(),
     val documentIdList: List<Int> = emptyList(),
     val showConfirmModal: Boolean = false,
+    val showErrorDialog: Boolean = false,
+    val errorMessage: String = "",
+    val isStaff: Boolean = false
 ) : State {
 
     val fundTypeText: String
@@ -67,5 +70,10 @@ data class LedgerDetailState(
         }
 
     val enabledEdit: Boolean
-        get() = !isStoreNameError && !isTotalPriceError && !isPaymentDateError && !isPaymentTimeError && !isMemoError
-}
+        get() {
+            val hasStoreName = !isStoreNameError && storeNameValue.text.isNotEmpty()
+            val hasTotalPrice = !isTotalPriceError && totalPriceValue.text.isNotEmpty()
+            val hasPaymentDate = !isPaymentDateError && paymentDateValue.text.isNotEmpty()
+            val hasPaymentTime = !isPaymentTimeError && paymentTimeValue.text.isNotEmpty()
+            return hasStoreName && hasTotalPrice && hasPaymentDate && hasPaymentTime && !isMemoError
+        }}

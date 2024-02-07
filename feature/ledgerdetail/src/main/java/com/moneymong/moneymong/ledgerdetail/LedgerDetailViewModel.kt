@@ -1,7 +1,9 @@
 package com.moneymong.moneymong.ledgerdetail
 
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.lifecycle.SavedStateHandle
 import com.moneymong.moneymong.common.base.BaseViewModel
+import com.moneymong.moneymong.common.error.MoneyMongError
 import com.moneymong.moneymong.common.ext.toDateFormat
 import com.moneymong.moneymong.common.ui.isValidPaymentDate
 import com.moneymong.moneymong.common.ui.isValidPaymentTime
@@ -21,8 +23,10 @@ import com.moneymong.moneymong.domain.usecase.ledgerdetail.PostLedgerDocumentTra
 import com.moneymong.moneymong.domain.usecase.ledgerdetail.PostLedgerReceiptTransactionUseCase
 import com.moneymong.moneymong.domain.usecase.ledgerdetail.UpdateLedgerTransactionDetailUseCase
 import com.moneymong.moneymong.domain.usecase.ocr.PostFileUploadUseCase
+import com.moneymong.moneymong.ledgerdetail.navigation.LedgerDetailArgs
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
+import org.orbitmvi.orbit.annotation.OrbitExperimental
 import org.orbitmvi.orbit.syntax.simple.blockingIntent
 import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.postSideEffect
@@ -30,8 +34,10 @@ import org.orbitmvi.orbit.syntax.simple.reduce
 import java.io.File
 import javax.inject.Inject
 
+@OptIn(OrbitExperimental::class)
 @HiltViewModel
 class LedgerDetailViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle,
     private val fetchLedgerTransactionDetailUseCase: FetchLedgerTransactionDetailUseCase,
     private val updateLedgerTransactionDetailUseCase: UpdateLedgerTransactionDetailUseCase,
     private val postLedgerReceiptTransactionUseCase: PostLedgerReceiptTransactionUseCase,
@@ -41,6 +47,10 @@ class LedgerDetailViewModel @Inject constructor(
     private val postFileUploadUseCase: PostFileUploadUseCase,
     private val deleteLedgerDetailUseCase: DeleteLedgerDetailUseCase
 ) : BaseViewModel<LedgerDetailState, LedgerDetailSideEffect>(LedgerDetailState()) {
+
+    init {
+        onChangeStaffStatus(isStaff = LedgerDetailArgs(savedStateHandle).isStaff)
+    }
 
     fun ledgerTransactionEdit(detailId: Int) = intent {
         postLedgerReceiptTransaction(detailId)
@@ -57,7 +67,7 @@ class LedgerDetailViewModel @Inject constructor(
                 reduce { state.copy(ledgerTransactionDetail = it) }
                 initTextValue(it)
             }.onFailure {
-                // TODO
+                showErrorDialog(it.message)
             }.also { reduce { state.copy(isLoading = false) } }
     }
 
@@ -76,7 +86,7 @@ class LedgerDetailViewModel @Inject constructor(
                 reduce { state.copy(ledgerTransactionDetail = it) }
                 initTextValue(it)
             }.onFailure {
-                // TODO
+                showErrorDialog(it.message)
             }.also { reduce { state.copy(isLoading = false) } }
     }
 
@@ -92,7 +102,7 @@ class LedgerDetailViewModel @Inject constructor(
             )
             postLedgerReceiptTransactionUseCase(param)
                 .onFailure {
-                    // TODO
+                    showErrorDialog(it.message)
                 }.also { reduce { state.copy(isLoading = false) } }
         }
     }
@@ -109,7 +119,7 @@ class LedgerDetailViewModel @Inject constructor(
             )
             postLedgerDocumentTransactionUseCase(param)
                 .onFailure {
-                    // TODO
+                    showErrorDialog(it.message)
                 }.also { reduce { state.copy(isLoading = false) } }
         }
     }
@@ -121,7 +131,7 @@ class LedgerDetailViewModel @Inject constructor(
                 val param = DeleteLedgerReceiptParam(detailId = detailId, receiptId = receiptId)
                 deleteLedgerReceiptTransactionUseCase(param)
                     .onFailure {
-                        // TODO
+                        showErrorDialog(it.message)
                     }.also { reduce { state.copy(isLoading = false) } }
             }
         }
@@ -134,7 +144,7 @@ class LedgerDetailViewModel @Inject constructor(
                 val param = DeleteLedgerDocumentParam(detailId = detailId, documentId = documentId)
                 deleteLedgerDocumentTransactionUseCase(param)
                     .onFailure {
-                        // TODO
+                        showErrorDialog(it.message)
                     }.also { reduce { state.copy(isLoading = false) } }
             }
         }
@@ -146,7 +156,7 @@ class LedgerDetailViewModel @Inject constructor(
             .onSuccess {
                 postSideEffect(LedgerDetailSideEffect.LedgerDetailNavigateToLedger)
             }.onFailure {
-                // TODO
+                showErrorDialog(it.message)
             }.also { reduce { state.copy(isLoading = false) } }
     }
 
@@ -165,7 +175,7 @@ class LedgerDetailViewModel @Inject constructor(
                             }
                         }
                     }.onFailure {
-                        // TODO
+                        showErrorDialog(it.message)
                     }.also {
                         reduce {
                             state.copy(
@@ -318,6 +328,23 @@ class LedgerDetailViewModel @Inject constructor(
 
     fun onChangeVisibleConfirmModal(visible: Boolean) = intent {
         reduce { state.copy(showConfirmModal = visible) }
+    }
+
+    fun onChangeErrorDialogVisible(visible: Boolean) = intent {
+        reduce { state.copy(showErrorDialog = visible) }
+    }
+
+    private fun onChangeStaffStatus(isStaff: Boolean) = intent {
+        reduce { state.copy(isStaff = isStaff) }
+    }
+
+    private fun showErrorDialog(message: String?) = intent {
+        reduce {
+            state.copy(
+                showErrorDialog = true,
+                errorMessage = message ?: MoneyMongError.UnExpectedError.message
+            )
+        }
     }
 
     companion object {
