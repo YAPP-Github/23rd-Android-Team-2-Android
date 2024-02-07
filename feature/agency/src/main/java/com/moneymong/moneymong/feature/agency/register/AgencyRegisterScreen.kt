@@ -12,9 +12,14 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -41,6 +46,7 @@ fun AgencyRegisterScreen(
 ) {
     val state by viewModel.collectAsState()
     val focusManager = LocalFocusManager.current
+    val density = LocalDensity.current
 
     viewModel.collectSideEffect {
         when (it) {
@@ -93,14 +99,26 @@ fun AgencyRegisterScreen(
             contentDescription = null
         )
         Spacer(modifier = Modifier.height(8.dp))
+
+        var contentHeight by remember { mutableStateOf(0.dp) }
+        val contentModifier = if (contentHeight == 0.dp) Modifier.weight(1f) else Modifier
         AgencyResisterContentView(
-            modifier = Modifier.weight(1f),
+            modifier = contentModifier
+                .onSizeChanged {
+                    if (contentHeight == 0.dp) {
+                        with(density) {
+                            contentHeight = it.height.toDp()
+                        }
+                    }
+                }
+                .height(contentHeight),
             agencyType = state.agencyType,
             onAgencyTypeChange = viewModel::changeAgencyType,
             agencyName = state.agencyName,
             onAgencyNameChange = viewModel::changeAgencyName,
             changeNameTextFieldIsError = viewModel::changeNameTextFieldIsError,
         )
+
         val canRegister = state.agencyName.text.isNotEmpty() && state.nameTextFieldIsError.not()
         MDSButton(
             modifier = Modifier
