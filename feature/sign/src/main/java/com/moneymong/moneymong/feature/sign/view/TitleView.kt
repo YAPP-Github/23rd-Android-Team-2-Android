@@ -22,7 +22,6 @@ fun TitleView(mainText: String, subText: String) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Spacer(modifier = Modifier.height(16.dp))
         Text(
             text = mainText,
             style = Heading4,
