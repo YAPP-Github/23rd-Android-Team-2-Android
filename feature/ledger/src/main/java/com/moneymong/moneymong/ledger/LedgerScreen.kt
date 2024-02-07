@@ -73,7 +73,7 @@ fun LedgerScreen(
     padding: PaddingValues,
     navigateToAgency: () -> Unit,
     navigateToOCR: (NavOptions?) -> Unit,
-    navigateToLedgerDetail: (NavOptions?, Int) -> Unit,
+    navigateToLedgerDetail: (NavOptions?, Int, Boolean) -> Unit,
     navigateToLedgerManual: (NavOptions?) -> Unit
 ) {
     val state = viewModel.collectAsState().value
@@ -111,7 +111,7 @@ fun LedgerScreen(
     viewModel.collectSideEffect {
         when (it) {
             is LedgerSideEffect.LedgerNavigateToLedgerDetail -> {
-                navigateToLedgerDetail(null, it.id)
+                navigateToLedgerDetail(null, it.id, state.isStaff)
             }
 
             is LedgerSideEffect.LedgerNavigateToOCR -> {
@@ -338,7 +338,7 @@ fun LedgerScreenPreview() {
         padding = PaddingValues(),
         navigateToAgency = {},
         navigateToOCR = {},
-        navigateToLedgerDetail = { navOptions, i -> },
+        navigateToLedgerDetail = { navOptions, i, b -> },
         navigateToLedgerManual = {}
     )
 }

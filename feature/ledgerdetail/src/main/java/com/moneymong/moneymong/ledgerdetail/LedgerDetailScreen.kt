@@ -56,6 +56,7 @@ import com.moneymong.moneymong.design_system.component.textfield.util.MDSTextFie
 import com.moneymong.moneymong.design_system.component.textfield.visualtransformation.DateVisualTransformation
 import com.moneymong.moneymong.design_system.component.textfield.visualtransformation.PriceVisualTransformation
 import com.moneymong.moneymong.design_system.component.textfield.visualtransformation.TimeVisualTransformation
+import com.moneymong.moneymong.design_system.error.ErrorDialog
 import com.moneymong.moneymong.design_system.loading.LoadingScreen
 import com.moneymong.moneymong.design_system.theme.Blue01
 import com.moneymong.moneymong.design_system.theme.Blue03
@@ -141,6 +142,12 @@ fun LedgerDetailScreen(
                 ledgerTransactionId
             )
         )
+    }
+
+    if (state.showErrorDialog) {
+        ErrorDialog(message = state.errorMessage) {
+            viewModel.onChangeErrorDialogVisible(false)
+        }
     }
 
     if (state.showConfirmModal) {
@@ -529,27 +536,29 @@ fun LedgerDetailScreen(
                         )
                     }
                 }
-                if (state.useEditMode) {
-                    MDSButton(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 24.dp, horizontal = 20.dp),
-                        text = "완료하기",
-                        enabled = state.enabledEdit,
-                        size = MDSButtonSize.MEDIUM,
-                        type = MDSButtonType.PRIMARY,
-                        onClick = { viewModel.eventEmit(LedgerDetailSideEffect.LedgerDetailEditDone) }
-                    )
-                } else {
-                    MDSButton(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 24.dp, horizontal = 20.dp),
-                        text = "수정하기",
-                        size = MDSButtonSize.MEDIUM,
-                        type = MDSButtonType.PRIMARY,
-                        onClick = { viewModel.eventEmit(LedgerDetailSideEffect.LedgerDetailEdit) }
-                    )
+                if (state.isStaff) {
+                    if (state.useEditMode) {
+                        MDSButton(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 24.dp, horizontal = 20.dp),
+                            text = "완료하기",
+                            enabled = state.enabledEdit,
+                            size = MDSButtonSize.MEDIUM,
+                            type = MDSButtonType.PRIMARY,
+                            onClick = { viewModel.eventEmit(LedgerDetailSideEffect.LedgerDetailEditDone) }
+                        )
+                    } else {
+                        MDSButton(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 24.dp, horizontal = 20.dp),
+                            text = "수정하기",
+                            size = MDSButtonSize.MEDIUM,
+                            type = MDSButtonType.PRIMARY,
+                            onClick = { viewModel.eventEmit(LedgerDetailSideEffect.LedgerDetailEdit) }
+                        )
+                    }
                 }
             }
         }

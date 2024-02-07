@@ -24,7 +24,6 @@ class LoginViewModel @Inject constructor(
         viewModelScope.launch {
             loginUseCase.invoke(object : LoginCallback {
                 override suspend fun onLoginSuccess() {
-                    //fetchMyInfo()
                     tokenUseCase.getSchoolInfo()
                         .onSuccess {
                             if(it) {
