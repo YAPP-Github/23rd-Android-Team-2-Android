@@ -2,6 +2,7 @@ package com.moneymong.moneymong.ledger
 
 import androidx.lifecycle.SavedStateHandle
 import com.moneymong.moneymong.common.base.BaseViewModel
+import com.moneymong.moneymong.common.error.MoneyMongError
 import com.moneymong.moneymong.domain.param.ledger.LedgerTransactionListParam
 import com.moneymong.moneymong.domain.usecase.agency.FetchAgencyIdUseCase
 import com.moneymong.moneymong.domain.usecase.agency.FetchMyAgencyListUseCase
@@ -89,7 +90,12 @@ class LedgerViewModel @Inject constructor(
                         )
                     }
                 }.onFailure {
-                    reduce { state.copy(visibleError = true) }
+                    reduce {
+                        state.copy(
+                            visibleError = true,
+                            errorMessage = it.message ?: MoneyMongError.UnExpectedError.message
+                        )
+                    }
                 }.also { reduce { state.copy(isLedgerTransactionLoading = false) } }
         }
     }
@@ -108,7 +114,12 @@ class LedgerViewModel @Inject constructor(
                     saveAgencyId(it.first().id)
                 }
             }.onFailure {
-                reduce { state.copy(visibleError = true) }
+                reduce {
+                    state.copy(
+                        visibleError = true,
+                        errorMessage = it.message ?: MoneyMongError.UnExpectedError.message
+                    )
+                }
             }.also { reduce { state.copy(isMyAgencyLoading = false) } }
     }
 
@@ -124,7 +135,12 @@ class LedgerViewModel @Inject constructor(
                         )
                     }
                 }.onFailure {
-                    reduce { state.copy(visibleError = true) }
+                    reduce {
+                        state.copy(
+                            visibleError = true,
+                            errorMessage = it.message ?: MoneyMongError.UnExpectedError.message
+                        )
+                    }
                 }.also { reduce { state.copy(isAgencyMemberLoading = false) } }
         }
     }
@@ -151,5 +167,9 @@ class LedgerViewModel @Inject constructor(
 
     fun onChangeSnackbarState(visible: Boolean) = intent {
         reduce { state.copy(visibleSnackbar = visible) }
+    }
+
+    fun onChangeVisibleErrorDialog(visible: Boolean) = intent {
+        reduce { state.copy(visibleError = visible) }
     }
 }

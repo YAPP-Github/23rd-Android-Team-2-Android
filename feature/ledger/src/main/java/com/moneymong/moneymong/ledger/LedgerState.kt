@@ -23,7 +23,8 @@ data class LedgerState(
     val visibleError: Boolean = false,
     val visibleSnackbar: Boolean = false,
     val agencyList: List<MyAgencyEntity> = emptyList(),
-    val memberList: List<AgencyUserEntity> = emptyList()
+    val memberList: List<AgencyUserEntity> = emptyList(),
+    val errorMessage: String = ""
 ) : State {
 
     val filterTransactionList: List<LedgerDetailEntity>
