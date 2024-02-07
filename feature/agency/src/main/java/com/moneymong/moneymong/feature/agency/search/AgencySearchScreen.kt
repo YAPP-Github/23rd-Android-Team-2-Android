@@ -177,7 +177,7 @@ private fun ContentViewWithAgencies(
     LazyColumn(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(12.dp),
-        contentPadding = PaddingValues(vertical = 12.dp)
+        contentPadding = PaddingValues(vertical = 4.dp)
     ) {
         items(
             count = pagingItems.itemCount, key = pagingItems.itemKey { it.id }
