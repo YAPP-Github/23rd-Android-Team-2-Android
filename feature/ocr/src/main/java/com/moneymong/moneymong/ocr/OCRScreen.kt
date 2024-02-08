@@ -36,6 +36,7 @@ import com.moneymong.moneymong.design_system.theme.White
 import com.moneymong.moneymong.common.ext.hasPermission
 import com.moneymong.moneymong.common.ui.noRippleClickable
 import com.moneymong.moneymong.common.util.DisposableEffectWithLifeCycle
+import com.moneymong.moneymong.design_system.error.ErrorDialog
 import com.moneymong.moneymong.design_system.theme.Black
 import com.moneymong.moneymong.ocr.view.OCRCameraPermissionDeniedView
 import com.moneymong.moneymong.ocr.view.OCRCaptureView
@@ -103,6 +104,12 @@ fun OCRScreen(
             onClickNegative = viewModel::onClickDialogNegative,
             onClickPositive = viewModel::onClickDialogPositive
         )
+    }
+
+    if (state.visibleErrorDialog) {
+        ErrorDialog(message = state.errorMessage) {
+            viewModel.onChangeVisibleErrorDialog(false)
+        }
     }
 
     Scaffold {
