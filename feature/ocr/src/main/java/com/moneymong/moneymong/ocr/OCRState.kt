@@ -10,7 +10,9 @@ data class OCRState(
     val permissionDialogStatus: Boolean = false,
     val isDeniedCamera: Boolean = false,
     val visibleHelper: Boolean = true,
-    val isLoading: Boolean = false
+    val isLoading: Boolean = false,
+    val visibleErrorDialog: Boolean = false,
+    val errorMessage: String = ""
 ): State {
 
     val isReceipt: Boolean

@@ -12,10 +12,14 @@ fun String.toWonFormat(unit: Boolean = false): String {
     return if (this.isEmpty()) {
         this
     } else {
-        if (unit) {
-            "${DecimalFormat("#,###").format(this.toLong())}원"
-        } else {
-            DecimalFormat("#,###").format(this.toLong())
+        try {
+            if (unit) {
+                "${DecimalFormat("#,###").format(this.toLong())}원"
+            } else {
+                DecimalFormat("#,###").format(this.toLong())
+            }
+        } catch (e: Exception) {
+            ""
         }
     }
 }

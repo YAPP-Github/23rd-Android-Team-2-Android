@@ -49,6 +49,13 @@ class OCRViewModel @Inject constructor(
                 .onSuccess {
                     reduce { state.copy(document = it) }
                     possibleNavigateToOCRResult(it.images.first().inferResult.orEmpty())
+                }.onFailure {
+                    reduce {
+                        state.copy(
+                            visibleErrorDialog = true,
+                            errorMessage = "영수증을 인식하지 못했습니다."
+                        )
+                    }
                 }.also { reduce { state.copy(isLoading = false) } }
         }
     }
@@ -109,5 +116,9 @@ class OCRViewModel @Inject constructor(
 
     fun onClickHelper() = intent {
         reduce { state.copy(visibleHelper = !state.visibleHelper) }
+    }
+
+    fun onChangeVisibleErrorDialog(visible: Boolean) = intent {
+        reduce { state.copy(visibleErrorDialog = visible) }
     }
 }
