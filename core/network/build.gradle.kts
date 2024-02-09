@@ -22,6 +22,15 @@ android {
         buildConfigField("String", "MONEYMONG_BASE_URL", "\"https://dev.moneymong.site/\"")
     }
 
+    buildTypes {
+        debug {
+            buildConfigField("String", "MONEYMONG_BASE_URL", "\"https://dev.moneymong.site/\"")
+        }
+        release {
+            buildConfigField("String", "MONEYMONG_BASE_URL", "\"https://moneymong.site/\"")
+        }
+    }
+
     buildFeatures {
         buildConfig = true
     }
