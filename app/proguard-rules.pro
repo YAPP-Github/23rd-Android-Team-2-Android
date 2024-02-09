@@ -28,6 +28,7 @@
 -dontwarn org.conscrypt.*
 -dontwarn org.openjsse.**
 
+# --- Retrofit ---
 # With R8 full mode generic signatures are stripped for classes that are not
 # kept. Suspend functions are wrapped in continuations where the type argument
 # is used.
@@ -43,3 +44,8 @@
 
 # With R8 full mode generic signatures are stripped for classes that are not kept.
 -keep,allowobfuscation,allowshrinking class retrofit2.Response
+
+-keep class com.moneymong.moneymong.network.request.** { *; }
+-keep class com.moneymong.moneymong.network.response.** { *; }
+-keep class com.moneymong.moneymong.domain.entity.** { *; }
+-keep class com.moneymong.moneymong.domain.param.** { *; }
