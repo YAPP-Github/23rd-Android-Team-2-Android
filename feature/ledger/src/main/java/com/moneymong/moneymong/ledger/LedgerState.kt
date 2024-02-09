@@ -5,12 +5,14 @@ import com.moneymong.moneymong.domain.entity.agency.MyAgencyEntity
 import com.moneymong.moneymong.domain.entity.ledger.LedgerDetailEntity
 import com.moneymong.moneymong.domain.entity.ledger.LedgerTransactionListEntity
 import com.moneymong.moneymong.domain.entity.member.AgencyUserEntity
-import com.moneymong.moneymong.domain.entity.member.MemberListEntity
 import com.moneymong.moneymong.ledger.view.LedgerTransactionType
 import java.time.LocalDate
 
 data class LedgerState(
-    val isLoading: Boolean = false,
+    val isAgencyExistLoading: Boolean = true,
+    val isLedgerTransactionLoading: Boolean = true,
+    val isMyAgencyLoading: Boolean = true,
+    val isAgencyMemberLoading: Boolean = true,
     val agencyId: Int = 0,
     val userId: Int = 0,
     val isExistLedger: Boolean = false,
@@ -21,14 +23,15 @@ data class LedgerState(
     val visibleError: Boolean = false,
     val visibleSnackbar: Boolean = false,
     val agencyList: List<MyAgencyEntity> = emptyList(),
-    val memberList: List<AgencyUserEntity> = emptyList()
+    val memberList: List<AgencyUserEntity> = emptyList(),
+    val errorMessage: String = ""
 ) : State {
 
     val filterTransactionList: List<LedgerDetailEntity>
         get() = if (transactionType == LedgerTransactionType.전체) {
-            ledgerTransaction?.ledgerDetails.orEmpty()
+            ledgerTransaction?.ledgerInfoViewDetails.orEmpty()
         } else {
-            ledgerTransaction?.ledgerDetails?.filter { it.fundType == transactionType.type }.orEmpty()
+            ledgerTransaction?.ledgerInfoViewDetails?.filter { it.fundType == transactionType.type }.orEmpty()
         }
 
     val hasTransaction: Boolean
@@ -42,4 +45,7 @@ data class LedgerState(
 
     val isStaff: Boolean
         get() = memberList.find { it.userId.toInt() == userId }?.agencyUserRole.orEmpty() == "STAFF"
+
+    val isLoading: Boolean
+        get() = isAgencyExistLoading || isLedgerTransactionLoading || isMyAgencyLoading || isAgencyMemberLoading
 }

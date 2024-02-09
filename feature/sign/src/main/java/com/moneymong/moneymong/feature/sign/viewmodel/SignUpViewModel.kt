@@ -4,11 +4,16 @@ import android.util.Log
 import androidx.compose.ui.text.input.TextFieldValue
 import com.moneymong.moneymong.common.base.BaseViewModel
 import com.moneymong.moneymong.domain.param.signup.UnivParam
+import com.moneymong.moneymong.domain.usecase.signup.SchoolInfoUseCase
 import com.moneymong.moneymong.domain.usecase.signup.UnivUseCase
 import com.moneymong.moneymong.feature.sign.sideeffect.SignUpSideEffect
 import com.moneymong.moneymong.feature.sign.state.SignUpState
 import com.moneymong.moneymong.feature.sign.util.Grade
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.annotation.OrbitExperimental
 import org.orbitmvi.orbit.syntax.simple.blockingIntent
 import org.orbitmvi.orbit.syntax.simple.intent
@@ -17,7 +22,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SignUpViewModel @Inject constructor(
-    private val univUseCase: UnivUseCase
+    private val univUseCase: UnivUseCase,
+    private val schoolInfoUseCase : SchoolInfoUseCase,
 ) : BaseViewModel<SignUpState, SignUpSideEffect>(SignUpState()) {
     fun createUniv(universityName: String, grade: Int) = intent {
         val body = UnivParam(universityName, grade)
@@ -55,6 +61,12 @@ class SignUpViewModel @Inject constructor(
                     )
                 }
             }
+    }
+
+    fun storeSchoolInfoExist(infoExist : Boolean ){
+        CoroutineScope(Dispatchers.IO).launch {
+            schoolInfoUseCase.invoke(infoExist)
+        }
     }
 
     fun isSelectedChanged(isSelected: Boolean) = intent {
@@ -155,11 +167,13 @@ class SignUpViewModel @Inject constructor(
         }
     }
 
-    fun textInputChanged(isTextInput : Boolean) = intent{
-        reduce {
+
+    fun isButtonVisibleChanged(isButtonVisible : Boolean) = intent{
+        reduce{
             state.copy(
-                textInput = isTextInput
+                isButtonVisible = isButtonVisible
             )
         }
     }
+
 }

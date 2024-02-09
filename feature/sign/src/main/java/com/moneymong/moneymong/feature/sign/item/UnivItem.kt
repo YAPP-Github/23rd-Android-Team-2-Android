@@ -14,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.moneymong.moneymong.common.ui.noRippleClickable
 import com.moneymong.moneymong.design_system.R
 import com.moneymong.moneymong.design_system.theme.Black
 import com.moneymong.moneymong.design_system.theme.Blue04
@@ -29,16 +30,16 @@ fun UnivItem(
     isItemSelectedChanged: (Boolean) -> Unit,
     univs: University,
     onClick: (String) -> Unit,
+    isButtonVisibleChanged : (Boolean) -> Unit
 ) {
-
-
     Row(
         modifier = Modifier
             .background(White)
             .fillMaxWidth()
-            .clickable {
+            .noRippleClickable {
                 isItemSelectedChanged(!isItemSelected)
                 onClick(univs.schoolName)
+                isButtonVisibleChanged(true)
             }
             .padding(bottom = 20.dp)
 

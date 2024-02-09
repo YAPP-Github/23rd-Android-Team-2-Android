@@ -40,7 +40,7 @@ fun OCRHelperView(
             modifier = Modifier.fillMaxSize(),
             painter = painterResource(id = R.drawable.img_background_blur),
             contentDescription = null,
-            contentScale = ContentScale.FillWidth
+            contentScale = ContentScale.FillBounds
         )
         Row(
             modifier = Modifier.fillMaxWidth().align(Alignment.TopCenter),

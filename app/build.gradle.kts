@@ -1,4 +1,6 @@
 import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+import java.io.FileInputStream
+import java.util.Properties
 
 @Suppress("DSL_SCOPE_VIOLATION")
 plugins {
@@ -11,11 +13,16 @@ plugins {
 
 }
 
-fun getApiKey(propertyKey : String): String {
-    return gradleLocalProperties(rootDir).getProperty(propertyKey)
-}
-
 android {
+    signingConfigs {
+        create("release") {
+            storeFile =
+                file(getKeyStore("storeFile"))
+            storePassword = getKeyStore("storePassword")
+            keyAlias = getKeyStore("keyAlias")
+            keyPassword = getKeyStore("keyPassword")
+        }
+    }
     namespace = "com.moneymong.moneymong"
     compileSdk = 34
 
@@ -23,7 +30,7 @@ android {
         applicationId = "com.moneymong.moneymong"
         minSdk = 24
         targetSdk = 34
-        versionCode = 1
+        versionCode = 5
         versionName = "1.0.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -38,11 +45,12 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            signingConfig = signingConfigs.getByName("release")
         }
     }
     packaging {
@@ -80,4 +88,24 @@ dependencies {
     implementation(libs.orbit.viewModel)
 
     implementation(libs.kakao.v2.user)
+
+    testImplementation(libs.junit4)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.test.espresso.core)
+}
+
+fun keystoreProperties(projectRootDir : File) : Properties {
+    val keystorePropertiesFile = rootProject.file("keystore.properties")
+    val keystoreProperties = Properties()
+    keystoreProperties.load(FileInputStream(keystorePropertiesFile))
+
+    return keystoreProperties
+}
+
+fun getApiKey(propertyKey : String): String {
+    return gradleLocalProperties(rootDir).getProperty(propertyKey)
+}
+
+fun getKeyStore(keystoreKey : String): String {
+    return keystoreProperties(rootDir).getProperty(keystoreKey)
 }

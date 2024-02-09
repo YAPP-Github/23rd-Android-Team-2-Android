@@ -58,7 +58,8 @@ import org.orbitmvi.orbit.compose.collectSideEffect
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MemberScreen(
-    viewModel: MemberViewModel = hiltViewModel()
+    viewModel: MemberViewModel = hiltViewModel(),
+    agencyId: Int
 ) {
     val sheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = true,
@@ -70,6 +71,20 @@ fun MemberScreen(
     val coroutineScope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
 
+    LaunchedEffect(agencyId) {
+        viewModel.updateAgencyId(agencyId)
+        viewModel.eventEmit(MemberSideEffect.GetInvitationCode(agencyId.toLong()))
+        viewModel.eventEmit(MemberSideEffect.GetMemberLists(agencyId.toLong()))
+        viewModel.eventEmit(MemberSideEffect.GetMyInfo(Unit))
+    }
+
+    if(state.isBlockedUser){
+        ErrorDialog(
+            message = "강퇴당한 소속입니다.",
+            onConfirm = {
+                viewModel.isBlockedUser(false)
+            })
+    }
 
     viewModel.collectSideEffect {
         when (it) {

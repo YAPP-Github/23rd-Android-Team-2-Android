@@ -148,7 +148,7 @@ fun UniversityInfo(
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    text = "$university ${grade}학년",
+                    text = "$university $grade" + if (grade == 5) "학년 이상" else "학년",
                     color = Gray08,
                     style = Body4
                 )

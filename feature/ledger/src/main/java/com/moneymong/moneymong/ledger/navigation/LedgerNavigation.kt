@@ -35,7 +35,7 @@ fun NavGraphBuilder.ledgerScreen(
     padding: PaddingValues,
     navigateToAgency: () -> Unit,
     navigateToOCR: (NavOptions?) -> Unit,
-    navigateToLedgerDetail: (NavOptions?, Int) -> Unit,
+    navigateToLedgerDetail: (NavOptions?, Int, Boolean) -> Unit,
     navigateToLedgerManual: (NavOptions?) -> Unit
 ) {
     composable(

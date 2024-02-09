@@ -1,6 +1,5 @@
 package com.moneymong.moneymong.ledgerdetail
 
-import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -28,14 +27,9 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -62,6 +56,8 @@ import com.moneymong.moneymong.design_system.component.textfield.util.MDSTextFie
 import com.moneymong.moneymong.design_system.component.textfield.visualtransformation.DateVisualTransformation
 import com.moneymong.moneymong.design_system.component.textfield.visualtransformation.PriceVisualTransformation
 import com.moneymong.moneymong.design_system.component.textfield.visualtransformation.TimeVisualTransformation
+import com.moneymong.moneymong.design_system.error.ErrorDialog
+import com.moneymong.moneymong.design_system.loading.LoadingScreen
 import com.moneymong.moneymong.design_system.theme.Blue01
 import com.moneymong.moneymong.design_system.theme.Blue03
 import com.moneymong.moneymong.design_system.theme.Blue04
@@ -148,6 +144,12 @@ fun LedgerDetailScreen(
         )
     }
 
+    if (state.showErrorDialog) {
+        ErrorDialog(message = state.errorMessage) {
+            viewModel.onChangeErrorDialogVisible(false)
+        }
+    }
+
     if (state.showConfirmModal) {
         MDSModal(
             icon = R.drawable.ic_warning_filled,
@@ -159,413 +161,405 @@ fun LedgerDetailScreen(
             onClickPositive = { viewModel.eventEmit(LedgerDetailSideEffect.LedgerDetailConfirmModalPositive) })
     }
 
-    Scaffold(
-        topBar = {
-            LedgerDetailTopbarView(
-                title = "${state.fundTypeText} 상세내역",
-                useEditMode = state.useEditMode,
-                enabledDone = state.enabledEdit,
-                onClickPrev = popBackStack,
-                onClickDelete = { viewModel.onChangeVisibleConfirmModal(true) },
-                onClickDone = { viewModel.eventEmit(LedgerDetailSideEffect.LedgerDetailEditDone) }
-            )
-        }
-    ) {
-        Column(
-            modifier = modifier
-                .fillMaxSize()
-                .verticalScroll(verticalScrollState)
-                .background(Gray01)
-                .padding(it)
+    if (state.isLoading) {
+        LoadingScreen(modifier = Modifier.fillMaxSize())
+    } else {
+        Scaffold(
+            topBar = {
+                LedgerDetailTopbarView(
+                    title = "${state.fundTypeText} 상세내역",
+                    useEditMode = state.useEditMode,
+                    enabledDone = state.enabledEdit,
+                    onClickPrev = popBackStack,
+                    onClickDelete = { viewModel.onChangeVisibleConfirmModal(true) },
+                    onClickDone = { viewModel.eventEmit(LedgerDetailSideEffect.LedgerDetailEditDone) }
+                )
+            }
         ) {
-            Spacer(modifier = Modifier.height(12.dp))
-            Box(
-                modifier = Modifier
+            Column(
+                modifier = modifier
                     .fillMaxSize()
-                    .padding(horizontal = MMHorizontalSpacing)
-                    .clip(RoundedCornerShape(16.dp))
-                    .border(width = 1.dp, color = Blue03, shape = RoundedCornerShape(16.dp))
-                    .background(White)
+                    .verticalScroll(verticalScrollState)
+                    .background(Gray01)
+                    .padding(it)
             ) {
-                Column(
+                Spacer(modifier = Modifier.height(12.dp))
+                Box(
                     modifier = Modifier
                         .fillMaxSize()
+                        .padding(horizontal = MMHorizontalSpacing)
+                        .clip(RoundedCornerShape(16.dp))
+                        .border(width = 1.dp, color = Blue03, shape = RoundedCornerShape(16.dp))
                         .background(White)
-                        .padding(vertical = 28.dp, horizontal = 16.dp)
                 ) {
-                    if (state.useEditMode) {
-                        var isStoreNameFilled by remember { mutableStateOf(false) }
-                        MDSTextField(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .onFocusChanged { isStoreNameFilled = !it.isFocused },
-                            value = state.storeNameValue,
-                            onValueChange = viewModel::onChangeStoreNameValue,
-                            title = "수입·지출 출처",
-                            placeholder = "",
-                            isFilled = isStoreNameFilled,
-                            isError = state.isStoreNameError,
-                            helperText = "20자 이내로 입력해주세요",
-                            maxCount = 20,
-                            icon = MDSTextFieldIcons.Clear,
-                            singleLine = true,
-                            onIconClick = { viewModel.onChangeStoreNameValue(TextFieldValue()) }
-                        )
-                    } else {
-                        Text(
-                            text = "수입·지출 출처",
-                            style = Body2,
-                            color = Gray06
-                        )
-                        Spacer(modifier = Modifier.height(8.dp))
-                        Text(
-                            text = state.ledgerTransactionDetail?.storeInfo.orEmpty(),
-                            style = Body3,
-                            color = Gray10
-                        )
-                    }
-                    Box(
+                    Column(
                         modifier = Modifier
-                            .padding(vertical = 20.dp)
-                            .fillMaxWidth()
-                            .height(1.dp)
-                            .background(Gray03, shape = DottedShape(8.dp))
-                    )
-                    if (state.useEditMode) {
-                        var isTotalPriceFilled by remember { mutableStateOf(false) }
-                        MDSTextField(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .onFocusChanged { isTotalPriceFilled = !it.isFocused },
-                            value = state.totalPriceValue,
-                            onValueChange = viewModel::onChangeTotalPriceValue,
-                            title = "${state.fundTypeText} 금액",
-                            placeholder = "",
-                            isFilled = isTotalPriceFilled,
-                            isError = state.isTotalPriceError,
-                            helperText = "999,999,999원 이내로 입력해주세요",
-                            onIconClick = { viewModel.onChangeTotalPriceValue(TextFieldValue()) },
-                            singleLine = true,
-                            icon = MDSTextFieldIcons.Clear,
-                            visualTransformation = PriceVisualTransformation(type = state.priceType),
-                            keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
-                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
-                        )
-                    } else {
-                        Text(
-                            text = "${state.fundTypeText} 금액",
-                            style = Body2,
-                            color = Gray06
-                        )
-                        Spacer(modifier = Modifier.height(8.dp))
-                        Text(
-                            text = "${state.priceType.symbol}${state.totalPrice}원",
-                            style = Body3,
-                            color = Gray10
-                        )
-                    }
-                    Box(
-                        modifier = Modifier
-                            .padding(vertical = 20.dp)
-                            .fillMaxWidth()
-                            .height(1.dp)
-                            .background(Gray03, shape = DottedShape(8.dp))
-                    )
-                    if (state.useEditMode) {
-                        var isPaymentDateFilled by remember { mutableStateOf(false) }
-                        MDSTextField(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .onFocusChanged { isPaymentDateFilled = !it.isFocused },
-                            value = state.paymentDateValue,
-                            onValueChange = viewModel::onChangePaymentDateValue,
-                            title = "날짜",
-                            placeholder = "2024/01/01",
-                            isFilled = isPaymentDateFilled,
-                            isError = state.isPaymentDateError,
-                            helperText = "올바른 날짜를 입력해주세요",
-                            onIconClick = { viewModel.onChangePaymentDateValue(TextFieldValue()) },
-                            singleLine = true,
-                            icon = MDSTextFieldIcons.Clear,
-                            visualTransformation = DateVisualTransformation(),
-                            keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
-                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
-                        )
-                    } else {
-                        Text(
-                            text = "날짜",
-                            style = Body2,
-                            color = Gray06
-                        )
-                        Spacer(modifier = Modifier.height(8.dp))
-                        Text(
-                            text = state.formattedDate,
-                            style = Body3,
-                            color = Gray10
-                        )
-                    }
-                    Box(
-                        modifier = Modifier
-                            .padding(vertical = 20.dp)
-                            .fillMaxWidth()
-                            .height(1.dp)
-                            .background(Gray03, shape = DottedShape(8.dp))
-                    )
-                    if (state.useEditMode) {
-                        var isPaymentTimeFilled by remember { mutableStateOf(false) }
-                        MDSTextField(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .onFocusChanged { isPaymentTimeFilled = !it.isFocused },
-                            value = state.paymentTimeValue,
-                            onValueChange = viewModel::onChangePaymentTimeValue,
-                            title = "시간",
-                            placeholder = "00:00:00",
-                            isFilled = isPaymentTimeFilled,
-                            isError = state.isPaymentTimeError,
-                            helperText = "올바른 시간을 입력해주세요",
-                            onIconClick = { viewModel.onChangePaymentTimeValue(TextFieldValue()) },
-                            singleLine = true,
-                            icon = MDSTextFieldIcons.Clear,
-                            visualTransformation = TimeVisualTransformation(),
-                            keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
-                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
-                        )
-                    } else {
-                        Text(
-                            text = "시간",
-                            style = Body2,
-                            color = Gray06
-                        )
-                        Spacer(modifier = Modifier.height(8.dp))
-                        Text(
-                            text = state.formattedTime,
-                            style = Body3,
-                            color = Gray10
-                        )
-                    }
-                    Box(
-                        modifier = Modifier
-                            .padding(vertical = 20.dp)
-                            .fillMaxWidth()
-                            .height(1.dp)
-                            .background(Gray03, shape = DottedShape(8.dp))
-                    )
-                    if (state.useEditMode) {
-                        var isMemoFilled by remember { mutableStateOf(false) }
-                        MDSTextField(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .onFocusChanged { isMemoFilled = !it.isFocused },
-                            value = state.memoValue,
-                            onValueChange = { viewModel.onChangeMemoValue(it) },
-                            title = "메모",
-                            placeholder = "",
-                            isFilled = isMemoFilled,
-                            isError = state.isMemoError,
-                            helperText = "300자 이내로 입력해주세요",
-                            maxCount = 300,
-                            singleLine = false,
-                            icon = MDSTextFieldIcons.Clear,
-                            onIconClick = { viewModel.onChangeMemoValue(TextFieldValue()) },
-                            keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() })
-                        )
-                    } else {
-                        Text(
-                            text = "메모",
-                            style = Body2,
-                            color = Gray06
-                        )
-                        Spacer(modifier = Modifier.height(8.dp))
-                        Text(
-                            text = state.ledgerTransactionDetail?.description.orEmpty(),
-                            style = Body3,
-                            color = Gray10
-                        )
-                    }
-                    Box(
-                        modifier = Modifier
-                            .padding(vertical = 20.dp)
-                            .fillMaxWidth()
-                            .height(1.dp)
-                            .background(Gray03, shape = DottedShape(8.dp))
-                    )
-                    Text(
-                        text = "영수증 (최대12장)",
-                        style = Body2,
-                        color = Gray06
-                    )
-                    Spacer(modifier = Modifier.height(8.dp))
-                    LazyVerticalGrid(
-                        modifier = modifier
                             .fillMaxSize()
-                            .heightIn(max = 504.dp)
-                            .background(White),
-                        columns = GridCells.Fixed(3),
-                        verticalArrangement = Arrangement.spacedBy(8.dp),
-                        horizontalArrangement = Arrangement.spacedBy(10.dp)
+                            .background(White)
+                            .padding(vertical = 28.dp, horizontal = 16.dp)
                     ) {
-                        val showAddReceipt = state.useEditMode && state.receiptList.size < 12
-                        if (showAddReceipt) {
-                            item {
+                        if (state.useEditMode) {
+                            MDSTextField(
+                                modifier = Modifier.fillMaxWidth(),
+                                value = state.storeNameValue,
+                                onValueChange = viewModel::onChangeStoreNameValue,
+                                title = "수입·지출 출처",
+                                placeholder = "",
+                                isFilled = false,
+                                isError = state.isStoreNameError,
+                                helperText = "20자 이내로 입력해주세요",
+                                maxCount = 20,
+                                icon = MDSTextFieldIcons.Clear,
+                                singleLine = true,
+                                onIconClick = { viewModel.onChangeStoreNameValue(TextFieldValue()) },
+                                keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
+                            )
+                        } else {
+                            Text(
+                                text = "수입·지출 출처",
+                                style = Body2,
+                                color = Gray06
+                            )
+                            Spacer(modifier = Modifier.height(8.dp))
+                            Text(
+                                text = state.ledgerTransactionDetail?.storeInfo.orEmpty(),
+                                style = Body3,
+                                color = Gray10
+                            )
+                        }
+                        Box(
+                            modifier = Modifier
+                                .padding(vertical = 20.dp)
+                                .fillMaxWidth()
+                                .height(1.dp)
+                                .background(Gray03, shape = DottedShape(8.dp))
+                        )
+                        if (state.useEditMode) {
+                            MDSTextField(
+                                modifier = Modifier.fillMaxWidth(),
+                                value = state.totalPriceValue,
+                                onValueChange = viewModel::onChangeTotalPriceValue,
+                                title = "${state.fundTypeText} 금액",
+                                placeholder = "",
+                                isFilled = false,
+                                isError = state.isTotalPriceError,
+                                helperText = "999,999,999원 이내로 입력해주세요",
+                                onIconClick = { viewModel.onChangeTotalPriceValue(TextFieldValue()) },
+                                singleLine = true,
+                                icon = MDSTextFieldIcons.Clear,
+                                visualTransformation = PriceVisualTransformation(type = state.priceType),
+                                keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
+                                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                            )
+                        } else {
+                            Text(
+                                text = "${state.fundTypeText} 금액",
+                                style = Body2,
+                                color = Gray06
+                            )
+                            Spacer(modifier = Modifier.height(8.dp))
+                            Text(
+                                text = "${state.priceType.symbol}${state.totalPrice}원",
+                                style = Body3,
+                                color = Gray10
+                            )
+                        }
+                        Box(
+                            modifier = Modifier
+                                .padding(vertical = 20.dp)
+                                .fillMaxWidth()
+                                .height(1.dp)
+                                .background(Gray03, shape = DottedShape(8.dp))
+                        )
+                        if (state.useEditMode) {
+                            MDSTextField(
+                                modifier = Modifier.fillMaxWidth(),
+                                value = state.paymentDateValue,
+                                onValueChange = viewModel::onChangePaymentDateValue,
+                                title = "날짜",
+                                placeholder = "2024/01/01",
+                                isFilled = false,
+                                isError = state.isPaymentDateError,
+                                helperText = "올바른 날짜를 입력해주세요",
+                                onIconClick = { viewModel.onChangePaymentDateValue(TextFieldValue()) },
+                                singleLine = true,
+                                icon = MDSTextFieldIcons.Clear,
+                                visualTransformation = DateVisualTransformation(),
+                                keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
+                                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                            )
+                        } else {
+                            Text(
+                                text = "날짜",
+                                style = Body2,
+                                color = Gray06
+                            )
+                            Spacer(modifier = Modifier.height(8.dp))
+                            Text(
+                                text = state.formattedDate,
+                                style = Body3,
+                                color = Gray10
+                            )
+                        }
+                        Box(
+                            modifier = Modifier
+                                .padding(vertical = 20.dp)
+                                .fillMaxWidth()
+                                .height(1.dp)
+                                .background(Gray03, shape = DottedShape(8.dp))
+                        )
+                        if (state.useEditMode) {
+                            MDSTextField(
+                                modifier = Modifier.fillMaxWidth(),
+                                value = state.paymentTimeValue,
+                                onValueChange = viewModel::onChangePaymentTimeValue,
+                                title = "시간",
+                                placeholder = "00:00:00",
+                                isFilled = false,
+                                isError = state.isPaymentTimeError,
+                                helperText = "올바른 시간을 입력해주세요",
+                                onIconClick = { viewModel.onChangePaymentTimeValue(TextFieldValue()) },
+                                singleLine = true,
+                                icon = MDSTextFieldIcons.Clear,
+                                visualTransformation = TimeVisualTransformation(),
+                                keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
+                                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                            )
+                        } else {
+                            Text(
+                                text = "시간",
+                                style = Body2,
+                                color = Gray06
+                            )
+                            Spacer(modifier = Modifier.height(8.dp))
+                            Text(
+                                text = state.formattedTime,
+                                style = Body3,
+                                color = Gray10
+                            )
+                        }
+                        Box(
+                            modifier = Modifier
+                                .padding(vertical = 20.dp)
+                                .fillMaxWidth()
+                                .height(1.dp)
+                                .background(Gray03, shape = DottedShape(8.dp))
+                        )
+                        if (state.useEditMode) {
+                            MDSTextField(
+                                modifier = Modifier.fillMaxWidth(),
+                                value = state.memoValue,
+                                onValueChange = { viewModel.onChangeMemoValue(it) },
+                                title = "메모",
+                                placeholder = "",
+                                isFilled = false,
+                                isError = state.isMemoError,
+                                helperText = "300자 이내로 입력해주세요",
+                                maxCount = 300,
+                                singleLine = false,
+                                icon = MDSTextFieldIcons.Clear,
+                                onIconClick = { viewModel.onChangeMemoValue(TextFieldValue()) },
+                                keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() })
+                            )
+                        } else {
+                            Text(
+                                text = "메모",
+                                style = Body2,
+                                color = Gray06
+                            )
+                            Spacer(modifier = Modifier.height(8.dp))
+                            Text(
+                                text = state.ledgerTransactionDetail?.description.orEmpty(),
+                                style = Body3,
+                                color = Gray10
+                            )
+                        }
+                        Box(
+                            modifier = Modifier
+                                .padding(vertical = 20.dp)
+                                .fillMaxWidth()
+                                .height(1.dp)
+                                .background(Gray03, shape = DottedShape(8.dp))
+                        )
+                        Text(
+                            text = "영수증 (최대12장)",
+                            style = Body2,
+                            color = Gray06
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+                        LazyVerticalGrid(
+                            modifier = modifier
+                                .fillMaxSize()
+                                .heightIn(max = 504.dp)
+                                .background(White),
+                            columns = GridCells.Fixed(3),
+                            verticalArrangement = Arrangement.spacedBy(8.dp),
+                            horizontalArrangement = Arrangement.spacedBy(10.dp)
+                        ) {
+                            val showAddReceipt = state.useEditMode && state.receiptList.size < 12
+                            if (showAddReceipt) {
+                                item {
+                                    Box(
+                                        modifier = Modifier
+                                            .height(120.dp)
+                                            .clip(RoundedCornerShape(8.dp))
+                                            .background(Blue01)
+                                            .noRippleClickable {
+                                                viewModel.onChangeImageType(isReceipt = true)
+                                            },
+                                        contentAlignment = Alignment.Center
+                                    ) {
+                                        Icon(
+                                            painter = painterResource(id = R.drawable.ic_plus_outline),
+                                            contentDescription = null,
+                                            tint = Blue04
+                                        )
+                                    }
+                                }
+                            }
+                            itemsIndexed(items = state.receiptList) { index, item ->
                                 Box(
                                     modifier = Modifier
                                         .height(120.dp)
                                         .clip(RoundedCornerShape(8.dp))
-                                        .background(Blue01)
-                                        .noRippleClickable {
-                                            viewModel.onChangeImageType(isReceipt = true)
-                                        },
-                                    contentAlignment = Alignment.Center
                                 ) {
-                                    Icon(
-                                        painter = painterResource(id = R.drawable.ic_plus_outline),
+                                    GlideImage(
+                                        modifier = Modifier.fillMaxSize(),
+                                        model = item,
                                         contentDescription = null,
-                                        tint = Blue04
+                                        contentScale = ContentScale.FillWidth
                                     )
+                                    if (state.useEditMode) {
+                                        Icon(
+                                            modifier = Modifier
+                                                .align(Alignment.TopEnd)
+                                                .noRippleClickable {
+                                                    viewModel.onClickRemoveReceipt(item)
+                                                }
+                                                .padding(5.dp),
+                                            painter = painterResource(id = R.drawable.ic_close_filled),
+                                            contentDescription = null,
+                                            tint = Color.Unspecified
+                                        )
+                                    }
                                 }
                             }
                         }
-                        itemsIndexed(items = state.receiptList) { index, item ->
-                            Box(
-                                modifier = Modifier
-                                    .height(120.dp)
-                                    .clip(RoundedCornerShape(8.dp))
-                            ) {
-                                GlideImage(
-                                    modifier = Modifier.fillMaxSize(),
-                                    model = item,
-                                    contentDescription = null,
-                                    contentScale = ContentScale.FillWidth
-                                )
-                                if (state.useEditMode) {
-                                    Icon(
+                        Box(
+                            modifier = Modifier
+                                .padding(vertical = 20.dp)
+                                .fillMaxWidth()
+                                .height(1.dp)
+                                .background(Gray03, shape = DottedShape(8.dp))
+                        )
+                        Text(
+                            text = "증빙자료 (최대12장)",
+                            style = Body2,
+                            color = Gray06
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+                        LazyVerticalGrid(
+                            modifier = modifier
+                                .fillMaxSize()
+                                .heightIn(max = 504.dp)
+                                .background(White),
+                            columns = GridCells.Fixed(3),
+                            verticalArrangement = Arrangement.spacedBy(8.dp),
+                            horizontalArrangement = Arrangement.spacedBy(10.dp)
+                        ) {
+                            val showAddDocument = state.useEditMode && state.documentList.size < 12
+                            if (showAddDocument) {
+                                item {
+                                    Box(
                                         modifier = Modifier
-                                            .align(Alignment.TopEnd)
+                                            .height(120.dp)
+                                            .clip(RoundedCornerShape(8.dp))
+                                            .background(Blue01)
                                             .noRippleClickable {
-                                                viewModel.onClickRemoveReceipt(item)
-                                            }
-                                            .padding(5.dp),
-                                        painter = painterResource(id = R.drawable.ic_close_filled),
-                                        contentDescription = null,
-                                        tint = Color.Unspecified
-                                    )
+                                                viewModel.onChangeImageType(isReceipt = false)
+                                            },
+                                        contentAlignment = Alignment.Center
+                                    ) {
+                                        Icon(
+                                            painter = painterResource(id = R.drawable.ic_plus_outline),
+                                            contentDescription = null,
+                                            tint = Blue04
+                                        )
+                                    }
                                 }
                             }
-                        }
-                    }
-                    Box(
-                        modifier = Modifier
-                            .padding(vertical = 20.dp)
-                            .fillMaxWidth()
-                            .height(1.dp)
-                            .background(Gray03, shape = DottedShape(8.dp))
-                    )
-                    Text(
-                        text = "증빙자료 (최대12장)",
-                        style = Body2,
-                        color = Gray06
-                    )
-                    Spacer(modifier = Modifier.height(8.dp))
-                    LazyVerticalGrid(
-                        modifier = modifier
-                            .fillMaxSize()
-                            .heightIn(max = 504.dp)
-                            .background(White),
-                        columns = GridCells.Fixed(3),
-                        verticalArrangement = Arrangement.spacedBy(8.dp),
-                        horizontalArrangement = Arrangement.spacedBy(10.dp)
-                    ) {
-                        val showAddDocument = state.useEditMode && state.documentList.size < 12
-                        if (showAddDocument) {
-                            item {
+                            itemsIndexed(items = state.documentList) { index, item ->
                                 Box(
                                     modifier = Modifier
                                         .height(120.dp)
                                         .clip(RoundedCornerShape(8.dp))
-                                        .background(Blue01)
-                                        .noRippleClickable {
-                                            viewModel.onChangeImageType(isReceipt = false)
-                                        },
-                                    contentAlignment = Alignment.Center
                                 ) {
-                                    Icon(
-                                        painter = painterResource(id = R.drawable.ic_plus_outline),
+                                    GlideImage(
+                                        modifier = Modifier.fillMaxSize(),
+                                        model = item,
                                         contentDescription = null,
-                                        tint = Blue04
+                                        contentScale = ContentScale.FillWidth
                                     )
+                                    if (state.useEditMode) {
+                                        Icon(
+                                            modifier = Modifier
+                                                .align(Alignment.TopEnd)
+                                                .noRippleClickable {
+                                                    viewModel.onClickRemoveDocument(item)
+                                                }
+                                                .padding(5.dp),
+                                            painter = painterResource(id = R.drawable.ic_close_filled),
+                                            contentDescription = null,
+                                            tint = Color.Unspecified
+                                        )
+                                    }
                                 }
                             }
                         }
-                        itemsIndexed(items = state.documentList) { index, item ->
-                            Box(
-                                modifier = Modifier
-                                    .height(120.dp)
-                                    .clip(RoundedCornerShape(8.dp))
-                            ) {
-                                GlideImage(
-                                    modifier = Modifier.fillMaxSize(),
-                                    model = item,
-                                    contentDescription = null,
-                                    contentScale = ContentScale.FillWidth
-                                )
-                                if (state.useEditMode) {
-                                    Icon(
-                                        modifier = Modifier
-                                            .align(Alignment.TopEnd)
-                                            .noRippleClickable {
-                                                viewModel.onClickRemoveDocument(item)
-                                            }
-                                            .padding(5.dp),
-                                        painter = painterResource(id = R.drawable.ic_close_filled),
-                                        contentDescription = null,
-                                        tint = Color.Unspecified
-                                    )
-                                }
-                            }
-                        }
+                        Box(
+                            modifier = Modifier
+                                .padding(vertical = 20.dp)
+                                .fillMaxWidth()
+                                .height(1.dp)
+                                .background(Gray03, shape = DottedShape(8.dp))
+                        )
+                        Text(
+                            text = "작성자",
+                            style = Body2,
+                            color = Gray06
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Text(
+                            text = state.ledgerTransactionDetail?.authorName.orEmpty(),
+                            style = Body3,
+                            color = Gray10
+                        )
                     }
-                    Box(
-                        modifier = Modifier
-                            .padding(vertical = 20.dp)
-                            .fillMaxWidth()
-                            .height(1.dp)
-                            .background(Gray03, shape = DottedShape(8.dp))
-                    )
-                    Text(
-                        text = "작성자",
-                        style = Body2,
-                        color = Gray06
-                    )
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Text(
-                        text = state.ledgerTransactionDetail?.authorName.orEmpty(),
-                        style = Body3,
-                        color = Gray10
-                    )
                 }
-            }
-            if (state.useEditMode) {
-                MDSButton(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 24.dp, horizontal = 20.dp),
-                    text = "완료하기",
-                    enabled = state.enabledEdit,
-                    size = MDSButtonSize.MEDIUM,
-                    type = MDSButtonType.PRIMARY,
-                    onClick = { viewModel.eventEmit(LedgerDetailSideEffect.LedgerDetailEditDone) }
-                )
-            } else {
-                MDSButton(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 24.dp, horizontal = 20.dp),
-                    text = "수정하기",
-                    size = MDSButtonSize.MEDIUM,
-                    type = MDSButtonType.PRIMARY,
-                    onClick = { viewModel.eventEmit(LedgerDetailSideEffect.LedgerDetailEdit) }
-                )
+                if (state.isStaff) {
+                    if (state.useEditMode) {
+                        MDSButton(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 24.dp, horizontal = 20.dp),
+                            text = "완료하기",
+                            enabled = state.enabledEdit,
+                            size = MDSButtonSize.MEDIUM,
+                            type = MDSButtonType.PRIMARY,
+                            onClick = { viewModel.eventEmit(LedgerDetailSideEffect.LedgerDetailEditDone) }
+                        )
+                    } else {
+                        MDSButton(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 24.dp, horizontal = 20.dp),
+                            text = "수정하기",
+                            size = MDSButtonSize.MEDIUM,
+                            type = MDSButtonType.PRIMARY,
+                            onClick = { viewModel.eventEmit(LedgerDetailSideEffect.LedgerDetailEdit) }
+                        )
+                    }
+                }
             }
         }
     }

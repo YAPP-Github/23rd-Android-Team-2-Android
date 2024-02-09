@@ -89,7 +89,7 @@ fun OCRCaptureView(
                         .fillMaxWidth()
                         .background(Black.copy(alpha = 0.6f)),
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween
+                    horizontalArrangement = Arrangement.Center
                 ) {
                     // TODO MVP 에서는 제외되는 기능입니다.
 //                    Box(
@@ -138,7 +138,7 @@ fun OCRCaptureView(
                         contentDescription = null,
                         tint = Color.White
                     )
-                    Spacer(modifier = Modifier.width(76.dp))
+                    //Spacer(modifier = Modifier.width(76.dp))
                 }
                 Box(
                     modifier = Modifier

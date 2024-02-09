@@ -2,7 +2,6 @@ package com.moneymong.moneymong.feature.agency.join
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -20,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.moneymong.moneymong.common.ui.noRippleClickable
@@ -34,9 +34,9 @@ import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
 fun AgencyCompleteScreen(
-    modifier : Modifier = Modifier,
-    navigateToLedger : () -> Unit,
-    navigateToSearch : () -> Unit,
+    modifier: Modifier = Modifier,
+    navigateToLedger: () -> Unit,
+    navigateToSearch: () -> Unit,
     viewModel: AgencyCompleteViewModel = hiltViewModel()
 ) {
     val state = viewModel.collectAsState().value
@@ -51,18 +51,15 @@ fun AgencyCompleteScreen(
             .background(White)
             .padding(horizontal = MMHorizontalSpacing),
         topBar = {
-            Row(
+            Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(44.dp)
                     .background(White),
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
                     modifier = Modifier
-                        .weight(1f)
-                        .padding(vertical = 8.dp),
+                        .padding(vertical = 16.dp)
+                        .align(Alignment.Center),
                     text = "가입완료",
                     style = Heading1,
                     color = Black,
@@ -73,7 +70,8 @@ fun AgencyCompleteScreen(
                     modifier = Modifier
                         .noRippleClickable {
                             navigateToSearch()
-                        },
+                        }
+                        .align(Alignment.CenterEnd),
                     contentDescription = null
                 )
             }
@@ -83,7 +81,7 @@ fun AgencyCompleteScreen(
                 modifier = Modifier.padding(innerPadding),
                 navigateToLedger = navigateToLedger,
                 isBtnClicked = state.isBtnClicked,
-                isBtnClickChanged = { isBtnClicked ->  viewModel.isBtnClickChanged(isBtnClicked) }
+                isBtnClickChanged = { isBtnClicked -> viewModel.isBtnClickChanged(isBtnClicked) }
 
             )
         }
@@ -95,12 +93,12 @@ fun AgencyCompleteScreen(
 fun SignCompleteContent(
     modifier: Modifier = Modifier,
     navigateToLedger: () -> Unit,
-    isBtnClicked : Boolean,
-    isBtnClickChanged : (Boolean) -> Unit,
+    isBtnClicked: Boolean,
+    isBtnClickChanged: (Boolean) -> Unit,
 ) {
 
-    LaunchedEffect(key1 = isBtnClicked){
-        if(isBtnClicked){
+    LaunchedEffect(key1 = isBtnClicked) {
+        if (isBtnClicked) {
             navigateToLedger()
         }
     }
@@ -121,3 +119,11 @@ fun SignCompleteContent(
 }
 
 
+@Preview
+@Composable
+fun Preview() {
+    AgencyCompleteScreen(
+        navigateToLedger = {},
+        navigateToSearch = {},
+    )
+}

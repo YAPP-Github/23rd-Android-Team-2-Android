@@ -7,9 +7,12 @@ import com.moneymong.moneymong.ocr.util.ModalType
 data class OCRState(
     val document: DocumentEntity? = null,
     val modalType: ModalType = ModalType.CameraPermission,
-    val showPermissionDialog: Boolean = false,
+    val permissionDialogStatus: Boolean = false,
+    val isDeniedCamera: Boolean = false,
     val visibleHelper: Boolean = true,
-    val isLoading: Boolean = false
+    val isLoading: Boolean = false,
+    val visibleErrorDialog: Boolean = false,
+    val errorMessage: String = ""
 ): State {
 
     val isReceipt: Boolean
@@ -22,4 +25,7 @@ data class OCRState(
 
             return storeName || totalPrice || date || time
         }
+
+    val showPermissionDialog: Boolean
+        get() = permissionDialogStatus && !isDeniedCamera
 }

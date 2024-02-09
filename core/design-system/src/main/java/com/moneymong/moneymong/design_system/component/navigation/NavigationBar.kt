@@ -1,5 +1,6 @@
 package com.moneymong.moneymong.design_system.component.navigation
 
+import android.graphics.BlurMaskFilter
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -21,6 +22,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Paint
+import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -29,6 +33,7 @@ import com.moneymong.moneymong.design_system.component.navigation.MDSNavigationB
 import com.moneymong.moneymong.design_system.component.navigation.MDSNavigationBarItemDefaults.selectedLabelColor
 import com.moneymong.moneymong.design_system.component.navigation.MDSNavigationBarItemDefaults.unSelectedIconColor
 import com.moneymong.moneymong.design_system.component.navigation.MDSNavigationBarItemDefaults.unSelectedLabelColor
+import com.moneymong.moneymong.design_system.theme.Black
 import com.moneymong.moneymong.design_system.theme.Blue04
 import com.moneymong.moneymong.design_system.theme.Body2
 import com.moneymong.moneymong.design_system.theme.Gray02
@@ -44,6 +49,7 @@ fun MDSNavigationBar(
         modifier = modifier
             .fillMaxWidth()
             .navigationBarsPadding()
+            .navigationBarShadow()
             .background(color = White)
             .drawBehind {
                 val strokeWidth = 1.dp.toPx()
@@ -58,6 +64,32 @@ fun MDSNavigationBar(
             .padding(horizontal = 12.dp),
         content = content
     )
+}
+
+private fun Modifier.navigationBarShadow(): Modifier {
+    val shadowOffsetY = (-4).dp
+    val shadowBlurRadius = 8.dp
+    val shadowColor = Black.copy(alpha = 0.04f).toArgb()
+
+    return this.drawBehind {
+        drawIntoCanvas { canvas ->
+            val paint = Paint()
+            val frameworkPaint = paint.asFrameworkPaint()
+            frameworkPaint.color = shadowColor
+            frameworkPaint.maskFilter = BlurMaskFilter(
+                shadowBlurRadius.toPx(),
+                BlurMaskFilter.Blur.NORMAL
+            )
+
+            canvas.drawRect(
+                left = 0f,
+                top = shadowOffsetY.toPx(),
+                right = size.width,
+                bottom = size.height + shadowOffsetY.toPx(),
+                paint = paint
+            )
+        }
+    }
 }
 
 

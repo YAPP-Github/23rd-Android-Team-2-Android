@@ -32,6 +32,5 @@ fun KakaoLoginView(
             contentDescription = null,
             contentScale = ContentScale.FillWidth,
         )
-        Spacer(modifier = Modifier.height(28.dp))
     }
 }

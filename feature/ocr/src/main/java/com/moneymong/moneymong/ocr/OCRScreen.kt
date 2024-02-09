@@ -36,9 +36,11 @@ import com.moneymong.moneymong.design_system.theme.White
 import com.moneymong.moneymong.common.ext.hasPermission
 import com.moneymong.moneymong.common.ui.noRippleClickable
 import com.moneymong.moneymong.common.util.DisposableEffectWithLifeCycle
+import com.moneymong.moneymong.design_system.error.ErrorDialog
 import com.moneymong.moneymong.design_system.theme.Black
 import com.moneymong.moneymong.ocr.view.OCRCameraPermissionDeniedView
 import com.moneymong.moneymong.ocr.view.OCRCaptureView
+import com.moneymong.moneymong.ocr.view.OCRDeniedBottomBar
 import com.moneymong.moneymong.ocr.view.OCRHelperView
 import com.moneymong.moneymong.ocr.view.OCRTopbarView
 import org.orbitmvi.orbit.compose.collectAsState
@@ -59,7 +61,9 @@ fun OCRScreen(
     BackHandler(onBack = { navigateToLedger(false) })
 
     DisposableEffectWithLifeCycle(
-        onResume = { hasCameraPermission = context.hasPermission(CAMERA) }
+        onResume = {
+            hasCameraPermission = context.hasPermission(CAMERA)
+        }
     )
 
     LaunchedEffect(Unit) {
@@ -102,6 +106,12 @@ fun OCRScreen(
         )
     }
 
+    if (state.visibleErrorDialog) {
+        ErrorDialog(message = state.errorMessage) {
+            viewModel.onChangeVisibleErrorDialog(false)
+        }
+    }
+
     Scaffold {
         Box(
             modifier = modifier
@@ -111,11 +121,16 @@ fun OCRScreen(
             contentAlignment = Alignment.Center
         ) {
             if (!hasCameraPermission) {
-                OCRCameraPermissionDeniedView(onClickRequestPermission = {
-                    viewModel.eventEmit(
-                        OCRSideEffect.OCRMoveToPermissionSetting
-                    )
-                })
+                OCRCameraPermissionDeniedView(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .align(Alignment.Center),
+                    onClickRequestPermission = {
+                        viewModel.eventEmit(
+                            OCRSideEffect.OCRMoveToPermissionSetting
+                        )
+                    })
+                OCRDeniedBottomBar(modifier = Modifier.align(Alignment.BottomCenter))
             } else {
                 OCRCaptureView(
                     onClickCapture = {
@@ -134,6 +149,7 @@ fun OCRScreen(
             }
             OCRTopbarView(
                 modifier = Modifier.align(Alignment.TopCenter),
+                visibleHelp = hasCameraPermission,
                 onClickHelp = viewModel::onClickHelper,
                 onClickClose = { navigateToLedger(false) }
             )

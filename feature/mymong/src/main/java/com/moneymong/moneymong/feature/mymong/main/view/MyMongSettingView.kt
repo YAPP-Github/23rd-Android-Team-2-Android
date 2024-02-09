@@ -4,7 +4,6 @@ import android.content.pm.PackageManager
 import android.os.Build
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -72,7 +71,7 @@ internal fun MyMongSettingView(
             )
             SettingDivider()
             SettingItem(
-                iconRes = R.drawable.ic_paper,
+                iconRes = R.drawable.ic_document,
                 title = "개인정보 처리 방침",
                 onNavigateClick = navigateToPrivacyPolicy
             )

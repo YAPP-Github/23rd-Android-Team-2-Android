@@ -10,7 +10,7 @@ data class SignUpState(
     val isSelected: Boolean = false,
     val selectedUniv: String = "",
     val textValue: TextFieldValue = TextFieldValue(),
-    val isEnabled: Boolean = false,  //
+    val isEnabled: Boolean = false,
     val subTitleState: Boolean = false,
     val gradeInfor: Int = 0,
     //view
@@ -18,7 +18,6 @@ data class SignUpState(
     val isFilled: Boolean = false,
     val universityResponse: UniversitiesEntity? = null,
     val isUnivCreated : Boolean = false,
-    val textInput : Boolean = false,
     //item
     val isItemSelected : Boolean = false,
     val selectedGrade : Grade? = null,
@@ -26,7 +25,8 @@ data class SignUpState(
     val visibleError : Boolean = false,
     val errorMessage : String = "",
     val visiblePopUpError : Boolean = false,
-    val popUpErrorMessage : String = ""
+    val popUpErrorMessage : String = "",
+    val isButtonVisible : Boolean = true,
 
 
-) : State
+    ) : State

@@ -1,7 +1,9 @@
 package com.moneymong.moneymong.ledgerdetail
 
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.lifecycle.SavedStateHandle
 import com.moneymong.moneymong.common.base.BaseViewModel
+import com.moneymong.moneymong.common.error.MoneyMongError
 import com.moneymong.moneymong.common.ext.toDateFormat
 import com.moneymong.moneymong.common.ui.isValidPaymentDate
 import com.moneymong.moneymong.common.ui.isValidPaymentTime
@@ -21,8 +23,10 @@ import com.moneymong.moneymong.domain.usecase.ledgerdetail.PostLedgerDocumentTra
 import com.moneymong.moneymong.domain.usecase.ledgerdetail.PostLedgerReceiptTransactionUseCase
 import com.moneymong.moneymong.domain.usecase.ledgerdetail.UpdateLedgerTransactionDetailUseCase
 import com.moneymong.moneymong.domain.usecase.ocr.PostFileUploadUseCase
+import com.moneymong.moneymong.ledgerdetail.navigation.LedgerDetailArgs
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
+import org.orbitmvi.orbit.annotation.OrbitExperimental
 import org.orbitmvi.orbit.syntax.simple.blockingIntent
 import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.postSideEffect
@@ -30,8 +34,10 @@ import org.orbitmvi.orbit.syntax.simple.reduce
 import java.io.File
 import javax.inject.Inject
 
+@OptIn(OrbitExperimental::class)
 @HiltViewModel
 class LedgerDetailViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle,
     private val fetchLedgerTransactionDetailUseCase: FetchLedgerTransactionDetailUseCase,
     private val updateLedgerTransactionDetailUseCase: UpdateLedgerTransactionDetailUseCase,
     private val postLedgerReceiptTransactionUseCase: PostLedgerReceiptTransactionUseCase,
@@ -42,30 +48,31 @@ class LedgerDetailViewModel @Inject constructor(
     private val deleteLedgerDetailUseCase: DeleteLedgerDetailUseCase
 ) : BaseViewModel<LedgerDetailState, LedgerDetailSideEffect>(LedgerDetailState()) {
 
-    fun ledgerTransactionEdit(detailId: Int) = intent {
-        if (!state.isLoading) {
-            reduce { state.copy(isLoading = true) }
-            postLedgerReceiptTransaction(detailId)
-            deleteLedgerReceiptTransaction(detailId)
-            postLedgerDocumentTransaction(detailId)
-            deleteLedgerDocumentTransaction(detailId)
-            updateLedgerTransactionDetail(detailId)
-        }
+    init {
+        onChangeStaffStatus(isStaff = LedgerDetailArgs(savedStateHandle).isStaff)
+    }
 
-        reduce { state.copy(isLoading = false) }
+    fun ledgerTransactionEdit(detailId: Int) = intent {
+        postLedgerReceiptTransaction(detailId)
+        deleteLedgerReceiptTransaction(detailId)
+        postLedgerDocumentTransaction(detailId)
+        deleteLedgerDocumentTransaction(detailId)
+        updateLedgerTransactionDetail(detailId)
     }
 
     fun fetchLedgerTransactionDetail(detailId: Int) = intent {
+        reduce { state.copy(isLoading = true) }
         fetchLedgerTransactionDetailUseCase(detailId)
             .onSuccess {
                 reduce { state.copy(ledgerTransactionDetail = it) }
                 initTextValue(it)
             }.onFailure {
-                // TODO
-            }
+                showErrorDialog(it.message)
+            }.also { reduce { state.copy(isLoading = false) } }
     }
 
     fun updateLedgerTransactionDetail(detailId: Int) = intent {
+        reduce { state.copy(isLoading = true) }
         delay(1000) // 사진 수정 내용이 DB 반영되기 까지 걸리는 시간을 대응하기 위해 delay 설정
         val param = LedgerTransactionDetailParam(
             detailId = detailId,
@@ -79,12 +86,13 @@ class LedgerDetailViewModel @Inject constructor(
                 reduce { state.copy(ledgerTransactionDetail = it) }
                 initTextValue(it)
             }.onFailure {
-                // TODO
-            }
+                showErrorDialog(it.message)
+            }.also { reduce { state.copy(isLoading = false) } }
     }
 
     fun postLedgerReceiptTransaction(detailId: Int) = intent {
         if (state.receiptList.isNotEmpty()) {
+            reduce { state.copy(isLoading = true) }
             val mapToOriginalUrl =
                 state.ledgerTransactionDetail?.receiptImageUrls?.map { it.receiptImageUrl }
                     .orEmpty()
@@ -94,13 +102,14 @@ class LedgerDetailViewModel @Inject constructor(
             )
             postLedgerReceiptTransactionUseCase(param)
                 .onFailure {
-                    // TODO
-                }
+                    showErrorDialog(it.message)
+                }.also { reduce { state.copy(isLoading = false) } }
         }
     }
 
     fun postLedgerDocumentTransaction(detailId: Int) = intent {
         if (state.documentList.isNotEmpty()) {
+            reduce { state.copy(isLoading = true) }
             val mapToOriginalUrl =
                 state.ledgerTransactionDetail?.documentImageUrls?.map { it.documentImageUrl }
                     .orEmpty()
@@ -110,45 +119,45 @@ class LedgerDetailViewModel @Inject constructor(
             )
             postLedgerDocumentTransactionUseCase(param)
                 .onFailure {
-                    // TODO
-                }
+                    showErrorDialog(it.message)
+                }.also { reduce { state.copy(isLoading = false) } }
         }
     }
 
     fun deleteLedgerReceiptTransaction(detailId: Int) = intent {
         if (state.receiptIdList.isNotEmpty()) {
+            reduce { state.copy(isLoading = true) }
             state.receiptIdList.forEach { receiptId ->
                 val param = DeleteLedgerReceiptParam(detailId = detailId, receiptId = receiptId)
                 deleteLedgerReceiptTransactionUseCase(param)
                     .onFailure {
-                        // TODO
-                    }
+                        showErrorDialog(it.message)
+                    }.also { reduce { state.copy(isLoading = false) } }
             }
         }
     }
 
     fun deleteLedgerDocumentTransaction(detailId: Int) = intent {
         if (state.documentIdList.isNotEmpty()) {
+            reduce { state.copy(isLoading = true) }
             state.documentIdList.forEach { documentId ->
                 val param = DeleteLedgerDocumentParam(detailId = detailId, documentId = documentId)
                 deleteLedgerDocumentTransactionUseCase(param)
                     .onFailure {
-                        // TODO
-                    }
+                        showErrorDialog(it.message)
+                    }.also { reduce { state.copy(isLoading = false) } }
             }
         }
     }
 
     fun deleteLedgerDetail(detailId: Int) = intent {
-        if (!state.isLoading) {
-            reduce { state.copy(isLoading = true) }
-            deleteLedgerDetailUseCase(detailId)
-                .onSuccess {
-                    postSideEffect(LedgerDetailSideEffect.LedgerDetailNavigateToLedger)
-                }.onFailure {
-                    // TODO
-                }.also { reduce { state.copy(isLoading = false) } }
-        }
+        reduce { state.copy(isLoading = true) }
+        deleteLedgerDetailUseCase(detailId)
+            .onSuccess {
+                postSideEffect(LedgerDetailSideEffect.LedgerDetailNavigateToLedger)
+            }.onFailure {
+                showErrorDialog(it.message)
+            }.also { reduce { state.copy(isLoading = false) } }
     }
 
     fun postS3URLImage(imageFile: File?) = intent {
@@ -166,7 +175,7 @@ class LedgerDetailViewModel @Inject constructor(
                             }
                         }
                     }.onFailure {
-                        // TODO
+                        showErrorDialog(it.message)
                     }.also {
                         reduce {
                             state.copy(
@@ -319,6 +328,23 @@ class LedgerDetailViewModel @Inject constructor(
 
     fun onChangeVisibleConfirmModal(visible: Boolean) = intent {
         reduce { state.copy(showConfirmModal = visible) }
+    }
+
+    fun onChangeErrorDialogVisible(visible: Boolean) = intent {
+        reduce { state.copy(showErrorDialog = visible) }
+    }
+
+    private fun onChangeStaffStatus(isStaff: Boolean) = intent {
+        reduce { state.copy(isStaff = isStaff) }
+    }
+
+    private fun showErrorDialog(message: String?) = intent {
+        reduce {
+            state.copy(
+                showErrorDialog = true,
+                errorMessage = message ?: MoneyMongError.UnExpectedError.message
+            )
+        }
     }
 
     companion object {
