@@ -20,6 +20,13 @@ internal fun Project.configureAndroidCompose(
             val bom = libs.findLibrary("androidx-compose-bom").get()
             add("implementation", platform(bom))
             add("androidTestImplementation", platform(bom))
+
+            add("implementation" ,libs.findLibrary("androidx.compose.ui").get())
+            add("implementation" ,libs.findLibrary("androidx.compose.ui.tooling").get())
+            add("implementation" ,libs.findLibrary("androidx.compose.ui.tooling.preview").get())
+            add("implementation" ,libs.findLibrary("androidx.compose.material").get())
+            add("implementation" ,libs.findLibrary("androidx.compose.material3").get())
+            add("implementation" ,libs.findLibrary("androidx.navigation.compose").get())
         }
     }
 }
