@@ -32,6 +32,12 @@ fun configureFlavors(
                             applicationIdSuffix = it.applicationIdSuffix
                         }
                     }
+
+                    if (it == MoneyMongFlavor.tb) {
+                        manifestPlaceholders["appLabel"] = "머니몽 Dev"
+                    } else {
+                        manifestPlaceholders["appLabel"] = "머니몽"
+                    }
                 }
             }
         }
