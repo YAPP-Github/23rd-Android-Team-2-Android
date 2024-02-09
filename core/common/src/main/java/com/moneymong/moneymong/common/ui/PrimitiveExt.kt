@@ -4,15 +4,22 @@ import androidx.core.text.isDigitsOnly
 import java.text.DecimalFormat
 import java.text.ParseException
 import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.time.format.DateTimeParseException
 
 fun String.toWonFormat(unit: Boolean = false): String {
     return if (this.isEmpty()) {
         this
     } else {
-        if (unit) {
-            "${DecimalFormat("#,###").format(this.toLong())}원"
-        } else {
-            DecimalFormat("#,###").format(this.toLong())
+        try {
+            if (unit) {
+                "${DecimalFormat("#,###").format(this.toLong())}원"
+            } else {
+                DecimalFormat("#,###").format(this.toLong())
+            }
+        } catch (e: Exception) {
+            ""
         }
     }
 }
@@ -32,6 +39,16 @@ fun String.isValidPaymentDate(): Boolean {
     } catch (e: ParseException) {
         return false
     }
+
+    try {
+        val parsedDate = LocalDate.parse(this, DateTimeFormatter.ofPattern("yyyyMMdd"))
+        if (parsedDate.isAfter(LocalDate.now())) {
+            return false
+        }
+    } catch (e: DateTimeParseException) {
+        return false
+    }
+
     return true
 }
 

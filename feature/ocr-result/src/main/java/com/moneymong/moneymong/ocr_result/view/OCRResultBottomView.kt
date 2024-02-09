@@ -94,21 +94,21 @@ fun OCRResultBottomView(
                 OCRResultBottomItem(
                     modifier = Modifier
                         .fillMaxWidth(),
-                    icon = drawable.ic_agency,
+                    icon = drawable.ic_money,
                     prefix = "금액",
                     suffix = amount
                 )
                 Spacer(modifier = Modifier.height(14.dp))
                 OCRResultBottomItem(
                     modifier = Modifier.fillMaxWidth(),
-                    icon = drawable.ic_agency,
+                    icon = drawable.ic_plan,
                     prefix = "날짜",
                     suffix = date
                 )
                 Spacer(modifier = Modifier.height(14.dp))
                 OCRResultBottomItem(
                     modifier = Modifier.fillMaxWidth(),
-                    icon = drawable.ic_agency,
+                    icon = drawable.ic_time,
                     prefix = "시간",
                     suffix = time
                 )

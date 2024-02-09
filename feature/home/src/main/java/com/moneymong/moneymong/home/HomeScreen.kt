@@ -2,9 +2,11 @@ package com.moneymong.moneymong.home
 
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.navOptions
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
@@ -70,12 +72,15 @@ fun HomeScreen(
     Scaffold(
         bottomBar = {
             HomeBottomBarView(
-                homeNavigator = homeNavigator,
-                tabs = HomeBottomTabs.entries.toList()
+                visible = homeNavigator.includeCurrentRouteInTabs(),
+                tabs = HomeBottomTabs.entries.toList(),
+                currentRoute = homeNavigator.currentRoute,
+                navigateToTab = { homeNavigator.navigate(it.route) }
             )
         }
     ) { padding ->
         NavHost(
+            modifier = Modifier.fillMaxSize(),
             navController = homeNavController,
             startDestination = splashRoute,
             enterTransition = { EnterTransition.None },
@@ -185,10 +190,7 @@ fun HomeScreen(
                 navigateToTermsOfUse = homeNavController::navigateTermsOfUse,
                 navigateToPrivacyPolicy = homeNavController::navigatePrivacyPolicy,
                 navigateToWithdrawal = homeNavController::navigateWithdrawal,
-                navigateToLogin = {
-                    homeNavController.clearBackStack(agencyRoute)
-                    homeNavController.navigateLogin()
-                },
+                navigateToLogin = homeNavController::navigateLogin,
                 navigateUp = homeNavController::navigateUp
             )
         }

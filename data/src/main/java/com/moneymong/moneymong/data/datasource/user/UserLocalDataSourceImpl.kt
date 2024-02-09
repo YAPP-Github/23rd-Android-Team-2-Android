@@ -2,6 +2,7 @@ package com.moneymong.moneymong.data.datasource.user
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.intPreferencesKey
@@ -57,9 +58,30 @@ class UserLocalDataSourceImpl @Inject constructor(
         return flow.firstOrNull().orEmpty()
     }
 
+    override suspend fun saveDeniedCameraPermission(isDenied: Boolean) {
+        userDataStorePreferences.edit { preferences ->
+            preferences[DENIED_CAMERA_PERMISSION] = isDenied
+        }
+    }
+
+    override suspend fun fetchDeniedCameraPermission(): Boolean {
+        val flow = userDataStorePreferences.data
+            .catch { exception ->
+                when (exception) {
+                    is IOException -> emit(emptyPreferences())
+                    else -> throw exception
+                }
+            }
+            .map { preferences ->
+                preferences[DENIED_CAMERA_PERMISSION]
+            }
+        return flow.firstOrNull() ?: false
+    }
+
 
     companion object {
         val USER_ID = intPreferencesKey("userId")
         val USER_NICKNAME = stringPreferencesKey("userNickanme")
+        val DENIED_CAMERA_PERMISSION = booleanPreferencesKey("isDeniedCamera")
     }
 }

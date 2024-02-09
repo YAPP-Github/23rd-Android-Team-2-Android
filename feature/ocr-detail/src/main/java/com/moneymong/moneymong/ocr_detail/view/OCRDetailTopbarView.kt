@@ -46,7 +46,7 @@ fun OCRDetailTopbarView(
             tint = Gray10
         )
         Text(
-            modifier = Modifier.padding(start = 20.dp, top = 8.dp, bottom = 8.dp),
+            modifier = Modifier.padding(start = 20.dp, top = 16.dp, bottom = 16.dp),
             text = "상세내역",
             style = Heading1,
             color = Gray10

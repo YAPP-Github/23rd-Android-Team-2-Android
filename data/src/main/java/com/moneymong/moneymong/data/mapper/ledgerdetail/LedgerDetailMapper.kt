@@ -37,6 +37,7 @@ fun LedgerDetail.toEntity() =
         fundType = this.fundType,
         amount = this.amount,
         balance = this.balance,
+        order = this.order,
         paymentDate = this.paymentDate
     )
 

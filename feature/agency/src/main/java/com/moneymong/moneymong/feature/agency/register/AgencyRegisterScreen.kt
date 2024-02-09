@@ -1,6 +1,7 @@
 package com.moneymong.moneymong.feature.agency.register
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,8 +12,15 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -20,11 +28,11 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.moneymong.moneymong.common.ui.noRippleClickable
 import com.moneymong.moneymong.design_system.R
 import com.moneymong.moneymong.design_system.component.button.MDSButton
+import com.moneymong.moneymong.design_system.component.modal.MDSModal
 import com.moneymong.moneymong.design_system.error.ErrorDialog
 import com.moneymong.moneymong.design_system.theme.Gray07
 import com.moneymong.moneymong.design_system.theme.MMHorizontalSpacing
 import com.moneymong.moneymong.design_system.theme.White
-import com.moneymong.moneymong.feature.agency.register.component.AgencyOutDialog
 import com.moneymong.moneymong.feature.agency.register.view.AgencyResisterContentView
 import org.orbitmvi.orbit.compose.collectAsState
 import org.orbitmvi.orbit.compose.collectSideEffect
@@ -37,6 +45,8 @@ fun AgencyRegisterScreen(
     navigateUp: () -> Unit
 ) {
     val state by viewModel.collectAsState()
+    val focusManager = LocalFocusManager.current
+    val density = LocalDensity.current
 
     viewModel.collectSideEffect {
         when (it) {
@@ -51,10 +61,14 @@ fun AgencyRegisterScreen(
     }
 
     if (state.visibleOutDialog) {
-        AgencyOutDialog(
-            onDismissRequest = { viewModel.changeOutDialogVisibility(false) },
-            onPositive = viewModel::navigateUp,
-            onNegative = { viewModel.changeOutDialogVisibility(false) }
+        MDSModal(
+            icon = R.drawable.ic_warning_filled,
+            title = "정말 나가시겠습니까?",
+            description = "입력하신 내용은 저장되지 않습니다.",
+            negativeBtnText = "취소",
+            positiveBtnText = "확인",
+            onClickNegative = { viewModel.changeOutDialogVisibility(false) },
+            onClickPositive = viewModel::navigateUp
         )
     }
 
@@ -69,6 +83,9 @@ fun AgencyRegisterScreen(
         modifier = modifier
             .fillMaxSize()
             .background(color = White)
+            .pointerInput(key1 = Unit) {
+                detectTapGestures(onTap = { focusManager.clearFocus() })
+            }
             .padding(horizontal = MMHorizontalSpacing)
     ) {
         Icon(
@@ -82,14 +99,26 @@ fun AgencyRegisterScreen(
             contentDescription = null
         )
         Spacer(modifier = Modifier.height(8.dp))
+
+        var contentHeight by remember { mutableStateOf(0.dp) }
+        val contentModifier = if (contentHeight == 0.dp) Modifier.weight(1f) else Modifier
         AgencyResisterContentView(
-            modifier = Modifier.weight(1f),
+            modifier = contentModifier
+                .onSizeChanged {
+                    if (contentHeight == 0.dp) {
+                        with(density) {
+                            contentHeight = it.height.toDp()
+                        }
+                    }
+                }
+                .height(contentHeight),
             agencyType = state.agencyType,
             onAgencyTypeChange = viewModel::changeAgencyType,
             agencyName = state.agencyName,
             onAgencyNameChange = viewModel::changeAgencyName,
             changeNameTextFieldIsError = viewModel::changeNameTextFieldIsError,
         )
+
         val canRegister = state.agencyName.text.isNotEmpty() && state.nameTextFieldIsError.not()
         MDSButton(
             modifier = Modifier

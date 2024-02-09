@@ -19,7 +19,8 @@ fun SignUpButtonView(
     visiblePopUpError : Boolean,
     popUpErrorMessage : String,
     visiblePopUpErrorChanged : (Boolean) -> Unit,
-    onCreateUniversity : () -> Unit
+    onCreateUniversity : () -> Unit,
+    storeSchoolInfoExist : (Boolean) -> Unit
 ) {
     if(visiblePopUpError){
         ErrorDialog(
@@ -37,6 +38,7 @@ fun SignUpButtonView(
                 modifier = Modifier.fillMaxWidth(),
                 onClick = {
                     onCreateUniversity()
+                    storeSchoolInfoExist(true)
                 },
                 text = "가입하기",
                 type = MDSButtonType.PRIMARY,

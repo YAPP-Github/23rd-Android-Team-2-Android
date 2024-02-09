@@ -26,7 +26,8 @@ fun SignCompleteCheckedView(
     text: String,
     onChanged: () -> Unit,
     onSelectedGrade: () -> Unit,
-    onItemSelectedChange: (Boolean) -> Unit,
+    onItemSelectedChanged: (Boolean) -> Unit,
+    isEnableChanged : (Boolean) -> Unit
 ) {
     Row(
         modifier = modifier
@@ -52,7 +53,8 @@ fun SignCompleteCheckedView(
             onClick = {
                 onChanged()
                 onSelectedGrade()
-                onItemSelectedChange(false)
+                onItemSelectedChanged(false)
+                isEnableChanged(false)
             }
         ) {
 

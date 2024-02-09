@@ -34,6 +34,7 @@ import com.moneymong.moneymong.common.ui.noRippleClickable
 import com.moneymong.moneymong.common.ui.toWonFormat
 import com.moneymong.moneymong.design_system.R.*
 import com.moneymong.moneymong.design_system.component.chip.MDSChip
+import com.moneymong.moneymong.design_system.loading.LoadingScreen
 import com.moneymong.moneymong.design_system.theme.Body2
 import com.moneymong.moneymong.design_system.theme.Body3
 import com.moneymong.moneymong.design_system.theme.Gray01
@@ -77,6 +78,7 @@ fun LedgerDefaultView(
     transactionType: LedgerTransactionType,
     currentDate: LocalDate,
     hasTransaction: Boolean,
+    isLoading: Boolean,
     onChangeTransactionType: (LedgerTransactionType) -> Unit,
     onAddMonthFromCurrentDate: (Long) -> Unit,
     onClickTransactionItem: (Int) -> Unit
@@ -180,23 +182,30 @@ fun LedgerDefaultView(
             )
             Spacer(modifier = Modifier.height(6.dp))
         }
-        if (hasTransaction) {
-            itemsIndexed(ledgerDetails) { index, item ->
-                LedgerTransactionItem(
-                    modifier = Modifier.padding(horizontal = 20.dp),
-                    ledgerDetail = item,
-                    onClickTransactionItem = onClickTransactionItem
-                )
-            }
-        } else {
-            val descriptionDate =
-                if (transactionType == LedgerTransactionType.전체) "${currentDate.monthValue}월에 " else ""
+        if (isLoading) {
             item {
                 Spacer(modifier = Modifier.height(121.dp))
-                LedgerTransactionEmptyView(
-                    text = descriptionDate + transactionType.description,
-                    image = transactionType.imgRes
-                )
+                LoadingScreen(modifier = Modifier.fillMaxSize())
+            }
+        } else {
+            if (hasTransaction) {
+                itemsIndexed(ledgerDetails) { index, item ->
+                    LedgerTransactionItem(
+                        modifier = Modifier.padding(horizontal = 20.dp),
+                        ledgerDetail = item,
+                        onClickTransactionItem = onClickTransactionItem
+                    )
+                }
+            } else {
+                val descriptionDate =
+                    if (transactionType == LedgerTransactionType.전체) "${currentDate.monthValue}월에 " else ""
+                item {
+                    Spacer(modifier = Modifier.height(121.dp))
+                    LedgerTransactionEmptyView(
+                        text = descriptionDate + transactionType.description,
+                        image = transactionType.imgRes
+                    )
+                }
             }
         }
     }
@@ -211,6 +220,7 @@ fun LedgerDefaultPreview() {
         transactionType = LedgerTransactionType.전체,
         currentDate = LocalDate.now(),
         hasTransaction = false,
+        isLoading = false,
         onChangeTransactionType = {},
         onAddMonthFromCurrentDate = {},
         onClickTransactionItem = {}

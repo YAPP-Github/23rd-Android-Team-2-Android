@@ -20,6 +20,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.moneymong.moneymong.common.ui.noRippleClickable
@@ -119,7 +120,6 @@ fun SignUpContent(
 ) {
 
     LaunchedEffect(key1 = state.isUnivCreated) {
-        Log.d("isUnivCreated", state.isUnivCreated.toString())
         if (state.isUnivCreated) {
             navigateToSignComplete()
         }
@@ -185,8 +185,7 @@ fun SignUpContent(
                             viewModel.eventEmit(SignUpSideEffect.UniversitiesApi(it))
                         },
                         value = state.textValue,
-                        textInput = state.textInput,
-                        textValueChanged = { isTextInput -> viewModel.textInputChanged(isTextInput)}
+                        isButtonVisibleChanged = { isButtonVisible -> viewModel.isButtonVisibleChanged(isButtonVisible)}
                     )
                 } else {
                     Column(modifier = Modifier.fillMaxSize()) {
@@ -197,7 +196,8 @@ fun SignUpContent(
                                 viewModel.isSelectedChanged(false)
                             },
                             onSelectedGrade = { viewModel.selectedGradeChange(null) },
-                            onItemSelectedChange = { viewModel.isItemSelectedChanged(it) },
+                            onItemSelectedChanged = { viewModel.isItemSelectedChanged(it) },
+                            isEnableChanged = { viewModel.isEnabledChanged(it) }
                         )
                         SignUpGradeView(
                             modifier = Modifier.fillMaxWidth(),
@@ -216,24 +216,35 @@ fun SignUpContent(
                 .fillMaxWidth()
                 .align(Alignment.BottomCenter)
         ) {
-            SignUpButtonView(
-                modifier = Modifier.fillMaxWidth(),
-                isEnabled = state.isEnabled,
-                visiblePopUpError = state.visiblePopUpError,
-                popUpErrorMessage = state.popUpErrorMessage,
-                visiblePopUpErrorChanged = { visiblePopUpError ->
-                    viewModel.visiblePopUpErrorChanged(visiblePopUpError)
-                },
-                onCreateUniversity = {
-                    viewModel.eventEmit(
-                        SignUpSideEffect.CreateUniversityApi(
-                            state.selectedUniv,
-                            state.gradeInfor
+            if(state.isButtonVisible){
+                SignUpButtonView(
+                    modifier = Modifier.fillMaxWidth(),
+                    isEnabled = state.isEnabled,
+                    visiblePopUpError = state.visiblePopUpError,
+                    popUpErrorMessage = state.popUpErrorMessage,
+                    visiblePopUpErrorChanged = { visiblePopUpError ->
+                        viewModel.visiblePopUpErrorChanged(visiblePopUpError)
+                    },
+                    onCreateUniversity = {
+                        viewModel.eventEmit(
+                            SignUpSideEffect.CreateUniversityApi(
+                                state.selectedUniv,
+                                state.gradeInfor
+                            )
                         )
-                    )
-                }
-            )
+                    },
+                    storeSchoolInfoExist = { viewModel.storeSchoolInfoExist(it) }
+                )
+            }
         }
     }
 }
 
+@Preview
+@Composable
+fun Preview(){
+    SignUpScreen(
+        navigateUp = {},
+        navigateToSignComplete = {}
+    )
+}

@@ -6,6 +6,9 @@ import com.moneymong.moneymong.common.ui.toWonFormat
 import com.moneymong.moneymong.domain.entity.ocr.DocumentEntity
 import com.moneymong.moneymong.domain.entity.ocr.DocumentResultEntity
 import java.io.File
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 data class OCRResultState(
     val isLoading: Boolean = false,
@@ -42,18 +45,18 @@ data class OCRResultState(
 
     val formattedDate: String
         get() {
-            val date = receipt?.paymentInfo?.date?.formatted
-            val formattedYear = date?.year?.let { "${it}년" }.orEmpty()
-            val formattedMonth = date?.month?.let { "${it}월" }.orEmpty()
-            val formattedDay = date?.day?.let { "${it}일" }.orEmpty()
-
-            return "$formattedYear $formattedMonth $formattedDay"
+            val currentDate = SimpleDateFormat("yyyy년 MM월 dd일", Locale.KOREA).format(Date(System.currentTimeMillis()))
+            return receipt?.paymentInfo?.date?.let {
+                "${it.formatted?.year}년 ${it.formatted?.month}월 ${it.formatted?.day}일"
+            } ?: currentDate
         }
 
     val formattedTime: String
         get() {
-            val time = receipt?.paymentInfo?.time?.formatted
-            return "${time?.hour ?: "00"}:${time?.minute ?: "00"}:${time?.second ?: "00"}"
+            val currentTime = SimpleDateFormat("HH:mm:ss", Locale.KOREA).format(Date(System.currentTimeMillis()))
+            return receipt?.paymentInfo?.time?.let {
+                "${it.formatted?.hour}:${it.formatted?.minute}:${it.formatted?.second}"
+            } ?: currentTime
         }
 
     val postPaymentDate: String

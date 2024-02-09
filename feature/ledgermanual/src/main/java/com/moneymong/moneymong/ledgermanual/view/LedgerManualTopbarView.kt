@@ -41,7 +41,7 @@ fun LedgerManualTopbarView(
                 .width(65.dp)
         )
         Text(
-            modifier = Modifier.padding(vertical = 8.dp),
+            modifier = Modifier.padding(vertical = 16.dp),
             text = "장부작성",
             style = Heading1,
             color = Gray10

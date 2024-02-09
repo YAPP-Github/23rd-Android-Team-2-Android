@@ -35,7 +35,6 @@ class TokenRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getUpdateToken(refreshToken: String): Result<RefreshTokenEntity> {
-        tokenUpdateFailed.emit(true)
         return tokenRemoteDataSource.getUpdateToken(refreshToken).map { it.toEntity() }
     }
 
@@ -59,5 +58,8 @@ class TokenRepositoryImpl @Inject constructor(
         return localDataSource.getSchoolInfo()
     }
 
+    override suspend fun setSchoolInfoExist(infoExist : Boolean) {
+        return localDataSource.setSchoolInfoExist(infoExist)
+    }
 
 }

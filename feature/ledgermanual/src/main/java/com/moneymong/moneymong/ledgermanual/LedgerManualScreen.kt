@@ -7,6 +7,7 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,7 +17,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -35,10 +35,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
@@ -170,6 +172,9 @@ fun LedgerManualScreen(
                 .fillMaxSize()
                 .verticalScroll(verticalScrollState)
                 .background(White)
+                .pointerInput(key1 = Unit) {
+                    detectTapGestures(onTap = { focusManager.clearFocus() })
+                }
                 .padding(it)
         ) {
             Spacer(modifier = Modifier.height(12.dp))
@@ -282,7 +287,7 @@ fun LedgerManualScreen(
                 )
                 Text(
                     text = buildAnnotatedString {
-                        append("영수증 (최대 12장)\n")
+                        append("영수증 (선택/최대 12장)\n")
                         withStyle(SpanStyle(color = Blue04)) {
                             append("*지출일 경우 영수증을 꼭 제출해주세요")
                         }
@@ -351,7 +356,7 @@ fun LedgerManualScreen(
                 }
                 Spacer(modifier = Modifier.height(24.dp))
                 Text(
-                    text = "증빙 자료 (최대 12장)",
+                    text = "증빙 자료 (선택/최대 12장)",
                     style = Body2,
                     color = Gray06
                 )
@@ -429,8 +434,6 @@ fun LedgerManualScreen(
                     singleLine = false,
                     isFilled = isMemoFilled,
                     isError = state.isMemoError,
-                    onIconClick = { viewModel.onChangeMemoValue(TextFieldValue()) },
-                    icon = MDSTextFieldIcons.Clear,
                     keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() })
                 )
                 Spacer(modifier = Modifier.height(28.dp))
@@ -448,8 +451,7 @@ fun LedgerManualScreen(
                 Spacer(modifier = Modifier.height(64.dp))
                 MDSButton(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .imePadding(),
+                        .fillMaxWidth(),
                     text = "작성하기",
                     enabled = state.enabled,
                     type = MDSButtonType.PRIMARY,

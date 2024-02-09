@@ -5,7 +5,6 @@ import android.content.ClipboardManager
 import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -130,7 +129,7 @@ fun MemberCardView(
                             color = Blue04
                         )
                         Icon(
-                            painter = painterResource(id = R.drawable.ic_copy),
+                            painter = painterResource(id = R.drawable.img_copy),
                             modifier = Modifier
                                 .padding(start = 2.dp, top = 1.dp, bottom = 1.dp)
                                 .size(18.dp),
@@ -152,7 +151,7 @@ fun MemberCardView(
                             color = Blue04
                         )
                         Icon(
-                            painter = painterResource(id = R.drawable.ic_reissue),
+                            painter = painterResource(id = R.drawable.img_reissue),
                             modifier = Modifier
                                 .padding(start = 2.dp, top = 1.dp, bottom = 1.dp)
                                 .size(18.dp),

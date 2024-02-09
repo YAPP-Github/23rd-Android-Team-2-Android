@@ -80,6 +80,7 @@ fun MemberListView(
                                 onIconClick = {
                                     onIconClick(true)
                                 },
+                                memberMyInfo = memberMyInfo,
                                 userId = filteredMemberList.userId,
                                 vertClickedUserIdChanged = vertClickedUserIdChanged
                             )
