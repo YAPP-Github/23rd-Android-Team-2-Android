@@ -16,10 +16,8 @@
             </builds>
           </compositeBuild>
         </compositeConfiguration>
-        <option name="testRunner" value="GRADLE" />
-        <option name="distributionType" value="DEFAULT_WRAPPED" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="gradleJvm" value="jbr-17" />
+        <option name="gradleJvm" value="#GRADLE_LOCAL_JAVA_HOME" />
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
@@ -27,14 +25,27 @@
             <option value="$PROJECT_DIR$/build-logic" />
             <option value="$PROJECT_DIR$/build-logic/convention" />
             <option value="$PROJECT_DIR$/core" />
+            <option value="$PROJECT_DIR$/core/common" />
             <option value="$PROJECT_DIR$/core/design-system" />
+            <option value="$PROJECT_DIR$/core/network" />
             <option value="$PROJECT_DIR$/core/ui" />
             <option value="$PROJECT_DIR$/data" />
             <option value="$PROJECT_DIR$/domain" />
             <option value="$PROJECT_DIR$/feature" />
+            <option value="$PROJECT_DIR$/feature/agency" />
+            <option value="$PROJECT_DIR$/feature/home" />
+            <option value="$PROJECT_DIR$/feature/ledger" />
+            <option value="$PROJECT_DIR$/feature/ledgerdetail" />
+            <option value="$PROJECT_DIR$/feature/ledgermanual" />
+            <option value="$PROJECT_DIR$/feature/member" />
+            <option value="$PROJECT_DIR$/feature/mymong" />
+            <option value="$PROJECT_DIR$/feature/ocr" />
+            <option value="$PROJECT_DIR$/feature/ocr-detail" />
+            <option value="$PROJECT_DIR$/feature/ocr-result" />
             <option value="$PROJECT_DIR$/feature/sign" />
           </set>
         </option>
+        <option name="resolveExternalAnnotations" value="false" />
       </GradleProjectSettings>
     </option>
   </component>
