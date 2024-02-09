@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "1091533625653",
+    "project_id": "moneymong-9e794",
+    "storage_bucket": "moneymong-9e794.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1091533625653:android:f8c3edecf6f6108fad547c",
+        "android_client_info": {
+          "package_name": "com.moneymong.moneymong.live"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAb9dOMs-B-u9YynEWdtV9nrq_VbMpAXtg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1091533625653:android:435637da7f3d4352ad547c",
+        "android_client_info": {
+          "package_name": "com.moneymong.moneymong.tb"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAb9dOMs-B-u9YynEWdtV9nrq_VbMpAXtg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
