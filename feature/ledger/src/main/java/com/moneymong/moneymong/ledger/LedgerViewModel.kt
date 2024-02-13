@@ -79,7 +79,7 @@ class LedgerViewModel @Inject constructor(
                 year = state.currentDate.year,
                 month = state.currentDate.monthValue,
                 page = 0,
-                limit = 10
+                limit = 1000
             )
             fetchLedgerTransactionListUseCase(param)
                 .onSuccess {
