@@ -17,10 +17,10 @@ android {
     signingConfigs {
         create("release") {
             storeFile =
-                file(getKeyStore("storeFile"))
-            storePassword = getKeyStore("storePassword")
-            keyAlias = getKeyStore("keyAlias")
-            keyPassword = getKeyStore("keyPassword")
+                file(getApiKey("storeFile"))
+            storePassword = getApiKey("storePassword")
+            keyAlias = getApiKey("keyAlias")
+            keyPassword = getApiKey("keyPassword")
         }
     }
     namespace = "com.moneymong.moneymong"
@@ -30,7 +30,7 @@ android {
         applicationId = "com.moneymong.moneymong"
         minSdk = 24
         targetSdk = 34
-        versionCode = 6
+        versionCode = 9
         versionName = "1.0.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -94,18 +94,6 @@ dependencies {
     androidTestImplementation(libs.androidx.test.espresso.core)
 }
 
-fun keystoreProperties(projectRootDir : File) : Properties {
-    val keystorePropertiesFile = rootProject.file("keystore.properties")
-    val keystoreProperties = Properties()
-    keystoreProperties.load(FileInputStream(keystorePropertiesFile))
-
-    return keystoreProperties
-}
-
 fun getApiKey(propertyKey : String): String {
     return gradleLocalProperties(rootDir).getProperty(propertyKey)
-}
-
-fun getKeyStore(keystoreKey : String): String {
-    return keystoreProperties(rootDir).getProperty(keystoreKey)
 }
