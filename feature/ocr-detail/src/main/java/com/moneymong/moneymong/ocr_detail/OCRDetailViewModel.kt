@@ -21,6 +21,9 @@ import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.postSideEffect
 import org.orbitmvi.orbit.syntax.simple.reduce
 import java.io.File
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 import javax.inject.Inject
 
 @HiltViewModel
@@ -39,12 +42,14 @@ class OCRDetailViewModel @Inject constructor(
 
     fun init(document: DocumentEntity?) = intent {
         val receipt = document?.images?.first()?.receipt?.result
-        val paymentDateString = receipt?.paymentInfo?.date?.formatted.run {
-            "${this?.year ?: ""}${this?.month ?: ""}${this?.day ?: ""}"
-        }
-        val paymentTimeString = receipt?.paymentInfo?.time?.formatted.run {
-            "${this?.hour ?: ""}${this?.minute ?: ""}${this?.second ?: ""}"
-        }
+        val currentDate = SimpleDateFormat("yyyyMMdd", Locale.KOREA).format(Date(System.currentTimeMillis()))
+        val currentTime = SimpleDateFormat("HHmmss", Locale.KOREA).format(Date(System.currentTimeMillis()))
+        val paymentDateString = receipt?.paymentInfo?.date?.let {
+            "${it.formatted?.year}년 ${it.formatted?.month}월 ${it.formatted?.day}일"
+        } ?: currentDate
+        val paymentTimeString = receipt?.paymentInfo?.time?.let {
+            "${it.formatted?.hour}:${it.formatted?.minute}:${it.formatted?.second}"
+        } ?: currentTime
         reduce {
             state.copy(
                 document = document,
@@ -77,7 +82,7 @@ class OCRDetailViewModel @Inject constructor(
                 id = state.agencyId,
                 storeInfo = state.storeNameValue.text,
                 fundType = state.fundType,
-                amount = state.totalPriceValue.text.toInt(),
+                amount = state.totalPriceValue.text.replace(".", "").toInt(),
                 description = state.memoValue.text,
                 paymentDate = state.postPaymentDate,
                 receiptImageUrls = state.receiptImageUrls,
