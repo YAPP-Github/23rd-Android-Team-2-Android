@@ -35,8 +35,11 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -68,6 +71,7 @@ import com.moneymong.moneymong.design_system.theme.Gray03
 import com.moneymong.moneymong.design_system.theme.Gray06
 import com.moneymong.moneymong.design_system.theme.Gray10
 import com.moneymong.moneymong.design_system.theme.MMHorizontalSpacing
+import com.moneymong.moneymong.design_system.theme.Red03
 import com.moneymong.moneymong.design_system.theme.White
 import com.moneymong.moneymong.ledgerdetail.view.LedgerDetailTopbarView
 import org.orbitmvi.orbit.compose.collectAsState
@@ -203,7 +207,14 @@ fun LedgerDetailScreen(
                                 modifier = Modifier.fillMaxWidth(),
                                 value = state.storeNameValue,
                                 onValueChange = viewModel::onChangeStoreNameValue,
-                                title = "수입·지출 출처",
+                                title = buildAnnotatedString {
+                                    append("수입·지출 출처")
+                                    if (state.enabledEdit) {
+                                        withStyle(SpanStyle(color = Red03)) {
+                                            append("*")
+                                        }
+                                    }
+                                },
                                 placeholder = "",
                                 isFilled = false,
                                 isError = state.isStoreNameError,
@@ -239,7 +250,14 @@ fun LedgerDetailScreen(
                                 modifier = Modifier.fillMaxWidth(),
                                 value = state.totalPriceValue,
                                 onValueChange = viewModel::onChangeTotalPriceValue,
-                                title = "${state.fundTypeText} 금액",
+                                title = buildAnnotatedString {
+                                    append("${state.fundTypeText} 금액")
+                                    if (state.enabledEdit) {
+                                        withStyle(SpanStyle(color = Red03)) {
+                                            append("*")
+                                        }
+                                    }
+                                },
                                 placeholder = "",
                                 isFilled = false,
                                 isError = state.isTotalPriceError,
@@ -276,7 +294,14 @@ fun LedgerDetailScreen(
                                 modifier = Modifier.fillMaxWidth(),
                                 value = state.paymentDateValue,
                                 onValueChange = viewModel::onChangePaymentDateValue,
-                                title = "날짜",
+                                title = buildAnnotatedString {
+                                    append("날짜")
+                                    if (state.enabledEdit) {
+                                        withStyle(SpanStyle(color = Red03)) {
+                                            append("*")
+                                        }
+                                    }
+                                },
                                 placeholder = "2024/01/01",
                                 isFilled = false,
                                 isError = state.isPaymentDateError,
@@ -313,7 +338,14 @@ fun LedgerDetailScreen(
                                 modifier = Modifier.fillMaxWidth(),
                                 value = state.paymentTimeValue,
                                 onValueChange = viewModel::onChangePaymentTimeValue,
-                                title = "시간",
+                                title = buildAnnotatedString {
+                                    append("시간")
+                                    if (state.enabledEdit) {
+                                        withStyle(SpanStyle(color = Red03)) {
+                                            append("*")
+                                        }
+                                    }
+                                },
                                 placeholder = "00:00:00",
                                 isFilled = false,
                                 isError = state.isPaymentTimeError,
