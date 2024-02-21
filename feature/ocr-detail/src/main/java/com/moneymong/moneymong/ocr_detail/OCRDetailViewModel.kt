@@ -45,10 +45,10 @@ class OCRDetailViewModel @Inject constructor(
         val currentDate = SimpleDateFormat("yyyyMMdd", Locale.KOREA).format(Date(System.currentTimeMillis()))
         val currentTime = SimpleDateFormat("HHmmss", Locale.KOREA).format(Date(System.currentTimeMillis()))
         val paymentDateString = receipt?.paymentInfo?.date?.let {
-            "${it.formatted?.year}년 ${it.formatted?.month}월 ${it.formatted?.day}일"
+            "${it.formatted?.year}${it.formatted?.month}${it.formatted?.day}"
         } ?: currentDate
         val paymentTimeString = receipt?.paymentInfo?.time?.let {
-            "${it.formatted?.hour}:${it.formatted?.minute}:${it.formatted?.second}"
+            "${it.formatted?.hour}${it.formatted?.minute}${it.formatted?.second}"
         } ?: currentTime
         reduce {
             state.copy(
