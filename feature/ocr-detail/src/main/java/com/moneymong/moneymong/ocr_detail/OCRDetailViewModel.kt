@@ -44,11 +44,23 @@ class OCRDetailViewModel @Inject constructor(
         val receipt = document?.images?.first()?.receipt?.result
         val currentDate = SimpleDateFormat("yyyyMMdd", Locale.KOREA).format(Date(System.currentTimeMillis()))
         val currentTime = SimpleDateFormat("HHmmss", Locale.KOREA).format(Date(System.currentTimeMillis()))
-        val paymentDateString = receipt?.paymentInfo?.date?.let {
-            "${it.formatted?.year}${it.formatted?.month}${it.formatted?.day}"
+        val paymentDateString = receipt?.paymentInfo?.date?.formatted?.let {
+            ("${it.year}${it.month}${it.day}").run {
+                if (validateValue(length = 8, isDigit = true) && isValidPaymentDate()) {
+                    this
+                } else {
+                    currentDate
+                }
+            }
         } ?: currentDate
-        val paymentTimeString = receipt?.paymentInfo?.time?.let {
-            "${it.formatted?.hour}${it.formatted?.minute}${it.formatted?.second}"
+        val paymentTimeString = receipt?.paymentInfo?.time?.formatted?.let {
+            ("${it.hour}${it.minute}${it.second}").run {
+                if (validateValue(length = 6, isDigit = true) && isValidPaymentTime()) {
+                    this
+                } else {
+                    currentTime
+                }
+            }
         } ?: currentTime
         reduce {
             state.copy(
