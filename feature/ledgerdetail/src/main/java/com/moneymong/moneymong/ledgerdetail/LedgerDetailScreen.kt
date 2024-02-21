@@ -209,10 +209,8 @@ fun LedgerDetailScreen(
                                 onValueChange = viewModel::onChangeStoreNameValue,
                                 title = buildAnnotatedString {
                                     append("수입·지출 출처")
-                                    if (state.enabledEdit) {
-                                        withStyle(SpanStyle(color = Red03)) {
-                                            append("*")
-                                        }
+                                    withStyle(SpanStyle(color = Red03)) {
+                                        append("*")
                                     }
                                 },
                                 placeholder = "",
@@ -252,10 +250,8 @@ fun LedgerDetailScreen(
                                 onValueChange = viewModel::onChangeTotalPriceValue,
                                 title = buildAnnotatedString {
                                     append("${state.fundTypeText} 금액")
-                                    if (state.enabledEdit) {
-                                        withStyle(SpanStyle(color = Red03)) {
-                                            append("*")
-                                        }
+                                    withStyle(SpanStyle(color = Red03)) {
+                                        append("*")
                                     }
                                 },
                                 placeholder = "",
@@ -296,10 +292,8 @@ fun LedgerDetailScreen(
                                 onValueChange = viewModel::onChangePaymentDateValue,
                                 title = buildAnnotatedString {
                                     append("날짜")
-                                    if (state.enabledEdit) {
-                                        withStyle(SpanStyle(color = Red03)) {
-                                            append("*")
-                                        }
+                                    withStyle(SpanStyle(color = Red03)) {
+                                        append("*")
                                     }
                                 },
                                 placeholder = "2024/01/01",
@@ -340,10 +334,8 @@ fun LedgerDetailScreen(
                                 onValueChange = viewModel::onChangePaymentTimeValue,
                                 title = buildAnnotatedString {
                                     append("시간")
-                                    if (state.enabledEdit) {
-                                        withStyle(SpanStyle(color = Red03)) {
-                                            append("*")
-                                        }
+                                    withStyle(SpanStyle(color = Red03)) {
+                                        append("*")
                                     }
                                 },
                                 placeholder = "00:00:00",
