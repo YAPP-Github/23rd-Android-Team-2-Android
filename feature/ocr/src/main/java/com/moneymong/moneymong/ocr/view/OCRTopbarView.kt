@@ -46,7 +46,7 @@ fun OCRTopbarView(
             if (visibleHelp) {
                 Icon(
                     modifier = Modifier
-                        .padding(vertical = 10.dp, horizontal = 20.dp)
+                        .padding(vertical = 16.dp, horizontal = 20.dp)
                         .noRippleClickable { onClickHelp() },
                     painter = painterResource(id = drawable.ic_warning_outline),
                     contentDescription = null,
@@ -57,7 +57,7 @@ fun OCRTopbarView(
             }
             Icon(
                 modifier = Modifier
-                    .padding(vertical = 10.dp, horizontal = 20.dp)
+                    .padding(vertical = 16.dp, horizontal = 20.dp)
                     .noRippleClickable { onClickClose() },
                 painter = painterResource(id = drawable.ic_close_default),
                 contentDescription = null,
@@ -67,7 +67,7 @@ fun OCRTopbarView(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = 20.dp, top = 42.dp, end = 20.dp)
+                .padding(start = 20.dp, top = 56.dp, end = 20.dp)
                 .drawBehind {
                     drawIntoCanvas {
                         val paint = Paint()

@@ -21,6 +21,9 @@ import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.postSideEffect
 import org.orbitmvi.orbit.syntax.simple.reduce
 import java.io.File
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 import javax.inject.Inject
 
 @HiltViewModel
@@ -39,12 +42,26 @@ class OCRDetailViewModel @Inject constructor(
 
     fun init(document: DocumentEntity?) = intent {
         val receipt = document?.images?.first()?.receipt?.result
-        val paymentDateString = receipt?.paymentInfo?.date?.formatted.run {
-            "${this?.year ?: ""}${this?.month ?: ""}${this?.day ?: ""}"
-        }
-        val paymentTimeString = receipt?.paymentInfo?.time?.formatted.run {
-            "${this?.hour ?: ""}${this?.minute ?: ""}${this?.second ?: ""}"
-        }
+        val currentDate = SimpleDateFormat("yyyyMMdd", Locale.KOREA).format(Date(System.currentTimeMillis()))
+        val currentTime = SimpleDateFormat("HHmmss", Locale.KOREA).format(Date(System.currentTimeMillis()))
+        val paymentDateString = receipt?.paymentInfo?.date?.formatted?.let {
+            ("${it.year}${it.month}${it.day}").run {
+                if (validateValue(length = 8, isDigit = true) && isValidPaymentDate()) {
+                    this
+                } else {
+                    currentDate
+                }
+            }
+        } ?: currentDate
+        val paymentTimeString = receipt?.paymentInfo?.time?.formatted?.let {
+            ("${it.hour}${it.minute}${it.second}").run {
+                if (validateValue(length = 6, isDigit = true) && isValidPaymentTime()) {
+                    this
+                } else {
+                    currentTime
+                }
+            }
+        } ?: currentTime
         reduce {
             state.copy(
                 document = document,
@@ -77,7 +94,7 @@ class OCRDetailViewModel @Inject constructor(
                 id = state.agencyId,
                 storeInfo = state.storeNameValue.text,
                 fundType = state.fundType,
-                amount = state.totalPriceValue.text.toInt(),
+                amount = state.totalPriceValue.text.replace(".", "").toInt(),
                 description = state.memoValue.text,
                 paymentDate = state.postPaymentDate,
                 receiptImageUrls = state.receiptImageUrls,

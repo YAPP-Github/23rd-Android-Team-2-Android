@@ -187,7 +187,7 @@ fun LedgerDetailScreen(
                     .background(Gray01)
                     .padding(it)
             ) {
-                Spacer(modifier = Modifier.height(12.dp))
+                Spacer(modifier = Modifier.height(4.dp))
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
@@ -565,10 +565,10 @@ fun LedgerDetailScreen(
                         MDSButton(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(vertical = 24.dp, horizontal = 20.dp),
+                                .padding(vertical = 12.dp, horizontal = 20.dp),
                             text = "완료하기",
                             enabled = state.enabledEdit,
-                            size = MDSButtonSize.MEDIUM,
+                            size = MDSButtonSize.LARGE,
                             type = MDSButtonType.PRIMARY,
                             onClick = { viewModel.eventEmit(LedgerDetailSideEffect.LedgerDetailEditDone) }
                         )
@@ -576,9 +576,9 @@ fun LedgerDetailScreen(
                         MDSButton(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(vertical = 24.dp, horizontal = 20.dp),
+                                .padding(vertical = 12.dp, horizontal = 20.dp),
                             text = "수정하기",
-                            size = MDSButtonSize.MEDIUM,
+                            size = MDSButtonSize.LARGE,
                             type = MDSButtonType.PRIMARY,
                             onClick = { viewModel.eventEmit(LedgerDetailSideEffect.LedgerDetailEdit) }
                         )
