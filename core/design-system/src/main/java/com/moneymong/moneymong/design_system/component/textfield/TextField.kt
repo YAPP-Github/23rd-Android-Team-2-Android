@@ -12,10 +12,15 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import com.moneymong.moneymong.design_system.component.textfield.util.MDSTextFieldIcons
+import com.moneymong.moneymong.design_system.theme.Red03
 
 
 @Composable
@@ -24,6 +29,46 @@ fun MDSTextField(
     value: TextFieldValue,
     onValueChange: (TextFieldValue) -> Unit,
     title: String,
+    placeholder: String,
+    isFilled: Boolean,
+    isError: Boolean = false,
+    helperText: String? = null,
+    maxCount: Int? = null,
+    singleLine: Boolean,
+    minLines: Int = 1,
+    icon: MDSTextFieldIcons? = null,
+    onIconClick: (() -> Unit) = {},
+    visualTransformation: VisualTransformation = VisualTransformation.None,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    keyboardActions: KeyboardActions = KeyboardActions.Default
+) {
+
+    MDSBaseTextField(
+        modifier = modifier,
+        value = value,
+        onValueChange = onValueChange,
+        title = AnnotatedString(text = title),
+        placeholder = placeholder,
+        isFilled = isFilled,
+        isError = isError,
+        helperText = helperText,
+        maxCount = maxCount,
+        singleLine = singleLine,
+        minLines = minLines,
+        icon = icon,
+        onIconClick = onIconClick,
+        visualTransformation = visualTransformation,
+        keyboardOptions = keyboardOptions,
+        keyboardActions = keyboardActions
+    )
+}
+
+@Composable
+fun MDSTextField(
+    modifier: Modifier = Modifier,
+    value: TextFieldValue,
+    onValueChange: (TextFieldValue) -> Unit,
+    title: AnnotatedString,
     placeholder: String,
     isFilled: Boolean,
     isError: Boolean = false,
@@ -78,7 +123,12 @@ fun MDSTextFieldPreview() {
             .onFocusChanged { isFilled = !it.isFocused },
         value = userInput,
         onValueChange = { userInput = it },
-        title = "title",
+        title = buildAnnotatedString {
+            append("title")
+            withStyle(style = SpanStyle(color = Red03)) {
+                append("*")
+            }
+        },
         placeholder = "placeholder",
         isFilled = isFilled,
         isError = isError,
