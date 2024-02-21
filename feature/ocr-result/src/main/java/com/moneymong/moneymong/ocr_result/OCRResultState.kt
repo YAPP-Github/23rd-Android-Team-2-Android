@@ -2,7 +2,10 @@ package com.moneymong.moneymong.ocr_result
 
 import com.moneymong.moneymong.common.base.State
 import com.moneymong.moneymong.common.ext.toZonedDateTime
+import com.moneymong.moneymong.common.ui.isValidPaymentDate
+import com.moneymong.moneymong.common.ui.isValidPaymentTime
 import com.moneymong.moneymong.common.ui.toWonFormat
+import com.moneymong.moneymong.common.ui.validateValue
 import com.moneymong.moneymong.domain.entity.ocr.DocumentEntity
 import com.moneymong.moneymong.domain.entity.ocr.DocumentResultEntity
 import java.io.File
@@ -46,16 +49,28 @@ data class OCRResultState(
     val formattedDate: String
         get() {
             val currentDate = SimpleDateFormat("yyyy년 MM월 dd일", Locale.KOREA).format(Date(System.currentTimeMillis()))
-            return receipt?.paymentInfo?.date?.let {
-                "${it.formatted?.year}년 ${it.formatted?.month}월 ${it.formatted?.day}일"
+            return receipt?.paymentInfo?.date?.formatted?.let {
+                ("${it.year}${it.month}${it.day}").run {
+                    if (validateValue(length = 8, isDigit = true) && isValidPaymentDate()) {
+                        "${it.year}년 ${it.month}월 ${it.day}일"
+                    } else {
+                        currentDate
+                    }
+                }
             } ?: currentDate
         }
 
     val formattedTime: String
         get() {
             val currentTime = SimpleDateFormat("HH:mm:ss", Locale.KOREA).format(Date(System.currentTimeMillis()))
-            return receipt?.paymentInfo?.time?.let {
-                "${it.formatted?.hour}:${it.formatted?.minute}:${it.formatted?.second}"
+            return receipt?.paymentInfo?.time?.formatted?.let {
+                ("${it.hour}${it.minute}${it.second}").run {
+                    if (validateValue(length = 6, isDigit = true) && isValidPaymentTime()) {
+                        "${it.hour}:${it.minute}:${it.second}"
+                    } else {
+                        currentTime
+                    }
+                }
             } ?: currentTime
         }
 
