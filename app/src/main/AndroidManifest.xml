@@ -31,7 +31,8 @@
             android:exported="true"
             android:label="${appLabel}"
             android:windowSoftInputMode="adjustResize"
-            android:theme="@style/Theme.Moneymongandroid">
+            android:theme="@style/Theme.Moneymongandroid"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

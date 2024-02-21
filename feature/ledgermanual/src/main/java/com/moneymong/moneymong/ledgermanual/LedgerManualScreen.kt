@@ -35,7 +35,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.onFocusChanged
@@ -76,6 +75,7 @@ import com.moneymong.moneymong.design_system.theme.Body3
 import com.moneymong.moneymong.design_system.theme.Gray06
 import com.moneymong.moneymong.design_system.theme.Gray10
 import com.moneymong.moneymong.design_system.theme.MMHorizontalSpacing
+import com.moneymong.moneymong.design_system.theme.Red03
 import com.moneymong.moneymong.design_system.theme.White
 import com.moneymong.moneymong.domain.param.ledger.FundType
 import com.moneymong.moneymong.ledgermanual.view.LedgerManualTopbarView
@@ -190,7 +190,12 @@ fun LedgerManualScreen(
                         .onFocusChanged { isStoreNameFilled = !it.isFocused },
                     value = state.storeNameValue,
                     onValueChange = viewModel::onChangeStoreNameValue,
-                    title = "수입·지출 출처",
+                    title = buildAnnotatedString {
+                        append("수입·지출 출처")
+                        withStyle(SpanStyle(color = Red03)) {
+                            append("*")
+                        }
+                    },
                     placeholder = "점포명을 입력해주세요",
                     helperText = "20자 이하로 입력해주세요",
                     maxCount = 20,
@@ -209,7 +214,12 @@ fun LedgerManualScreen(
                         .onFocusChanged { isTotalPriceFilled = !it.isFocused },
                     value = state.totalPriceValue,
                     onValueChange = viewModel::onChangeTotalPriceValue,
-                    title = "금액",
+                    title = buildAnnotatedString {
+                        append("금액")
+                        withStyle(SpanStyle(color = Red03)) {
+                            append("*")
+                        }
+                    },
                     placeholder = "거래 금액을 입력해주세요",
                     helperText = "999,999,999,999원 이하로 입력해주세요",
                     isFilled = isTotalPriceFilled,
@@ -223,7 +233,12 @@ fun LedgerManualScreen(
                 )
                 Spacer(modifier = Modifier.height(24.dp))
                 Text(
-                    text = "거래 유형",
+                    text = buildAnnotatedString {
+                        append("거래 유형")
+                        withStyle(SpanStyle(color = Gray06)) {
+                            append("*")
+                        }
+                    },
                     style = Body2,
                     color = Gray06
                 )
@@ -253,7 +268,12 @@ fun LedgerManualScreen(
                         .onFocusChanged { isPaymentDateFilled = !it.isFocused },
                     value = state.paymentDateValue,
                     onValueChange = viewModel::onChangePaymentDateValue,
-                    title = "날짜",
+                    title = buildAnnotatedString {
+                        append("날짜")
+                        withStyle(SpanStyle(color = Red03)) {
+                            append("*")
+                        }
+                    },
                     placeholder = "YYYY/MM/DD",
                     helperText = "올바른 날짜를 입력해주세요",
                     isFilled = isPaymentDateFilled,
@@ -273,7 +293,12 @@ fun LedgerManualScreen(
                         .onFocusChanged { isPaymentTimeFilled = !it.isFocused },
                     value = state.paymentTimeValue,
                     onValueChange = viewModel::onChangePaymentTimeValue,
-                    title = "시간",
+                    title = buildAnnotatedString {
+                        append("시간")
+                        withStyle(SpanStyle(color = Red03)) {
+                            append("*")
+                        }
+                    },
                     placeholder = "00:00:00 (24시 단위)",
                     helperText = "올바른 시간을 입력해주세요",
                     isFilled = isPaymentTimeFilled,
@@ -287,7 +312,7 @@ fun LedgerManualScreen(
                 )
                 Text(
                     text = buildAnnotatedString {
-                        append("영수증 (선택/최대 12장)\n")
+                        append("영수증 (최대 12장)\n")
                         withStyle(SpanStyle(color = Blue04)) {
                             append("*지출일 경우 영수증을 꼭 제출해주세요")
                         }
@@ -356,7 +381,7 @@ fun LedgerManualScreen(
                 }
                 Spacer(modifier = Modifier.height(24.dp))
                 Text(
-                    text = "증빙 자료 (선택/최대 12장)",
+                    text = "증빙 자료 (최대 12장)",
                     style = Body2,
                     color = Gray06
                 )
@@ -427,7 +452,7 @@ fun LedgerManualScreen(
                         .onFocusChanged { isMemoFilled = !it.isFocused },
                     value = state.memoValue,
                     onValueChange = viewModel::onChangeMemoValue,
-                    title = "메모 (선택)",
+                    title = "메모",
                     placeholder = "메모할 내용을 입력하세요",
                     helperText = "300자 이하로 입력해주세요",
                     maxCount = 300,

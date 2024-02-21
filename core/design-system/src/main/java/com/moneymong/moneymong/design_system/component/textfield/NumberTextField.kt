@@ -14,6 +14,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
@@ -33,6 +34,38 @@ fun MDSNumberTextField(
     value: TextFieldValue,
     onValueChange: (TextFieldValue) -> Unit,
     title: String,
+    placeholder: String,
+    isFilled: Boolean,
+    onIconClick: (() -> Unit),
+    singleLine: Boolean = true,
+    visualTransformation: VisualTransformation = VisualTransformation.None,
+    keyboardActions: KeyboardActions = KeyboardActions.Default,
+) {
+
+    MDSBaseTextField(
+        modifier = modifier,
+        value = value,
+        onValueChange = { original ->
+            onValueChange(original.copy(text = original.text.filter { char -> char.isDigit() }))
+        },
+        title = AnnotatedString(text = title),
+        placeholder = placeholder,
+        isFilled = isFilled,
+        singleLine = singleLine,
+        icon = MDSTextFieldIcons.Clear,
+        onIconClick = onIconClick,
+        visualTransformation = visualTransformation,
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+        keyboardActions = keyboardActions,
+    )
+}
+
+@Composable
+fun MDSNumberTextField(
+    modifier: Modifier = Modifier,
+    value: TextFieldValue,
+    onValueChange: (TextFieldValue) -> Unit,
+    title: AnnotatedString,
     placeholder: String,
     isFilled: Boolean,
     onIconClick: (() -> Unit),
