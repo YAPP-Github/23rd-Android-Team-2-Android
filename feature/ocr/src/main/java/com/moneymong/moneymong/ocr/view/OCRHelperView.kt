@@ -48,7 +48,7 @@ fun OCRHelperView(
         ) {
             Icon(
                 modifier = Modifier
-                    .padding(vertical = 10.dp, horizontal = 20.dp)
+                    .padding(vertical = 16.dp, horizontal = 20.dp)
                     .noRippleClickable { onClickClose() },
                 painter = painterResource(id = R.drawable.ic_close_default),
                 contentDescription = null,

@@ -43,7 +43,7 @@ fun LedgerDetailTopbarView(
                 .noRippleClickable {
                     onClickPrev()
                 }
-                .padding(vertical = 10.dp, horizontal = MMHorizontalSpacing)
+                .padding(vertical = 18.dp, horizontal = MMHorizontalSpacing)
                 .align(Alignment.CenterStart),
             painter = painterResource(id = drawable.ic_chevron_left),
             contentDescription = null,
@@ -51,7 +51,7 @@ fun LedgerDetailTopbarView(
         )
         Text(
             modifier = Modifier
-                .padding(vertical = 8.dp)
+                .padding(vertical = 16.dp)
                 .align(Alignment.Center),
             text = title,
             style = Heading1,
@@ -75,7 +75,7 @@ fun LedgerDetailTopbarView(
                     .noRippleClickable {
                         onClickDelete()
                     }
-                    .padding(vertical = 10.dp, horizontal = MMHorizontalSpacing)
+                    .padding(vertical = 18.dp, horizontal = MMHorizontalSpacing)
                     .align(Alignment.CenterEnd),
                 painter = painterResource(id = drawable.ic_delete),
                 contentDescription = null,

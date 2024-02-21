@@ -14,6 +14,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.moneymong.moneymong.design_system.theme.Body2
@@ -24,7 +25,7 @@ import com.moneymong.moneymong.design_system.theme.Caption
 internal fun MDSTextFieldContainer(
     modifier: Modifier = Modifier,
     state: MDSTextFieldState,
-    title: String,
+    title: AnnotatedString,
     count: Int,
     placeholder: String,
     icon: MDSTextFieldIcons?,
@@ -59,7 +60,7 @@ internal fun MDSTextFieldContainer(
 
 @Composable
 private fun MDSTextFieldContainerTop(
-    title: String,
+    title: AnnotatedString,
     state: MDSTextFieldState
 ) {
     Text(
