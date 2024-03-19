@@ -7,7 +7,7 @@
 
 
 ### 스크린샷
-![image](https://github.com/YAPP-Github/23rd-Android-Team-2-Android/assets/80373033/612a05bf-0711-4b88-87ef-42b8985f9e06)
+![screenshots](https://github.com/YAPP-Github/23rd-Android-Team-2-Android/assets/80373033/bd33680e-768d-4a84-9f38-c3feaf14d211)
 
 ### 팀원
 | [기은서](https://github.com/eunseo0105)                                              | [안병헌](https://github.com/Heonbyeong)                                          | [장희직](https://github.com/jhg3410)                                              |
