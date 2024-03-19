@@ -5,9 +5,8 @@
 
 <a href="https://play.google.com/store/apps/details?id=com.moneymong.moneymong.live"><img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" height="70"></a>
 
-
 ### 스크린샷
-![screenshots](https://github.com/YAPP-Github/23rd-Android-Team-2-Android/assets/80373033/bd33680e-768d-4a84-9f38-c3feaf14d211)
+![screenshots](https://github.com/YAPP-Github/23rd-Android-Team-2-Android/assets/80373033/cec76398-db5d-4e2c-b0ad-d967a01c358c)
 
 ### 팀원
 | [기은서](https://github.com/eunseo0105)                                              | [안병헌](https://github.com/Heonbyeong)                                          | [장희직](https://github.com/jhg3410)                                              |
